@@ -2,24 +2,28 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: <a href='https://people.miami.edu/profile/f7508a21683d334770fe03a231e454a3'>University of Miami Herbert Business School</a>
 
 profile:
   align: right
-  image: prof_pic.jpg
-  image_circular: false # crops the image to make it circular
+  image: prof_pic.jpeg
+  image_circular: true # crops the image to make it circular
   more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>Coral Gables, Florida 33146</p>
 
-news: true # includes a list of news items
-selected_papers: true # includes a list of papers marked as "selected={true}"
-social: true # includes social icons at the bottom of the page
+news: false # includes a list of news items
+selected_papers: false # includes a list of papers marked as "selected={true}"
+social: false # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+I am a Professor of Business Technology, Miami Herbert Centennial Endowed Chair, and Associate Dean for Research at the [Miami Herbert Business School](https://www.herbert.miami.edu/), [University of Miami](https://welcome.miami.edu/). Previously, I was the C. T. Bauer Professor of Artificial Intelligence & Digital Society and Director of the Bauer College PhD Programs in the C. T. Bauer College of Business at University of Houston and a faculty advisory member of the HPE Data Science Institute. Prior to that, I was a tenured faculty member at Arizona State University's W. P. Carey School of Business. I currently serve as a Senior Editor of [*Production and Operations Management*](http://www.poms.org/journal/departments/) and an Associate Editor at [*Information Systems Research*](https://pubsonline.informs.org/page/isre/editorial-board). I am also currently co-editing a POM Special Issue on [Social Technologies in Operations](https://www.poms.org/POM%20Social%20Technology%20special%20issue.pdf?fbclid=IwAR0SfajVeeNq7pfh6EhVHaLL_vQGGrxnRUtCdMI88j8P5_EgCV7APrGTVWM).
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+My research interests are in the areas of *Future of Work*, *Digital Platforms*, *Digital Media*, and *Human-AI Interactions*. My research has been published in premier journals such as *Management Science*, *Information Systems Research*, *MIS Quarterly*, *Production and Operations Management*, *INFORMS Journal on Computing*, among others. My work has been supported by several prestigious grants, from the *Robert Wood Johnson Foundation*, the *National Science Foundation*, *NET Institute*, and the *Department of Education*.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+My research papers have won a number of best paper awards at major conferences, including the *Workshop on Information Systems and Economics* (2018), the *International Conference on Information Systems* (2012, 2018, 2020), *Hawaii International Conference on System Sciences* (2017), *INFORMS Annual Conference eBusiness Cluster* (2021), *America's Conference on Information Systems* (2012), and the *China Summer Workshop on Information Management* (2018). My dissertation research on the gig economy and future of work was awarded the *ACM SIGMIS Best Dissertation Award* (2014) and runner-up *INFORMS ISS Nunamaker-Chen Dissertation Award* (2014). In 2017, I was awarded the college-wide *W. P. Carey Faculty Research Award*. Further, I was awarded the *Association for Information Systems Early Career Award* (2018) and the *INFORMS Information Systems Society Sandy Slaughter Early Career Award* (2019). And recently, I was awarded the *Associate Editor of the Year Award* (2018) from *Information Systems Research*. According to the [AIS Research Rankings](https://www.aisresearchrankings.org/rankings/), I was ranked #5 in the world based on publications in the top two information systems journals (*MISQ*, *ISR*) for 2021-2023 and #7 for 2016-2018. And I received the Outstanding PhD Alumni Award (2020) from the Fox School of Business, Temple University. And I am an AIS Distinguished Member since 2020.
+
+At Miami Herbert Business School, I have taught at executive, PhD, masters, and undergraduate levels. At Bauer College, I led the [Bauer Initiative in Artificial Intelligence and Digital Society](https://www.bauer.uh.edu/ai/). I also led the effort in designing and delivering the [Business Data Analytics Mini-MBA Executive Education Program](https://www.bauer.uh.edu/executive-education/comprehensive/#bda). Prior to joining the Bauer College at UH, I worked at the W. P. Carey School of Business at Arizona State University (ASU) as an Assistant Professor (2014-2018) and tenured Associate Professor (2018-2020), where I was also the director of the IS PhD program, co-director of the Digital Society Initiative, and the Nita & Phil Francis Faculty Fellow. I have taught and led the curriculum development at both the undergraduate ([CIS](/files/CIS360_Hong.pdf) and [BDA](/files/CIS315_Hong.docx)) and graduate ([MS-BA](/files/MSBA_Applied_Projects_Syllabus.docx) and [PhD](/files/CIS791_Hong.doc)) levels. Most notably, I led the college-level initiatives in designing and implementing the undergraduate analytics core course -- [Problem Solving and Actionable Analytics](/files/WPC300_Syllabus_2020Spring_V04.docx) (WPC300). Serving as the course coordinator for WPC300, I oversaw over 50 sections of the course each year taught by instructors from multiple departments. Further, I led a team of analytics faculty in designing, implementing, and coordinating the core college analytics course in the [online](/files/Hong-WPC300-Spring A_Online_Syllabus.docx) and [hybrid](/files/WPC300_Schedule_2020Spring.docx) (onsite + online) formats. Here is a [live stream recording](https://player.theplatform.com/p/U8-EDC/dKzF6F2_w14a/select/media/dCsGzS1z_uCq?form=html) of my talk on analytics teaching and research in the W. P. Carey 'Back-to-Class' Alumni event in April 2019. I received Department of Information Systems' Outstanding Teaching Award in 2016, and was a finalist for the W. P. Carey Huizingh Undergraduate Teaching Award (2019), Huizingh Award for Undergraduate Service to Students (2020), and the ASU Outstanding Doctoral Mentor (2020).
+
+Prior to my academic career, I have worked as an analyst at a leading investment bank and as a language specialist for the International Olympics Committee. Besides research and teaching as a faculty member, I serve as an advisor or external research scientist for a number of tech companies, primarily working with them on large-scale digital transformation, data analytics, and digital experimentation efforts. Some of my corporate research partners include Freelancer, Alibaba, Livad, fits.me, Summer, Ports America, Extole, Ookong, and Picmonic.
+
+In my spare time, I enjoy reading books and writing codes. I am an avid [*Emacs*](https://www.spacemacs.org/) user, a [*typography*](https://fontsinuse.com/) enthusiast, a frequent [*Redditor*](https://www.reddit.com/), and a [*mechanical keyboard*](https://www.reddit.com/r/MechanicalKeyboards/) designer and collector.
