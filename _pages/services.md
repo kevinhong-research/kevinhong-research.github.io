@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /services/
-title: academic services
+title: services
 description: List of academic services and student advising.
 nav: true
 nav_order: 3
