@@ -7,7 +7,6 @@ nav: true
 nav_order: 1
 ---
 
-<div class="publications">
 
 ## Selected Journal Publications
 
@@ -104,5 +103,3 @@ Sabzehzar A, Burtch G, Hong Y, TS Raghu. 2024. [The Efficacy of Need-Based Atten
 Mousavi R, Wang X, Hong Y, Ren Y. 2023. [The Impacts of the Physical Environment on Online Content Creation](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4443675)
 
 Liu Q, Du Q, Hong Y, Fan W. 2023. [Idea Recommendation in Open Innovation Platforms: A Design Science Approach](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3898894)
-
-</div>
