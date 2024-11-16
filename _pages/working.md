@@ -8,7 +8,7 @@ nav_order: 1
 ---
 
 
-### Selected Working Papers
+#### Selected Working Papers
 
 Zhao K, Hong Y, Ma T, Lu Y, Hu Y. 2024. [Group Size, Content Moderators, and User Engagement in Online Synchronous Content Platforms](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4030879)
 
