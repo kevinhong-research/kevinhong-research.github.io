@@ -9,14 +9,14 @@ nav_order: 3
 
 #### Editorships
 
-`Editorial Appointments`
+###### `Editorial Appointments`
 
 - Senior Editor, `Production and Operations Management` (2019–)
 - Associate Editor, `Information Systems Research` (2018–)
 - Associate Editor, *Journal of the Association for Information Systems* (2019–)
 - Editorial Board, *Journal of the Association for Information Systems* (2017–2019)
 
-`Special Issue Editors`
+###### `Special Issue Editors`
 
 - Co-Editor, *Production and Operations Management*, Special Issue on "Social Technologies in Operations"
 - Senior Editor, *Production and Operations Management*, Special Issue on "Responsible Data Science"
@@ -41,20 +41,20 @@ nav_order: 3
 
 #### PhD/Postdoc Students Supervision and Placement
 
-`Dissertation Chair / Co-Chair`
+###### `Dissertation Chair / Co-Chair`
 - [Amin Sabzehzar](https://freeman.tulane.edu/faculty-research/management-science/amin-sabzehzar), Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
 - [Qinglai He](https://business.wisc.edu/directory/profile/qinglai-he/), Assistant Professor (2021), Wisconsin School of Business, University of Wisconsin-Madison
-	* ICIS SIGMIS Doctoral Dissertation Award Runnerup
+	* ACM SIGMIS Doctoral Dissertation Award Runnerup
 - [Chen Liang](https://www.business.uconn.edu/person/chen-liang/), Assistant Professor (2019), School of Business, University of Connecticut
 	* ISS Gordon B. Davis Young Scholar Award
 	* AIS Early Career Award
 - [Ying Liu](https://www.isenberg.umass.edu/people/ying-liu), Assistant Professor (2018), Isenberg School of Management, University of Massachusetts Amherst
 
-`Postdoc Advisor / Co-Advisor`
+###### `Postdoc Advisor / Co-Advisor`
 - [Jason Wu](https://www.unsw.edu.au/staff/jason-wu1), Assistant Professor (2023), UNSW Business School, University of New South Wales
 - [Yumei (Joy) He](https://freeman.tulane.edu/faculty-research/management-science/yumei-he), Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
 
-`Dissertation Member`
+###### `Dissertation Member`
 - [Aida Sanatizadeh](https://www.cob.niu.edu/about/directory/sanatizadeh.shtml), Assistant Professor (2024), College of Business, Northern Illinois University
 - [Jingbo Hou](https://www.scu.edu/business/isa/faculty/hou/), Assistant Professor (2023), Leavey School of Business, Santa Clara University
 - [Tengteng Ma](https://www.usf.edu/business/about/bios/ma-tengteng.aspx), Assistant Professor (2023), Muma College of Business, University of South Florida
@@ -62,7 +62,7 @@ nav_order: 3
 - Alvin Zheng, Assistant Professor (2021), Renmin University of China
 - [Cheng Chen](https://uwm.edu/business/people/chen-cheng/), Assistant Professor (2020), Lubar School of Business, University of Wisconsin-Milwaukee
 
-`PhD Students Mentoring`
+###### `PhD Students Mentoring`
 - Dezhen Guo (2024-), PhD student at University of Miami
 - Alan Huang (2023-), PhD student at University of Miami
 - Freya Liu (2022-), PhD student at HK PolyU
