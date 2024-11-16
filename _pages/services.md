@@ -44,7 +44,7 @@ nav_order: 3
 `Dissertation Chair / Co-Chair`
 - [Amin Sabzehzar](https://freeman.tulane.edu/faculty-research/management-science/amin-sabzehzar), Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
 - [Qinglai He](https://business.wisc.edu/directory/profile/qinglai-he/), Assistant Professor (2021), Wisconsin School of Business, University of Wisconsin-Madison
-	* ICIS SIGMIS Doctoral Dissertation Award Runnerup)
+	* ICIS SIGMIS Doctoral Dissertation Award Runnerup
 - [Chen Liang](https://www.business.uconn.edu/person/chen-liang/), Assistant Professor (2019), School of Business, University of Connecticut
 	* ISS Gordon B. Davis Young Scholar Award
 	* AIS Early Career Award
