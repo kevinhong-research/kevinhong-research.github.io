@@ -7,7 +7,7 @@ nav: true
 nav_order: 3
 ---
 
-### Editorships
+#### Editorships
 
 `Editorial Appointments`
 
@@ -27,7 +27,7 @@ nav_order: 3
 - Associate Editor, *Information Systems Research*, Special Issue on “Market Design and Analytics”
 - Editorial Board, *Journal of the Association for Information Systems*, Special Issue on “Addressing Societal Challenges through Analytics”
 
-### Selected Professional Services
+#### Selected Professional Services
 
 - Track Co-Chair for the “Sharing Economy, Platforms, and Crowds” Track, International Conference on Information Systems (2025)
 - Track Co-Chair for the "Sharing Economy, Platforms, and Crowds" Track, International Conference on Information Systems (2024)
@@ -39,7 +39,7 @@ nav_order: 3
  
 <!-- <hr style="clear:both;visibility: hidden;" />   -->
 
-### PhD/Postdoc Students Supervision and Placement
+#### PhD/Postdoc Students Supervision and Placement
 
 `Dissertation Chair / Co-Chair`
 - Amin Sabzehzar, Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
