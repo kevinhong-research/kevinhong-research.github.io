@@ -13,6 +13,8 @@ nav_order: 2
 
 {% include bib_search.liquid %}
 
+<img src="/assets/img/citation_map.png" alt="Citation Map" width="200"/>
+
 <div class="publications">
 
 {% bibliography %}
