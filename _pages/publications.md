@@ -13,7 +13,9 @@ nav_order: 2
 
 {% include bib_search.liquid %}
 
-<img src="/assets/img/citation_map.png" alt="Citation Map" width="600"/>
+<!-- <img src="/assets/img/citation_map.png" alt="Citation Map" width="600"/> -->
+
+![Citation Map](/assets/img/citation_map.png "Google Citation World Map")
 
 <div class="publications">
 
