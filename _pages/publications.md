@@ -13,7 +13,7 @@ nav_order: 2
 
 {% include bib_search.liquid %}
 
-<img src="/assets/img/citation_map.png" alt="Google Citation World Map" title="Google Citation World Map" width="450"/>
+<img src="/assets/img/citation_map.png" alt="Google Citation World Map" title="Google Citation World Map" width="500"/>
 
 <div class="publications">
 
