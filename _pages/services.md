@@ -65,6 +65,7 @@ nav_order: 3
 ###### `PhD Students Mentoring`
 - Dezhen Guo (2024-), PhD student at University of Miami
 - Alan Huang (2023-), PhD student at University of Miami
+- Xingchen Ye (2024-), PhD student at USTC
 - Freya Liu (2022-), PhD student at HK PolyU
 - Xingchen Xu (2019-), PhD student at University of Washington
 
