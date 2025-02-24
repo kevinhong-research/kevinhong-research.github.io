@@ -10,8 +10,6 @@ nav_order: 1
 
 #### Selected Working Papers
 
-Zhao K, Hong Y, Ma T, Lu Y, Hu Y. 2025. [Group Size, Content Moderators, and User Engagement in Online Synchronous Content Platforms](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4030879)
-
 Huang A, Huang N, Hong Y. 2025. [On the Double-Edged Effects of Peer-to-Peer Payment Systems: Evidence from Zelle Partnerships
 ](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4883176)
 
