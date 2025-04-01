@@ -7,9 +7,9 @@ nav: true
 nav_order: 2
 ---
 
-1. Texas Tech University, Rawls College of Business, 4/2025
+1. Virginia Tech, Pamplin College of Business, 9/2025
 
-1. Virginia Tech, Pamplin College of Business, 2/2025
+1. Cheung Kong Graduate School of Business (CKGSB), 6/2025
 
 1. Indian School of Business, 11/2024
 
