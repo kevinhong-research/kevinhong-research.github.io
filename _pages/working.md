@@ -30,7 +30,7 @@ Hou J, Sabzehzar A, Hong Y, Chen PY. 2024. [Jumpstarting Online Presence: How Al
 
 Sabzehzar A, Burtch G, Hong Y, TS Raghu. 2024. [The Efficacy of Need-Based Attentional Interventions in Educational Crowdfunding](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4838321)
 
-Ye X, Guo D, Gao C, Hong Y, Huang N. 2025. [Navigating Exclusivity and Free Offerings: How Digital Paywalls Influence Content Creators' Behavior](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5237567)
+Ye X, Guo D, Gao C, Hong Y, Huang N. 2025. [Navigating Exclusivity and Free Offerings: How Digital Paywalls Influence Content Creators' Behavior](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5237649)
 
 Mousavi R, Wang X, Hong Y, Ren Y. 2023. [The Impacts of the Physical Environment on Online Content Creation](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4443675)
 
