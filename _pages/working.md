@@ -17,8 +17,7 @@ Short J, D'Arcy J, Hong Y. 2025. [Chief Information Officers (CIOs) Joining Outs
 
 Wang W, Liu X, Zhang X, Hong Y. 2025. [Knowledge Trap in Augmented Intelligence: Human Experts’ Overfocus on Details Hurts Task Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4395858)
 
-Huang A, Huang N, Hong Y. 2025. [Algorithm-enabled Workflow Automation in Open-source Development: Evidence from GitHub Actions
-](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4969718)
+Huang A, Huang N, Hong Y. 2025. [Workflow Automation in Open-Source Software Development: Accelerating Innovation through Mechanization and Orchestration](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4969718)
 
 Guo D, Kwon E, Huang N, Hong Y. 2025. [How does Shielded (vs. Open) Voting Shape Collective Actions? Evidence from Decentralized Autonomous Organizations](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4982940)
 
