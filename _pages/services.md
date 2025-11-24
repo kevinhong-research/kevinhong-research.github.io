@@ -42,25 +42,25 @@ nav_order: 3
 #### PhD/Postdoc Students Supervision and Placement
 
 ###### `Dissertation Chair / Co-Chair`
-- [Amin Sabzehzar](https://freeman.tulane.edu/faculty-research/management-science/amin-sabzehzar), Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
-- [Qinglai He](https://business.wisc.edu/directory/profile/qinglai-he/), Assistant Professor (2021), Wisconsin School of Business, University of Wisconsin-Madison
+- `Amin Sabzehzar`, Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
+- `Qinglai He`, Assistant Professor (2021), Wisconsin School of Business, University of Wisconsin-Madison
 	* ACM SIGMIS Doctoral Dissertation Award Runnerup
-- [Chen Liang](https://www.business.uconn.edu/person/chen-liang/), Associate Professor (2019), School of Business, University of Connecticut
+- `Chen Liang`, Associate Professor (2019), School of Business, University of Connecticut
 	* ISS Gordon B. Davis Young Scholar Award
 	* AIS Early Career Award
-- [Ying Liu](https://www.isenberg.umass.edu/people/ying-liu), Assistant Professor (2018), Isenberg School of Management, University of Massachusetts Amherst
+- `Ying Liu`, Assistant Professor (2018), Isenberg School of Management, University of Massachusetts Amherst
 
 ###### `Postdoc Advisor / Co-Advisor`
-- [Jason Wu](https://www.unsw.edu.au/staff/jason-wu1), Assistant Professor (2023), UNSW Business School, University of New South Wales
-- [Yumei (Joy) He](https://freeman.tulane.edu/faculty-research/management-science/yumei-he), Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
+- `Jason Wu`, Assistant Professor (2023), UNSW Business School, University of New South Wales
+- `Yumei (Joy) He`, Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
 
 ###### `Dissertation Member`
-- [Aida Sanatizadeh](https://www.cob.niu.edu/about/directory/sanatizadeh.shtml), Assistant Professor (2024), College of Business, Northern Illinois University
-- [Jingbo Hou](https://www.scu.edu/business/isa/faculty/hou/), Assistant Professor (2023), Leavey School of Business, Santa Clara University
-- [Tengteng Ma](https://www.usf.edu/business/about/bios/ma-tengteng.aspx), Assistant Professor (2023), Muma College of Business, University of South Florida
-- [Keran Zhao](https://directory.smeal.psu.edu/kkz5215), Assistant Professor (2021), Smeal College of Business, Penn State University
-- Alvin Zheng, Assistant Professor (2021), Renmin University of China
-- [Cheng Chen](https://uwm.edu/business/people/chen-cheng/), Assistant Professor (2020), Lubar School of Business, University of Wisconsin-Milwaukee
+- `Aida Sanatizadeh`, Assistant Professor (2024), College of Business, Northern Illinois University
+- `Jingbo Hou`, Assistant Professor (2023), Leavey School of Business, Santa Clara University
+- `Tengteng Ma`, Assistant Professor (2023), Muma College of Business, University of South Florida
+- `Keran Zhao`, Assistant Professor (2021), Smeal College of Business, Penn State University
+- `Alvin Zheng`, Assistant Professor (2021), Renmin University of China
+- `Cheng Chen`, Assistant Professor (2020), Lubar School of Business, University of Wisconsin-Milwaukee
 
 ###### `PhD Students Mentoring`
 - Dezhen Guo (2024-), PhD student at University of Miami
