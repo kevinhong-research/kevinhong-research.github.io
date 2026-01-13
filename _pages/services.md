@@ -11,9 +11,10 @@ nav_order: 3
 
 ###### `Editorial Appointments`
 
+- Senior Editor, `Information Systems Research` (2026–)
 - Senior Editor, `Production and Operations Management` (2019–)
-- Associate Editor, `Information Systems Research` (2018–)
-- Associate Editor, *Journal of the Association for Information Systems* (2019–)
+- Associate Editor, `Information Systems Research` (2018–2025)
+- Associate Editor, *Journal of the Association for Information Systems* (2019–2025)
 - Editorial Board, *Journal of the Association for Information Systems* (2017–2019)
 
 ###### `Special Issue Editors`
