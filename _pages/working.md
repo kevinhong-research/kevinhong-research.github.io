@@ -13,11 +13,7 @@ nav_order: 1
 Huang A, Huang N, Hong Y. 2025. [On the Double-Edged Effects of Peer-to-Peer Payment Systems: Evidence from Zelle Partnerships
 ](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4883176)
 
-Short J, D'Arcy J, Hong Y. 2025. [Chief Information Officers (CIOs) Joining Outside Boards of Directors: Impact on Their Home Firms’ Cybersecurity](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4750083)
-
 Wang W, Liu X, Zhang X, Hong Y. 2025. [Knowledge Trap in Augmented Intelligence: Human Experts’ Overfocus on Details Hurts Task Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4395858)
-
-Huang A, Huang N, Hong Y. 2025. [Workflow Automation in Open-Source Software Development: Accelerating Innovation through Mechanization and Orchestration](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4969718)
 
 Guo D, Kwon E, Huang N, Hong Y. 2025. [How does Shielded (vs. Open) Voting Shape Collective Actions? Evidence from Decentralized Autonomous Organizations](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4982940)
 
