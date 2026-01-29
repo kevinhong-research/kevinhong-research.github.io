@@ -56,6 +56,7 @@ nav_order: 3
 - `Yumei (Joy) He`, Assistant Professor (2022), A. B. Freeman School of Business, Tulane University
 
 ###### `Dissertation Member`
+- `Qinlu Hu`, Assistant Professor (2026), Nova School of Business and Economics
 - `Aida Sanatizadeh`, Assistant Professor (2024), College of Business, Northern Illinois University
 - `Jingbo Hou`, Assistant Professor (2023), Leavey School of Business, Santa Clara University
 - `Tengteng Ma`, Assistant Professor (2023), Muma College of Business, University of South Florida
