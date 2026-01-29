@@ -17,7 +17,7 @@ Wang W, Liu X, Zhang X, Hong Y. 2025. [Knowledge Trap in Augmented Intelligence:
 
 Guo D, Kwon E, Huang N, Hong Y. 2025. [How does Shielded (vs. Open) Voting Shape Collective Actions? Evidence from Decentralized Autonomous Organizations](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4982940)
 
-Tang J, Wang W, Hong Y. 2025. [Empathetic GPT Social Chatbot: A Field Experiment](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5106705)
+Tang J, Wang W, Hong Y. 2025. [When More Is Less: The Interference Logic of Multimodal Empathy in GPT Social Chatbots](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5106705)
 
 Li B, Hong Y, Shi W, Xie Y. 2024. [Unpacking Firms’ Non-Market Responses to Data Breaches: Evidence from Cybersecurity Lobbying Activities](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4263031)
 
