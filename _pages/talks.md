@@ -7,6 +7,8 @@ nav: true
 nav_order: 2
 ---
 
+1. University of South Florida, Muma College of Business, Fall 2026
+
 1. Tulane University, The Murphy Institute, 4/2026
 
 1. University of Texas at Austin, McCombs School of Business, 3/2026
