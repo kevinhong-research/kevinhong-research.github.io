@@ -146,7 +146,7 @@
 
 .pub-item {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 44px 1fr;
   gap: 1.5rem;
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--line);
@@ -241,7 +241,6 @@
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
 }
 .pub-badge {
-  display: none;
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -251,7 +250,8 @@
   transition: color 0.2s;
   text-align: right;
 }
-.pub-item:hover .pub-badge { color: var(--orange); }
+.pub-item:hover 
+/*.pub-badge { color: var(--orange); }*/
 
 /* ── SCROLL REVEAL ── */
 .nh-reveal {
