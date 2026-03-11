@@ -272,3 +272,29 @@
   .pub-item { grid-template-columns: 32px 1fr; }
   .pub-badge { display: none; }
 }
+
+/* ── SCHOLAR BUTTON ── */
+.scholar-bar {
+  padding: 0 0 1.5rem;
+}
+.scholar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(0, 160, 96, 0.4);
+  color: #00a060;
+  background: transparent;
+  text-decoration: none;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  transition: all 0.2s ease;
+}
+.scholar-btn:hover {
+  border-color: #00a060;
+  background: rgba(0, 160, 96, 0.08);
+  color: #00a060;
+}

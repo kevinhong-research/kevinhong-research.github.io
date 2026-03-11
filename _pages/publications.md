@@ -15,6 +15,16 @@ nav_order: 2
 
 <div class="nh-research">
 
+  <div class="scholar-bar">
+  <a href="https://scholar.google.com/citations?user=VwQmUFQAAAAJ" 
+     target="_blank" class="scholar-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.6v8.4h4.8V12h7.2v5.9h4.8V9.5H24z"/>
+    </svg>
+    Google Scholar
+  </a>
+  </div>
+
   <div class="filter-bar">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="ISR">ISR</button>
