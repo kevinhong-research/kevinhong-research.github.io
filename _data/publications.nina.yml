@@ -1,0 +1,185 @@
+# _data/publications.yml
+#
+# Fields:
+#   title        — full paper title
+#   url          — DOI or publisher link
+#   authors      — list; wrap your name in ** ** to bold it  e.g. "**Huang N**"
+#   journal      — shorthand key (ISR | MISQ | MS | POM | JMIS | JAIS | TKDD | JCP)
+#   year         — publication or expected year
+#   volume       — volume/issue/pages string, omit if forthcoming
+#   forthcoming  — true | false (omit or set false once published)
+
+- title: "Workflow Automation in Open-Source Software Development: Accelerating Innovation through Mechanization and Orchestration"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2024.1551"
+  authors: ["Huang A", "**Huang N**", "Hong Y"]
+  journal: ISR
+  year: 2026
+  forthcoming: true
+
+- title: "What Happens When Machines Become Smarter? An Empirical Investigation of Artificial Intelligence (AI) Opponents in Online Gaming"
+  url: "https://misq.umn.edu/misq/article-abstract/doi/10.25300/MISQ/2025/18603/3258/What-Happens-When-Machines-Become-Smarter-An"
+  authors: ["Yuan H", "He Q", "Wang L", "**Huang N**", "Wei Q", "Zhang J"]
+  journal: MISQ
+  year: 2026
+  forthcoming: true
+
+- title: "Evaluating the Efficacy of Application Costs for Managing Congestion in Online Matching Market"
+  url: "https://pubsonline.informs.org/doi/10.1287/mnsc.2021.03495"
+  authors: ["**Huang N**", "Burtch G", "Chen P", "Huang A"]
+  journal: MS
+  year: 2026
+  forthcoming: true
+
+- title: "Forced to Change? Media Exposure of Labor Issues and Firm Artificial Intelligence (AI) Investment"
+  url: "https://pubsonline.informs.org/doi/abs/10.1287/isre.2022.0402"
+  authors: ["Li B", "**Huang N**", "Shi W"]
+  journal: ISR
+  year: 2026
+  forthcoming: true
+
+- title: "Real-Time Sales Data, Streamer Improvisation, and Sales Performance: Evidence From Live Stream Selling"
+  url: "https://misq.umn.edu/misq/article-abstract/49/4/1567/3274/Real-Time-Sales-Data-Streamer-Improvisation-and"
+  authors: ["He Y", "**Huang N**", "Wang L", "Sun Y"]
+  journal: MISQ
+  year: 2025
+  volume: "49(4):1567–1594"
+
+- title: "Artificial Intelligence (AI) Assistant in Online Shopping: A Randomized Field Experiment on a Livestream Selling Platform"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2023.0103"
+  authors: ["Wang L", "**Huang N**", "He Y", "Liu D", "Guo X", "Sun Y", "Chen G"]
+  journal: ISR
+  year: 2025
+  volume: "36(4):2358–2374"
+
+- title: "Mining Linguistic Styles in Bilateral Matching: A Contrastive Learning Approach to Reciprocal Recommendation"
+  url: "https://dl.acm.org/doi/10.1145/3736418"
+  authors: ["Guan Y", "He Y", "**Huang N**", "Guo X", "Chen G"]
+  journal: TKDD
+  year: 2025
+  volume: "19(6):1–25"
+
+- title: "Enhancing User Privacy Through Ephemeral Sharing Design: Experimental Evidence from the Online Dating Context"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2021.0379"
+  authors: ["He Y", "Xu X", "**Huang N**", "Hong Y", "Liu D"]
+  journal: ISR
+  year: 2024
+  volume: "36(1):162–183"
+
+- title: "How to Translate Firm-Generated Content to Sales? Evidence from Online Healthcare Platforms"
+  url: "https://www.tandfonline.com/doi/full/10.1080/07421222.2024.2415767"
+  authors: ["Qiao W", "**Huang N**", "Yan Z"]
+  journal: JMIS
+  year: 2024
+  volume: "41(4):1173–1197"
+
+- title: "When the Clock Strikes: A Multimethod Investigation of On-the-Hour Effects in Online Learning"
+  url: "https://pubsonline.informs.org/doi/full/10.1287/isre.2023.1234"
+  authors: ["**Huang N**", "Wang L", "Hong Y", "Lin L", "Guo X", "Chen G"]
+  journal: ISR
+  year: 2023
+  volume: "35(2):766–782"
+
+- title: "Voice-based AI in Call Center Customer Service: A Natural Field Experiment"
+  url: "https://onlinelibrary.wiley.com/doi/10.1111/poms.13953"
+  authors: ["Wang L", "**Huang N**", "Hong Y", "Liu L", "Guo X", "Chen G"]
+  journal: POM
+  year: 2023
+  volume: "32(4):1002–1018"
+
+- title: "Managing Congestion in a Matching Market via Demand Information Disclosure"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2022.1148"
+  authors: ["**Huang N**", "Burtch G", "He Y", "Hong Y"]
+  journal: ISR
+  year: 2022
+  volume: "33(4):1196–1220"
+
+- title: "Causality Meets Diversity in Information Systems Research"
+  url: "https://misq.umn.edu/misq/downloads/download/editorial/759/"
+  authors: ["Mithas S", "Xue L", "**Huang N**", "Burton-Jones A"]
+  journal: MISQ
+  year: 2022
+  volume: "46(3):i–xvii"
+
+- title: "Effects of Online-Offline Service Integration on e-Healthcare Providers: A Quasi-Natural Experiment"
+  url: "https://onlinelibrary.wiley.com/doi/abs/10.1111/poms.13381"
+  authors: ["**Huang N**", "Yan Z", "Yin H"]
+  journal: POM
+  year: 2021
+  volume: "30(8):2359–2378"
+
+- title: "Just DM Me (Politely): Direct Messaging, Politeness, and Hiring Outcomes in Online Labor Markets"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2021.1003"
+  authors: ["Hong Y", "Peng J", "Burtch G", "**Huang N**"]
+  journal: ISR
+  year: 2021
+  volume: "32(3):786–800"
+
+- title: "Not Registered? Please Sign Up First: A Randomized Field Experiment on the Ex Ante Registration Request"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2021.0999"
+  authors: ["**Huang N**", "Mojumder P", "Sun T", "Lv J", "Golden J"]
+  journal: ISR
+  year: 2021
+  volume: "32(3):914–931"
+
+- title: "Combating Procrastination on Massive Online Open Courses via Optimal Calls to Action"
+  url: "https://pubsonline.informs.org/doi/abs/10.1287/isre.2020.0974"
+  authors: ["**Huang N**", "Zhang J", "Burtch G", "Li X", "Chen P"]
+  journal: ISR
+  year: 2020
+  volume: "32(2):301–316"
+
+- title: "Designing Promotion Incentive to Embrace Social Sharing: Evidence from Field and Online Experiments"
+  url: "https://misq.umn.edu/designing-promotional-incentives-to-embrace-social-sharing-evidence-from-field-and-online-experiments.html"
+  authors: ["Sun T", "Viswanathan S", "**Huang N**", "Zheleva E"]
+  journal: MISQ
+  year: 2020
+  volume: "45(2):789–820"
+
+- title: "Unemployment and Worker Participation in the Gig Economy: Evidence from an Online Labor Market"
+  url: "https://pubsonline.informs.org/doi/abs/10.1287/isre.2019.0896"
+  authors: ["**Huang N**", "Burtch G", "Hong Y", "Pavlou PA"]
+  journal: ISR
+  year: 2020
+  volume: "31(2):431–448"
+
+- title: "Word-of-Mouth System Implementation and Customer Conversion: A Randomized Field Experiment"
+  url: "https://pubsonline.informs.org/doi/abs/10.1287/isre.2018.0832"
+  authors: ["**Huang N**", "Sun T", "Chen P", "Golden J"]
+  journal: ISR
+  year: 2019
+  volume: "30(3):711–1105"
+
+- title: "Motivating User-Generated Content with Performance Feedback: Evidence from Randomized Field Experiments"
+  url: "https://pubsonline.informs.org/doi/10.1287/mnsc.2017.2944"
+  authors: ["**Huang N**", "Burtch G", "Gu B", "Hong Y", "Liang C", "Wang K", "Fu D", "Yang B"]
+  journal: MS
+  year: 2019
+  volume: "65(1):327–345"
+
+- title: "Spillover Effects of Financial Incentives on User Engagement: Evidence From an Online Knowledge Exchange Platform"
+  url: "https://www.tandfonline.com/doi/abs/10.1080/07421222.2018.1550564"
+  authors: ["Kuang L", "**Huang N**", "Hong Y", "Yan Z"]
+  journal: JMIS
+  year: 2019
+  volume: "36(1):289–320"
+
+- title: "Social Network Integration and User Content Generation: Evidence from Natural Experiments"
+  url: "https://misq.org/social-network-integration-and-user-content-generation-evidence-from-natural-experiments.html"
+  authors: ["**Huang N**", "Hong Y", "Burtch G"]
+  journal: MISQ
+  year: 2017
+  volume: "41(4):1035–1058"
+
+- title: "Culture, Conformity and Emotional Suppression in Online Reviews"
+  url: "http://aisel.aisnet.org/jais/vol17/iss11/2/"
+  authors: ["Hong Y", "**Huang N**", "Burtch G", "Li C"]
+  journal: JAIS
+  year: 2016
+  volume: "17(11):308–329"
+
+- title: "Effects of Multiple Psychological Distances on Construal and Consumer Evaluation: A Field Study of Online Reviews"
+  url: "https://doi.org/10.1016/j.jcps.2016.03.001"
+  authors: ["**Huang N**", "Burtch G", "Hong Y", "Polman E"]
+  journal: JCP
+  year: 2016
+  volume: "26(4):474–482"
