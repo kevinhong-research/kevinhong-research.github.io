@@ -33,6 +33,10 @@
   --green-hi: #00a060;
 }
 
+.header-link {
+  color: #00a060;
+}
+
 /* Active nav link */
 .nav-item.active > .nav-link {
   color: #00a060 !important;
