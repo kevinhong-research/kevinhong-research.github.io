@@ -2,7 +2,7 @@
 layout: page
 permalink: /publications/
 title: publications
-description: publications in reversed chronological order, using this <a href='https://nihuang.me/research/' target='_blank'>template</a>.
+description: Selected publications in <a href='https://jsom.utdallas.edu/the-utd-top-100-business-school-research-rankings/list-of-journals' target='_blank' class='header-link'>UTD-24 journals</a>, using this <a href='https://nihuang.me/research/' target='_blank' class='header-link'>template style</a>.
 nav: false
 nav_order: 2
 ---
