@@ -1,0 +1,434 @@
+# _data/publications.yml
+#
+# Converted from papers.bib — 39 entries, sorted chronologically.
+# Authors: ** ** wraps Nina Huang's name to bold it in the renderer.
+# Note: IJOC is a new journal key — add it to JOURNAL_META in research.js:
+#   IJOC: { label: "INFORMS Journal on Computing", badge: "IJOC", filter: "other" }
+
+- title: "Can Regulation Restore Authenticity? Evidence from Policies Against Online Review Suppression"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2023.0436"
+  authors:
+    - "Sanatizadeh A"
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Hu Y"
+  journal: ISR
+  year: 2026
+  forthcoming: true
+
+- title: "Two Streams to Success: Unpacking the Informational and Relational Roles of Live Streaming in Online Shopping"
+  url: "https://journals.sagepub.com/doi/10.1177/10591478251403725"
+  authors:
+    - "Chen C"
+    - "Hu Y"
+    - "Lu Y"
+    - "**Hong Y**"
+  journal: POM
+  year: 2026
+  forthcoming: true
+
+- title: "Workflow Automation in Open-Source Software Development: Accelerating Innovation through Mechanization and Orchestration"
+  url: "https://pubsonline.informs.org/doi/10.1287/isre.2024.1551"
+  authors:
+    - "Huang A"
+    - "Huang N"
+    - "**Hong Y**"
+  journal: ISR
+  year: 2026
+  forthcoming: true
+
+- title: "Asymmetric Learning Effects of Chief Information Officer (CIO) Outside Board Appointments: Cybersecurity Implications for Sender and Receiver Firms"
+  url: "https://pubsonline.informs.org/doi/abs/10.1287/isre.2024.1003"
+  authors:
+    - "Short J"
+    - "D'Arcy J"
+    - "**Hong Y**"
+  journal: ISR
+  year: 2026
+  forthcoming: true
+
+- title: "When Do Equity Appeals Increase Giving? Evidence from Educational Crowdfunding"
+  url: ""
+  authors:
+    - "Sabzehzar A"
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Raghu T"
+  journal: ISR
+  year: 2026
+  forthcoming: true
+- title: "Advancing Next-Generation Multimethod Research in Information Systems: A Framework and Some Recommendations for Authors and Evaluators"
+  url: "https://doi.org/10.1287/isre.2025.editorial.v36.n2"
+  authors:
+    - "Sarker S"
+    - "Bala H"
+    - "**Hong Y**"
+    - "Kankanhalli A"
+    - "Rossi M"
+    - "Gu B"
+    - "Oestreicher-Singer G"
+  journal: ISR
+  year: 2025
+  forthcoming: true
+
+- title: "Lost in the Crowd: How Group Size and Content Moderation Shape User Engagement in Live Streaming"
+  url: "https://doi.org/10.1287/isre.2022.0086"
+  authors:
+    - "Zhao K"
+    - "**Hong Y**"
+    - "Ma T"
+    - "Lu Y"
+    - "Hu Y"
+  journal: ISR
+  year: 2025
+  forthcoming: true
+
+- title: "Monitoring and the cold start problem in digital platforms: Theory and evidence from online labor markets"
+  url: "https://doi.org/10.1287/isre.2021.0146"
+  authors:
+    - "Liang C"
+    - "**Hong Y**"
+    - "Gu B"
+  journal: ISR
+  year: 2025
+  forthcoming: true
+
+- title: "Enhancing user privacy through ephemeral sharing design: Experimental evidence from online dating"
+  url: "https://doi.org/10.1287/isre.2021.0379"
+  authors:
+    - "He Y"
+    - "Xu X"
+    - "Huang N"
+    - "**Hong Y**"
+    - "Liu D"
+  journal: ISR
+  year: 2025
+  volume: "36(1):162–183"
+
+- title: "Monitoring and home bias in global hiring: Evidence from an online labor platform"
+  url: "https://doi.org/10.1287/isre.2021.0526"
+  authors:
+    - "Liang C"
+    - "**Hong Y**"
+    - "Gu B"
+  journal: ISR
+  year: 2025
+  volume: "36(1):600–620"
+
+- title: "Platform governance with algorithm-based content moderation: An empirical study on Reddit"
+  url: "https://doi.org/10.1287/isre.2021.0036"
+  authors:
+    - "He Q"
+    - "**Hong Y**"
+    - "Raghu T"
+  journal: ISR
+  year: 2025
+  forthcoming: true
+
+- title: "When the clock strikes: A multimethod investigation of on-the-hour effects in online learning"
+  url: "https://doi.org/10.1287/isre.2023.1234"
+  authors:
+    - "Huang N"
+    - "Wang L"
+    - "**Hong Y**"
+    - "Lin L"
+    - "Guo X"
+    - "Chen G"
+  journal: ISR
+  year: 2024
+  volume: "35(2):766–782"
+
+- title: "Voice-based AI in call center customer service: A natural field experiment"
+  url: "https://doi.org/10.1111/poms.13953"
+  authors:
+    - "Wang L"
+    - "Huang N"
+    - "**Hong Y**"
+    - "Liu L"
+    - "Guo X"
+    - "Chen G"
+  journal: POM
+  year: 2023
+  volume: "32(4):1002–1018"
+
+- title: "The hidden costs and benefits of monitoring in the gig economy"
+  url: "https://doi.org/10.1287/isre.2022.1130"
+  authors:
+    - "Liang C"
+    - "Peng J"
+    - "**Hong Y**"
+    - "Gu B"
+  journal: ISR
+  year: 2023
+  volume: "34(1):297–318"
+
+- title: "Putting religious bias in context: How offline and online contexts shape religious bias in online prosocial lending"
+  url: ""
+  authors:
+    - "Sabzehzar A"
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Raghu T"
+  journal: MISQ
+  year: 2023
+  volume: "47(1):33–62"
+
+- title: "Direct and indirect spillovers from content providers’ switching: Evidence from online livestreaming"
+  url: "https://doi.org/10.1287/isre.2022.1160"
+  authors:
+    - "Zhao K"
+    - "Lu Y"
+    - "Hu Y"
+    - "**Hong Y**"
+  journal: ISR
+  year: 2023
+  volume: "34(3):847–866"
+
+- title: "Some thoughts on reviewing for Information Systems Research and other leading information systems journals"
+  url: "https://doi.org/10.1287/isre.2023.editorial.v34.n4"
+  authors:
+    - "Sarker S"
+    - "Whitley EA"
+    - "Goh K"
+    - "**Hong Y**"
+    - "MAhring M"
+    - "Sanyal P"
+    - "Su N"
+    - "Xu H"
+    - "Xu JD"
+    - "Zhang J"
+  journal: ISR
+  year: 2023
+  volume: "34(4):1321–1338"
+
+- title: "Differential effects of multidimensional review evaluations on product sales for mainstream vs. niche products"
+  url: "https://aisel.aisnet.org/misq/vol47/iss2/14/"
+  authors:
+    - "Zheng X"
+    - "Cao J"
+    - "**Hong Y**"
+    - "Yang S"
+    - "Ren X"
+  journal: MISQ
+  year: 2023
+  volume: "47(2):833–856"
+- title: "SHEDR: an end-to-end deep neural event detection and recommendation framework for hyperlocal news using social media"
+  url: "https://doi.org/10.1287/ijoc.2021.1112"
+  authors:
+    - "Hu Y"
+    - "**Hong Y**"
+  journal: IJOC
+  year: 2022
+  volume: "34(2):790–806"
+
+- title: "How do on-demand ridesharing services affect traffic congestion? The moderating role of urban compactness"
+  url: "https://doi.org/10.1111/poms.13530"
+  authors:
+    - "Li Z"
+    - "Liang C"
+    - "**Hong Y**"
+    - "Zhang Z"
+  journal: POM
+  year: 2022
+  volume: "31(1):239–258"
+
+- title: "How do peer awards motivate creative content? Experimental evidence from Reddit"
+  url: "https://doi.org/10.1287/mnsc.2021.4040"
+  authors:
+    - "Burtch G"
+    - "He Q"
+    - "**Hong Y**"
+    - "Lee D"
+  journal: MS
+  year: 2022
+  volume: "68(5):3488–3506"
+
+- title: "The screening role of design parameters for service procurement auctions in online service outsourcing platforms"
+  url: "https://doi.org/10.1287/isre.2022.1168"
+  authors:
+    - "Liang C"
+    - "**Hong Y**"
+    - "Chen P"
+    - "Shao BB"
+  journal: ISR
+  year: 2022
+  volume: "33(4):1324–1343"
+
+- title: "Managing congestion in a matching market via demand information disclosure"
+  url: "https://doi.org/10.1287/isre.2022.1148"
+  authors:
+    - "Huang N"
+    - "Burtch G"
+    - "He Y"
+    - "**Hong Y**"
+  journal: ISR
+  year: 2022
+  volume: "33(4):1196–1220"
+
+- title: "On factors that moderate the effect of buyer-supplier experience on e-procurement platforms"
+  url: "https://doi.org/10.1111/poms.13291"
+  authors:
+    - "**Hong Y**"
+    - "Shao BB"
+  journal: POM
+  year: 2021
+  volume: "30(4):1034–1051"
+
+- title: "Measuring product type and purchase uncertainty with online product ratings: A theoretical model and empirical application"
+  url: "https://doi.org/10.1287/isre.2021.1041"
+  authors:
+    - "Chen P"
+    - "Hitt LM"
+    - "**Hong Y**"
+    - "Wu S"
+  journal: ISR
+  year: 2021
+  volume: "32(4):1470–1489"
+
+- title: "When does dispute resolution substitute for a reputation system? Empirical evidence from a service procurement platform"
+  url: "https://doi.org/10.1111/poms.13341"
+  authors:
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Kumar S"
+  journal: POM
+  year: 2021
+  volume: "30(6):1565–1582"
+
+- title: "Just DM me (politely): Direct messaging, politeness, and hiring outcomes in online labor markets"
+  url: "https://doi.org/10.1287/isre.2021.1003"
+  authors:
+    - "**Hong Y**"
+    - "Peng J"
+    - "Burtch G"
+    - "Huang N"
+  journal: ISR
+  year: 2021
+  volume: "32(3):786–800"
+
+- title: "Unemployment and worker participation in the gig economy: Evidence from an online labor market"
+  url: "https://doi.org/10.1287/isre.2019.0896"
+  authors:
+    - "Huang N"
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Pavlou PA"
+  journal: ISR
+  year: 2020
+  volume: "31(2):431–448"
+
+- title: "Motivating user-generated content with performance feedback: Evidence from randomized field experiments"
+  url: "https://doi.org/10.1287/mnsc.2017.2944"
+  authors:
+    - "Huang N"
+    - "Burtch G"
+    - "Gu B"
+    - "**Hong Y**"
+    - "Liang C"
+    - "Wang K"
+    - "Fu D"
+    - "Yang B"
+  journal: MS
+  year: 2019
+  volume: "65(1):327–345"
+
+- title: "Stimulating online reviews by combining financial incentives and social norms"
+  url: "https://doi.org/10.1287/mnsc.2016.2715"
+  authors:
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Bapna R"
+    - "Griskevicius V"
+  journal: MS
+  year: 2018
+  volume: "64(5):2065–2082"
+
+- title: "Embeddedness, prosociality, and social influence: Evidence from online crowdfunding"
+  url: ""
+  authors:
+    - "**Hong Y**"
+    - "Hu Y"
+    - "Burtch G"
+  journal: MISQ
+  year: 2018
+  volume: "42(4):1211–1224"
+
+- title: "The value of multidimensional rating systems: Evidence from a natural experiment and randomized experiments"
+  url: "https://doi.org/10.1287/mnsc.2017.2852"
+  authors:
+    - "Chen P"
+    - "**Hong Y**"
+    - "Liu Y"
+  journal: MS
+  year: 2018
+  volume: "64(10):4629–4647"
+
+- title: "Surviving in global online labor markets for IT services: A geo-economic analysis"
+  url: "https://doi.org/10.1287/isre.2017.0751"
+  authors:
+    - "Kanat I"
+    - "**Hong Y**"
+    - "Raghu T"
+  journal: ISR
+  year: 2018
+  volume: "29(4):893–909"
+
+- title: "On the role of fairness and social distance in designing effective social referral systems"
+  url: "https://www.jstor.org/stable/26635014"
+  authors:
+    - "**Hong Y**"
+    - "Pavlou PA"
+    - "Shi N"
+    - "Wang K"
+  journal: MISQ
+  year: 2017
+  volume: "41(3):787–A13"
+
+- title: "On buyer selection of service providers in online outsourcing platforms for IT services"
+  url: "https://doi.org/10.1287/isre.2017.0709"
+  authors:
+    - "**Hong Y**"
+    - "Pavlou PA"
+  journal: ISR
+  year: 2017
+  volume: "28(3):547–562"
+
+- title: "Social network integration and user content generation: Evidence from natural experiments"
+  url: "https://www.jstor.org/stable/26630284"
+  authors:
+    - "Huang N"
+    - "**Hong Y**"
+    - "Burtch G"
+  journal: MISQ
+  year: 2017
+  volume: "41(4):1035–1058"
+
+- title: "Comparing open and sealed bid auctions: Evidence from online labor markets"
+  url: "https://doi.org/10.1287/isre.2015.0606"
+  authors:
+    - "**Hong Y**"
+    - "Wang C"
+    - "Pavlou PA"
+  journal: ISR
+  year: 2016
+  volume: "27(1):49–69"
+
+- title: "Product fit uncertainty in online markets: Nature, effects, and antecedents"
+  url: "https://doi.org/10.1287/isre.2014.0520"
+  authors:
+    - "**Hong Y**"
+    - "Pavlou PA"
+  journal: ISR
+  year: 2014
+  volume: "25(2):328–344"
+
+- title: "On product uncertainty in online markets: Theory and evidence"
+  url: "https://doi.org/10.2307/41703461"
+  authors:
+    - "Dimoka A"
+    - "**Hong Y**"
+    - "Pavlou PA"
+  journal: MISQ
+  year: 2012
+  volume: "36(2):395–426"
+
