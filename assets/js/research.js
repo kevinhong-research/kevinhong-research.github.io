@@ -50,10 +50,7 @@
               <span class="pub-year">${pub.year}</span>
               ${pub.forthcoming  ? `<span class="pub-note">Forthcoming</span>` : ''}
               ${pub.volume       ? `<span class="pub-year">${pub.volume}</span>` : ''}
-            </div>
-          </div>
-          <span class="pub-badge">${j.badge}</span>
-        </div>`;
+            </div>`;
     }).join('');
 
     updateCount();
