@@ -2,7 +2,7 @@
 layout: page
 permalink: /publications/
 title: publications
-description: publications in reversed chronological order; template designed by Nina Huang.
+description: publications in reversed chronological order, using this <a href='https://nihuang.me/research/' target='_blank'>Template</a>.
 nav: false
 nav_order: 2
 ---
