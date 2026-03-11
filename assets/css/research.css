@@ -149,6 +149,7 @@
   grid-template-columns: 44px 1fr;
   gap: 1.5rem;
   padding: 1.5rem 0;
+  padding-left: 0;
   border-bottom: 1px solid var(--line);
   align-items: start;
   position: relative;
@@ -250,7 +251,7 @@
   transition: color 0.2s;
   text-align: right;
 }
-.pub-item:hover 
+/*.pub-item:hover */
 /*.pub-badge { color: var(--orange); }*/
 
 /* ── SCROLL REVEAL ── */
