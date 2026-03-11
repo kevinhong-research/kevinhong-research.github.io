@@ -181,7 +181,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     renderPubs(window.PUBLICATIONS || []);
     initSectionReveal();
-    initCursor();
+    // initCursor();
   });
 
 })();

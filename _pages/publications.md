@@ -2,18 +2,18 @@
 layout: page
 permalink: /publications/
 title: publications
-description: publications in reversed chronological order, using this <a href='https://nihuang.me/research/' target='_blank'>Template</a>.
+description: publications in reversed chronological order, using this <a href='https://nihuang.me/research/' target='_blank'>template</a>.
 nav: false
 nav_order: 2
 ---
 
 <!-- Cursor elements (referenced by research.js) -->
-<div id="nhCursor"></div>
-<div id="nhCursorRing"></div>
+<!-- <div id="nhCursor"></div>
+<div id="nhCursorRing"></div> -->
 
 <link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
 
-<div class="nh-research"><div>
+<div class="nh-research">
 
   <div class="filter-bar">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -27,9 +27,6 @@ nav_order: 2
 
       <!-- Populated by research.js via window.PUBLICATIONS -->
   <div class="pub-list" id="pubList"></div>
-
-  </div>
-  </div>
 
 </div><!-- end .nh-research -->
 
