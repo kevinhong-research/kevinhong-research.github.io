@@ -30,8 +30,7 @@ nav_order: 2
   <button class="filter-btn" data-filter="Future of Work">Future of Work</button>
   <button class="filter-btn" data-filter="Digital Platforms">Digital Platforms</button>
   <button class="filter-btn" data-filter="Digital Media">Digital Media</button>
-  <button class="filter-btn" data-filter="Human-Algorithm Interactions">Human-Algorithm Interactions</button>
-  <button class="filter-btn" data-filter="Editorial">Editorial</button>
+  <button class="filter-btn" data-filter="Human-Algorithm Interactions">Human-Algorithm Interaction</button>
   <span class="filter-count" id="filterCount"></span>
 </div>
 
