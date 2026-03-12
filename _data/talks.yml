@@ -1,0 +1,308 @@
+# _data/talks.yml
+# Add new talks at the top. Fields:
+#   institution: (required)
+#   venue:       (optional)
+#   date:        (required) — use M/YYYY format for correct sorting, or "Season YYYY"
+#   month:       (required for sorting) — numeric month; use 13 for "Fall", 0 for undated
+#   year:        (required for sorting) — numeric year
+#   upcoming:    true  — shows green Upcoming badge
+#   type:        "keynote" — shows orange Keynote badge
+
+- institution: "University of South Florida"
+  venue: "Muma College of Business"
+  date: "Fall 2026"
+  year: 2026
+  month: 13
+  upcoming: true
+
+- institution: "Tulane University"
+  venue: "The Murphy Institute"
+  date: "4/2026"
+  year: 2026
+  month: 4
+  upcoming: true
+
+- institution: "University of Texas at Austin"
+  venue: "McCombs School of Business"
+  date: "3/2026"
+  year: 2026
+  month: 3
+
+- institution: "Ohio State University"
+  venue: "Fisher College of Business"
+  date: "11/2025"
+  year: 2025
+  month: 11
+
+- institution: "Virginia Tech"
+  venue: "Pamplin College of Business"
+  date: "9/2025"
+  year: 2025
+  month: 9
+
+- institution: "Cheung Kong Graduate School of Business (CKGSB)"
+  date: "6/2025"
+  year: 2025
+  month: 6
+
+- institution: "Indian School of Business"
+  date: "11/2024"
+  year: 2024
+  month: 11
+
+- institution: "University of Illinois Urbana-Champaign"
+  venue: "Gies College of Business"
+  date: "11/2024"
+  year: 2024
+  month: 11
+
+- institution: "New York University"
+  venue: "Stern School of Business, ISPOC"
+  date: "5/2024"
+  year: 2024
+  month: 5
+
+- institution: "ZEVEDI-Lecture Series"
+  venue: "Responsible Algorithmic Decision-Making in the Workplace"
+  date: "4/2024"
+  year: 2024
+  month: 4
+
+- institution: "Boston University"
+  venue: "Questrom School of Business"
+  date: "11/2023"
+  year: 2023
+  month: 11
+
+- institution: "University of Delaware"
+  venue: "Lerner College of Business and Economics"
+  date: "10/2023"
+  year: 2023
+  month: 10
+
+- institution: "University of Southern California"
+  venue: "Marshall School of Business"
+  date: "12/2022"
+  year: 2022
+  month: 12
+
+- institution: "Florida State University"
+  venue: "College of Business"
+  date: "10/2022"
+  year: 2022
+  month: 10
+
+- institution: "University of Georgia"
+  venue: "Terry College of Business"
+  date: "4/2022"
+  year: 2022
+  month: 4
+
+- institution: "University of Rochester"
+  venue: "Simon Business School"
+  date: "4/2022"
+  year: 2022
+  month: 4
+
+- institution: "University of Pittsburgh"
+  venue: "Katz Graduate School of Business"
+  date: "11/2021"
+  year: 2021
+  month: 11
+
+- institution: "University of Miami"
+  venue: "Herbert Business School"
+  date: "11/2021"
+  year: 2021
+  month: 11
+
+- institution: "University of Wisconsin-Madison"
+  venue: "Wisconsin School of Business"
+  date: "11/2021"
+  year: 2021
+  month: 11
+
+- institution: "Tsinghua University"
+  venue: "School of Economics and Management"
+  date: "10/2021"
+  year: 2021
+  month: 10
+
+- institution: "National University of Singapore"
+  venue: "NUS Business School"
+  date: "10/2021"
+  year: 2021
+  month: 10
+
+- institution: "University of Maryland"
+  venue: "R. H. Smith School of Business"
+  date: "9/2021"
+  year: 2021
+  month: 9
+
+- institution: "Erasmus University"
+  venue: "Rotterdam School of Management"
+  date: "5/2021"
+  year: 2021
+  month: 5
+
+- institution: "University of Houston"
+  venue: "Hewlett Packard Enterprise Data Science Institute"
+  date: "4/2021"
+  year: 2021
+  month: 4
+
+- institution: "University of Oklahoma"
+  venue: "Price College of Business"
+  date: "4/2021"
+  year: 2021
+  month: 4
+
+- institution: "University of Connecticut"
+  venue: "School of Business"
+  date: "2/2021"
+  year: 2021
+  month: 2
+
+- institution: "Lehigh University"
+  venue: "College of Business"
+  date: "1/2021"
+  year: 2021
+  month: 1
+
+- institution: "University of Washington"
+  venue: "Foster School of Business"
+  date: "2/2020"
+  year: 2020
+  month: 2
+
+- institution: "University of Houston"
+  venue: "Bauer College of Business"
+  date: "12/2019"
+  year: 2019
+  month: 12
+
+- institution: "Georgia State University"
+  venue: "Robinson College of Business"
+  date: "11/2019"
+  year: 2019
+  month: 11
+
+- institution: "University of Arizona"
+  venue: "Eller College of Management"
+  date: "10/2019"
+  year: 2019
+  month: 10
+
+- institution: "University of North Carolina at Charlotte"
+  venue: "Belk College of Business"
+  date: "10/2019"
+  year: 2019
+  month: 10
+
+- institution: "University of Utah"
+  venue: "Eccles School of Business"
+  date: "9/2019"
+  year: 2019
+  month: 9
+
+- institution: "Hong Kong Polytechnic University"
+  venue: "Faculty of Business"
+  date: "6/2019"
+  year: 2019
+  month: 6
+
+- institution: "Boston College"
+  venue: "Carroll School of Management"
+  date: "5/2019"
+  year: 2019
+  month: 5
+
+- institution: "George Washington University"
+  venue: "College of Business"
+  date: "4/2019"
+  year: 2019
+  month: 4
+
+- institution: "University of Illinois at Chicago"
+  venue: "College of Business"
+  date: "11/2018"
+  year: 2018
+  month: 11
+
+- institution: "MentorStudents.org"
+  date: "3/2018"
+  year: 2018
+  month: 3
+
+- institution: "University of Minnesota"
+  venue: "Carlson School of Management"
+  date: "3/2018"
+  year: 2018
+  month: 3
+
+- institution: "Special Libraries Association"
+  venue: "Invited Keynote Speech"
+  date: "7/2017"
+  year: 2017
+  month: 7
+  type: "keynote"
+
+- institution: "Arizona State University"
+  venue: "Ira A. Fulton School of Engineering"
+  date: "3/2017"
+  year: 2017
+  month: 3
+
+- institution: "Temple University"
+  venue: "Fox School of Business"
+  date: "2/2017"
+  year: 2017
+  month: 2
+
+- institution: "Uber"
+  date: "10/2016"
+  year: 2016
+  month: 10
+
+- institution: "Arizona State University"
+  venue: "Information Systems Research Workshop"
+  date: "2/2016"
+  year: 2016
+  month: 2
+
+- institution: "Temple University"
+  venue: "CIBER"
+  date: "4/2014"
+  year: 2014
+  month: 4
+
+- institution: "Arizona State University"
+  venue: "W. P. Carey School of Business"
+  date: "11/2013"
+  year: 2013
+  month: 11
+
+- institution: "University of Virginia"
+  venue: "McIntire School of Commerce"
+  date: "10/2013"
+  year: 2013
+  month: 10
+
+- institution: "Nanyang Technological University"
+  venue: "Nanyang Business School"
+  date: "10/2013"
+  year: 2013
+  month: 10
+
+- institution: "HKUST"
+  venue: "School of Business"
+  date: "7/2013"
+  year: 2013
+  month: 7
+
+- institution: "City University of Hong Kong"
+  venue: "School of Business"
+  date: "7/2013"
+  year: 2013
+  month: 7
