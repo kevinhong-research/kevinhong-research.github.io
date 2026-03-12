@@ -157,6 +157,9 @@
   }
 
   async function fetchCitations() {
+    const CACHE_KEY = 'nh_openalex_citations';
+    const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
     const anchors = Array.from(document.querySelectorAll('.pub-cite[data-doi]'))
                          .filter(a => a.dataset.doi);
     if (!anchors.length) return;
@@ -164,6 +167,18 @@
     const doiMap = {};
     anchors.forEach(a => { doiMap[a.dataset.doi.toLowerCase()] = a; });
     const dois = Object.keys(doiMap);
+
+    // Try sessionStorage cache first
+    try {
+      const raw = sessionStorage.getItem(CACHE_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (cached && (Date.now() - cached.ts < CACHE_TTL)) {
+          applyCountsToDOM(cached.counts, doiMap);
+          return;
+        }
+      }
+    } catch (_) {}
 
     // Build URL — pipes MUST be literal, not encoded as %7C
     const filterParam = 'doi:' + dois.join('|');  // OpenAlex: doi:val1|val2 (prefix once)
@@ -186,6 +201,9 @@
       });
 
       applyCountsToDOM(counts, doiMap);
+
+      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), counts })); }
+      catch (_) {}
 
     } catch (err) {
       console.error('[citations] Fetch failed:', err.message);
