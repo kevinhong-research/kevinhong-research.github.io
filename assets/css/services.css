@@ -1,0 +1,203 @@
+/* ============================================================
+   services.css — styles for the /services/ page
+   Extends research.css variables and base classes.
+   ============================================================ */
+
+/* ── SECTION ─────────────────────────────────────────────── */
+.svc-section {
+  border-top: 1px solid var(--line);
+  padding-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+.svc-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.svc-section-header {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+  margin-bottom: 1.75rem;
+}
+
+/* ── BLOCK (subsection) ──────────────────────────────────── */
+.svc-block {
+  margin-bottom: 2rem;
+}
+.svc-block-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #F47321;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── ROLE LIST (editorial & professional services) ───────── */
+.svc-role-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.svc-role-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  padding-left: 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  transition: padding-left 0.25s ease;
+}
+.svc-role-item:first-child {
+  border-top: 1px solid var(--line);
+}
+.svc-role-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: #F47321;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s ease;
+}
+.svc-role-item:hover { padding-left: 12px; }
+.svc-role-item:hover::before { transform: scaleY(1); }
+
+.svc-role-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+.svc-role-title {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-hi);
+  line-height: 1.4;
+}
+.svc-role-journal {
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-mid);
+}
+.svc-role-topic {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.4;
+}
+.svc-role-cochair {
+  color: var(--text-lo);
+  font-size: 0.75rem;
+}
+.svc-role-years {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--text-lo);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  padding-top: 3px;
+  flex-shrink: 0;
+}
+
+/* ── STUDENT LIST ────────────────────────────────────────── */
+.svc-student-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.svc-student-item {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  padding-left: 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+  position: relative;
+  transition: padding-left 0.25s ease;
+}
+.svc-student-item:first-child {
+  border-top: 1px solid var(--line);
+}
+.svc-student-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: #00a060;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s ease;
+}
+.svc-student-item:hover { padding-left: 12px; }
+.svc-student-item:hover::before { transform: scaleY(1); }
+
+/* Green accent for current students */
+.svc-current .svc-student-item::before {
+  background: var(--green-hi);
+  opacity: 0.6;
+}
+
+.svc-student-year {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-lo);
+  padding-top: 3px;
+  transition: color 0.2s;
+}
+.svc-student-item:hover .svc-student-year { color: #00a060; }
+
+.svc-student-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.svc-student-name {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-hi);
+  line-height: 1.4;
+}
+.svc-student-placement {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--text-mid);
+  line-height: 1.4;
+}
+
+/* ── AWARD BADGES ────────────────────────────────────────── */
+.svc-awards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.svc-award {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #F47321;
+  border: 1px solid rgba(244, 115, 33, 0.35);
+  padding: 0.1rem 0.5rem;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  white-space: nowrap;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .svc-role-item { flex-direction: column; gap: 0.5rem; }
+  .svc-role-years { align-self: flex-start; }
+  .svc-student-item { grid-template-columns: 44px 1fr; }
+}
