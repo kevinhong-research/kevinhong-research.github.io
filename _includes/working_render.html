@@ -1,0 +1,31 @@
+{% comment %}
+  _includes/working_render.html
+  Renders _data/working_papers.yml.
+  Edit data in _data/working_papers.yml only.
+{% endcomment %}
+
+{% assign papers = site.data.working_papers | sort: "sort_key" | reverse %}
+
+<div class="nh-research">
+  <section class="svc-section">
+    <div class="pub-list" id="workingList">
+      {% for paper in papers %}
+      <div class="pub-item nh-visible">
+        <span class="pub-num">{{ paper.year }}</span>
+        <div class="pub-body">
+          <a class="pub-title" href="{{ paper.url }}" target="_blank">{{ paper.title }}</a>
+          <div class="pub-authors">
+            {% for author in paper.authors %}
+              {% if author contains "**" %}
+                <strong>{{ author | remove: "**" }}</strong>{% unless forloop.last %}, {% endunless %}
+              {% else %}
+                {{ author }}{% unless forloop.last %}, {% endunless %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>

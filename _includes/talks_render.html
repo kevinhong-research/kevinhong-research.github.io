@@ -1,13 +1,11 @@
 {% comment %}
   _includes/talks_render.html
   Renders _data/talks.yml as a flat reverse-chronological list.
-  Sorted by year desc, then month desc.
+  Sorted by sort_key (YYYYMM) descending — single-field compound sort.
   Edit data in _data/talks.yml only.
 {% endcomment %}
 
-{% comment %} Sort: year desc, month desc {% endcomment %}
-{% assign sorted = site.data.talks | sort: "month" | reverse %}
-{% assign sorted = sorted | sort: "year" | reverse %}
+{% assign sorted = site.data.talks | sort: "sort_key" | reverse %}
 
 <div class="nh-research">
   <section class="svc-section">

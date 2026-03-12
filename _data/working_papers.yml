@@ -1,0 +1,103 @@
+# _data/working_papers.yml
+# Add new papers at the top.
+# Fields: title, url, authors (list), year
+# sort_key: YYYY (used for ordering)
+
+- title: "On the Double-Edged Effects of Peer-to-Peer Payment Systems: Evidence from Zelle Partnerships"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4883176"
+  authors:
+    - "Huang A"
+    - "Huang N"
+    - "**Hong Y**"
+  year: 2025
+  sort_key: 2025
+
+- title: "Knowledge Trap in Augmented Intelligence: Human Experts' Overfocus on Details Hurts Task Performance"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4395858"
+  authors:
+    - "Wang W"
+    - "Liu X"
+    - "Zhang X"
+    - "**Hong Y**"
+  year: 2025
+  sort_key: 2025
+
+- title: "How does Shielded (vs. Open) Voting Shape Collective Actions? Evidence from Decentralized Autonomous Organizations"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4982940"
+  authors:
+    - "Guo D"
+    - "Kwon E"
+    - "Huang N"
+    - "**Hong Y**"
+  year: 2025
+  sort_key: 2025
+
+- title: "When More Is Less: The Interference Logic of Multimodal Empathy in GPT Social Chatbots"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5106705"
+  authors:
+    - "Tang J"
+    - "Wang W"
+    - "**Hong Y**"
+  year: 2025
+  sort_key: 2025
+
+- title: "Navigating Exclusivity and Free Offerings: How Digital Paywalls Influence Content Creators' Behavior"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5237649"
+  authors:
+    - "Ye X"
+    - "Guo D"
+    - "Gao C"
+    - "**Hong Y**"
+    - "Huang N"
+  year: 2025
+  sort_key: 2025
+
+- title: "Unpacking Firms' Non-Market Responses to Data Breaches: Evidence from Cybersecurity Lobbying Activities"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4263031"
+  authors:
+    - "Li B"
+    - "**Hong Y**"
+    - "Shi W"
+    - "Xie Y"
+  year: 2024
+  sort_key: 2024
+
+- title: "Jumpstarting Online Presence: How Algorithmic Content Mitigates Cold Start Woes"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4296173"
+  authors:
+    - "Hou J"
+    - "Sabzehzar A"
+    - "**Hong Y**"
+    - "Chen PY"
+  year: 2024
+  sort_key: 2024
+
+- title: "The Efficacy of Need-Based Attentional Interventions in Educational Crowdfunding"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4838321"
+  authors:
+    - "Sabzehzar A"
+    - "Burtch G"
+    - "**Hong Y**"
+    - "Raghu TS"
+  year: 2024
+  sort_key: 2024
+
+- title: "The Impacts of the Physical Environment on Online Content Creation"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4443675"
+  authors:
+    - "Mousavi R"
+    - "Wang X"
+    - "**Hong Y**"
+    - "Ren Y"
+  year: 2023
+  sort_key: 2023
+
+- title: "Idea Recommendation in Open Innovation Platforms: A Design Science Approach"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3898894"
+  authors:
+    - "Liu Q"
+    - "Du Q"
+    - "**Hong Y**"
+    - "Fan W"
+  year: 2023
+  sort_key: 2023
