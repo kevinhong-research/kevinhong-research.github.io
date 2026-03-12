@@ -46,13 +46,13 @@ window.PUBLICATIONS = [
   {
     "title":       {{ pub.title       | jsonify }},
     "url":         {{ pub.url         | jsonify }},
-    "doi":         {{ pub.doi | default: "" | jsonify }},
+    "doi":         {{ pub.doi         | default: "" | jsonify }},
     "authors":     {{ pub.authors     | jsonify }},
     "journal":     {{ pub.journal     | jsonify }},
     "year":        {{ pub.year        | jsonify }},
     "volume":      {{ pub.volume      | default: "" | jsonify }},
     "forthcoming": {{ pub.forthcoming | default: false | jsonify }},
-    "topics":      {{ pub.topics | default: [] | jsonify }}
+    "topics":      {{ pub.topics | jsonify | default: "[]" }}
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
 ];
