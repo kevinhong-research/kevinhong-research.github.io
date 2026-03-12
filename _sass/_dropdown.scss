@@ -1,0 +1,94 @@
+/* ============================================================
+   _dropdown.scss — nav dropdown styling consistent with site design
+   Import in assets/css/main.scss with @import "dropdown"
+   ============================================================ */
+
+/* ── DROPDOWN TOGGLE (the "research" nav item) ───────────── */
+.nav-item.dropdown > .nav-link {
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+.nav-item.dropdown > .nav-link:hover,
+.nav-item.dropdown > .nav-link:focus,
+.nav-item.dropdown.show > .nav-link {
+  color: #00a060 !important;
+}
+
+/* Caret — hide the default Bootstrap one, draw a minimal one */
+.nav-item.dropdown > .nav-link::after {
+  display: inline-block;
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  margin-left: 5px;
+  vertical-align: middle;
+  transition: transform 0.2s, border-color 0.2s;
+  border-top: none;
+  border-left: none;
+}
+.nav-item.dropdown.show > .nav-link::after {
+  transform: translateY(2px) rotate(-135deg);
+  border-color: #00a060;
+}
+
+/* ── DROPDOWN MENU PANEL ─────────────────────────────────── */
+.nav-item.dropdown .dropdown-menu {
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  padding: 0.4rem 0;
+  min-width: 180px;
+  margin-top: 4px;
+
+  /* Clip-path parallelogram to match site aesthetic */
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+}
+
+/* ── DROPDOWN ITEMS ──────────────────────────────────────── */
+.nav-item.dropdown .dropdown-item {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #666;
+  padding: 0.45rem 1.1rem;
+  background: transparent;
+  transition: color 0.2s, padding-left 0.2s;
+  position: relative;
+}
+.nav-item.dropdown .dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: #F47321;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.2s ease;
+}
+.nav-item.dropdown .dropdown-item:hover,
+.nav-item.dropdown .dropdown-item:focus {
+  color: #f0f0f0;
+  background: transparent;
+  padding-left: 1.4rem;
+}
+.nav-item.dropdown .dropdown-item:hover::before,
+.nav-item.dropdown .dropdown-item:focus::before {
+  transform: scaleY(1);
+}
+
+/* Active page highlight */
+.nav-item.dropdown .dropdown-item.active,
+.nav-item.dropdown .dropdown-item:active {
+  color: #00a060;
+  background: transparent;
+}
+
+/* ── DIVIDER ─────────────────────────────────────────────── */
+.nav-item.dropdown .dropdown-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin: 0.3rem 0;
+}
