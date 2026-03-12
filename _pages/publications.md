@@ -25,15 +25,15 @@ nav_order: 2
   </a>
   </div>
 
-  <div class="filter-bar">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="ISR">ISR</button>
-        <button class="filter-btn" data-filter="MISQ">MISQ</button>
-        <button class="filter-btn" data-filter="MS">MS</button>
-        <button class="filter-btn" data-filter="POM">POM</button>
-        <button class="filter-btn" data-filter="IJOC">IJOC</button>
-        <span class="filter-count" id="filterCount"></span>
-      </div>
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="Future of Work">Future of Work</button>
+  <button class="filter-btn" data-filter="Digital Platforms">Digital Platforms</button>
+  <button class="filter-btn" data-filter="Digital Media">Digital Media</button>
+  <button class="filter-btn" data-filter="Human-Algorithm Interactions">Human-Algorithm Interactions</button>
+  <button class="filter-btn" data-filter="Editorial">Editorial</button>
+  <span class="filter-count" id="filterCount"></span>
+</div>
 
       <!-- Populated by research.js via window.PUBLICATIONS -->
   <div class="pub-list" id="pubList"></div>
@@ -52,6 +52,7 @@ window.PUBLICATIONS = [
     "year":        {{ pub.year        | jsonify }},
     "volume":      {{ pub.volume      | default: "" | jsonify }},
     "forthcoming": {{ pub.forthcoming | default: false | jsonify }}
+    "topics":      {{ pub.topics | default: [] | jsonify }}
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
 ];

@@ -40,7 +40,7 @@
         .join(', ');
 
       return `
-        <div class="pub-item" data-journal="${j.filter}">
+        <div class="pub-item" data-topics="${(pub.topics || []).join('|')}">
           <span class="pub-num">${num}</span>
           <div class="pub-body">
             <a class="pub-title" href="${pub.url || '#'}" target="_blank">${pub.title}</a>
@@ -75,8 +75,14 @@
         const f = btn.dataset.filter;
         let count = 0;
 
+        // items.forEach(item => {
+        //   const show = f === 'all' || item.dataset.journal === f;
+        //   item.classList.toggle('hidden', !show);
+        //   if (show) { item.classList.remove('nh-visible'); count++; }
+        // });
         items.forEach(item => {
-          const show = f === 'all' || item.dataset.journal === f;
+          const topics = (item.dataset.topics || '').split('|');
+          const show = f === 'all' || topics.includes(f);
           item.classList.toggle('hidden', !show);
           if (show) { item.classList.remove('nh-visible'); count++; }
         });
