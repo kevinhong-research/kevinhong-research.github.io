@@ -63,42 +63,79 @@
   /* ── FILTER BAR ────────────────────────────────────────────
      Filters visible pub-items and re-staggers their entrance.
   ──────────────────────────────────────────────────────────── */
+  // function initFilter() {
+  //   const btns  = document.querySelectorAll('.filter-btn');
+  //   const items = document.querySelectorAll('.pub-item');
+
+  //   btns.forEach(btn => {
+  //     btn.addEventListener('click', () => {
+  //       btns.forEach(b => b.classList.remove('active'));
+  //       btn.classList.add('active');
+
+  //       const f = btn.dataset.filter;
+  //       let count = 0;
+
+  //       // items.forEach(item => {
+  //       //   const show = f === 'all' || item.dataset.journal === f;
+  //       //   item.classList.toggle('hidden', !show);
+  //       //   if (show) { item.classList.remove('nh-visible'); count++; }
+  //       // });
+  //       items.forEach(item => {
+  //         const topics = (item.dataset.topics || '').split('|');
+  //         const show = f === 'all' || topics.includes(f);
+  //         item.classList.toggle('hidden', !show);
+  //         if (show) { item.classList.remove('nh-visible'); count++; }
+  //       });
+
+  //       updateCount(count, f === 'all');
+
+  //       setTimeout(() => {
+  //         Array.from(items)
+  //           .filter(i => !i.classList.contains('hidden'))
+  //           .forEach((item, i) => {
+  //             setTimeout(() => item.classList.add('nh-visible'), i * 40);
+  //           });
+  //       }, 30);
+  //     });
+  //   });
+  // }
+
   function initFilter() {
-    const btns  = document.querySelectorAll('.filter-btn');
-    const items = document.querySelectorAll('.pub-item');
+  const btns = document.querySelectorAll('.filter-btn');
 
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-        const f = btn.dataset.filter;
-        let count = 0;
+      const f = btn.dataset.filter;
 
-        // items.forEach(item => {
-        //   const show = f === 'all' || item.dataset.journal === f;
-        //   item.classList.toggle('hidden', !show);
-        //   if (show) { item.classList.remove('nh-visible'); count++; }
-        // });
-        items.forEach(item => {
-          const topics = (item.dataset.topics || '').split('|');
-          const show = f === 'all' || topics.includes(f);
-          item.classList.toggle('hidden', !show);
-          if (show) { item.classList.remove('nh-visible'); count++; }
-        });
+      // Re-query each time so we always have current items
+      const items = document.querySelectorAll('.pub-item');
+      let count = 0;
 
-        updateCount(count, f === 'all');
+      items.forEach(item => {
+        const topics = (item.dataset.topics || '').split('|');
+        const show = f === 'all' || topics.includes(f);
+        if (show) {
+          item.classList.remove('hidden');
+          count++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
 
-        setTimeout(() => {
-          Array.from(items)
-            .filter(i => !i.classList.contains('hidden'))
-            .forEach((item, i) => {
-              setTimeout(() => item.classList.add('nh-visible'), i * 40);
-            });
-        }, 30);
+      updateCount(count);
+
+      // Stagger re-animate only the visible items
+      const visible = Array.from(items).filter(i => !i.classList.contains('hidden'));
+      visible.forEach(item => item.classList.remove('nh-visible'));
+      visible.forEach((item, i) => {
+        setTimeout(() => item.classList.add('nh-visible'), i * 40);
       });
     });
-  }
+  });
+}
 
   function updateCount(n, all) {
     const el = document.getElementById('filterCount');
