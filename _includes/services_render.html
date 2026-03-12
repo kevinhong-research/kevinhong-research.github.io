@@ -1,8 +1,7 @@
 {% comment %}
   _includes/services_render.html
   Renders all sections of _data/services.yml.
-  Included by services.md — do not edit layout here,
-  edit data in _data/services.yml instead.
+  Edit data in _data/services.yml — no HTML changes needed.
 {% endcomment %}
 
 {% assign svc = site.data.services %}
@@ -19,8 +18,11 @@
         {% for item in svc.editorial_appointments %}
         <div class="svc-role-item">
           <div class="svc-role-body">
-            <span class="svc-role-title">{{ item.role }}</span>
-            <span class="svc-role-journal">{{ item.journal }}</span>
+            <div class="svc-role-row1">
+              <span class="svc-role-title">{{ item.role }}</span>
+              <span class="svc-role-sep">·</span>
+              <span class="svc-role-journal">{{ item.journal }}</span>
+            </div>
           </div>
           {% if item.years %}<span class="svc-role-years">{{ item.years }}</span>{% endif %}
         </div>
@@ -34,8 +36,11 @@
         {% for item in svc.special_issues %}
         <div class="svc-role-item">
           <div class="svc-role-body">
-            <span class="svc-role-title">{{ item.role }}</span>
-            <span class="svc-role-journal">{{ item.journal }}</span>
+            <div class="svc-role-row1">
+              <span class="svc-role-title">{{ item.role }}</span>
+              <span class="svc-role-sep">·</span>
+              <span class="svc-role-journal">{{ item.journal }}</span>
+            </div>
             {% if item.topic %}<span class="svc-role-topic">{{ item.topic }}</span>{% endif %}
           </div>
         </div>
@@ -51,8 +56,11 @@
       {% for item in svc.professional_services %}
       <div class="svc-role-item">
         <div class="svc-role-body">
-          <span class="svc-role-title">{{ item.role }}</span>
-          <span class="svc-role-journal">{{ item.venue }}</span>
+          <div class="svc-role-row1">
+            <span class="svc-role-title">{{ item.role }}</span>
+            <span class="svc-role-sep">·</span>
+            <span class="svc-role-journal">{{ item.venue }}</span>
+          </div>
           {% if item.topic %}
           <span class="svc-role-topic">
             {{ item.topic }}{% if item.cochair %}<span class="svc-role-cochair"> · with {{ item.cochair }}</span>{% endif %}
@@ -66,25 +74,19 @@
   </section>
 
   {% comment %}── PHD / POSTDOC ADVISING ──{% endcomment %}
-  {% assign chair_label    = "Dissertation Chair / Co-Chair" %}
-  {% assign postdoc_label  = "Postdoc Advisor / Co-Advisor" %}
-  {% assign member_label   = "Dissertation Committee Member" %}
-  {% assign mentoring_label = "PhD Students Mentoring" %}
-
   <section class="svc-section nh-reveal">
     <div class="svc-section-header">PhD &amp; Postdoc Advising</div>
 
     {% assign role_groups = "chair,postdoc,member,mentoring" | split: "," %}
-    {% assign role_labels = "" | split: "" %}
 
     {% for group in role_groups %}
       {% assign students = svc.advising | where: "role", group %}
       {% if students.size > 0 %}
 
-        {% if group == "chair"     %}{% assign label = chair_label %}{% endif %}
-        {% if group == "postdoc"   %}{% assign label = postdoc_label %}{% endif %}
-        {% if group == "member"    %}{% assign label = member_label %}{% endif %}
-        {% if group == "mentoring" %}{% assign label = mentoring_label %}{% endif %}
+        {% if group == "chair"     %}{% assign label = "Dissertation Chair / Co-Chair" %}{% endif %}
+        {% if group == "postdoc"   %}{% assign label = "Postdoc Advisor / Co-Advisor" %}{% endif %}
+        {% if group == "member"    %}{% assign label = "Dissertation Committee Member" %}{% endif %}
+        {% if group == "mentoring" %}{% assign label = "PhD Students Mentoring" %}{% endif %}
 
         <div class="svc-block">
           <div class="svc-block-label">{{ label }}</div>
