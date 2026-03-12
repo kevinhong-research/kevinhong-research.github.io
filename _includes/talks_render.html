@@ -1,0 +1,30 @@
+{% comment %}
+  _includes/talks_render.html
+  Renders _data/talks.yml as a flat reverse-chronological list.
+  Sorted by year desc, then month desc.
+  Edit data in _data/talks.yml only.
+{% endcomment %}
+
+{% comment %} Sort: year desc, month desc {% endcomment %}
+{% assign sorted = site.data.talks | sort: "month" | reverse %}
+{% assign sorted = sorted | sort: "year" | reverse %}
+
+<div class="nh-research">
+  <section class="svc-section">
+    <div class="talk-list">
+      {% for talk in sorted %}
+      <div class="talk-item">
+        <div class="talk-body">
+          <span class="talk-institution">{{ talk.institution }}</span>
+          {% if talk.venue %}<span class="talk-venue">{{ talk.venue }}</span>{% endif %}
+        </div>
+        <div class="talk-meta">
+          {% if talk.upcoming %}<span class="talk-badge talk-badge--upcoming">Upcoming</span>{% endif %}
+          {% if talk.type == "keynote" %}<span class="talk-badge talk-badge--keynote">Keynote</span>{% endif %}
+          <span class="talk-date">{{ talk.date }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
