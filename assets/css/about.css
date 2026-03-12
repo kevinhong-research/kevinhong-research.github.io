@@ -1,0 +1,64 @@
+/* ============================================================
+   about.css — styles for the / (about) page
+   Extends research.css variables. Injected via about.md.
+   ============================================================ */
+
+/* ── SUBTITLE LINK ───────────────────────────────────────── */
+.post-description a,
+.post-description a:visited {
+  color: #00a060;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.post-description a:hover { color: #00c07a; }
+
+/* ── BODY LINKS ──────────────────────────────────────────── */
+.about-content a,
+.about-content a:visited,
+article.post-content a,
+article.post-content a:visited {
+  color: #00a060;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 160, 96, 0.25);
+  transition: border-color 0.2s, color 0.2s;
+}
+.about-content a:hover,
+article.post-content a:hover {
+  color: #00c07a;
+  border-bottom-color: rgba(0, 160, 96, 0.6);
+}
+
+/* ── INLINE CODE (backtick highlights) ───────────────────── */
+/* Used for: research areas, journal names, awards, institutions */
+.about-content code,
+article.post-content p code,
+.profile-wrapper ~ * p code {
+  font-family: inherit;
+  font-size: 0.88em;
+  font-weight: 400;
+  color: #f0f0f0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  padding: 0.05em 0.4em;
+  clip-path: polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* ── PARAGRAPH SPACING ───────────────────────────────────── */
+.about-content p,
+article.post-content p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+  color: #aaaaaa;
+}
+
+/* ── PROFILE IMAGE ───────────────────────────────────────── */
+.profile {
+  margin-left: 2.5rem !important;
+}
+.profile img {
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+}
