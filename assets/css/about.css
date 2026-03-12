@@ -6,11 +6,11 @@
 /* ── SUBTITLE LINK ───────────────────────────────────────── */
 .post-description a,
 .post-description a:visited {
-  color: #00a060;
+  color: #F47321;
   text-decoration: none;
   transition: color 0.2s;
 }
-.post-description a:hover { color: #00c07a; }
+.post-description a:hover { color: #ff8c42; }
 
 /* ── BODY LINKS ──────────────────────────────────────────── */
 .about-content a,
