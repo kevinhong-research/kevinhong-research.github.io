@@ -295,7 +295,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.28rem 0.5rem;
-  background: #4285F4;
+  background: #00a060;
   color: #fff;
   white-space: nowrap;
   min-width: 2.5ch;
@@ -319,7 +319,7 @@
   .nh-section-label { position: static; }
   .pub-item { grid-template-columns: 32px 1fr; }
   .pub-badge { display: none; }
-  .pub-cite  { display: none; } /* hide badges on small screens to save space */
+  .pub-cite  { font-size: 0.6rem; }
 }
 
 /* ── SCHOLAR BUTTON ── */
