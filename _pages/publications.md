@@ -46,6 +46,7 @@ window.PUBLICATIONS = [
   {
     "title":       {{ pub.title       | jsonify }},
     "url":         {{ pub.url         | jsonify }},
+    "doi":         {{ pub.doi | default: "" | jsonify }},
     "authors":     {{ pub.authors     | jsonify }},
     "journal":     {{ pub.journal     | jsonify }},
     "year":        {{ pub.year        | jsonify }},

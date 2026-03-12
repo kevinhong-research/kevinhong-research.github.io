@@ -1,6 +1,6 @@
 /* ============================================================
    research.css — styles for the /research/ page
-   Used by: _pages/research_nh.md
+   Used by: _pages/publications.md
    ============================================================ */
 
 /* ── CUSTOM CURSOR ── */
@@ -43,14 +43,6 @@
 }
 
 /* ── SECTION ── */
-/*.nh-section {
-  border-top: 1px solid var(--line);
-  padding-top: 2rem;
-  margin-bottom: 0;
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 3rem;
-}*/
 .nh-section {
   border-top: 1px solid var(--line);
   padding-top: 2rem;
@@ -116,7 +108,7 @@
   border: 1px solid var(--line);
   color: var(--text-lo);
   background: transparent;
-  cursor: none;
+  cursor: pointer;
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   transition: all 0.2s ease;
   font-family: inherit;
@@ -251,8 +243,64 @@
   transition: color 0.2s;
   text-align: right;
 }
-/*.pub-item:hover */
-/*.pub-badge { color: var(--orange); }*/
+
+/* ── CITATION COUNT BADGE ──────────────────────────────────
+   Two-tone pill: beige left half (icon + "scholar" label),
+   Google blue right half (citation count). Matches the
+   shields.io badge style from the al-folio Jekyll template.
+   Only rendered for papers that have a DOI in publications.yml.
+──────────────────────────────────────────────────────────── */
+.pub-cite {
+  display: inline-flex;
+  align-items: stretch;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: middle;
+  opacity: 0.7;
+  transition: opacity 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.pub-cite:hover {
+  opacity: 1;
+  border-color: rgba(66, 133, 244, 0.4);
+  text-decoration: none;
+}
+
+/* Left half — icon + "scholar" label */
+.pub-cite-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.5rem;
+  background: #e8e4d0;
+  color: #333;
+  white-space: nowrap;
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+}
+.pub-cite-label svg {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+}
+
+/* Right half — numeric citation count */
+.pub-cite-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.28rem 0.5rem;
+  background: #4285F4;
+  color: #fff;
+  white-space: nowrap;
+  min-width: 2.5ch;
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+}
 
 /* ── SCROLL REVEAL ── */
 .nh-reveal {
@@ -271,6 +319,7 @@
   .nh-section-label { position: static; }
   .pub-item { grid-template-columns: 32px 1fr; }
   .pub-badge { display: none; }
+  .pub-cite  { display: none; } /* hide badges on small screens to save space */
 }
 
 /* ── SCHOLAR BUTTON ── */

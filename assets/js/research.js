@@ -21,9 +21,17 @@
     IJOC: { label: "INFORMS Journal on Computing", badge: "IJOC", filter: "IJOC" },
   };
 
+  /* ── GOOGLE SCHOLAR ICON SVG ───────────────────────────────
+     Inline SVG path for the Google Scholar logo (mortarboard
+     + circle). Sourced from Simple Icons / shields.io.
+  ──────────────────────────────────────────────────────────── */
+  const SCHOLAR_ICON = `<svg viewBox="0 0 24 24" fill="#4285F4" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/>
+  </svg>`;
+
   /* ── RENDER PUBLICATIONS ───────────────────────────────────
      Called once on DOMContentLoaded. Reads window.PUBLICATIONS
-     (injected by the Jekyll data loop in research_nh.md) and
+     (injected by the Jekyll data loop in publications.md) and
      builds the pub-item markup, then kicks off animations.
   ──────────────────────────────────────────────────────────── */
   function renderPubs(pubs) {
@@ -39,6 +47,25 @@
         .map(a => a.startsWith('**') ? `<strong>${a.slice(2, -2)}</strong>` : a)
         .join(', ');
 
+      // Citation badge — only rendered when a DOI is present.
+      // Links to a Google Scholar title search for the paper.
+      // The .pub-cite-count span starts with an em dash placeholder;
+      // fetchCitations() replaces it with the real count once the
+      // OpenAlex response arrives.
+      const citeBadge = pub.doi ? `
+        <a class="pub-cite"
+           data-doi="${pub.doi}"
+           href="https://scholar.google.com/scholar?q=${encodeURIComponent(pub.title)}"
+           target="_blank"
+           rel="noopener"
+           title="View on Google Scholar">
+          <span class="pub-cite-label">
+            ${SCHOLAR_ICON}
+            scholar
+          </span>
+          <span class="pub-cite-count">—</span>
+        </a>` : '';
+
       return `
         <div class="pub-item" data-topics="${(pub.topics || []).join('|')}">
           <span class="pub-num">${num}</span>
@@ -50,6 +77,7 @@
               <span class="pub-year">${pub.year}</span>
               ${pub.forthcoming  ? `<span class="pub-note">Forthcoming</span>` : ''}
               ${pub.volume       ? `<span class="pub-year">${pub.volume}</span>` : ''}
+              ${citeBadge}
             </div>
           </div>
         </div>`;
@@ -63,81 +91,44 @@
   /* ── FILTER BAR ────────────────────────────────────────────
      Filters visible pub-items and re-staggers their entrance.
   ──────────────────────────────────────────────────────────── */
-  // function initFilter() {
-  //   const btns  = document.querySelectorAll('.filter-btn');
-  //   const items = document.querySelectorAll('.pub-item');
-
-  //   btns.forEach(btn => {
-  //     btn.addEventListener('click', () => {
-  //       btns.forEach(b => b.classList.remove('active'));
-  //       btn.classList.add('active');
-
-  //       const f = btn.dataset.filter;
-  //       let count = 0;
-
-  //       // items.forEach(item => {
-  //       //   const show = f === 'all' || item.dataset.journal === f;
-  //       //   item.classList.toggle('hidden', !show);
-  //       //   if (show) { item.classList.remove('nh-visible'); count++; }
-  //       // });
-  //       items.forEach(item => {
-  //         const topics = (item.dataset.topics || '').split('|');
-  //         const show = f === 'all' || topics.includes(f);
-  //         item.classList.toggle('hidden', !show);
-  //         if (show) { item.classList.remove('nh-visible'); count++; }
-  //       });
-
-  //       updateCount(count, f === 'all');
-
-  //       setTimeout(() => {
-  //         Array.from(items)
-  //           .filter(i => !i.classList.contains('hidden'))
-  //           .forEach((item, i) => {
-  //             setTimeout(() => item.classList.add('nh-visible'), i * 40);
-  //           });
-  //       }, 30);
-  //     });
-  //   });
-  // }
-
   function initFilter() {
-  const btns = document.querySelectorAll('.filter-btn');
+    const btns = document.querySelectorAll('.filter-btn');
 
-  btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-      const f = btn.dataset.filter;
+        const f = btn.dataset.filter;
 
-      // Re-query each time so we always have current items
-      const items = document.querySelectorAll('.pub-item');
-      let count = 0;
+        // Re-query each time so we always have current items
+        const items = document.querySelectorAll('.pub-item');
+        let count = 0;
 
-      items.forEach(item => {
-        const topics = (item.dataset.topics || '').split('|');
-        const show = f === 'all' || topics.includes(f);
-        if (show) {
-          item.classList.remove('hidden');
-          count++;
-        } else {
-          item.classList.add('hidden');
-        }
-      });
+        items.forEach(item => {
+          const topics = (item.dataset.topics || '').split('|');
+          const show = f === 'all' || topics.includes(f);
+          if (show) {
+            item.classList.remove('hidden');
+            count++;
+          } else {
+            item.classList.add('hidden');
+          }
+        });
 
-      updateCount(count);
+        updateCount(count);
 
-      // Stagger re-animate only the visible items
-      const visible = Array.from(items).filter(i => !i.classList.contains('hidden'));
-      visible.forEach(item => item.classList.remove('nh-visible'));
-      visible.forEach((item, i) => {
-        setTimeout(() => item.classList.add('nh-visible'), i * 40);
+        // Stagger re-animate only the visible items
+        const visible = Array.from(items).filter(i => !i.classList.contains('hidden'));
+        visible.forEach(item => item.classList.remove('nh-visible'));
+        visible.forEach((item, i) => {
+          setTimeout(() => item.classList.add('nh-visible'), i * 40);
+        });
       });
     });
-  });
-}
+  }
 
-  function updateCount(n, all) {
+  function updateCount(n) {
     const el = document.getElementById('filterCount');
     if (!el) return;
     const count = (n !== undefined)
@@ -182,6 +173,110 @@
     document.querySelectorAll('.nh-reveal').forEach(r => obs.observe(r));
   }
 
+  /* ── CITATION COUNTS (OpenAlex) ────────────────────────────
+     Fires after renderPubs() builds the DOM.
+
+     Flow:
+       1. Collect all [data-doi] anchors rendered by renderPubs()
+       2. Check sessionStorage for a cached result (<12 h old)
+       3. On cache miss: batch all DOIs into ONE OpenAlex request
+          using the pipe-separated filter syntax
+       4. Write counts back to the .pub-cite-count span inside
+          each anchor; update the cache
+       5. On any network/parse failure: fail silently — the em
+          dash placeholder stays visible
+
+     OpenAlex API docs: https://docs.openalex.org/api-entities/works
+     Rate limit (polite pool, mailto= provided): 100k req/day
+  ──────────────────────────────────────────────────────────── */
+
+  // Write counts into the DOM, shared by cache and fresh-fetch paths
+  function applyCountsToDOM(counts, doiMap) {
+    Object.entries(counts).forEach(([doi, count]) => {
+      const anchor = doiMap[doi];
+      if (!anchor || count == null) return;
+      const countSpan = anchor.querySelector('.pub-cite-count');
+      if (countSpan) {
+        // toLocaleString() adds commas for 1,000+ counts
+        countSpan.textContent = Number(count).toLocaleString();
+      }
+    });
+  }
+
+  async function fetchCitations() {
+    const CACHE_KEY = 'nh_openalex_citations';
+    const CACHE_TTL = 12 * 60 * 60 * 1000; // 12 hours in ms
+
+    // 1. Collect all citation anchors that have a DOI attribute
+    const anchors = Array.from(document.querySelectorAll('.pub-cite[data-doi]'));
+    if (!anchors.length) return;
+
+    // 2. Build DOI → anchor lookup (lowercase for reliable matching)
+    const doiMap = {};
+    anchors.forEach(a => {
+      doiMap[a.dataset.doi.toLowerCase()] = a;
+    });
+
+    // 3. Try session cache first
+    try {
+      const raw = sessionStorage.getItem(CACHE_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (cached && (Date.now() - cached.ts < CACHE_TTL)) {
+          applyCountsToDOM(cached.counts, doiMap);
+          return;
+        }
+      }
+    } catch (_) {
+      // sessionStorage unavailable (private mode, etc.) — proceed to fetch
+    }
+
+    // 4. Cache miss: fetch from OpenAlex
+    //    Pipe-separated DOI filter returns all works in a single request.
+    //    "select" limits response payload to only the fields we need.
+    //    "mailto" opts into the polite pool for higher rate limits.
+    const dois = Object.keys(doiMap);
+    const filterParam  = dois.map(d => `doi:${d}`).join('|');
+    const selectFields = 'doi,cited_by_count';
+    const mailto       = 'khong@miami.edu'; // ← replace with your email
+    const apiUrl = [
+      'https://api.openalex.org/works',
+      `?filter=${encodeURIComponent(filterParam)}`,
+      `&select=${selectFields}`,
+      `&per-page=100`,
+      `&mailto=${mailto}`
+    ].join('');
+
+    try {
+      const res = await fetch(apiUrl);
+      if (!res.ok) return; // non-200: fail silently
+
+      const data = await res.json();
+      const counts = {};
+
+      // OpenAlex returns full DOI URLs: "https://doi.org/10.x/y"
+      // Strip the prefix so keys match our bare-DOI doiMap
+      (data.results || []).forEach(work => {
+        if (!work.doi) return;
+        const bare = work.doi.replace(/^https?:\/\/doi\.org\//i, '').toLowerCase();
+        counts[bare] = work.cited_by_count;
+      });
+
+      // 5. Write to DOM
+      applyCountsToDOM(counts, doiMap);
+
+      // 6. Persist to cache
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), counts }));
+      } catch (_) {
+        // Storage quota exceeded or unavailable — ignore
+      }
+    } catch (_) {
+      // Network failure or JSON parse error — fail silently
+      // The em dash placeholder remains in place
+    }
+  }
+
   /* ── CUSTOM CURSOR ─────────────────────────────────────────
      Dot + ring that follow the mouse. Expands on interactive
      elements; hidden on touch devices.
@@ -218,11 +313,12 @@
 
   /* ── INIT ──────────────────────────────────────────────────
      window.PUBLICATIONS is set by the inline <script> in
-     research_nh.md (populated via Jekyll/Liquid).
+     publications.md (populated via Jekyll/Liquid).
   ──────────────────────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', () => {
     renderPubs(window.PUBLICATIONS || []);
     initSectionReveal();
+    fetchCitations();
     // initCursor();
   });
 
