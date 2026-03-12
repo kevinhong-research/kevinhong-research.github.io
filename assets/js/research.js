@@ -157,31 +157,13 @@
   }
 
   async function fetchCitations() {
-    const CACHE_KEY = 'nh_openalex_v2';
-    const CACHE_TTL = 12 * 60 * 60 * 1000;
-
     const anchors = Array.from(document.querySelectorAll('.pub-cite[data-doi]'))
                          .filter(a => a.dataset.doi);
-    console.log('[citations] Found', anchors.length, 'badge anchors');
     if (!anchors.length) return;
 
     const doiMap = {};
     anchors.forEach(a => { doiMap[a.dataset.doi.toLowerCase()] = a; });
     const dois = Object.keys(doiMap);
-    console.log('[citations] DOIs to fetch:', dois.length, dois.slice(0,3));
-
-    // Try cache
-    try {
-      const raw = sessionStorage.getItem(CACHE_KEY);
-      if (raw) {
-        const cached = JSON.parse(raw);
-        if (cached && (Date.now() - cached.ts < CACHE_TTL)) {
-          console.log('[citations] Using cached data');
-          applyCountsToDOM(cached.counts, doiMap);
-          return;
-        }
-      }
-    } catch (_) {}
 
     // Build URL — pipes MUST be literal, not encoded as %7C
     const filterParam = 'doi:' + dois.join('|');  // OpenAlex: doi:val1|val2 (prefix once)
@@ -191,16 +173,11 @@
                  + '&per-page=100'
                  + '&mailto=khong@miami.edu';
 
-    console.log('[citations] Fetching:', apiUrl.slice(0, 120) + '...');
-
     try {
       const res = await fetch(apiUrl);
-      console.log('[citations] Response status:', res.status);
-      if (!res.ok) { console.warn('[citations] Non-OK response, aborting'); return; }
+      if (!res.ok) return;
 
       const data = await res.json();
-      console.log('[citations] Results received:', (data.results || []).length);
-
       const counts = {};
       (data.results || []).forEach(work => {
         if (!work.doi) return;
@@ -209,9 +186,6 @@
       });
 
       applyCountsToDOM(counts, doiMap);
-
-      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), counts })); }
-      catch (_) {}
 
     } catch (err) {
       console.error('[citations] Fetch failed:', err.message);
