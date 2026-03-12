@@ -1,0 +1,212 @@
+# _data/services.yml
+# Edit this file to update the /services/ page.
+# No HTML knowledge needed — just follow the structure below.
+
+# ── EDITORIAL APPOINTMENTS ───────────────────────────────────────────────────
+editorial_appointments:
+  - role: "Senior Editor"
+    journal: "Information Systems Research"
+    years: "2026–"
+
+  - role: "Senior Editor"
+    journal: "Production and Operations Management"
+    years: "2019–"
+
+  - role: "Associate Editor"
+    journal: "Information Systems Research"
+    years: "2018–2025"
+
+  - role: "Associate Editor"
+    journal: "Journal of the Association for Information Systems"
+    years: "2019–2025"
+
+  - role: "Editorial Board"
+    journal: "Journal of the Association for Information Systems"
+    years: "2017–2019"
+
+# ── SPECIAL ISSUE EDITORSHIPS ────────────────────────────────────────────────
+special_issues:
+  - role: "Co-Editor"
+    journal: "Production and Operations Management"
+    topic: "Social Technologies in Operations"
+
+  - role: "Senior Editor"
+    journal: "Production and Operations Management"
+    topic: "Responsible Data Science"
+
+  - role: "Senior Editor"
+    journal: "Production and Operations Management"
+    topic: "Disruptive Technologies and Operations Management"
+
+  - role: "Senior Editor"
+    journal: "Production and Operations Management"
+    topic: "Role of National Culture in Operations Management"
+
+  - role: "Senior Editor"
+    journal: "Production and Operations Management"
+    topic: "New Business Models and Operations Innovations"
+
+  - role: "Associate Editor"
+    journal: "Information Systems Research"
+    topic: "Humans, Algorithms, and Augmented Intelligence: The Future of Work, Organizations and Society"
+
+  - role: "Associate Editor"
+    journal: "Information Systems Research"
+    topic: "Market Design and Analytics"
+
+  - role: "Editorial Board"
+    journal: "Journal of the Association for Information Systems"
+    topic: "Addressing Societal Challenges through Analytics"
+
+# ── PROFESSIONAL SERVICES ────────────────────────────────────────────────────
+professional_services:
+  - role: "Track Co-Chair"
+    venue: "International Conference on Information Systems"
+    topic: "Sharing Economy, Platforms, and Crowds"
+    cochair: "Jonny Holmström and Zhijie Lin"
+    year: "2025"
+
+  - role: "Track Co-Chair"
+    venue: "International Conference on Information Systems"
+    topic: "Sharing Economy, Platforms, and Crowds"
+    cochair: "Thomas Kude and Mengxiang Li"
+    year: "2024"
+
+  - role: "Track Co-Chair"
+    venue: "Decision Sciences Institute Annual Conference"
+    topic: "Information Systems"
+    year: "2021"
+
+  - role: "Track Co-Chair"
+    venue: "International Conference on Information Systems"
+    topic: "AI Systems"
+    cochair: "Ann Majchrzak and Saonee Sarker"
+    year: "2021"
+
+  - role: "Doctoral Consortium Mentor"
+    venue: "America's Conference on Information Systems"
+    year: "2020"
+
+  - role: "Cluster Co-Chair"
+    venue: "INFORMS Information Systems Society Cluster"
+    year: "2019"
+
+  - role: "Conference Co-Chair"
+    venue: "INFORMS Conference on Information Systems and Technology"
+    year: "2018"
+
+# ── PHD / POSTDOC ADVISING ───────────────────────────────────────────────────
+# role options: "chair" | "postdoc" | "member" | "mentoring"
+advising:
+  - name: "Amin Sabzehzar"
+    role: "chair"
+    year: "2022"
+    placement: "Assistant Professor"
+    institution: "A. B. Freeman School of Business, Tulane University"
+
+  - name: "Qinglai He"
+    role: "chair"
+    year: "2021"
+    placement: "Assistant Professor"
+    institution: "Wisconsin School of Business, University of Wisconsin–Madison"
+    awards:
+      - "ACM SIGMIS Doctoral Dissertation Award Runnerup"
+
+  - name: "Chen Liang"
+    role: "chair"
+    year: "2019"
+    placement: "Associate Professor"
+    institution: "School of Business, University of Connecticut"
+    awards:
+      - "ISS Gordon B. Davis Young Scholar Award"
+      - "AIS Early Career Award"
+
+  - name: "Ying Liu"
+    role: "chair"
+    year: "2018"
+    placement: "Assistant Professor"
+    institution: "Isenberg School of Management, University of Massachusetts Amherst"
+
+  - name: "Jason Wu"
+    role: "postdoc"
+    year: "2023"
+    placement: "Assistant Professor"
+    institution: "UNSW Business School, University of New South Wales"
+
+  - name: "Yumei (Joy) He"
+    role: "postdoc"
+    year: "2022"
+    placement: "Assistant Professor"
+    institution: "A. B. Freeman School of Business, Tulane University"
+
+  - name: "Qinlu Hu"
+    role: "member"
+    year: "2026"
+    placement: "Assistant Professor"
+    institution: "Nova School of Business and Economics"
+
+  - name: "Aida Sanatizadeh"
+    role: "member"
+    year: "2024"
+    placement: "Assistant Professor"
+    institution: "College of Business, Northern Illinois University"
+
+  - name: "Jingbo Hou"
+    role: "member"
+    year: "2023"
+    placement: "Assistant Professor"
+    institution: "Leavey School of Business, Santa Clara University"
+
+  - name: "Tengteng Ma"
+    role: "member"
+    year: "2023"
+    placement: "Assistant Professor"
+    institution: "Muma College of Business, University of South Florida"
+
+  - name: "Keran Zhao"
+    role: "member"
+    year: "2021"
+    placement: "Assistant Professor"
+    institution: "Smeal College of Business, Penn State University"
+
+  - name: "Alvin Zheng"
+    role: "member"
+    year: "2021"
+    placement: "Assistant Professor"
+    institution: "Renmin University of China"
+
+  - name: "Cheng Chen"
+    role: "member"
+    year: "2020"
+    placement: "Assistant Professor"
+    institution: "Lubar School of Business, University of Wisconsin–Milwaukee"
+
+  - name: "Dezhen Guo"
+    role: "mentoring"
+    year: "2024–"
+    placement: "PhD Student"
+    institution: "University of Miami"
+
+  - name: "Alan Huang"
+    role: "mentoring"
+    year: "2023–"
+    placement: "PhD Student"
+    institution: "University of Miami"
+
+  - name: "Xingchen Ye"
+    role: "mentoring"
+    year: "2024–"
+    placement: "PhD Student"
+    institution: "USTC"
+
+  - name: "Freya Liu"
+    role: "mentoring"
+    year: "2022–"
+    placement: "PhD Student"
+    institution: "HK PolyU"
+
+  - name: "Xingchen Xu"
+    role: "mentoring"
+    year: "2019–"
+    placement: "PhD Student"
+    institution: "University of Washington"

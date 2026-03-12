@@ -1,0 +1,115 @@
+{% comment %}
+  _includes/services_render.html
+  Renders all sections of _data/services.yml.
+  Included by services.md — do not edit layout here,
+  edit data in _data/services.yml instead.
+{% endcomment %}
+
+{% assign svc = site.data.services %}
+
+<div class="nh-research">
+
+  {% comment %}── EDITORSHIPS ──{% endcomment %}
+  <section class="svc-section nh-reveal">
+    <div class="svc-section-header">Editorships</div>
+
+    <div class="svc-block">
+      <div class="svc-block-label">Editorial Appointments</div>
+      <div class="svc-role-list">
+        {% for item in svc.editorial_appointments %}
+        <div class="svc-role-item">
+          <div class="svc-role-body">
+            <span class="svc-role-title">{{ item.role }}</span>
+            <span class="svc-role-journal">{{ item.journal }}</span>
+          </div>
+          {% if item.years %}<span class="svc-role-years">{{ item.years }}</span>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="svc-block">
+      <div class="svc-block-label">Special Issue Editorships</div>
+      <div class="svc-role-list">
+        {% for item in svc.special_issues %}
+        <div class="svc-role-item">
+          <div class="svc-role-body">
+            <span class="svc-role-title">{{ item.role }}</span>
+            <span class="svc-role-journal">{{ item.journal }}</span>
+            {% if item.topic %}<span class="svc-role-topic">{{ item.topic }}</span>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% comment %}── PROFESSIONAL SERVICES ──{% endcomment %}
+  <section class="svc-section nh-reveal">
+    <div class="svc-section-header">Selected Professional Services</div>
+    <div class="svc-role-list">
+      {% for item in svc.professional_services %}
+      <div class="svc-role-item">
+        <div class="svc-role-body">
+          <span class="svc-role-title">{{ item.role }}</span>
+          <span class="svc-role-journal">{{ item.venue }}</span>
+          {% if item.topic %}
+          <span class="svc-role-topic">
+            {{ item.topic }}{% if item.cochair %}<span class="svc-role-cochair"> · with {{ item.cochair }}</span>{% endif %}
+          </span>
+          {% endif %}
+        </div>
+        {% if item.year %}<span class="svc-role-years">{{ item.year }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% comment %}── PHD / POSTDOC ADVISING ──{% endcomment %}
+  {% assign chair_label    = "Dissertation Chair / Co-Chair" %}
+  {% assign postdoc_label  = "Postdoc Advisor / Co-Advisor" %}
+  {% assign member_label   = "Dissertation Committee Member" %}
+  {% assign mentoring_label = "PhD Students Mentoring" %}
+
+  <section class="svc-section nh-reveal">
+    <div class="svc-section-header">PhD &amp; Postdoc Advising</div>
+
+    {% assign role_groups = "chair,postdoc,member,mentoring" | split: "," %}
+    {% assign role_labels = "" | split: "" %}
+
+    {% for group in role_groups %}
+      {% assign students = svc.advising | where: "role", group %}
+      {% if students.size > 0 %}
+
+        {% if group == "chair"     %}{% assign label = chair_label %}{% endif %}
+        {% if group == "postdoc"   %}{% assign label = postdoc_label %}{% endif %}
+        {% if group == "member"    %}{% assign label = member_label %}{% endif %}
+        {% if group == "mentoring" %}{% assign label = mentoring_label %}{% endif %}
+
+        <div class="svc-block">
+          <div class="svc-block-label">{{ label }}</div>
+          <div class="svc-student-list{% if group == "mentoring" %} svc-current{% endif %}">
+            {% for s in students %}
+            <div class="svc-student-item">
+              <span class="svc-student-year">{{ s.year }}</span>
+              <div class="svc-student-body">
+                <span class="svc-student-name">{{ s.name }}</span>
+                <span class="svc-student-placement">{{ s.placement }} · {{ s.institution }}</span>
+                {% if s.awards %}
+                <div class="svc-awards">
+                  {% for award in s.awards %}
+                  <span class="svc-award">{{ award }}</span>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      {% endif %}
+    {% endfor %}
+  </section>
+
+</div><!-- end .nh-research -->
