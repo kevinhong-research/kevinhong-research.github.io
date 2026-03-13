@@ -38,11 +38,15 @@
 .nav-item.dropdown .dropdown-menu {
   background: #141414;
   border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: none;
   border-radius: 0;
+  border-right: none;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   padding: 0.4rem 0;
   min-width: 180px;
-  margin-top: 4px;
+  margin-top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
 
   /* Clip-path parallelogram to match site aesthetic */
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
@@ -102,4 +106,11 @@
 .nav-item.dropdown.show .dropdown-menu {
   border-color: rgba(0, 160, 96, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 160, 96, 0.15);
+}
+
+/* ── REMOVE BROWSER'S FOCUS RING ─────────────────────────── */
+.nav-item.dropdown > .nav-link:focus,
+.nav-item.dropdown > .nav-link:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
