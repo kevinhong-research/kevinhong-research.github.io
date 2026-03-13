@@ -269,7 +269,7 @@ plugins:
   - jekyll-twitter-plugin
   - jemoji
   # - jekyll-jupyter-notebook
-  
+
 # Sitemap settings
 defaults:
   - scope:
@@ -278,6 +278,10 @@ defaults:
       sitemap: false
 
 sass:
+  quiet_deps: true
+  silence_deprecations:
+    - import
+    - global-builtin
   style: compressed
 
 # -----------------------------------------------------------------------------
