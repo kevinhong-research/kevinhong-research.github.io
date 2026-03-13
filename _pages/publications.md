@@ -52,7 +52,8 @@ window.PUBLICATIONS = [
     "year":        {{ pub.year        | jsonify }},
     "volume":      {{ pub.volume      | default: "" | jsonify }},
     "forthcoming": {{ pub.forthcoming | default: false | jsonify }},
-    "topics":      {{ pub.topics | jsonify | default: "[]" }}
+    "topics":      {{ pub.topics | jsonify | default: "[]" }},
+    "abstract":    {{ pub.abstract    | default: "" | jsonify }}
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
 ];

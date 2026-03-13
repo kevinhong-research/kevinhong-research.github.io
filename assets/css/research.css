@@ -244,6 +244,119 @@
   text-align: right;
 }
 
+/* ── ABSTRACT TOGGLE ───────────────────────────────────────
+   Sits below .pub-meta. A minimal text+chevron button that
+   reveals the abstract with a smooth CSS grid animation.
+   No JS height measurement — grid-template-rows does it all.
+──────────────────────────────────────────────────────────── */
+
+/* Wrapper: just a flex column to keep button and body stacked */
+.pub-abstract-wrap {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+/* The toggle button */
+.pub-abstract-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  width: fit-content;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+  transition: color 0.2s ease;
+  line-height: 1;
+  /* Stop the pub-item hover indent from firing on click */
+  position: relative;
+  z-index: 1;
+}
+.pub-abstract-btn:hover,
+.pub-abstract-btn--open {
+  color: #00a060;
+}
+
+/* Chevron SVG — rotates 180° when open */
+.pub-abstract-chevron {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  transform: rotate(0deg);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pub-abstract-btn--open .pub-abstract-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Abstract body — CSS grid height animation ─────────────
+   grid-template-rows: 0fr → 1fr  gives a perfect collapse
+   with no JS height measurement.
+   The inner div needs overflow:hidden for the clip to work.
+──────────────────────────────────────────────────────────── */
+.pub-abstract-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity            0.35s ease;
+  opacity: 0;
+}
+.pub-abstract-body.pub-abstract-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+/* The inner wrapper — must have overflow:hidden for the grid trick */
+.pub-abstract-inner {
+  overflow: hidden;
+  /* Pull the panel down slightly from the button */
+  padding-top: 0.75rem;
+}
+
+/* The visible content panel */
+.pub-abstract-inner::after {
+  /* Ensures bottom breathing room even when grid is 0fr */
+  content: '';
+  display: block;
+  height: 0.1px;
+}
+
+/* Styled content box inside the inner wrapper */
+.pub-abstract-inner p,
+.pub-abstract-inner {
+  /* Reset any paragraph margin from Jekyll themes */
+  margin: 0;
+}
+
+.pub-abstract-inner {
+  /* Render the content as a styled panel */
+  font-size: 0.84rem;
+  font-weight: 300;
+  line-height: 1.78;
+  color: var(--text);
+  letter-spacing: 0.01em;
+
+  /* Left accent line */
+  border-left: 2px solid rgba(0, 160, 96, 0.22);
+
+  /* Very subtle green-tinted background */
+  background: rgba(0, 160, 96, 0.028);
+
+  /* Generous padding for readability */
+  padding: 0.85rem 1.1rem 0.85rem 1.1rem;
+
+  /* Clip to match site's slanted-corner aesthetic */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+}
+
 /* ── CITATION COUNT BADGE ──────────────────────────────────
    Two-tone pill: beige left half (icon + "scholar" label),
    Google blue right half (citation count). Matches the
@@ -320,6 +433,10 @@
   .pub-item { grid-template-columns: 32px 1fr; }
   .pub-badge { display: none; }
   .pub-cite  { font-size: 0.6rem; }
+  .pub-abstract-inner {
+    font-size: 0.8rem;
+    padding: 0.75rem 0.9rem;
+  }
 }
 
 /* ── SCHOLAR BUTTON ── */

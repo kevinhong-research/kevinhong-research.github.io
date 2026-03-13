@@ -23,15 +23,18 @@
     <path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/>
   </svg>`;
 
+  /* ── CHEVRON ICON (abstract toggle) ───────────────────────*/
+  const CHEVRON_ICON = `<svg class="pub-abstract-chevron" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+
   /* ── EXTRACT DOI ───────────────────────────────────────────
      Returns a bare DOI string from either the explicit doi
      field or by parsing the url field as a fallback.
      e.g. "https://doi.org/10.1287/mnsc.2021.4040" → "10.1287/mnsc.2021.4040"
   ──────────────────────────────────────────────────────────── */
   function extractDoi(pub) {
-    // Prefer explicit doi field
     if (pub.doi && pub.doi.trim()) return pub.doi.trim();
-    // Fall back: parse from url
     if (pub.url) {
       const m = pub.url.match(/doi\.org\/(.+)$/i)
              || pub.url.match(/\/doi\/(?:abs\/)?(.+)$/i);
@@ -46,7 +49,7 @@
     if (!list || !pubs || !pubs.length) return;
 
     list.innerHTML = pubs.map((pub, i) => {
-      const j = JOURNAL_META[pub.journal] || { label: pub.journal };
+      const j       = JOURNAL_META[pub.journal] || { label: pub.journal };
       const num     = String(i + 1).padStart(2, '0');
       const authors = (pub.authors || [])
         .map(a => a.startsWith('**') ? `<strong>${a.slice(2, -2)}</strong>` : a)
@@ -63,6 +66,19 @@
           <span class="pub-cite-count">—</span>
         </a>` : '';
 
+      /* ── Abstract block — only rendered when abstract exists ── */
+      const hasAbstract = pub.abstract && pub.abstract.trim();
+      const abstractBlock = hasAbstract ? `
+        <div class="pub-abstract-wrap">
+          <button class="pub-abstract-btn" aria-expanded="false" aria-label="Toggle abstract">
+            ${CHEVRON_ICON}
+            <span class="pub-abstract-btn-label">Abstract</span>
+          </button>
+          <div class="pub-abstract-body" aria-hidden="true">
+            <div class="pub-abstract-inner">${pub.abstract.trim()}</div>
+          </div>
+        </div>` : '';
+
       return `
         <div class="pub-item" data-topics="${(pub.topics || []).join('|')}">
           <span class="pub-num">${num}</span>
@@ -76,6 +92,7 @@
               ${pub.volume      ? `<span class="pub-year">${pub.volume}</span>` : ''}
               ${citeBadge}
             </div>
+            ${abstractBlock}
           </div>
         </div>`;
     }).join('');
@@ -83,6 +100,30 @@
     updateCount();
     initPubAnimations();
     initFilter();
+    initAbstracts();
+  }
+
+  /* ── ABSTRACT TOGGLES ──────────────────────────────────────
+     Uses the CSS grid trick (grid-template-rows: 0fr → 1fr)
+     for a native-feeling height animation with no JS height
+     measurement needed. The chevron SVG rotates via CSS.
+  ──────────────────────────────────────────────────────────── */
+  function initAbstracts() {
+    document.querySelectorAll('.pub-abstract-btn').forEach(btn => {
+      const body = btn.nextElementSibling; // .pub-abstract-body
+
+      btn.addEventListener('click', (e) => {
+        /* Prevent the pub-item hover indent from flickering on click */
+        e.stopPropagation();
+
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        body.setAttribute('aria-hidden', String(isOpen));
+        body.classList.toggle('pub-abstract-open', !isOpen);
+        btn.classList.toggle('pub-abstract-btn--open', !isOpen);
+      });
+    });
   }
 
   /* ── FILTER BAR ────────────────────────────────────────────*/
@@ -168,7 +209,6 @@
     anchors.forEach(a => { doiMap[a.dataset.doi.toLowerCase()] = a; });
     const dois = Object.keys(doiMap);
 
-    // Try sessionStorage cache first
     try {
       const raw = sessionStorage.getItem(CACHE_KEY);
       if (raw) {
@@ -180,8 +220,7 @@
       }
     } catch (_) {}
 
-    // Build URL — pipes MUST be literal, not encoded as %7C
-    const filterParam = 'doi:' + dois.join('|');  // OpenAlex: doi:val1|val2 (prefix once)
+    const filterParam = 'doi:' + dois.join('|');
     const apiUrl = 'https://api.openalex.org/works'
                  + '?filter='  + filterParam
                  + '&select=doi,cited_by_count'
