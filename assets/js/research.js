@@ -66,17 +66,16 @@
           <span class="pub-cite-count">—</span>
         </a>` : '';
 
-      /* ── Abstract block — only rendered when abstract exists ── */
+      /* ── Abstract — button lives in pub-meta row, body lives below it ── */
       const hasAbstract = pub.abstract && pub.abstract.trim();
-      const abstractBlock = hasAbstract ? `
-        <div class="pub-abstract-wrap">
-          <button class="pub-abstract-btn" aria-expanded="false" aria-label="Toggle abstract">
-            ${CHEVRON_ICON}
-            <span class="pub-abstract-btn-label">Abstract</span>
-          </button>
-          <div class="pub-abstract-body" aria-hidden="true">
-            <div class="pub-abstract-inner">${pub.abstract.trim()}</div>
-          </div>
+      const abstractBtn = hasAbstract ? `
+        <button class="pub-abstract-btn" aria-expanded="false" aria-label="Toggle abstract">
+          ${CHEVRON_ICON}
+          <span class="pub-abstract-btn-label">Abstract</span>
+        </button>` : '';
+      const abstractBody = hasAbstract ? `
+        <div class="pub-abstract-body" aria-hidden="true">
+          <div class="pub-abstract-inner">${pub.abstract.trim()}</div>
         </div>` : '';
 
       return `
@@ -91,8 +90,9 @@
               ${pub.forthcoming ? `<span class="pub-note">Forthcoming</span>` : ''}
               ${pub.volume      ? `<span class="pub-year">${pub.volume}</span>` : ''}
               ${citeBadge}
+              ${abstractBtn}
             </div>
-            ${abstractBlock}
+            ${abstractBody}
           </div>
         </div>`;
     }).join('');
@@ -110,7 +110,8 @@
   ──────────────────────────────────────────────────────────── */
   function initAbstracts() {
     document.querySelectorAll('.pub-abstract-btn').forEach(btn => {
-      const body = btn.nextElementSibling; // .pub-abstract-body
+      /* Button is inside .pub-meta; body is a direct child of .pub-body */
+      const body = btn.closest('.pub-body').querySelector('.pub-abstract-body');
 
       btn.addEventListener('click', (e) => {
         /* Prevent the pub-item hover indent from flickering on click */
