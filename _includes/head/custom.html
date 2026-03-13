@@ -1,0 +1,7 @@
+<!-- Force dark theme on all devices regardless of OS/system preference.
+     Runs before the theme JS so localStorage is already set when it checks. -->
+<script>
+  document.documentElement.setAttribute('data-theme', 'dark');
+  document.documentElement.setAttribute('data-theme-setting', 'dark');
+  try { localStorage.setItem('theme', 'dark'); } catch (_) {}
+</script>
