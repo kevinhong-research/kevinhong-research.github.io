@@ -69,6 +69,16 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
+      - name: Cache ImageMagick outputs 🖼️
+        uses: actions/cache@v4
+        with:
+          path: |
+            assets/img/**/*-480.webp
+            assets/img/**/*-800.webp
+            assets/img/**/*-1400.webp
+          key: imagemagick-${{ hashFiles('assets/img/**/*.jpg', 'assets/img/**/*.jpeg', 'assets/img/**/*.png') }}
+          restore-keys: |
+            imagemagick-
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
