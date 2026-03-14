@@ -92,14 +92,14 @@
         </div>
         <div class="tm-map-area">
           <div id="tm-tip"></div>
-          <svg id="tm-svg" viewBox="0 0 960 520"></svg>
+          <svg id="tm-svg" viewBox="0 0 960 580"></svg>
         </div>
       </div>`;
 
     const svg    = d3.select("#tm-svg");
     const tip    = document.getElementById("tm-tip");
     const area   = container.querySelector(".tm-map-area");
-    const proj   = d3.geoAlbersUsa().scale(1100).translate([480, 290]);
+    const proj   = d3.geoAlbersUsa().scale(1100).translate([480, 270]);
     const pathFn = d3.geoPath().projection(proj);
 
     fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json")
@@ -198,7 +198,7 @@
               const svgRect  = svg.node().getBoundingClientRect();
               const wrapRect = area.getBoundingClientRect();
               const sx = svgRect.width  / 960;
-              const sy = svgRect.height / 520;
+              const sy = svgRect.height / 580;
               let lx = cx * sx + (svgRect.left - wrapRect.left) + 14;
               let ly = cy * sy + (svgRect.top  - wrapRect.top)  - 14;
               if (lx + 230 > wrapRect.width) lx -= 245;
