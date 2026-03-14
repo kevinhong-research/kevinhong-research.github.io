@@ -174,17 +174,7 @@
   }
 
   function updateCount(n) {
-    const el = document.getElementById('filterCount');
-    if (!el) return;
-    let count;
-    if (n !== undefined) {
-      count = n;
-    } else if (currentView === 'list') {
-      count = document.querySelectorAll('.pub-item:not(.hidden)').length;
-    } else {
-      count = getFiltered().length;
-    }
-    el.textContent = count + ' publication' + (count !== 1 ? 's' : '');
+    /* Count display removed — no filterCount element in the new layout */
   }
 
   /* ── SCROLL-REVEAL ─────────────────────────────────────────*/
@@ -300,27 +290,42 @@
   }
 
   /* ── VIEW TOGGLE ────────────────────────────────────────────
-     Two-button toggle at far right of filter bar.
-     Switches between list and timeline with a crossfade.
+     Single button that toggles between list and timeline views.
+     Button always shows the name of the view you'll switch TO,
+     with the corresponding icon. Sits at margin-left:auto in
+     the filter bar, replacing the old filter-count element.
   ──────────────────────────────────────────────────────────── */
   function initViewToggle() {
-    const btnList     = document.getElementById('viewBtnList');
-    const btnTimeline = document.getElementById('viewBtnTimeline');
-    const listEl      = document.getElementById('pubList');
-    const timelineEl  = document.getElementById('timelineList');
-    if (!btnList || !btnTimeline || !listEl || !timelineEl) return;
+    const btn        = document.getElementById('viewToggleBtn');
+    const label      = document.getElementById('viewToggleLabel');
+    const iconTl     = btn && btn.querySelector('.vtb-icon--timeline');
+    const iconList   = btn && btn.querySelector('.vtb-icon--list');
+    const listEl     = document.getElementById('pubList');
+    const timelineEl = document.getElementById('timelineList');
+    if (!btn || !listEl || !timelineEl) return;
 
     function switchTo(view) {
       if (view === currentView) return;
       currentView = view;
 
-      /* Update button states */
-      btnList.classList.toggle('view-btn--active',     view === 'list');
-      btnTimeline.classList.toggle('view-btn--active', view === 'timeline');
+      /* Update button to show the OTHER view (what you'll switch to next) */
+      if (view === 'timeline') {
+        if (label)    label.textContent       = 'List';
+        if (iconTl)   iconTl.style.display    = 'none';
+        if (iconList) iconList.style.display  = '';
+        btn.title = 'Switch to list view';
+        btn.dataset.current = 'timeline';
+      } else {
+        if (label)    label.textContent       = 'Timeline';
+        if (iconTl)   iconTl.style.display    = '';
+        if (iconList) iconList.style.display  = 'none';
+        btn.title = 'Switch to timeline view';
+        btn.dataset.current = 'list';
+      }
 
-      /* Crossfade */
-      const leaving = view === 'list' ? timelineEl : listEl;
-      const entering = view === 'list' ? listEl : timelineEl;
+      /* Crossfade between views */
+      const leaving  = view === 'list' ? timelineEl : listEl;
+      const entering = view === 'list' ? listEl     : timelineEl;
 
       leaving.style.transition = 'opacity 0.2s ease';
       leaving.style.opacity    = '0';
@@ -329,27 +334,26 @@
         leaving.style.display = 'none';
         leaving.setAttribute('aria-hidden', 'true');
 
-        entering.style.display = view === 'list' ? 'flex' : 'block';
-        entering.style.opacity = '0';
+        entering.style.display  = view === 'list' ? 'flex' : 'block';
+        entering.style.opacity  = '0';
         entering.setAttribute('aria-hidden', 'false');
         entering.style.transition = 'opacity 0.25s ease';
 
         if (view === 'timeline') {
           renderTimeline(getFiltered());
         } else {
-          /* List already rendered; just re-trigger animation on visible items */
           const items = Array.from(listEl.querySelectorAll('.pub-item:not(.hidden)'));
           items.forEach(item => item.classList.remove('nh-visible'));
           items.forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 35));
-          updateCount();
         }
 
         requestAnimationFrame(() => { entering.style.opacity = '1'; });
       }, 200);
     }
 
-    btnList.addEventListener('click',     () => switchTo('list'));
-    btnTimeline.addEventListener('click', () => switchTo('timeline'));
+    btn.addEventListener('click', () => {
+      switchTo(currentView === 'list' ? 'timeline' : 'list');
+    });
   }
 
   function initSectionReveal() {
