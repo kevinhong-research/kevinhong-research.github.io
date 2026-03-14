@@ -436,57 +436,55 @@
   color: #00a060;
 }
 
-/* ── VIEW TOGGLE ────────────────────────────────────────────
-   Two-button joined control at far right of the filter bar.
-   Same diamond clip-path and type scale as filter buttons.
-   Green active state matches the site's secondary accent.
+/* ── VIEW TOGGLE BUTTON ─────────────────────────────────────
+   Single button at far-right of filter bar (margin-left:auto).
+   Shows the view you'll switch TO — same clip-path, type scale,
+   and sizing as the existing filter buttons for visual harmony.
+   Resting state matches the quiet grey of inactive filter btns;
+   hover warms toward green to signal it's an action, not a stat.
 ──────────────────────────────────────────────────────────── */
-.view-toggle {
-  display: inline-flex;
-  margin-left: auto;
-  border: 1px solid var(--line);
-  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.view-btn {
+.view-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.38rem;
+  margin-left: auto;
+  flex-shrink: 0;
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 0.4rem 0.85rem;
-  border: none;
-  background: transparent;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--line);
   color: var(--text-lo);
+  background: transparent;
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.2s ease, background 0.2s ease;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   line-height: 1;
 }
-.view-btn + .view-btn {
-  border-left: 1px solid var(--line);
-}
-.view-btn svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-.view-btn:hover {
-  color: var(--text);
-}
-.view-btn:hover svg { opacity: 1; }
-
-.view-btn--active {
+.view-toggle-btn:hover {
   color: #00a060;
-  background: rgba(0, 160, 96, 0.08);
+  border-color: rgba(0, 160, 96, 0.35);
+  background: rgba(0, 160, 96, 0.06);
 }
-.view-btn--active svg { opacity: 1; }
+.view-toggle-btn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+/* When timeline is active, button label reads "List" — tint green
+   so user knows they're currently in a non-default state */
+.view-toggle-btn[data-current="timeline"] {
+  color: #00a060;
+  border-color: rgba(0, 160, 96, 0.35);
+  background: rgba(0, 160, 96, 0.06);
+}
+.view-toggle-btn[data-current="timeline"]:hover {
+  color: #00c07a;
+  border-color: rgba(0, 160, 96, 0.55);
+  background: rgba(0, 160, 96, 0.1);
+}
 
 /* ── TIMELINE CONTAINER ─────────────────────────────────────
    Hidden by default; display toggled by initViewToggle().
@@ -692,5 +690,5 @@
   .tl-year-node  { left: -33px; }
   .tl-paper::after { left: -28px; width: 27px; }
   .tl-year-group::before { left: 15px; }
-  .view-btn { padding: 0.4rem 0.6rem; }
+  .view-toggle-btn { padding: 0.4rem 0.6rem; font-size: 0.7rem; }
 }

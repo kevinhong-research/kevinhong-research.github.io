@@ -31,32 +31,28 @@ nav_order: 2
   <button class="filter-btn" data-filter="Digital Platforms">Digital Platforms</button>
   <button class="filter-btn" data-filter="Digital Media">Digital Media</button>
   <button class="filter-btn" data-filter="Human-AI Interaction">Human-AI Interaction</button>
-  <span class="filter-count" id="filterCount"></span>
-  <div class="view-toggle" role="group" aria-label="View mode">
-    <button class="view-btn view-btn--active" id="viewBtnList" data-view="list" title="List view">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <line x1="4.5" y1="2.5"  x2="13" y2="2.5"  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="4.5" y1="7"    x2="13" y2="7"    stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="4.5" y1="11.5" x2="13" y2="11.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <circle cx="2" cy="2.5"  r="1.1" fill="currentColor"/>
-        <circle cx="2" cy="7"    r="1.1" fill="currentColor"/>
-        <circle cx="2" cy="11.5" r="1.1" fill="currentColor"/>
-      </svg>
-      List
-    </button>
-    <button class="view-btn" id="viewBtnTimeline" data-view="timeline" title="Timeline view">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <line x1="7" y1="1"  x2="7" y2="13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="7" y1="3"  x2="12" y2="3"  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="7" y1="7"  x2="12" y2="7"  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="7" y1="11" x2="12" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <circle cx="7" cy="3"  r="2" fill="currentColor" stroke="none"/>
-        <circle cx="7" cy="7"  r="2" fill="currentColor" stroke="none"/>
-        <circle cx="7" cy="11" r="2" fill="currentColor" stroke="none"/>
-      </svg>
-      Timeline
-    </button>
-  </div>
+  <!-- Single view-toggle button: shows what you'll switch TO.
+       Sits at far-right via margin-left:auto in CSS. -->
+  <button class="view-toggle-btn" id="viewToggleBtn" data-current="list" title="Switch to timeline view">
+    <svg class="vtb-icon vtb-icon--timeline" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+      <line x1="6.5" y1="1" x2="6.5" y2="12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="6.5" y1="3"  x2="11.5" y2="3"  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="6.5" y1="6.5" x2="11.5" y2="6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="6.5" y1="10" x2="11.5" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <circle cx="6.5" cy="3"   r="1.8" fill="currentColor"/>
+      <circle cx="6.5" cy="6.5" r="1.8" fill="currentColor"/>
+      <circle cx="6.5" cy="10"  r="1.8" fill="currentColor"/>
+    </svg>
+    <svg class="vtb-icon vtb-icon--list" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true" style="display:none">
+      <line x1="4" y1="2.5"  x2="12.5" y2="2.5"  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="4" y1="6.5"  x2="12.5" y2="6.5"  stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="4" y1="10.5" x2="12.5" y2="10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <circle cx="1.8" cy="2.5"  r="1.5" fill="currentColor"/>
+      <circle cx="1.8" cy="6.5"  r="1.5" fill="currentColor"/>
+      <circle cx="1.8" cy="10.5" r="1.5" fill="currentColor"/>
+    </svg>
+    <span class="vtb-label" id="viewToggleLabel">Timeline</span>
+  </button>
 </div>
 
   <!-- List view — populated by research.js -->
