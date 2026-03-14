@@ -34,7 +34,7 @@ window.TALKMAP_DATA = [
 <div class="nh-research">
   <div id="talk-map-toggle" class="tm-toggle" role="button" aria-expanded="false" tabindex="0">
     <div class="tm-toggle-left">
-      <svg class="tm-toggle-chevron" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="tm-toggle-chevron" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" width="10" height="6" style="width:10px;height:6px;flex-shrink:0">
         <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="tm-toggle-title">Invited Research Talks in the United States</span>
