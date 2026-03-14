@@ -61,17 +61,31 @@ social: false # includes social icons at the bottom of the page
   50%       { opacity: 0; }
 }
 
-/* Research area code tags — subtle link affordance */
+/* Research area tags — orange diamond badges matching filter buttons */
 article code.nh-topic-link,
 .post-content code.nh-topic-link {
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  display: inline-block !important;
+  cursor: pointer !important;
+  font-size: 0.78em !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: none !important;
+  font-family: inherit !important;
+  color: #F47321 !important;
+  background: rgba(244, 115, 33, 0.08) !important;
+  border: 1px solid rgba(244, 115, 33, 0.35) !important;
+  border-radius: 0 !important;
+  padding: 0.08em 0.55em !important;
+  clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%) !important;
+  transition: background 0.2s, border-color 0.2s, color 0.2s !important;
+  text-decoration: none !important;
+  white-space: nowrap;
 }
 article code.nh-topic-link:hover,
 .post-content code.nh-topic-link:hover {
-  color: #00a060 !important;
-  border-color: rgba(0, 160, 96, 0.35) !important;
-  background: rgba(0, 160, 96, 0.08) !important;
+  color: #F47321 !important;
+  background: rgba(244, 115, 33, 0.15) !important;
+  border-color: rgba(244, 115, 33, 0.6) !important;
 }
 </style>
 
@@ -177,11 +191,16 @@ In my spare time, I enjoy reading books, writing codes, and watching American fo
 
   function wire() {
     document.querySelectorAll('article code, .post-content code').forEach(function (el) {
-      var key  = el.textContent.trim();
+      /* Strip any existing # so lookup works whether or not already prefixed */
+      var key  = el.textContent.trim().replace(/^#/, '');
       var href = TOPIC_MAP[key];
       if (!href) return;
       if (el.parentNode.tagName === 'A') return; /* already wrapped */
 
+      /* Prepend # to the displayed text */
+      if (!el.textContent.startsWith('#')) {
+        el.textContent = '#' + el.textContent;
+      }
       el.classList.add('nh-topic-link');
       el.setAttribute('title', 'View ' + key + ' publications');
 
