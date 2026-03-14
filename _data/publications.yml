@@ -650,6 +650,7 @@
     scores.
 
 - title: "How do on-demand ridesharing services affect traffic congestion? The moderating role of urban compactness"
+  id: "ridesharing-traffic-congestion"
   url: "https://doi.org/10.1111/poms.13530"
   doi: "10.1111/poms.13530"
   authors:
@@ -684,6 +685,7 @@
     the underlying mechanisms by analyzing public transit and commuting characteristic data.
 
 - title: "How do peer awards motivate creative content? Experimental evidence from Reddit"
+  id: "peer-awards-reddit"
   url: "https://doi.org/10.1287/mnsc.2021.4040"
   doi: "10.1287/mnsc.2021.4040"
   authors:

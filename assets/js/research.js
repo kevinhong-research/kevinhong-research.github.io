@@ -12,6 +12,7 @@
   let currentView   = 'list';
   let allPubs       = [];   /* full unfiltered set, kept for view switching */
   let currentFilter = 'all';
+  let pendingPaperId = null;
 
   /* ── JOURNAL METADATA ──────────────────────────────────────*/
   const JOURNAL_META = {
@@ -88,7 +89,7 @@
         </div>` : '';
 
       return `
-        <div class="pub-item" data-topics="${(pub.topics || []).join('|')}">
+        <div class="pub-item" data-topics="${(pub.topics || []).join('|')}" data-paper-id="${pub.id || ''}">
           <span class="pub-num">${num}</span>
           <div class="pub-body">
             <a class="pub-title" href="${pub.url || '#'}" target="_blank">${pub.title}</a>
@@ -111,6 +112,46 @@
     initFilter();
     initAbstracts();
     initViewToggle();
+    initPaperTarget();
+  }
+
+  function initPaperTarget() {
+    if (!pendingPaperId) {
+      const params = new URLSearchParams(window.location.search);
+      pendingPaperId = params.get('paper');
+    }
+    if (!pendingPaperId) return;
+
+    const target = document.querySelector(`.pub-item[data-paper-id="${pendingPaperId}"]`);
+    if (!target) return;
+
+    if (currentView !== 'list') {
+      const btn = document.getElementById('viewToggleBtn');
+      if (btn) btn.click();
+      return;
+    }
+
+    if (currentFilter !== 'all' && target.classList.contains('hidden')) {
+      const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+      if (allBtn) {
+        allBtn.click();
+        return;
+      }
+    }
+
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.remove('pub-target-flash');
+      void target.offsetWidth;
+      target.classList.add('pub-target-flash');
+
+      const abstractBtn = target.querySelector('.pub-abstract-btn');
+      if (abstractBtn && abstractBtn.getAttribute('aria-expanded') !== 'true') {
+        abstractBtn.click();
+      }
+    });
+
+    pendingPaperId = null;
   }
 
   /* ── ABSTRACT TOGGLES ──────────────────────────────────────
