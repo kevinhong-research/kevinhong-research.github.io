@@ -35,6 +35,9 @@ social: false # includes social icons at the bottom of the page
   margin-bottom: 1.4rem;
   user-select: none;
 }
+#nhTerminal2 {
+  margin-top: -0.8rem;
+}
 .nh-terminal-prompt {
   color: #00a060;
   margin-right: 0.55em;
