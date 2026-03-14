@@ -111,6 +111,25 @@ article code.nh-topic-link:hover,
   background: rgba(244, 115, 33, 0.15) !important;
   border-color: rgba(244, 115, 33, 0.6) !important;
 }
+
+/* ── Mobile layout improvements ───────────────────────── */
+@media (max-width: 768px) {
+
+  /* hide terminal intro on mobile */
+  #nhTerminal,
+  #nhTerminal2 {
+    display: none;
+  }
+
+  /* improve profile image layout */
+  .profile img {
+    max-width: 220px;
+    width: 70%;
+    margin: 1.2rem auto 1.5rem auto;
+    display: block;
+  }
+
+}
 </style>
 
 <div class="nh-terminal" id="nhTerminal">
