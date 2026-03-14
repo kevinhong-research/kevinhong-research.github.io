@@ -5,6 +5,14 @@
 
 (function () {
 
+  /* ── VIEW STATE ─────────────────────────────────────────────
+     Tracks which view is active: 'list' or 'timeline'.
+     Shared across renderPubs, initFilter, updateCount.
+  ──────────────────────────────────────────────────────────── */
+  let currentView   = 'list';
+  let allPubs       = [];   /* full unfiltered set, kept for view switching */
+  let currentFilter = 'all';
+
   /* ── JOURNAL METADATA ──────────────────────────────────────*/
   const JOURNAL_META = {
     ISR:  { label: "Information Systems Research" },
@@ -45,6 +53,7 @@
 
   /* ── RENDER PUBLICATIONS ───────────────────────────────────*/
   function renderPubs(pubs) {
+    allPubs = pubs;   /* cache for view switching */
     const list = document.getElementById('pubList');
     if (!list || !pubs || !pubs.length) return;
 
@@ -101,6 +110,7 @@
     initPubAnimations();
     initFilter();
     initAbstracts();
+    initViewToggle();
   }
 
   /* ── ABSTRACT TOGGLES ──────────────────────────────────────
@@ -128,25 +138,37 @@
   }
 
   /* ── FILTER BAR ────────────────────────────────────────────*/
+  function getFiltered() {
+    if (currentFilter === 'all') return allPubs;
+    return allPubs.filter(p => (p.topics || []).includes(currentFilter));
+  }
+
   function initFilter() {
     const btns = document.querySelectorAll('.filter-btn');
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         btns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const f = btn.dataset.filter;
-        const items = document.querySelectorAll('.pub-item');
-        let count = 0;
-        items.forEach(item => {
-          const topics = (item.dataset.topics || '').split('|');
-          const show = f === 'all' || topics.includes(f);
-          show ? item.classList.remove('hidden') : item.classList.add('hidden');
-          if (show) count++;
-        });
-        updateCount(count);
-        const visible = Array.from(items).filter(i => !i.classList.contains('hidden'));
-        visible.forEach(item => item.classList.remove('nh-visible'));
-        visible.forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 40));
+        currentFilter = btn.dataset.filter;
+
+        if (currentView === 'list') {
+          /* Filter list items in-place with animation */
+          const items = document.querySelectorAll('.pub-item');
+          let count = 0;
+          items.forEach(item => {
+            const topics = (item.dataset.topics || '').split('|');
+            const show = currentFilter === 'all' || topics.includes(currentFilter);
+            show ? item.classList.remove('hidden') : item.classList.add('hidden');
+            if (show) count++;
+          });
+          updateCount(count);
+          const visible = Array.from(items).filter(i => !i.classList.contains('hidden'));
+          visible.forEach(item => item.classList.remove('nh-visible'));
+          visible.forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 40));
+        } else {
+          /* Re-render timeline with filtered pubs */
+          renderTimeline(getFiltered());
+        }
       });
     });
   }
@@ -154,7 +176,14 @@
   function updateCount(n) {
     const el = document.getElementById('filterCount');
     if (!el) return;
-    const count = n !== undefined ? n : document.querySelectorAll('.pub-item').length;
+    let count;
+    if (n !== undefined) {
+      count = n;
+    } else if (currentView === 'list') {
+      count = document.querySelectorAll('.pub-item:not(.hidden)').length;
+    } else {
+      count = getFiltered().length;
+    }
     el.textContent = count + ' publication' + (count !== 1 ? 's' : '');
   }
 
@@ -171,6 +200,156 @@
       }
     }, { threshold: 0.02 });
     po.observe(list);
+  }
+
+  /* ── TIMELINE RENDERER ─────────────────────────────────────
+     Groups publications by year descending, renders as a
+     vertical timeline with year nodes, connector ticks,
+     and a staggered entrance animation.
+  ──────────────────────────────────────────────────────────── */
+  function renderTimeline(pubs) {
+    const container = document.getElementById('timelineList');
+    if (!container) return;
+
+    if (!pubs || !pubs.length) {
+      container.innerHTML = '<div class="tl-empty">No publications match this filter.</div>';
+      updateCount(0);
+      return;
+    }
+
+    /* Group by year, descending */
+    const byYear = {};
+    pubs.forEach(p => {
+      if (!byYear[p.year]) byYear[p.year] = [];
+      byYear[p.year].push(p);
+    });
+    const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+
+    container.innerHTML = years.map(yr => {
+      const papers = byYear[yr];
+      const paperHTML = papers.map(p => {
+        const j       = JOURNAL_META[p.journal] || { label: p.journal };
+        const authors = (p.authors || [])
+          .map(a => a.startsWith('**') ? `<strong>${a.slice(2, -2)}</strong>` : a)
+          .join(', ');
+        const meta = [
+          `<span class="tl-journal">${j.label}</span>`,
+          p.volume      ? `<span class="tl-volume">${p.volume}</span>`             : '',
+          p.forthcoming ? `<span class="tl-forthcoming">Forthcoming</span>`        : '',
+        ].filter(Boolean).join('<span class="tl-meta-sep">·</span>');
+
+        /* Abstract toggle — reuses same CSS as list view */
+        const hasAbstract = p.abstract && p.abstract.trim();
+        const abstractBtn = hasAbstract ? `
+          <button class="pub-abstract-btn tl-abstract-btn" aria-expanded="false" aria-label="Toggle abstract">
+            ${CHEVRON_ICON}
+            <span class="pub-abstract-btn-label">Abstract</span>
+          </button>` : '';
+        const abstractBody = hasAbstract ? `
+          <div class="pub-abstract-body" aria-hidden="true">
+            <div class="pub-abstract-inner">${p.abstract.trim()}</div>
+          </div>` : '';
+
+        return `
+          <div class="tl-paper" data-topics="${(p.topics || []).join('|')}">
+            <a class="tl-title" href="${p.url || '#'}" target="_blank">${p.title}</a>
+            <div class="tl-authors">${authors}</div>
+            <div class="tl-meta">${meta}${abstractBtn}</div>
+            ${abstractBody}
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="tl-year-group">
+          <div class="tl-year-header">
+            <div class="tl-year-node"><div class="tl-year-dot"></div></div>
+            <span class="tl-year-label">${yr}</span>
+            <span class="tl-year-count">${papers.length} paper${papers.length > 1 ? 's' : ''}</span>
+          </div>
+          <div class="tl-papers">${paperHTML}</div>
+        </div>`;
+    }).join('');
+
+    updateCount(pubs.length);
+
+    /* Wire abstract toggles in timeline */
+    container.querySelectorAll('.pub-abstract-btn').forEach(btn => {
+      const body = btn.closest('.tl-paper').querySelector('.pub-abstract-body');
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        body.setAttribute('aria-hidden', String(isOpen));
+        body.classList.toggle('pub-abstract-open', !isOpen);
+        btn.classList.toggle('pub-abstract-btn--open', !isOpen);
+      });
+    });
+
+    /* Stagger entrance animation */
+    const papers = container.querySelectorAll('.tl-paper');
+    papers.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateX(-8px)'; });
+    requestAnimationFrame(() => {
+      papers.forEach((el, i) => {
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+          el.style.opacity    = '1';
+          el.style.transform  = 'none';
+        }, i * 35);
+      });
+    });
+  }
+
+  /* ── VIEW TOGGLE ────────────────────────────────────────────
+     Two-button toggle at far right of filter bar.
+     Switches between list and timeline with a crossfade.
+  ──────────────────────────────────────────────────────────── */
+  function initViewToggle() {
+    const btnList     = document.getElementById('viewBtnList');
+    const btnTimeline = document.getElementById('viewBtnTimeline');
+    const listEl      = document.getElementById('pubList');
+    const timelineEl  = document.getElementById('timelineList');
+    if (!btnList || !btnTimeline || !listEl || !timelineEl) return;
+
+    function switchTo(view) {
+      if (view === currentView) return;
+      currentView = view;
+
+      /* Update button states */
+      btnList.classList.toggle('view-btn--active',     view === 'list');
+      btnTimeline.classList.toggle('view-btn--active', view === 'timeline');
+
+      /* Crossfade */
+      const leaving = view === 'list' ? timelineEl : listEl;
+      const entering = view === 'list' ? listEl : timelineEl;
+
+      leaving.style.transition = 'opacity 0.2s ease';
+      leaving.style.opacity    = '0';
+
+      setTimeout(() => {
+        leaving.style.display = 'none';
+        leaving.setAttribute('aria-hidden', 'true');
+
+        entering.style.display = view === 'list' ? 'flex' : 'block';
+        entering.style.opacity = '0';
+        entering.setAttribute('aria-hidden', 'false');
+        entering.style.transition = 'opacity 0.25s ease';
+
+        if (view === 'timeline') {
+          renderTimeline(getFiltered());
+        } else {
+          /* List already rendered; just re-trigger animation on visible items */
+          const items = Array.from(listEl.querySelectorAll('.pub-item:not(.hidden)'));
+          items.forEach(item => item.classList.remove('nh-visible'));
+          items.forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 35));
+          updateCount();
+        }
+
+        requestAnimationFrame(() => { entering.style.opacity = '1'; });
+      }, 200);
+    }
+
+    btnList.addEventListener('click',     () => switchTo('list'));
+    btnTimeline.addEventListener('click', () => switchTo('timeline'));
   }
 
   function initSectionReveal() {

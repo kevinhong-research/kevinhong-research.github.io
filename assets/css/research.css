@@ -435,3 +435,262 @@
   background: rgba(0, 160, 96, 0.08);
   color: #00a060;
 }
+
+/* ── VIEW TOGGLE ────────────────────────────────────────────
+   Two-button joined control at far right of the filter bar.
+   Same diamond clip-path and type scale as filter buttons.
+   Green active state matches the site's secondary accent.
+──────────────────────────────────────────────────────────── */
+.view-toggle {
+  display: inline-flex;
+  margin-left: auto;
+  border: 1px solid var(--line);
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.85rem;
+  border: none;
+  background: transparent;
+  color: var(--text-lo);
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s ease, background 0.2s ease;
+  line-height: 1;
+}
+.view-btn + .view-btn {
+  border-left: 1px solid var(--line);
+}
+.view-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.view-btn:hover {
+  color: var(--text);
+}
+.view-btn:hover svg { opacity: 1; }
+
+.view-btn--active {
+  color: #00a060;
+  background: rgba(0, 160, 96, 0.08);
+}
+.view-btn--active svg { opacity: 1; }
+
+/* ── TIMELINE CONTAINER ─────────────────────────────────────
+   Hidden by default; display toggled by initViewToggle().
+──────────────────────────────────────────────────────────── */
+.pub-timeline {
+  display: none;
+  flex-direction: column;
+}
+
+/* ── TIMELINE SPINE & YEAR GROUPS ───────────────────────────
+   Spine is a pseudo-element on the container.
+   Year groups sit 72px from the left to make room for it.
+──────────────────────────────────────────────────────────── */
+.tl-year-group {
+  position: relative;
+  padding-left: 64px;
+}
+
+/* The vertical green spine */
+.tl-year-group::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 8px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 160, 96, 0.18);
+}
+.tl-year-group:last-child::before {
+  bottom: auto;
+  height: 28px; /* spine only down to node on last group */
+}
+
+/* ── YEAR HEADER ─────────────────────────────────────────── */
+.tl-year-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 2rem 0 0.8rem;
+  position: relative;
+}
+.tl-year-group:first-child .tl-year-header {
+  padding-top: 0.25rem;
+}
+
+/* Circle node on the spine */
+.tl-year-node {
+  position: absolute;
+  left: -49px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg, #111);
+  border: 1.5px solid #00a060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.tl-year-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00a060;
+}
+
+.tl-year-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #00a060;
+}
+
+.tl-year-count {
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--text-lo);
+}
+
+/* ── PAPER CARDS ─────────────────────────────────────────── */
+.tl-papers {
+  display: flex;
+  flex-direction: column;
+}
+
+.tl-paper {
+  padding: 0.95rem 0 0.95rem 1.1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  transition: padding-left 0.2s ease, border-left-color 0.2s ease;
+}
+.tl-paper:last-child {
+  border-bottom: none;
+  padding-bottom: 0.25rem;
+}
+
+/* Left green bar on hover */
+.tl-paper::before {
+  content: '';
+  position: absolute;
+  left: -1px; top: 0; bottom: 0;
+  width: 2px;
+  background: #00a060;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease;
+}
+.tl-paper:hover {
+  padding-left: 1.5rem;
+  border-left-color: rgba(0, 160, 96, 0.12);
+}
+.tl-paper:hover::before { transform: scaleY(1); }
+
+/* Horizontal tick connecting spine to card */
+.tl-paper::after {
+  content: '';
+  position: absolute;
+  left: -44px;
+  top: 50%;
+  width: 43px;
+  height: 1px;
+  background: rgba(0, 160, 96, 0.1);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Paper title */
+.tl-title {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-hi);
+  line-height: 1.5;
+  text-decoration: none;
+  margin-bottom: 0.3rem;
+  transition: color 0.2s;
+}
+.tl-title:hover { color: #00a060; }
+
+/* Authors */
+.tl-authors {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--text-mid);
+  margin-bottom: 0.25rem;
+}
+.tl-authors strong {
+  color: var(--text);
+  font-weight: 400;
+}
+
+/* Meta row: journal · volume · forthcoming · abstract btn */
+.tl-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.tl-journal {
+  font-size: 0.78rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-mid);
+}
+.tl-volume {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--text-lo);
+}
+.tl-meta-sep {
+  font-size: 0.65rem;
+  color: var(--text-lo);
+  opacity: 0.5;
+}
+.tl-forthcoming {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green-hi);
+  border: 1px solid rgba(0, 160, 96, 0.3);
+  padding: 0.1rem 0.45rem;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+
+/* Abstract btn inside timeline inherits all .pub-abstract-btn styles */
+.tl-abstract-btn { margin-left: 0.1rem; }
+
+/* Empty state */
+.tl-empty {
+  font-size: 0.85rem;
+  color: var(--text-lo);
+  padding: 2rem 0;
+}
+
+/* ── RESPONSIVE (timeline) ──────────────────────────────── */
+@media (max-width: 760px) {
+  .tl-year-group { padding-left: 48px; }
+  .tl-year-node  { left: -33px; }
+  .tl-paper::after { left: -28px; width: 27px; }
+  .tl-year-group::before { left: 15px; }
+  .view-btn { padding: 0.4rem 0.6rem; }
+}
