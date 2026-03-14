@@ -11,10 +11,117 @@ nav_order: 2
 <link rel="stylesheet" href="{{ '/assets/css/talks.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/talkmap.css' | relative_url }}">
 
-<!-- Serialize US talks (those with lat/lng) from talks.yml into JS.
-     To add a talk to the map: add lat/lng to its entry in talks.yml.
-     Pill counts and map data are both derived from this array at runtime. -->
+<!-- Pill strip styles inlined to guarantee rendering regardless of asset path.
+     The map-specific styles (states, tooltip, animation) stay in talkmap.css. -->
+<style>
+.tm-pills {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.7rem 0 0.7rem 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  cursor: pointer;
+  transition: padding-left 0.22s ease;
+  user-select: none;
+  margin-bottom: 0;
+}
+.tm-pills::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0; width: 2px;
+  background: #F47321;
+  transform: scaleY(0); transform-origin: top;
+  transition: transform 0.25s ease;
+}
+.tm-pills:hover, .tm-pills:focus-visible { padding-left: 10px; outline: none; }
+.tm-pills:hover::before,
+.tm-pills:focus-visible::before,
+.tm-pills--open::before { transform: scaleY(1); }
+
+.tm-pill {
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 0.32rem;
+  padding: 0.25rem 0.85rem 0.25rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.06);
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+  line-height: 1;
+  background: transparent;
+  text-decoration: none;
+  font-family: inherit;
+}
+.tm-pills:hover .tm-pill,
+.tm-pills--open .tm-pill {
+  border-color: rgba(244,115,33,0.18);
+  background: rgba(244,115,33,0.04);
+}
+.tm-pill-n {
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  color: #3a3a3a;
+  letter-spacing: 0;
+  line-height: 1;
+  transition: color 0.2s;
+  font-style: normal;
+}
+.tm-pill-l {
+  font-size: 0.68rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #2e2e2e;
+  transition: color 0.2s;
+  font-style: normal;
+}
+.tm-pill--green .tm-pill-n { color: #00a060; }
+.tm-pill--blue  .tm-pill-n { color: #4db8ff; }
+.tm-pills:hover .tm-pill--green .tm-pill-n,
+.tm-pills--open .tm-pill--green .tm-pill-n { color: #00c070; }
+.tm-pills:hover .tm-pill--blue .tm-pill-n,
+.tm-pills--open .tm-pill--blue .tm-pill-n  { color: #6dc8ff; }
+.tm-pills:hover .tm-pill-l,
+.tm-pills--open .tm-pill-l { color: #444; }
+
+.tm-pill-sep {
+  display: inline-block !important;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  transition: background 0.2s;
+  align-self: center;
+}
+.tm-pills:hover .tm-pill-sep,
+.tm-pills--open .tm-pill-sep { background: rgba(255,255,255,0.13); }
+
+.tm-pill-hint {
+  display: inline-block !important;
+  margin-left: auto;
+  font-size: 0.68rem !important;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #272727;
+  white-space: nowrap;
+  padding-right: 2px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+  font-style: normal;
+}
+.tm-pills:hover .tm-pill-hint { color: #3a3a3a; }
+.tm-pills--open .tm-pill-hint { color: #444; }
+</style>
+
+<!-- ALL talks count (not just US) — separate from TALKMAP_DATA which is US-only.
+     Add lat/lng to a talks.yml entry to make it appear on the map.
+     These counts update automatically on every deploy. -->
 <script>
+window.TALKMAP_ALL_TOTAL    = {{ site.data.talks | size }};
+window.TALKMAP_ALL_UPCOMING = {{ site.data.talks | where: "upcoming", true | size }};
 window.TALKMAP_DATA = [
   {% assign us_talks = site.data.talks | where_exp: "t", "t.lat" %}
   {% for t in us_talks %}
@@ -43,11 +150,10 @@ window.TALKMAP_DATA = [
       <span class="tm-pill-n" id="tm-count-upcoming">—</span>
       <span class="tm-pill-l">upcoming</span>
     </div>
-    <div class="tm-pill-sep"></div>
+    <div class="tm-pill-sep" id="tm-sep-geo"></div>
     <div class="tm-pill tm-pill--geo">
-      <span class="tm-pill-l">United States</span>
+      <span class="tm-pill-l" id="tm-pill-hint-geo">View US Talks on Map</span>
     </div>
-    <span class="tm-pill-hint" id="tm-pill-hint">View map</span>
   </div>
 
   <div class="tm-body" id="talk-map-body">
