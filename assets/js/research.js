@@ -151,6 +151,12 @@
         btn.classList.add('active');
         currentFilter = btn.dataset.filter;
 
+        /* Update URL hash for shareability and browser-back */
+        const slug = currentFilter === 'all'
+          ? location.pathname
+          : location.pathname + '#' + currentFilter.toLowerCase().replace(/ /g, '-');
+        history.replaceState(null, '', slug);
+
         if (currentView === 'list') {
           /* Filter list items in-place with animation */
           const items = document.querySelectorAll('.pub-item');
@@ -459,11 +465,29 @@
     });
   }
 
+  /* ── HASH → FILTER (deep-link) ────────────────────────────
+     Reads location.hash on load and activates the matching
+     filter button. Called after renderPubs so buttons exist.
+  ──────────────────────────────────────────────────────────── */
+  function applyHashFilter() {
+    const hash = location.hash.slice(1); // e.g. "digital-platforms"
+    if (!hash) return;
+
+    /* Convert slug back to filter label: "digital-platforms" → "Digital Platforms" */
+    const slug    = hash.toLowerCase();
+    const btn     = Array.from(document.querySelectorAll('.filter-btn[data-filter]'))
+                        .find(b => b.dataset.filter.toLowerCase().replace(/ /g, '-') === slug);
+    if (!btn) return;
+
+    btn.click(); /* reuse existing filter logic — also updates URL */
+  }
+
   /* ── INIT ──────────────────────────────────────────────────*/
   document.addEventListener('DOMContentLoaded', () => {
     renderPubs(window.PUBLICATIONS || []);
     initSectionReveal();
     fetchCitations();
+    applyHashFilter();
     // initCursor();
   });
 
