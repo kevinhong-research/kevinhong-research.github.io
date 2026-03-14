@@ -7,7 +7,7 @@
    Slightly warmer than the plain grey to hint it's an action.
 ──────────────────────────────────────────────────────────── */
 .tm-pill--geo .tm-pill-l {
-  color: #3a3a3a;
+  color: #00a060;
   letter-spacing: 0.08em;
 }
 .tm-pills:hover .tm-pill--geo .tm-pill-l,
