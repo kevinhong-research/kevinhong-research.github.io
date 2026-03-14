@@ -9,7 +9,7 @@ nav_order: 2
 
 <link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/talks.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/talkmap.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/talkmap.css' | relative_url }}?v={{ site.time | date: '%Y%m%d%H%M' }}">
 
 <!-- Pill strip styles inlined to guarantee rendering regardless of asset path.
      The map-specific styles (states, tooltip, animation) stay in talkmap.css. -->
@@ -168,4 +168,4 @@ window.TALKMAP_DATA = [
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
-<script src="{{ '/assets/js/talkmap.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/talkmap.js' | relative_url }}?v={{ site.time | date: '%Y%m%d%H%M' }}"></script>
