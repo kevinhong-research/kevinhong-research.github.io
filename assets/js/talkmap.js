@@ -82,24 +82,17 @@
       <div class="tm-wrap">
         <div class="tm-header">
           <div class="tm-title">
-            <span class="tm-label">United States</span>
+            <span class="tm-label">Invited Research Talks in the United States</span>
           </div>
           <div class="tm-stats">
             <div class="tm-stat"><span class="tm-stat-n tm-green">${TALKS.length}</span><span class="tm-stat-l">Talks</span></div>
             <div class="tm-divider"></div>
             <div class="tm-stat"><span class="tm-stat-n tm-blue">${upcoming}</span><span class="tm-stat-l">Upcoming</span></div>
-            <div class="tm-divider"></div>
-            <div class="tm-stat"><span class="tm-stat-n tm-orange">${keynotes}</span><span class="tm-stat-l">Keynote</span></div>
           </div>
         </div>
         <div class="tm-map-area">
           <div id="tm-tip"></div>
-          <svg id="tm-svg" viewBox="0 0 960 580"></svg>
-        </div>
-        <div class="tm-legend">
-          <div class="tm-leg-item"><div class="tm-leg-dot" style="background:#00a060"></div>Talk</div>
-          <div class="tm-leg-item"><div class="tm-leg-dot" style="background:#F47321"></div>Keynote</div>
-          <div class="tm-leg-item"><div class="tm-leg-dot tm-pulse-dot" style="background:#4db8ff"></div>Upcoming</div>
+          <svg id="tm-svg" viewBox="0 0 960 520"></svg>
         </div>
       </div>`;
 
@@ -154,60 +147,79 @@
             .text(abbr);
         });
 
-        /* Talk dots */
+        /* ── Cluster nearby talks (within CLUSTER_PX projected pixels) ──
+           Groups are averaged to a centroid. Upcoming type wins if any
+           talk in the group is upcoming.                               */
+        const CLUSTER_PX = 20;
+
+        const projected = TALKS.map(t => ({ talk: t, c: proj([t.lng, t.lat]) }))
+                               .filter(d => d.c);
+
+        const clusters = [];
+        projected.forEach(({ talk, c }) => {
+          const match = clusters.find(cl =>
+            Math.hypot(cl.cx - c[0], cl.cy - c[1]) < CLUSTER_PX
+          );
+          if (match) {
+            match.talks.push(talk);
+            /* Re-average centroid */
+            match.cx = match.talks.reduce((s, _, i) => s + projected.find(p => p.talk === match.talks[i]).c[0], 0) / match.talks.length;
+            match.cy = match.talks.reduce((s, _, i) => s + projected.find(p => p.talk === match.talks[i]).c[1], 0) / match.talks.length;
+          } else {
+            clusters.push({ talks: [talk], cx: c[0], cy: c[1] });
+          }
+        });
+
+        /* ── Render one dot per cluster ── */
         const dotsG = svg.append("g");
-        TALKS.forEach(t => {
-          const c = proj([t.lng, t.lat]);
-          if (!c) return;
+        clusters.forEach(cl => {
+          const hasUpcoming = cl.talks.some(t => t.type === "upcoming");
+          const color = hasUpcoming ? "#4db8ff" : "#00a060";
+          const count = cl.talks.length;
+          const r = hasUpcoming ? 7.5 : count > 1 ? 7 : 6;
+          const cx = cl.cx, cy = cl.cy;
 
-          const color = t.type === "upcoming" ? "#4db8ff"
-                      : t.type === "keynote"  ? "#F47321"
-                      : "#00a060";
-          const r = t.type === "keynote" ? 8.5 : t.type === "upcoming" ? 7.5 : 6;
-          const g = dotsG.append("g").attr("transform", `translate(${c[0]},${c[1]})`);
+          const g = dotsG.append("g").attr("transform", `translate(${cx},${cy})`);
 
-          /* Pulse ring for upcoming */
-          if (t.type === "upcoming") {
+          if (hasUpcoming) {
             g.append("circle")
               .attr("class", "tm-pulse")
-              .attr("r", 11)
-              .attr("fill", "none")
-              .attr("stroke", color)
-              .attr("stroke-width", 1.2)
-              .attr("opacity", 0.5);
+              .attr("r", 11).attr("fill", "none")
+              .attr("stroke", color).attr("stroke-width", 1.2).attr("opacity", 0.5);
           }
 
-          /* Soft glow */
-          g.append("circle").attr("r", r + 3.5)
-            .attr("fill", color).attr("opacity", 0.1);
+          g.append("circle").attr("r", r + 3.5).attr("fill", color).attr("opacity", 0.1);
 
-          /* Main dot */
           g.append("circle").attr("r", r)
-            .attr("fill", color)
-            .attr("opacity", 0.92)
-            .attr("stroke", "#0d0d0d")
-            .attr("stroke-width", 1.5)
+            .attr("fill", color).attr("opacity", 0.92)
+            .attr("stroke", "#0d0d0d").attr("stroke-width", 1.5)
             .style("cursor", "pointer")
             .on("mouseover", function () {
               const svgRect  = svg.node().getBoundingClientRect();
               const wrapRect = area.getBoundingClientRect();
               const sx = svgRect.width  / 960;
-              const sy = svgRect.height / 580;
-              let lx = c[0] * sx + (svgRect.left - wrapRect.left) + 14;
-              let ly = c[1] * sy + (svgRect.top  - wrapRect.top)  - 14;
-              if (lx + 215 > wrapRect.width) lx -= 230;
+              const sy = svgRect.height / 520;
+              let lx = cx * sx + (svgRect.left - wrapRect.left) + 14;
+              let ly = cy * sy + (svgRect.top  - wrapRect.top)  - 14;
+              if (lx + 230 > wrapRect.width) lx -= 245;
               if (ly < 0) ly += 50;
 
-              const badge = t.type === "upcoming"
-                ? `<div class="tm-tip-badge" style="color:#4db8ff">Upcoming</div>`
-                : t.type === "keynote"
-                ? `<div class="tm-tip-badge" style="color:#F47321">Keynote</div>`
-                : "";
+              const clusterUpcoming = cl.talks.some(t => t.type === "upcoming");
+              tip.className = "tm-tip" + (clusterUpcoming ? " upcoming" : "");
 
-              tip.className = "tm-tip " + (t.type || "");
-              tip.innerHTML = `<strong>${t.name}</strong>${t.venue ? `<div class="tm-tip-venue">${t.venue}</div>` : ""}<div class="tm-tip-date">${t.date}</div>${badge}`;
-              tip.style.left    = Math.round(lx) + "px";
-              tip.style.top     = Math.round(ly) + "px";
+              tip.innerHTML = cl.talks.map((t, i) => {
+                const meta = [t.venue, t.date].filter(Boolean).join(" · ");
+                const badge = t.type === "upcoming"
+                  ? `<span class="tm-tip-badge" style="color:#4db8ff"> · Upcoming</span>` : "";
+                const divider = i > 0 ? `<div class="tm-tip-divider"></div>` : "";
+                return `${divider}<div class="tm-tip-entry">
+                  <strong>${t.name}</strong>
+                  <div class="tm-tip-meta">${meta}${badge}</div>
+                </div>`;
+              }).join("");
+
+              tip.style.left = Math.round(lx) + "px";
+              tip.style.top  = Math.round(ly) + "px";
               tip.style.display = "block";
               d3.select(this).attr("r", r + 2).attr("opacity", 1);
             })
