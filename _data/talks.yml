@@ -7,6 +7,7 @@
 #   year:        (required for sorting) — numeric year
 #   upcoming:    true  — shows green Upcoming badge
 #   type:        "keynote" — shows orange Keynote badge
+#   lat/lng:     (optional) — add for US talks to appear on the talk map
 
 - institution: "University of South Florida"
   venue: "Muma College of Business"
@@ -15,6 +16,8 @@
   month: 11
   sort_key: 202611
   upcoming: true
+  lat: 28.058
+  lng: -82.413
 
 - institution: "Tulane University"
   venue: "The Murphy Institute"
@@ -23,6 +26,8 @@
   month: 4
   sort_key: 202604
   upcoming: true
+  lat: 29.938
+  lng: -90.120
 
 - institution: "University of Texas at Austin"
   venue: "McCombs School of Business"
@@ -30,6 +35,8 @@
   year: 2026
   month: 3
   sort_key: 202603
+  lat: 30.285
+  lng: -97.734
 
 - institution: "Ohio State University"
   venue: "Fisher College of Business"
@@ -37,6 +44,8 @@
   year: 2025
   month: 11
   sort_key: 202511
+  lat: 40.006
+  lng: -83.030
 
 - institution: "Virginia Tech"
   venue: "Pamplin College of Business"
@@ -44,6 +53,8 @@
   year: 2025
   month: 9
   sort_key: 202509
+  lat: 37.228
+  lng: -80.423
 
 - institution: "Cheung Kong Graduate School of Business (CKGSB)"
   date: "6/2025"
@@ -63,6 +74,8 @@
   year: 2024
   month: 11
   sort_key: 202411
+  lat: 40.102
+  lng: -88.227
 
 - institution: "New York University"
   venue: "Stern School of Business, ISPOC"
@@ -70,6 +83,8 @@
   year: 2024
   month: 5
   sort_key: 202405
+  lat: 40.729
+  lng: -73.996
 
 - institution: "ZEVEDI-Lecture Series"
   venue: "Responsible Algorithmic Decision-Making in the Workplace"
@@ -84,6 +99,8 @@
   year: 2023
   month: 11
   sort_key: 202311
+  lat: 42.350
+  lng: -71.105
 
 - institution: "University of Delaware"
   venue: "Lerner College of Business and Economics"
@@ -91,6 +108,8 @@
   year: 2023
   month: 10
   sort_key: 202310
+  lat: 39.678
+  lng: -75.751
 
 - institution: "University of Southern California"
   venue: "Marshall School of Business"
@@ -98,6 +117,8 @@
   year: 2022
   month: 12
   sort_key: 202212
+  lat: 34.022
+  lng: -118.285
 
 - institution: "Florida State University"
   venue: "College of Business"
@@ -105,6 +126,8 @@
   year: 2022
   month: 10
   sort_key: 202210
+  lat: 30.441
+  lng: -84.298
 
 - institution: "University of Georgia"
   venue: "Terry College of Business"
@@ -112,6 +135,8 @@
   year: 2022
   month: 4
   sort_key: 202204
+  lat: 33.948
+  lng: -83.377
 
 - institution: "University of Rochester"
   venue: "Simon Business School"
@@ -119,6 +144,8 @@
   year: 2022
   month: 4
   sort_key: 202204
+  lat: 43.128
+  lng: -77.627
 
 - institution: "University of Pittsburgh"
   venue: "Katz Graduate School of Business"
@@ -126,6 +153,8 @@
   year: 2021
   month: 11
   sort_key: 202111
+  lat: 40.444
+  lng: -79.960
 
 - institution: "University of Miami"
   venue: "Herbert Business School"
@@ -133,6 +162,8 @@
   year: 2021
   month: 11
   sort_key: 202111
+  lat: 25.758
+  lng: -80.375
 
 - institution: "University of Wisconsin-Madison"
   venue: "Wisconsin School of Business"
@@ -140,6 +171,8 @@
   year: 2021
   month: 11
   sort_key: 202111
+  lat: 43.076
+  lng: -89.412
 
 - institution: "Tsinghua University"
   venue: "School of Economics and Management"
@@ -161,6 +194,8 @@
   year: 2021
   month: 9
   sort_key: 202109
+  lat: 38.986
+  lng: -76.942
 
 - institution: "Erasmus University"
   venue: "Rotterdam School of Management"
@@ -175,6 +210,8 @@
   year: 2021
   month: 4
   sort_key: 202104
+  lat: 29.719
+  lng: -95.342
 
 - institution: "University of Oklahoma"
   venue: "Price College of Business"
@@ -182,6 +219,8 @@
   year: 2021
   month: 4
   sort_key: 202104
+  lat: 35.205
+  lng: -97.445
 
 - institution: "University of Connecticut"
   venue: "School of Business"
@@ -189,6 +228,8 @@
   year: 2021
   month: 2
   sort_key: 202102
+  lat: 41.808
+  lng: -72.249
 
 - institution: "Lehigh University"
   venue: "College of Business"
@@ -196,6 +237,8 @@
   year: 2021
   month: 1
   sort_key: 202101
+  lat: 40.606
+  lng: -75.378
 
 - institution: "University of Washington"
   venue: "Foster School of Business"
@@ -203,6 +246,8 @@
   year: 2020
   month: 2
   sort_key: 202002
+  lat: 47.655
+  lng: -122.303
 
 - institution: "University of Houston"
   venue: "Bauer College of Business"
@@ -210,6 +255,8 @@
   year: 2019
   month: 12
   sort_key: 201912
+  lat: 29.724
+  lng: -95.350
 
 - institution: "Georgia State University"
   venue: "Robinson College of Business"
@@ -217,6 +264,8 @@
   year: 2019
   month: 11
   sort_key: 201911
+  lat: 33.753
+  lng: -84.386
 
 - institution: "University of Arizona"
   venue: "Eller College of Management"
@@ -224,6 +273,8 @@
   year: 2019
   month: 10
   sort_key: 201910
+  lat: 32.231
+  lng: -110.950
 
 - institution: "University of North Carolina at Charlotte"
   venue: "Belk College of Business"
@@ -231,6 +282,8 @@
   year: 2019
   month: 10
   sort_key: 201910
+  lat: 35.307
+  lng: -80.735
 
 - institution: "University of Utah"
   venue: "Eccles School of Business"
@@ -238,6 +291,8 @@
   year: 2019
   month: 9
   sort_key: 201909
+  lat: 40.764
+  lng: -111.842
 
 - institution: "Hong Kong Polytechnic University"
   venue: "Faculty of Business"
@@ -252,6 +307,8 @@
   year: 2019
   month: 5
   sort_key: 201905
+  lat: 42.335
+  lng: -71.168
 
 - institution: "George Washington University"
   venue: "College of Business"
@@ -259,6 +316,8 @@
   year: 2019
   month: 4
   sort_key: 201904
+  lat: 38.899
+  lng: -77.048
 
 - institution: "University of Illinois at Chicago"
   venue: "College of Business"
@@ -266,12 +325,16 @@
   year: 2018
   month: 11
   sort_key: 201811
+  lat: 41.870
+  lng: -87.650
 
 - institution: "MentorStudents.org"
   date: "3/2018"
   year: 2018
   month: 3
   sort_key: 201803
+  lat: 37.386
+  lng: -122.084
 
 - institution: "University of Minnesota"
   venue: "Carlson School of Management"
@@ -279,6 +342,8 @@
   year: 2018
   month: 3
   sort_key: 201803
+  lat: 44.974
+  lng: -93.227
 
 - institution: "Special Libraries Association"
   venue: "Invited Keynote Speech"
@@ -287,6 +352,8 @@
   month: 7
   sort_key: 201707
   type: "keynote"
+  lat: 32.776
+  lng: -96.797
 
 - institution: "Arizona State University"
   venue: "Ira A. Fulton School of Engineering"
@@ -294,6 +361,8 @@
   year: 2017
   month: 3
   sort_key: 201703
+  lat: 33.425
+  lng: -111.940
 
 - institution: "Temple University"
   venue: "Fox School of Business"
@@ -301,12 +370,16 @@
   year: 2017
   month: 2
   sort_key: 201702
+  lat: 39.981
+  lng: -75.155
 
 - institution: "Uber"
   date: "10/2016"
   year: 2016
   month: 10
   sort_key: 201610
+  lat: 37.774
+  lng: -122.419
 
 - institution: "Arizona State University"
   venue: "Information Systems Research Workshop"
@@ -314,6 +387,8 @@
   year: 2016
   month: 2
   sort_key: 201602
+  lat: 33.430
+  lng: -111.935
 
 - institution: "Temple University"
   venue: "CIBER"
@@ -321,6 +396,8 @@
   year: 2014
   month: 4
   sort_key: 201404
+  lat: 39.985
+  lng: -75.150
 
 - institution: "Arizona State University"
   venue: "W. P. Carey School of Business"
@@ -328,6 +405,8 @@
   year: 2013
   month: 11
   sort_key: 201311
+  lat: 33.428
+  lng: -111.938
 
 - institution: "University of Virginia"
   venue: "McIntire School of Commerce"
@@ -335,6 +414,8 @@
   year: 2013
   month: 10
   sort_key: 201310
+  lat: 38.033
+  lng: -78.508
 
 - institution: "Nanyang Technological University"
   venue: "Nanyang Business School"
