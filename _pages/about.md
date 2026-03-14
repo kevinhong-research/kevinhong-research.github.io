@@ -132,6 +132,36 @@ article code.nh-topic-link:hover,
 }
 </style>
 
+{% assign featured_papers = site.data.publications | where_exp: "pub", "pub.id == 'peer-awards-reddit' or pub.id == 'ridesharing-traffic-congestion'" %}
+
+<div class="nh-paper-preview" id="nhPaperPreview" role="tooltip" aria-hidden="true">
+  <div class="nh-paper-preview__eyebrow">Featured publication</div>
+  <div class="nh-paper-preview__title"></div>
+  <div class="nh-paper-preview__authors"></div>
+  <div class="nh-paper-preview__meta"></div>
+  <div class="nh-paper-preview__abstract"></div>
+  <a class="nh-paper-preview__cta" href="#">
+    <span class="nh-paper-preview__cta-icon" aria-hidden="true">↗</span>
+    <span>Learn more about this paper</span>
+  </a>
+</div>
+
+<script>
+window.NH_FEATURED_PAPERS = {
+  {% for pub in featured_papers %}
+  {{ pub.id | jsonify }}: {
+    id: {{ pub.id | jsonify }},
+    title: {{ pub.title | jsonify }},
+    authors: {{ pub.authors | jsonify }},
+    journal: {{ pub.journal | jsonify }},
+    year: {{ pub.year | jsonify }},
+    volume: {{ pub.volume | default: "" | jsonify }},
+    abstract: {{ pub.abstract | default: "" | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+};
+</script>
+
 <div class="nh-terminal" id="nhTerminal">
   <span class="nh-terminal-prompt" id="nhPrompt">›</span>
   <span class="nh-terminal-text"   id="nhText"></span>
@@ -145,7 +175,7 @@ article code.nh-topic-link:hover,
 
 I study how digital technology reshapes work, markets, and human behavior. My research — spanning `Future of Work`, `Digital Platforms`, `Digital Media`, and `Human-Algorithm Interactions` — has been published in *Management Science*, *Information Systems Research*, *MIS Quarterly*, *Production and Operations Management*, *INFORMS Journal on Computing*, and supported by grants from the *National Science Foundation* and the *Robert Wood Johnson Foundation*, among others.
 
-My work has received sustained recognition across information systems and operations management. Most notably, my [paper](https://pubsonline.informs.org/doi/10.1287/mnsc.2021.4040) on peer awards and creative content won the `Management Science IS Best Paper Award` (2025), and my [paper](https://journals.sagepub.com/doi/10.1111/poms.13530) on ridesharing and traffic congestion won the `POM J. George Shanthikumar Best Data Science and E-Operations Paper Award` (2025). My dissertation on the gig economy received the `ACM SIGMIS Best Dissertation Award` and was runner-up for the `INFORMS ISS Nunamaker-Chen Dissertation Award`. I have also received the `AIS Early Career Award` (2018), the `INFORMS ISS Sandy Slaughter Early Career Award` (2019), the `W. P. Carey Faculty Research Award` (2017), and the `Associate Editor of the Year Award` from *Information Systems Research* (2018). Papers of mine have won best paper awards at the `ICIS` (2012, 2018, 2020, 2021), `INFORMS` (2021, 2024), `WISE` (2018), `HICSS` (2017), `AMCIS` (2012), and `CSWIM` (2018). According to the [AIS Research Rankings](https://www.aisresearchrankings.org/rankings/), I was ranked #1 globally in publications across *MISQ* and *ISR* for 2025, #5 for 2021–2023, and #7 for 2016–2018.
+My work has received sustained recognition across information systems and operations management. Most notably, my <a href="{{ '/publications/?paper=peer-awards-reddit' | relative_url }}" class="nh-paper-link" data-paper-id="peer-awards-reddit" aria-describedby="nhPaperPreview">paper</a> on peer awards and creative content won the `Management Science IS Best Paper Award` (2025), and my <a href="{{ '/publications/?paper=ridesharing-traffic-congestion' | relative_url }}" class="nh-paper-link" data-paper-id="ridesharing-traffic-congestion" aria-describedby="nhPaperPreview">paper</a> on ridesharing and traffic congestion won the `POM J. George Shanthikumar Best Data Science and E-Operations Paper Award` (2025). My dissertation on the gig economy received the `ACM SIGMIS Best Dissertation Award` and was runner-up for the `INFORMS ISS Nunamaker-Chen Dissertation Award`. I have also received the `AIS Early Career Award` (2018), the `INFORMS ISS Sandy Slaughter Early Career Award` (2019), the `W. P. Carey Faculty Research Award` (2017), and the `Associate Editor of the Year Award` from *Information Systems Research* (2018). Papers of mine have won best paper awards at the `ICIS` (2012, 2018, 2020, 2021), `INFORMS` (2021, 2024), `WISE` (2018), `HICSS` (2017), `AMCIS` (2012), and `CSWIM` (2018). According to the [AIS Research Rankings](https://www.aisresearchrankings.org/), I was ranked #1 globally in publications across *MISQ* and *ISR* for 2025, #5 for 2021–2023, and #7 for 2016–2018.
 
 Before entering academia, I spent time as an analyst at a leading investment bank and as a language specialist for the International Olympics Committee. I continue to work closely with industry — advising technology companies including Freelancer, Alibaba, Livad, fits.me, Summer, Extole, Ookong, and Picmonic on digital transformation, large-scale data analytics, and experimentation.
 
@@ -323,5 +353,115 @@ When I am not doing research, I enjoy reading, writing code, and watching Americ
   } else {
     wire();
   }
+})();
+</script>
+
+<script>
+(function () {
+  var JOURNAL_META = {
+    ISR: 'Information Systems Research',
+    MISQ: 'MIS Quarterly',
+    MS: 'Management Science',
+    POM: 'Production and Operations Management',
+    JMIS: 'Journal of Management Information Systems',
+    JAIS: 'Journal of the Association for Information Systems',
+    TKDD: 'ACM Transactions on Knowledge Discovery from Data',
+    JCP: 'Journal of Consumer Psychology',
+    IJOC: 'INFORMS Journal on Computing'
+  };
+
+  var data = window.NH_FEATURED_PAPERS || {};
+  var preview = document.getElementById('nhPaperPreview');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nh-paper-link[data-paper-id]'));
+  if (!preview || !links.length) return;
+
+  var titleEl = preview.querySelector('.nh-paper-preview__title');
+  var authorsEl = preview.querySelector('.nh-paper-preview__authors');
+  var metaEl = preview.querySelector('.nh-paper-preview__meta');
+  var abstractEl = preview.querySelector('.nh-paper-preview__abstract');
+  var ctaEl = preview.querySelector('.nh-paper-preview__cta');
+  var activeLink = null;
+  var hideTimer = null;
+
+  function authorMarkup(authors) {
+    return (authors || []).map(function (author) {
+      return author.indexOf('**') === 0 ? '<strong>' + author.slice(2, -2) + '</strong>' : author;
+    }).join(', ');
+  }
+
+  function metaText(paper) {
+    var parts = [];
+    var journal = JOURNAL_META[paper.journal] || paper.journal;
+    if (journal) parts.push(journal);
+    if (paper.year) parts.push(String(paper.year));
+    if (paper.volume) parts.push(paper.volume);
+    return parts.join(' · ');
+  }
+
+  function positionPreview(link) {
+    var rect = link.getBoundingClientRect();
+    var previewRect = preview.getBoundingClientRect();
+    var gap = 14;
+    var left = rect.left + window.scrollX;
+    var top = rect.bottom + window.scrollY + gap;
+
+    if (left + previewRect.width > window.scrollX + window.innerWidth - 16) {
+      left = window.scrollX + window.innerWidth - previewRect.width - 16;
+    }
+    if (left < window.scrollX + 16) left = window.scrollX + 16;
+
+    if (top + previewRect.height > window.scrollY + window.innerHeight - 16) {
+      top = rect.top + window.scrollY - previewRect.height - gap;
+    }
+    if (top < window.scrollY + 16) top = window.scrollY + 16;
+
+    preview.style.left = left + 'px';
+    preview.style.top = top + 'px';
+  }
+
+  function showPreview(link) {
+    var paper = data[link.dataset.paperId];
+    if (!paper) return;
+
+    window.clearTimeout(hideTimer);
+    activeLink = link;
+    titleEl.textContent = paper.title || '';
+    authorsEl.innerHTML = authorMarkup(paper.authors);
+    metaEl.textContent = metaText(paper);
+    abstractEl.textContent = paper.abstract || '';
+    if (ctaEl) ctaEl.href = link.href;
+    preview.classList.add('is-visible');
+    preview.setAttribute('aria-hidden', 'false');
+    positionPreview(link);
+  }
+
+  function hidePreviewSoon() {
+    window.clearTimeout(hideTimer);
+    hideTimer = window.setTimeout(function () {
+      activeLink = null;
+      preview.classList.remove('is-visible');
+      preview.setAttribute('aria-hidden', 'true');
+    }, 120);
+  }
+
+  links.forEach(function (link) {
+    link.addEventListener('mouseenter', function () { showPreview(link); });
+    link.addEventListener('focus', function () { showPreview(link); });
+    link.addEventListener('mouseleave', hidePreviewSoon);
+    link.addEventListener('blur', hidePreviewSoon);
+  });
+
+  preview.addEventListener('mouseenter', function () {
+    window.clearTimeout(hideTimer);
+  });
+  preview.addEventListener('mouseleave', hidePreviewSoon);
+
+  window.addEventListener('scroll', function () {
+    if (activeLink && preview.classList.contains('is-visible')) positionPreview(activeLink);
+  }, { passive: true });
+
+  window.addEventListener('resize', function () {
+    if (activeLink && preview.classList.contains('is-visible')) positionPreview(activeLink);
+  });
 })();
 </script>

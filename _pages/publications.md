@@ -68,6 +68,7 @@ nav_order: 2
 window.PUBLICATIONS = [
   {% for pub in site.data.publications %}
   {
+    "id":          {{ pub.id          | default: "" | jsonify }},
     "title":       {{ pub.title       | jsonify }},
     "url":         {{ pub.url         | jsonify }},
     "doi":         {{ pub.doi         | default: "" | jsonify }},
