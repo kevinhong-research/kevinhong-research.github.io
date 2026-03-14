@@ -60,7 +60,19 @@ social: false # includes social icons at the bottom of the page
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
 }
-.nh-terminal.nh-t-done { display: none; }
+
+/* Research area code tags — subtle link affordance */
+article code.nh-topic-link,
+.post-content code.nh-topic-link {
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+article code.nh-topic-link:hover,
+.post-content code.nh-topic-link:hover {
+  color: #00a060 !important;
+  border-color: rgba(0, 160, 96, 0.35) !important;
+  background: rgba(0, 160, 96, 0.08) !important;
+}
 </style>
 
 <div class="nh-terminal" id="nhTerminal">
@@ -87,21 +99,30 @@ In my spare time, I enjoy reading books, writing codes, and watching American fo
   var PRE_MS   = 320;  /* pause before typing starts        */
   var BLINK_MS = 950;  /* cursor blink duration after done  */
 
+  var TTL    = 24 * 60 * 60 * 1000; /* 24 hours in ms */
+
   var wrap   = document.getElementById('nhTerminal');
   var prompt = document.getElementById('nhPrompt');
   var text   = document.getElementById('nhText');
   var cursor = document.getElementById('nhCursorT');
   if (!wrap) return;
 
-  /* Return visitors: hide the line immediately, do nothing else */
-  try {
-    if (localStorage.getItem(KEY)) {
-      wrap.classList.add('nh-t-done');
-      return;
-    }
-  } catch (_) {}
+  /* Check if animation has run within the last 24 hours */
+  function hasRunRecently() {
+    try {
+      var ts = localStorage.getItem(KEY);
+      return ts && (Date.now() - Number(ts)) < TTL;
+    } catch (_) { return false; }
+  }
 
-  /* First visit: run the animation */
+  /* Show the completed line immediately (no animation) for return visits */
+  function showStatic() {
+    prompt.classList.add('nh-t-visible');
+    text.textContent = FULL;
+    /* cursor stays hidden — already opacity:0 by default */
+  }
+
+  /* First visit or TTL expired: run the typing animation */
   function run() {
     setTimeout(function () {
       prompt.classList.add('nh-t-visible');
@@ -116,17 +137,64 @@ In my spare time, I enjoy reading books, writing codes, and watching American fo
           cursor.classList.add('nh-t-blink');
           setTimeout(function () {
             cursor.classList.add('nh-t-hidden');
-            try { localStorage.setItem(KEY, '1'); } catch (_) {}
+            /* Store current timestamp — animation resets after 24h */
+            try { localStorage.setItem(KEY, String(Date.now())); } catch (_) {}
           }, BLINK_MS);
         }
       }, CHAR_MS);
     }, PRE_MS);
   }
 
+  function init() {
+    if (hasRunRecently()) {
+      showStatic(); /* line stays, no animation */
+    } else {
+      run();        /* animate, then persist timestamp */
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    run();
+    init();
+  }
+})();
+</script>
+
+<script>
+/* ── Research area deep-links ──────────────────────────────
+   Finds the four research-area <code> elements in the bio
+   by text content and makes them clickable links to the
+   filtered publications page. No HTML changes needed.
+──────────────────────────────────────────────────────────── */
+(function () {
+  var TOPIC_MAP = {
+    'Future of Work':              '/publications/#future-of-work',
+    'Digital Platforms':           '/publications/#digital-platforms',
+    'Digital Media':               '/publications/#digital-media',
+    'Human-Algorithm Interactions':'/publications/#human-ai-interaction',
+  };
+
+  function wire() {
+    document.querySelectorAll('article code, .post-content code').forEach(function (el) {
+      var key  = el.textContent.trim();
+      var href = TOPIC_MAP[key];
+      if (!href) return;
+      if (el.parentNode.tagName === 'A') return; /* already wrapped */
+
+      el.classList.add('nh-topic-link');
+      el.setAttribute('title', 'View ' + key + ' publications');
+
+      el.addEventListener('click', function () {
+        window.location.href = href;
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wire);
+  } else {
+    wire();
   }
 })();
 </script>
