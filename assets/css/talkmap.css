@@ -4,11 +4,11 @@
 
 /* ── WRAPPER ─────────────────────────────────────────────── */
 .tm-wrap {
-  background: #0d0d0d;
+  background: transparent;
   border-radius: 6px;
-  padding: 0.85rem 1.25rem 0.85rem;
+  padding: 0.75rem 1.25rem 0.6rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ── HEADER ──────────────────────────────────────────────── */
@@ -18,7 +18,7 @@
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.3rem;
 }
 
 .tm-label {
@@ -75,7 +75,7 @@
 }
 
 .tm-state {
-  fill: #13191f;
+  fill: rgba(19, 25, 31, 0.75);
   stroke: #1d2731;
   stroke-width: 0.7;
   transition: fill 0.18s;
