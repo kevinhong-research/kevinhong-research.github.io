@@ -61,6 +61,23 @@ social: false # includes social icons at the bottom of the page
   50%       { opacity: 0; }
 }
 
+/* Pulsing live dot before the "Currently" line */
+#nhTerminal2::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00a060;
+  margin-right: 0.6em;
+  flex-shrink: 0;
+  animation: nh-pulse 2.2s ease-in-out infinite;
+}
+@keyframes nh-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.3; transform: scale(0.75); }
+}
+
 /* Research area tags — orange diamond badges matching filter buttons */
 article code.nh-topic-link,
 .post-content code.nh-topic-link {
@@ -100,15 +117,13 @@ article code.nh-topic-link:hover,
   <span class="nh-terminal-cursor" id="nhCursorT2"></span>
 </div>
 
-<!-- I am a Professor of Business Technology, Miami Herbert Centennial Endowed Chair, and Associate Dean for Research at the [Miami Herbert Business School](https://www.herbert.miami.edu/about/miami-herbert-leadership/index.html), `University of Miami`. I currently serve as a Senior Editor at [Information Systems Research](https://pubsonline.informs.org/page/isre/editorial-board) and [Production and Operations Management](http://www.poms.org/journal/departments/). I recently co-edited a POM Special Issue on `Social Technologies in Operations`. -->
+I study how digital technology reshapes work, markets, and human behavior. My research — spanning `Future of Work`, `Digital Platforms`, `Digital Media`, and `Human-Algorithm Interactions` — has been published in *Management Science*, *Information Systems Research*, *MIS Quarterly*, *Production and Operations Management*, *INFORMS Journal on Computing*, and supported by grants from the *National Science Foundation* and the *Robert Wood Johnson Foundation*, among others.
 
-My research interests are in the areas of `Future of Work`, `Digital Platforms`, `Digital Media`, and `Human-Algorithm Interactions`. My research has been published in premier journals such as *Management Science*, *Information Systems Research*, *MIS Quarterly*, *Production and Operations Management*, *INFORMS Journal on Computing*, among others. My work has been supported by several prestigious grants, from the *Robert Wood Johnson Foundation*, the *National Science Foundation*, *NET Institute*, and the *Department of Education*.
+My work has been recognized with honors from the Information Systems and Operations Mangement fields. Most notably, my [paper](https://pubsonline.informs.org/doi/10.1287/mnsc.2021.4040) on peer awards and creative content won the `Management Science IS Best Paper Award` (2025), and my [paper](https://journals.sagepub.com/doi/10.1111/poms.13530) on ridesharing and traffic congestion won the `POM J. George Shanthikumar Best Data Science and E-Operations Paper Award` (2025). My dissertation on the gig economy received the `ACM SIGMIS Best Dissertation Award` and was runner-up for the `INFORMS ISS Nunamaker-Chen Dissertation Award`. I have also received the `AIS Early Career Award` (2018), the `INFORMS ISS Sandy Slaughter Early Career Award` (2019), the `W. P. Carey Faculty Research Award` (2017), and the `Associate Editor of the Year Award` from *Information Systems Research* (2018). Papers of mine have won best paper awards at the `International Conference on Information Systems` (2012, 2018, 2020, 2021), `INFORMS Annual Meeting` (2021, 2024), `WISE` (2018), `HICSS` (2017), `AMCIS` (2012), and `CSWIM` (2018). According to the [AIS Research Rankings](https://www.aisresearchrankings.org/rankings/), I was ranked #1 globally in publications across *MISQ* and *ISR* for 2025, #5 for 2021–2023, and #7 for 2016–2018.
 
-My research papers have won a number of best paper awards at major conferences and journals, including the `Workshop on Information Systems and Economics` (2018), the `International Conference on Information Systems` (2012, 2018, 2020, 2021), `Hawaii International Conference on System Sciences` (2017), `INFORMS Annual Conference Information Systems Cluster` (2024), `INFORMS Annual Conference eBusiness Cluster` (2021), `America's Conference on Information Systems` (2012), and the `China Summer Workshop on Information Management` (2018). Most notably, my [paper](https://pubsonline.informs.org/doi/10.1287/mnsc.2021.4040) on how peer awards shape creative content generation won the `Management Science IS Best Paper Award` (2025) and [paper](https://journals.sagepub.com/doi/10.1111/poms.13530) on the nuanced role of ridesharing on traffic congestion won the `POM J. George Shanthikumar Best Data Science and E-Operations Paper Award` (2025). My dissertation research on the gig economy and future of work was awarded the `ACM SIGMIS Best Dissertation Award` and runner-up `INFORMS ISS Nunamaker-Chen Dissertation Award`. In 2017, I was awarded the college-wide `W. P. Carey Faculty Research Award` at Arizona State University. Further, I was awarded the `Association for Information Systems Early Career Award` (2018) and the `INFORMS Information Systems Society Sandy Slaughter Early Career Award` (2019). And I was awarded the `Associate Editor of the Year Award` (2018) from `Information Systems Research`. According to the [AIS Research Rankings](https://www.aisresearchrankings.org/rankings/), I was ranked #1 in the world based on publications in the top two information systems journals (*MISQ*, *ISR*) for 2025, #5 for 2021-2023 and #7 for 2016-2018.
+Before entering academia, I spent time as an analyst at a leading investment bank and as a language specialist for the International Olympics Committee. I continue to work closely with industry — advising technology companies including Freelancer, Alibaba, Livad, fits.me, Summer, Extole, Ookong, and Picmonic on digital transformation, large-scale data analytics, and experimentation.
 
-Prior to my academic career, I have worked as an analyst at a leading investment bank and as a language specialist for the International Olympics Committee. Besides research and teaching as a faculty member, I serve as an advisor or external research scientist for a number of tech companies, primarily working with them on large-scale digital transformation, data analytics, and digital experimentation efforts. Some of my corporate research partners include Freelancer, Alibaba, Livad, fits.me, Summer, Ports America, Extole, Ookong, and Picmonic.
-
-In my spare time, I enjoy reading books, writing codes, and watching American football games. I am an avid [Emacs](https://www.spacemacs.org/) user, a [typography](https://fontsinuse.com/) enthusiast, a frequent [Redditor](https://www.reddit.com/), and a `mechanical keyboard` designer and collector.
+When I am not doing research, I enjoy reading, writing code, and watching American football. I am an avid [Emacs](https://www.spacemacs.org/) user, a [typography](https://fontsinuse.com/) enthusiast, a frequent [Redditor](https://www.reddit.com/), and a `mechanical keyboard` designer and collector.
 
 <script>
 (function () {
