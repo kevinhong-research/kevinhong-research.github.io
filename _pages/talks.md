@@ -13,7 +13,7 @@ nav_order: 2
 
 <!-- Serialize US talks (those with lat/lng) from talks.yml into JS.
      To add a talk to the map: add lat/lng to its entry in talks.yml.
-     No JS changes needed — the map updates automatically on deploy. -->
+     Pill counts and map data are both derived from this array at runtime. -->
 <script>
 window.TALKMAP_DATA = [
   {% assign us_talks = site.data.talks | where_exp: "t", "t.lat" %}
@@ -30,22 +30,32 @@ window.TALKMAP_DATA = [
 ];
 </script>
 
-<!-- Toggle bar — collapsed by default, expands to show the US map -->
+<!-- Pill strip toggle + collapsible map -->
 <div class="nh-research">
-  <div id="talk-map-toggle" class="tm-toggle" role="button" aria-expanded="false" tabindex="0">
-    <div class="tm-toggle-left">
-      <svg class="tm-toggle-chevron" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" width="10" height="6" style="width:10px;height:6px;flex-shrink:0">
-        <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="tm-toggle-title">Invited Research Talks in the United States</span>
+
+  <div class="tm-pills" id="talk-map-toggle" role="button" aria-expanded="false" tabindex="0">
+    <div class="tm-pill tm-pill--green">
+      <span class="tm-pill-n" id="tm-count-total">—</span>
+      <span class="tm-pill-l">talks</span>
     </div>
-    <span class="tm-toggle-meta" id="tm-toggle-meta"></span>
+    <div class="tm-pill-sep"></div>
+    <div class="tm-pill tm-pill--blue" id="tm-pill-upcoming">
+      <span class="tm-pill-n" id="tm-count-upcoming">—</span>
+      <span class="tm-pill-l">upcoming</span>
+    </div>
+    <div class="tm-pill-sep"></div>
+    <div class="tm-pill tm-pill--geo">
+      <span class="tm-pill-l">United States</span>
+    </div>
+    <span class="tm-pill-hint" id="tm-pill-hint">View map</span>
   </div>
+
   <div class="tm-body" id="talk-map-body">
     <div class="tm-body-inner">
       <div id="talk-map-container"></div>
     </div>
   </div>
+
 </div>
 
 {% include talks_render.html %}
