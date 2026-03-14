@@ -94,6 +94,11 @@ article code.nh-topic-link:hover,
   <span class="nh-terminal-text"   id="nhText"></span>
   <span class="nh-terminal-cursor" id="nhCursorT"></span>
 </div>
+<div class="nh-terminal" id="nhTerminal2">
+  <span class="nh-terminal-prompt" id="nhPrompt2">›</span>
+  <span class="nh-terminal-text"   id="nhText2"></span>
+  <span class="nh-terminal-cursor" id="nhCursorT2"></span>
+</div>
 
 I am a Professor of Business Technology, Miami Herbert Centennial Endowed Chair, and Associate Dean for Research at the [Miami Herbert Business School](https://www.herbert.miami.edu/about/miami-herbert-leadership/index.html), `University of Miami`. I currently serve as a Senior Editor at [Information Systems Research](https://pubsonline.informs.org/page/isre/editorial-board) and [Production and Operations Management](http://www.poms.org/journal/departments/). I recently co-edited a POM Special Issue on `Social Technologies in Operations`.
 
@@ -108,20 +113,28 @@ In my spare time, I enjoy reading books, writing codes, and watching American fo
 <script>
 (function () {
   var KEY      = 'nh_typed';
-  var FULL     = 'researcher \u00b7 professor \u00b7 builder';
-  var CHAR_MS  = 44;   /* ms per character typed            */
-  var PRE_MS   = 320;  /* pause before typing starts        */
-  var BLINK_MS = 950;  /* cursor blink duration after done  */
+  var CHAR_MS  = 44;
+  var PRE_MS   = 320;
+  var PAUSE_MS = 480;  /* pause between line 1 finishing and line 2 starting */
+  var BLINK_MS = 950;
+  var TTL      = 24 * 60 * 60 * 1000;
 
-  var TTL    = 24 * 60 * 60 * 1000; /* 24 hours in ms */
+  var LINE1 = 'researcher \u00b7 professor \u00b7 builder';
+  var LINE2 = 'Currently: Senior Editor, Information Systems Research \u00b7 Centennial Endowed Chair \u00b7 Associate Dean for Research';
+  /* The substring to linkify after line 2 finishes typing */
+  var ISR_TEXT = 'Information Systems Research';
+  var ISR_HREF = 'https://pubsonline.informs.org/page/isre/editorial-board';
 
-  var wrap   = document.getElementById('nhTerminal');
-  var prompt = document.getElementById('nhPrompt');
-  var text   = document.getElementById('nhText');
-  var cursor = document.getElementById('nhCursorT');
-  if (!wrap) return;
+  /* Elements — line 1 */
+  var prompt1 = document.getElementById('nhPrompt');
+  var text1   = document.getElementById('nhText');
+  var cursor1 = document.getElementById('nhCursorT');
+  /* Elements — line 2 */
+  var prompt2 = document.getElementById('nhPrompt2');
+  var text2   = document.getElementById('nhText2');
+  var cursor2 = document.getElementById('nhCursorT2');
+  if (!prompt1 || !prompt2) return;
 
-  /* Check if animation has run within the last 24 hours */
   function hasRunRecently() {
     try {
       var ts = localStorage.getItem(KEY);
@@ -129,41 +142,95 @@ In my spare time, I enjoy reading books, writing codes, and watching American fo
     } catch (_) { return false; }
   }
 
-  /* Show the completed line immediately (no animation) for return visits */
-  function showStatic() {
-    prompt.classList.add('nh-t-visible');
-    text.textContent = FULL;
-    /* cursor stays hidden — already opacity:0 by default */
+  /* Inject ISR link into line 2 text node after typing completes */
+  function linkifyISR() {
+    var full = text2.textContent;
+    var idx  = full.indexOf(ISR_TEXT);
+    if (idx === -1) return;
+
+    /* Split into three text nodes around the link */
+    var before = document.createTextNode(full.slice(0, idx));
+    var link   = document.createElement('a');
+    link.href        = ISR_HREF;
+    link.target      = '_blank';
+    link.rel         = 'noopener';
+    link.textContent = ISR_TEXT;
+    link.style.cssText = 'color:#00a060;text-decoration:none;border-bottom:1px solid rgba(0,160,96,0.3);transition:border-color 0.2s,color 0.2s';
+    link.addEventListener('mouseenter', function() {
+      this.style.color = '#00c07a';
+      this.style.borderBottomColor = 'rgba(0,160,96,0.7)';
+    });
+    link.addEventListener('mouseleave', function() {
+      this.style.color = '#00a060';
+      this.style.borderBottomColor = 'rgba(0,160,96,0.3)';
+    });
+    var after = document.createTextNode(full.slice(idx + ISR_TEXT.length));
+
+    text2.textContent = '';
+    text2.appendChild(before);
+    text2.appendChild(link);
+    text2.appendChild(after);
   }
 
-  /* First visit or TTL expired: run the typing animation */
+  /* Type a single line, call done() when finished */
+  function typeLine(textEl, cursorEl, promptEl, str, onDone) {
+    promptEl.classList.add('nh-t-visible');
+    cursorEl.classList.add('nh-t-visible');
+    var i = 0;
+    var iv = setInterval(function () {
+      textEl.textContent = str.slice(0, i + 1);
+      i++;
+      if (i >= str.length) {
+        clearInterval(iv);
+        if (onDone) onDone(cursorEl);
+      }
+    }, CHAR_MS);
+  }
+
+  /* Blink cursor briefly then hide it, call cb when done */
+  function blinkAndHide(cursorEl, cb) {
+    cursorEl.classList.add('nh-t-blink');
+    setTimeout(function () {
+      cursorEl.classList.remove('nh-t-blink');
+      cursorEl.classList.add('nh-t-hidden');
+      if (cb) cb();
+    }, BLINK_MS);
+  }
+
+  /* Static display (return visits within TTL) */
+  function showStatic() {
+    prompt1.classList.add('nh-t-visible');
+    text1.textContent = LINE1;
+
+    prompt2.classList.add('nh-t-visible');
+    text2.textContent = LINE2;
+    linkifyISR();
+  }
+
+  /* Animated display — line 1, pause, line 2, linkify */
   function run() {
     setTimeout(function () {
-      prompt.classList.add('nh-t-visible');
-      cursor.classList.add('nh-t-visible');
-
-      var i  = 0;
-      var iv = setInterval(function () {
-        text.textContent = FULL.slice(0, i + 1);
-        i++;
-        if (i >= FULL.length) {
-          clearInterval(iv);
-          cursor.classList.add('nh-t-blink');
+      typeLine(text1, cursor1, prompt1, LINE1, function (cur1) {
+        blinkAndHide(cur1, function () {
+          /* Pause before starting line 2 */
           setTimeout(function () {
-            cursor.classList.add('nh-t-hidden');
-            /* Store current timestamp — animation resets after 24h */
-            try { localStorage.setItem(KEY, String(Date.now())); } catch (_) {}
-          }, BLINK_MS);
-        }
-      }, CHAR_MS);
+            typeLine(text2, cursor2, prompt2, LINE2, function (cur2) {
+              blinkAndHide(cur2, function () {
+                linkifyISR();
+                try { localStorage.setItem(KEY, String(Date.now())); } catch (_) {}
+              });
+            });
+          }, PAUSE_MS);
+        });
+      });
     }, PRE_MS);
   }
 
   function init() {
     if (hasRunRecently()) {
-      showStatic(); /* line stays, no animation */
+      showStatic();
     } else {
-      run();        /* animate, then persist timestamp */
+      run();
     }
   }
 
