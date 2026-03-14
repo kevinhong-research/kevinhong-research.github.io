@@ -6,8 +6,8 @@
 .tm-wrap {
   background: #0d0d0d;
   border-radius: 6px;
-  padding: 1.25rem 1.5rem 1rem;
-  margin-bottom: 2.5rem;
+  padding: 0.85rem 1.25rem 0.85rem;
+  margin-bottom: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -18,7 +18,7 @@
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .tm-label {
@@ -57,7 +57,6 @@
 
 .tm-green  { color: #00a060; }
 .tm-blue   { color: #4db8ff; }
-.tm-orange { color: #F47321; }
 
 .tm-divider {
   width: 1px;
@@ -128,58 +127,38 @@
 .tm-tip.upcoming { border-left-color: #4db8ff; }
 .tm-tip.keynote  { border-left-color: #F47321; }
 
-.tm-tip strong {
+.tm-tip-entry {
+  padding: 1px 0;
+}
+
+.tm-tip-entry strong {
   color: #f0f0f0;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 12px;
   display: block;
-  margin-bottom: 1px;
+  line-height: 1.4;
 }
 
-.tm-tip-venue {
+.tm-tip-meta {
   color: #3a3a3a;
   font-size: 11px;
-}
-
-.tm-tip-date {
-  color: #2e2e2e;
-  font-size: 11px;
-  margin-top: 2px;
+  margin-top: 1px;
+  line-height: 1.4;
 }
 
 .tm-tip-badge {
   font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-/* ── LEGEND ──────────────────────────────────────────────── */
-.tm-legend {
-  display: flex;
-  gap: 18px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.tm-leg-item {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  color: #333;
   letter-spacing: 0.06em;
 }
 
-.tm-leg-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.tm-tip-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 5px 0;
 }
 
-/* ── RESPONSIVE ──────────────────────────────────────────── */
+/* ── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 600px) {
   .tm-wrap { padding: 1rem; }
   .tm-header { flex-direction: column; }
