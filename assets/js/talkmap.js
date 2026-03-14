@@ -7,7 +7,7 @@
 
 (function () {
 
-  /* ── State abbreviations for label rendering ─────────────── */
+  /* ── State abbreviations ────────────────────────────────── */
   const STATE_ABBR = {
     "01":"AL","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT",
     "10":"DE","12":"FL","13":"GA","16":"ID","17":"IL","18":"IN",
@@ -27,49 +27,60 @@
     "15": null,        /* HI — skip */
   };
 
-  const MIN_AREA    = 900;  /* px² to show a state label */
-  const CLUSTER_PX  = 20;  /* px radius for clustering dots */
+  const MIN_AREA   = 900;  /* px² threshold for state labels */
+  const CLUSTER_PX = 20;  /* px radius for dot clustering    */
 
-  /* ── Toggle bar wiring ───────────────────────────────────── */
+  /* ── Pill strip wiring ──────────────────────────────────── */
   function initToggle(talks) {
-    const toggle   = document.getElementById("talk-map-toggle");
-    const body     = document.getElementById("talk-map-body");
-    const metaEl   = document.getElementById("tm-toggle-meta");
-    if (!toggle || !body) return;
+    const strip   = document.getElementById("talk-map-toggle");
+    const body    = document.getElementById("talk-map-body");
+    const hint    = document.getElementById("tm-pill-hint");
+    const nTotal  = document.getElementById("tm-count-total");
+    const nUp     = document.getElementById("tm-count-upcoming");
+    const pillUp  = document.getElementById("tm-pill-upcoming");
+    if (!strip || !body) return;
 
-    /* Populate meta counts from live data */
+    /* Populate counts from live TALKMAP_DATA */
     const total    = talks.length;
     const upcoming = talks.filter(t => t.upcoming).length;
-    metaEl.textContent = upcoming > 0
-      ? `${total} talks · ${upcoming} upcoming`
-      : `${total} talks`;
+    nTotal.textContent = total;
+    nUp.textContent    = upcoming;
+
+    /* Hide the upcoming pill entirely if there are none */
+    if (upcoming === 0) {
+      pillUp.style.display = "none";
+      const sep = pillUp.previousElementSibling;
+      if (sep && sep.classList.contains("tm-pill-sep")) sep.style.display = "none";
+    }
 
     let mapBuilt = false;
 
-    function open() {
-      toggle.setAttribute("aria-expanded", "true");
-      toggle.classList.add("tm-toggle--open");
+    function openMap() {
+      strip.setAttribute("aria-expanded", "true");
+      strip.classList.add("tm-pills--open");
       body.classList.add("tm-body--open");
-      /* Build map on first open — avoids fetching TopoJSON until needed */
+      if (hint) hint.textContent = "Hide map";
+      /* Lazy-build: fetch TopoJSON only on first open */
       if (!mapBuilt) { buildMap(talks); mapBuilt = true; }
     }
 
-    function close() {
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.classList.remove("tm-toggle--open");
+    function closeMap() {
+      strip.setAttribute("aria-expanded", "false");
+      strip.classList.remove("tm-pills--open");
       body.classList.remove("tm-body--open");
+      if (hint) hint.textContent = "View map";
     }
 
-    toggle.addEventListener("click", () => {
-      toggle.getAttribute("aria-expanded") === "true" ? close() : open();
+    strip.addEventListener("click", () => {
+      strip.getAttribute("aria-expanded") === "true" ? closeMap() : openMap();
     });
 
-    toggle.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle.click(); }
+    strip.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); strip.click(); }
     });
   }
 
-  /* ── Map rendering ───────────────────────────────────────── */
+  /* ── Map rendering ──────────────────────────────────────── */
   function buildMap(talks) {
     const container = document.getElementById("talk-map-container");
     if (!container) return;
@@ -132,9 +143,7 @@
             .text(abbr);
         });
 
-        /* ── Cluster nearby talks ────────────────────────────
-           Groups dots within CLUSTER_PX of each other.
-           Centroid is re-averaged as members are added.      */
+        /* ── Cluster nearby talks ─────────────────────────── */
         const projected = talks
           .map(t => ({ talk: t, c: proj([t.lng, t.lat]) }))
           .filter(d => d.c);
@@ -160,31 +169,37 @@
           }
         });
 
-        /* ── Render one dot per cluster ─────────────────────── */
-        const dotsG = svg.append("g");
+        /* ── Render one dot per cluster ─────────────────────
+           Radius scale: 1→6, 2→8, 3→10, 4+→12
+           Upcoming overrides color and gets a pulse ring.    */
+        const BASE_R = [0, 6, 8, 10, 12];
+        const dotsG  = svg.append("g");
+
         clusters.forEach(cl => {
           const hasUpcoming = cl.talks.some(t => t.upcoming);
-          const color = hasUpcoming ? "#4db8ff" : "#00a060";
-          /* Dot radius scales with cluster size: 1→6, 2→8, 3→10, 4+→12 */
-          const BASE_R  = [0, 6, 8, 10, 12];
-          const countR  = BASE_R[Math.min(cl.talks.length, 4)];
-          const r       = hasUpcoming ? Math.max(7.5, countR) : countR;
-          const cx    = cl.cx, cy = cl.cy;
+          const color  = hasUpcoming ? "#4db8ff" : "#00a060";
+          const countR = BASE_R[Math.min(cl.talks.length, 4)];
+          const r      = hasUpcoming ? Math.max(7.5, countR) : countR;
+          const cx     = cl.cx, cy = cl.cy;
 
           const g = dotsG.append("g").attr("transform", `translate(${cx},${cy})`);
 
           if (hasUpcoming) {
             g.append("circle")
               .attr("class", "tm-pulse")
-              .attr("r", 11).attr("fill", "none")
-              .attr("stroke", color).attr("stroke-width", 1.2).attr("opacity", 0.5);
+              .attr("r", 12).attr("fill", "none")
+              .attr("stroke", color).attr("stroke-width", 1.2)
+              .attr("opacity", 0.45);
           }
 
-          g.append("circle").attr("r", r + 4).attr("fill", color).attr("opacity", 0.1);
+          /* Glow */
+          g.append("circle")
+            .attr("r", r + 4).attr("fill", color).attr("opacity", 0.1);
 
+          /* Main dot */
           g.append("circle").attr("r", r)
-            .attr("fill", color).attr("opacity", 0.92)
-            .attr("stroke", "#0d0d0d").attr("stroke-width", 1.5)
+            .attr("fill", color).attr("opacity", 0.9)
+            .attr("stroke", "rgba(0,0,0,0.5)").attr("stroke-width", 1.2)
             .style("cursor", "pointer")
             .on("mouseover", function () {
               const svgRect  = svg.node().getBoundingClientRect();
@@ -197,12 +212,12 @@
               if (ly < 0) ly += 50;
 
               tip.className = "tm-tip" + (hasUpcoming ? " upcoming" : "");
-              tip.innerHTML  = cl.talks.map((t, i) => {
+              tip.innerHTML = cl.talks.map((t, i) => {
                 const meta  = [t.venue, t.date].filter(Boolean).join(" · ");
                 const badge = t.upcoming
                   ? `<span class="tm-tip-badge" style="color:#4db8ff"> · Upcoming</span>`
                   : "";
-                const div   = i > 0 ? `<div class="tm-tip-divider"></div>` : "";
+                const div = i > 0 ? `<div class="tm-tip-divider"></div>` : "";
                 return `${div}<div class="tm-tip-entry">
                   <strong>${t.institution}</strong>
                   <div class="tm-tip-meta">${meta}${badge}</div>
@@ -216,13 +231,13 @@
             })
             .on("mouseout", function () {
               tip.style.display = "none";
-              d3.select(this).attr("r", r).attr("opacity", 0.92);
+              d3.select(this).attr("r", r).attr("opacity", 0.9);
             });
         });
       });
   }
 
-  /* ── Init ────────────────────────────────────────────────── */
+  /* ── Init ───────────────────────────────────────────────── */
   function init() {
     const talks = window.TALKMAP_DATA || [];
     if (!talks.length) return;
