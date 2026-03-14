@@ -1,67 +1,121 @@
 /* ============================================================
-   talkmap.css — US talks map on the /talks/ page
+   talkmap.css — US talks map toggle on the /talks/ page
    ============================================================ */
 
-/* ── WRAPPER ─────────────────────────────────────────────── */
-.tm-wrap {
-  background: transparent;
-  border-radius: 6px;
-  padding: 0.75rem 1.25rem 0.6rem;
-  margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* ── HEADER ──────────────────────────────────────────────── */
-.tm-header {
+/* ── TOGGLE BAR ──────────────────────────────────────────────
+   Styled to match .talk-item rows — same border, same orange
+   left-bar hover, same padding rhythm.
+──────────────────────────────────────────────────────────── */
+.tm-toggle {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 0.3rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  padding-left: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  cursor: pointer;
+  transition: padding-left 0.2s ease;
+  user-select: none;
+  /* sits above the talk list as its own row */
+  margin-bottom: 0;
 }
 
-.tm-label {
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #3a3a3a;
+.tm-toggle::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: #F47321;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease;
 }
 
-.tm-stats {
+.tm-toggle:hover,
+.tm-toggle:focus-visible {
+  padding-left: 10px;
+  outline: none;
+}
+
+.tm-toggle:hover::before,
+.tm-toggle:focus-visible::before,
+.tm-toggle--open::before {
+  transform: scaleY(1);
+}
+
+.tm-toggle-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.55rem;
+  min-width: 0;
 }
 
-.tm-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+.tm-toggle-chevron {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  color: #3a3a3a;
+  transform: rotate(0deg);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s;
 }
 
-.tm-stat-n {
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1;
+.tm-toggle:hover .tm-toggle-chevron,
+.tm-toggle--open .tm-toggle-chevron {
+  color: #F47321;
 }
 
-.tm-stat-l {
-  font-size: 10px;
-  color: #2e2e2e;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-top: 2px;
+.tm-toggle--open .tm-toggle-chevron {
+  transform: rotate(180deg);
 }
 
-.tm-green  { color: #00a060; }
-.tm-blue   { color: #4db8ff; }
+.tm-toggle-title {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #f0f0f0;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-.tm-divider {
-  width: 1px;
-  height: 28px;
-  background: rgba(255, 255, 255, 0.05);
+.tm-toggle-meta {
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: #3a3a3a;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── COLLAPSIBLE BODY — CSS grid height animation ────────────
+   Same technique as the abstract toggle: 0fr → 1fr.
+   Inner div must have overflow:hidden.
+──────────────────────────────────────────────────────────── */
+.tm-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity            0.35s ease;
+  opacity: 0;
+}
+
+.tm-body--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.tm-body-inner {
+  overflow: hidden;
+}
+
+/* ── MAP WRAPPER ─────────────────────────────────────────── */
+.tm-wrap {
+  background: transparent;
+  padding: 0.75rem 0 0.5rem;
 }
 
 /* ── MAP SVG ─────────────────────────────────────────────── */
@@ -82,7 +136,7 @@
 }
 
 .tm-state:hover {
-  fill: #1a2535;
+  fill: rgba(26, 37, 53, 0.85);
 }
 
 .tm-state-lbl {
@@ -119,17 +173,14 @@
   font-size: 12px;
   color: #666;
   line-height: 1.65;
-  max-width: 215px;
+  max-width: 230px;
   display: none;
   z-index: 20;
 }
 
 .tm-tip.upcoming { border-left-color: #4db8ff; }
-.tm-tip.keynote  { border-left-color: #F47321; }
 
-.tm-tip-entry {
-  padding: 1px 0;
-}
+.tm-tip-entry { padding: 1px 0; }
 
 .tm-tip-entry strong {
   color: #f0f0f0;
@@ -158,9 +209,12 @@
   margin: 5px 0;
 }
 
-/* ── RESPONSIVE ────────────────────────────────────────── */
+/* ── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .tm-wrap { padding: 1rem; }
-  .tm-header { flex-direction: column; }
-  .tm-stats { align-self: flex-start; }
+  .tm-toggle-title {
+    font-size: 0.8rem;
+  }
+  .tm-toggle-meta {
+    display: none;
+  }
 }
