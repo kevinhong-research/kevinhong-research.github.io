@@ -165,7 +165,10 @@
         clusters.forEach(cl => {
           const hasUpcoming = cl.talks.some(t => t.upcoming);
           const color = hasUpcoming ? "#4db8ff" : "#00a060";
-          const r     = hasUpcoming ? 7.5 : cl.talks.length > 1 ? 7 : 6;
+          /* Dot radius scales with cluster size: 1→6, 2→8, 3→10, 4+→12 */
+          const BASE_R  = [0, 6, 8, 10, 12];
+          const countR  = BASE_R[Math.min(cl.talks.length, 4)];
+          const r       = hasUpcoming ? Math.max(7.5, countR) : countR;
           const cx    = cl.cx, cy = cl.cy;
 
           const g = dotsG.append("g").attr("transform", `translate(${cx},${cy})`);
@@ -177,7 +180,7 @@
               .attr("stroke", color).attr("stroke-width", 1.2).attr("opacity", 0.5);
           }
 
-          g.append("circle").attr("r", r + 3.5).attr("fill", color).attr("opacity", 0.1);
+          g.append("circle").attr("r", r + 4).attr("fill", color).attr("opacity", 0.1);
 
           g.append("circle").attr("r", r)
             .attr("fill", color).attr("opacity", 0.92)

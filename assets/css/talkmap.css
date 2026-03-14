@@ -1,3 +1,11 @@
+/* ── THEME OVERRIDE — prevent al-folio from resizing the chevron SVG ── */
+.tm-toggle svg.tm-toggle-chevron,
+.tm-toggle svg.tm-toggle-chevron * {
+  width: 10px !important;
+  height: 6px !important;
+  font-size: inherit;
+}
+
 /* ============================================================
    talkmap.css — US talks map toggle on the /talks/ page
    ============================================================ */
@@ -54,12 +62,18 @@
 }
 
 .tm-toggle-chevron {
-  width: 10px;
-  height: 10px;
+  width: 10px !important;
+  height: 6px !important;
+  min-width: 10px !important;
+  min-height: 6px !important;
+  max-width: 10px !important;
+  max-height: 6px !important;
   flex-shrink: 0;
   color: #3a3a3a;
   transform: rotate(0deg);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s;
+  display: inline-block;
+  overflow: visible;
 }
 
 .tm-toggle:hover .tm-toggle-chevron,
@@ -95,17 +109,18 @@
    Inner div must have overflow:hidden.
 ──────────────────────────────────────────────────────────── */
 .tm-body {
-  display: grid;
-  grid-template-rows: 0fr;
+  display: grid !important;
+  grid-template-rows: 0fr !important;
   transition:
     grid-template-rows 0.45s cubic-bezier(0.4, 0, 0.2, 1),
     opacity            0.35s ease;
-  opacity: 0;
+  opacity: 0 !important;
+  overflow: hidden;
 }
 
 .tm-body--open {
-  grid-template-rows: 1fr;
-  opacity: 1;
+  grid-template-rows: 1fr !important;
+  opacity: 1 !important;
 }
 
 .tm-body-inner {
