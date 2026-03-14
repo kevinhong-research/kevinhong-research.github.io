@@ -34,23 +34,29 @@
   function initToggle(talks) {
     const strip   = document.getElementById("talk-map-toggle");
     const body    = document.getElementById("talk-map-body");
-    const hint    = document.getElementById("tm-pill-hint");
+    const hintGeo = document.getElementById("tm-pill-hint-geo");
     const nTotal  = document.getElementById("tm-count-total");
     const nUp     = document.getElementById("tm-count-upcoming");
     const pillUp  = document.getElementById("tm-pill-upcoming");
+    const sepGeo  = document.getElementById("tm-sep-geo");
     if (!strip || !body) return;
 
-    /* Populate counts from live TALKMAP_DATA */
-    const total    = talks.length;
-    const upcoming = talks.filter(t => t.upcoming).length;
+    /* Use ALL-talks counts (whole talks.yml) not just US subset */
+    const total    = window.TALKMAP_ALL_TOTAL    || talks.length;
+    const upcoming = window.TALKMAP_ALL_UPCOMING !== undefined
+                   ? window.TALKMAP_ALL_UPCOMING
+                   : talks.filter(t => t.upcoming).length;
+
     nTotal.textContent = total;
     nUp.textContent    = upcoming;
 
-    /* Hide the upcoming pill entirely if there are none */
+    /* Hide upcoming pill + its separator if count is zero */
     if (upcoming === 0) {
-      pillUp.style.display = "none";
-      const sep = pillUp.previousElementSibling;
-      if (sep && sep.classList.contains("tm-pill-sep")) sep.style.display = "none";
+      if (pillUp) pillUp.style.display = "none";
+      const sepBefore = pillUp && pillUp.previousElementSibling;
+      if (sepBefore && sepBefore.classList.contains("tm-pill-sep")) {
+        sepBefore.style.display = "none";
+      }
     }
 
     let mapBuilt = false;
@@ -59,8 +65,7 @@
       strip.setAttribute("aria-expanded", "true");
       strip.classList.add("tm-pills--open");
       body.classList.add("tm-body--open");
-      if (hint) hint.textContent = "Hide map";
-      /* Lazy-build: fetch TopoJSON only on first open */
+      if (hintGeo) hintGeo.textContent = "Hide US Talks on Map";
       if (!mapBuilt) { buildMap(talks); mapBuilt = true; }
     }
 
@@ -68,7 +73,7 @@
       strip.setAttribute("aria-expanded", "false");
       strip.classList.remove("tm-pills--open");
       body.classList.remove("tm-body--open");
-      if (hint) hint.textContent = "View map";
+      if (hintGeo) hintGeo.textContent = "View US Talks on Map";
     }
 
     strip.addEventListener("click", () => {
