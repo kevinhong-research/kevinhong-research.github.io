@@ -7,9 +7,11 @@
 #   year:        (required for sorting) — numeric year
 #   upcoming:    true  — shows green Upcoming badge
 #   type:        "keynote" — shows orange Keynote badge
+#   logo:        "/assets/img/talk-logos/example.svg" (optional transparent SVG/PNG)
 #   lat/lng:     (optional) — add for US talks to appear on the talk map
 
 - institution: "University of South Florida"
+  logo: "/assets/img/talk-logos/fbs-library/South_Florida_Bulls_logo-300x300.png"
   venue: "Muma College of Business"
   date: "Fall 2026"
   year: 2026
@@ -20,6 +22,7 @@
   lng: -82.413
 
 - institution: "Tulane University"
+  logo: "/assets/img/talk-logos/fbs-library/Tulane_Green_Wave_logo-300x300.png"
   venue: "The Murphy Institute"
   date: "4/2026"
   year: 2026
@@ -30,6 +33,7 @@
   lng: -90.120
 
 - institution: "University of Texas at Austin"
+  logo: "/assets/img/talk-logos/fbs-library/Texas_Longhorns_logo-300x300.png"
   venue: "McCombs School of Business"
   date: "3/2026"
   year: 2026
@@ -39,6 +43,7 @@
   lng: -97.734
 
 - institution: "Ohio State University"
+  logo: "/assets/img/talk-logos/fbs-library/Ohio_State_Buckeyes_logo-300x300.png"
   venue: "Fisher College of Business"
   date: "11/2025"
   year: 2025
@@ -48,6 +53,7 @@
   lng: -83.030
 
 - institution: "Virginia Tech"
+  logo: "/assets/img/talk-logos/fbs-library/Virginia_Tech_Hokies_logo-300x300.png"
   venue: "Pamplin College of Business"
   date: "9/2025"
   year: 2025
@@ -57,18 +63,21 @@
   lng: -80.423
 
 - institution: "Cheung Kong Graduate School of Business (CKGSB)"
+  logo: "/assets/img/talk-logos/non-fbs-library/CKGSB.jpg"
   date: "6/2025"
   year: 2025
   month: 6
   sort_key: 202506
 
 - institution: "Indian School of Business"
+  logo: "/assets/img/talk-logos/non-fbs-library/Indian_School_of_Business.png"
   date: "11/2024"
   year: 2024
   month: 11
   sort_key: 202411
 
 - institution: "University of Illinois Urbana-Champaign"
+  logo: "/assets/img/talk-logos/fbs-library/Illinois_Fighting_Illini_logo-300x300.png"
   venue: "Gies College of Business"
   date: "11/2024"
   year: 2024
@@ -78,6 +87,7 @@
   lng: -88.227
 
 - institution: "New York University"
+  logo: "/assets/img/talk-logos/non-fbs-library/New%20York%20University.png"
   venue: "Stern School of Business, ISPOC"
   date: "5/2024"
   year: 2024
@@ -87,6 +97,7 @@
   lng: -73.996
 
 - institution: "ZEVEDI-Lecture Series"
+  logo: "/assets/img/talk-logos/non-fbs-library/ZEVEDI.png"
   venue: "Responsible Algorithmic Decision-Making in the Workplace"
   date: "4/2024"
   year: 2024
@@ -94,6 +105,7 @@
   sort_key: 202404
 
 - institution: "Boston University"
+  logo: "/assets/img/talk-logos/non-fbs-library/Boston_University.png"
   venue: "Questrom School of Business"
   date: "11/2023"
   year: 2023
@@ -103,6 +115,7 @@
   lng: -71.105
 
 - institution: "University of Delaware"
+  logo: "/assets/img/talk-logos/non-fbs-library/Delaware.png"
   venue: "Lerner College of Business and Economics"
   date: "10/2023"
   year: 2023
@@ -112,6 +125,7 @@
   lng: -75.751
 
 - institution: "University of Southern California"
+  logo: "/assets/img/talk-logos/fbs-library/USC_Trojans_logo-300x300.png"
   venue: "Marshall School of Business"
   date: "12/2022"
   year: 2022
@@ -121,6 +135,7 @@
   lng: -118.285
 
 - institution: "Florida State University"
+  logo: "/assets/img/talk-logos/fbs-library/Florida_State_Seminoles_logo-300x300.png"
   venue: "College of Business"
   date: "10/2022"
   year: 2022
@@ -130,6 +145,7 @@
   lng: -84.298
 
 - institution: "University of Georgia"
+  logo: "/assets/img/talk-logos/fbs-library/Georgia_Bulldogs_logo-300x300.png"
   venue: "Terry College of Business"
   date: "4/2022"
   year: 2022
@@ -139,6 +155,7 @@
   lng: -83.377
 
 - institution: "University of Rochester"
+  logo: "/assets/img/talk-logos/non-fbs-library/University_of_Rochester.webp"
   venue: "Simon Business School"
   date: "4/2022"
   year: 2022
@@ -148,6 +165,7 @@
   lng: -77.627
 
 - institution: "University of Pittsburgh"
+  logo: "/assets/img/talk-logos/fbs-library/Pitt_Panthers_logo-300x300.png"
   venue: "Katz Graduate School of Business"
   date: "11/2021"
   year: 2021
@@ -157,6 +175,7 @@
   lng: -79.960
 
 - institution: "University of Miami"
+  logo: "/assets/img/talk-logos/fbs-library/Miami_Hurricanes_logo-300x300.png"
   venue: "Herbert Business School"
   date: "11/2021"
   year: 2021
@@ -166,6 +185,7 @@
   lng: -80.375
 
 - institution: "University of Wisconsin-Madison"
+  logo: "/assets/img/talk-logos/fbs-library/Wisconsin_Badgers_logo-300x300.png"
   venue: "Wisconsin School of Business"
   date: "11/2021"
   year: 2021
@@ -175,6 +195,7 @@
   lng: -89.412
 
 - institution: "Tsinghua University"
+  logo: "/assets/img/talk-logos/non-fbs-library/Tsinghua_University_Logo.png"
   venue: "School of Economics and Management"
   date: "10/2021"
   year: 2021
@@ -182,6 +203,7 @@
   sort_key: 202110
 
 - institution: "National University of Singapore"
+  logo: "/assets/img/talk-logos/non-fbs-library/National_University_of_Singapore.png"
   venue: "NUS Business School"
   date: "10/2021"
   year: 2021
@@ -189,6 +211,7 @@
   sort_key: 202110
 
 - institution: "University of Maryland"
+  logo: "/assets/img/talk-logos/fbs-library/Maryland_Terrapins_logo-300x300.png"
   venue: "R. H. Smith School of Business"
   date: "9/2021"
   year: 2021
@@ -198,6 +221,7 @@
   lng: -76.942
 
 - institution: "Erasmus University"
+  logo: "/assets/img/talk-logos/non-fbs-library/Erasmus_University_Rotterdam.png"
   venue: "Rotterdam School of Management"
   date: "5/2021"
   year: 2021
@@ -205,6 +229,7 @@
   sort_key: 202105
 
 - institution: "University of Houston"
+  logo: "/assets/img/talk-logos/fbs-library/Houston_Cougars_logo-300x300.png"
   venue: "Hewlett Packard Enterprise Data Science Institute"
   date: "4/2021"
   year: 2021
@@ -214,6 +239,7 @@
   lng: -95.342
 
 - institution: "University of Oklahoma"
+  logo: "/assets/img/talk-logos/fbs-library/Oklahoma_Sooners_logo-300x300.png"
   venue: "Price College of Business"
   date: "4/2021"
   year: 2021
@@ -223,6 +249,7 @@
   lng: -97.445
 
 - institution: "University of Connecticut"
+  logo: "/assets/img/talk-logos/fbs-library/Connecticut_Huskies_logo-300x300.png"
   venue: "School of Business"
   date: "2/2021"
   year: 2021
@@ -232,6 +259,7 @@
   lng: -72.249
 
 - institution: "Lehigh University"
+  logo: "/assets/img/talk-logos/non-fbs-library/Lehigh_University.svg"
   venue: "College of Business"
   date: "1/2021"
   year: 2021
@@ -241,6 +269,7 @@
   lng: -75.378
 
 - institution: "University of Washington"
+  logo: "/assets/img/talk-logos/fbs-library/Washington_Huskies_logo-300x300.png"
   venue: "Foster School of Business"
   date: "2/2020"
   year: 2020
@@ -250,6 +279,7 @@
   lng: -122.303
 
 - institution: "University of Houston"
+  logo: "/assets/img/talk-logos/fbs-library/Houston_Cougars_logo-300x300.png"
   venue: "Bauer College of Business"
   date: "12/2019"
   year: 2019
@@ -259,6 +289,7 @@
   lng: -95.350
 
 - institution: "Georgia State University"
+  logo: "/assets/img/talk-logos/fbs-library/Georgia_State_Panthers_logo-300x300.png"
   venue: "Robinson College of Business"
   date: "11/2019"
   year: 2019
@@ -268,6 +299,7 @@
   lng: -84.386
 
 - institution: "University of Arizona"
+  logo: "/assets/img/talk-logos/fbs-library/Arizona_Wildcats_logo-300x300.png"
   venue: "Eller College of Management"
   date: "10/2019"
   year: 2019
@@ -277,6 +309,7 @@
   lng: -110.950
 
 - institution: "University of North Carolina at Charlotte"
+  logo: "/assets/img/talk-logos/fbs-library/Charlotte_49ers_logo-300x300.png"
   venue: "Belk College of Business"
   date: "10/2019"
   year: 2019
@@ -286,6 +319,7 @@
   lng: -80.735
 
 - institution: "University of Utah"
+  logo: "/assets/img/talk-logos/fbs-library/Utah_Utes_logo-300x300.png"
   venue: "Eccles School of Business"
   date: "9/2019"
   year: 2019
@@ -295,6 +329,7 @@
   lng: -111.842
 
 - institution: "Hong Kong Polytechnic University"
+  logo: "/assets/img/talk-logos/non-fbs-library/Hong_Kong_Polytechnic_University.png"
   venue: "Faculty of Business"
   date: "6/2019"
   year: 2019
@@ -302,6 +337,7 @@
   sort_key: 201906
 
 - institution: "Boston College"
+  logo: "/assets/img/talk-logos/fbs-library/Boston_College_Eagles_logo-300x300.png"
   venue: "Carroll School of Management"
   date: "5/2019"
   year: 2019
@@ -311,6 +347,7 @@
   lng: -71.168
 
 - institution: "George Washington University"
+  logo: "/assets/img/talk-logos/non-fbs-library/George_Washington.png"
   venue: "College of Business"
   date: "4/2019"
   year: 2019
@@ -320,6 +357,7 @@
   lng: -77.048
 
 - institution: "University of Illinois at Chicago"
+  logo: "/assets/img/talk-logos/non-fbs-library/University_of_Illinois_at_Chicago.svg"
   venue: "College of Business"
   date: "11/2018"
   year: 2018
@@ -337,6 +375,7 @@
   lng: -122.084
 
 - institution: "University of Minnesota"
+  logo: "/assets/img/talk-logos/fbs-library/Minnesota_Golden_Gophers_logo-300x300.png"
   venue: "Carlson School of Management"
   date: "3/2018"
   year: 2018
@@ -346,6 +385,7 @@
   lng: -93.227
 
 - institution: "Special Libraries Association"
+  logo: "/assets/img/talk-logos/non-fbs-library/Special_Libraries_Association.jpeg"
   venue: "Invited Keynote Speech"
   date: "7/2017"
   year: 2017
@@ -356,6 +396,7 @@
   lng: -96.797
 
 - institution: "Arizona State University"
+  logo: "/assets/img/talk-logos/fbs-library/Arizona_State_Sun_Devils_logo-300x300.png"
   venue: "Ira A. Fulton School of Engineering"
   date: "3/2017"
   year: 2017
@@ -365,6 +406,7 @@
   lng: -111.940
 
 - institution: "Temple University"
+  logo: "/assets/img/talk-logos/fbs-library/Temple_Owls_logo-300x300.png"
   venue: "Fox School of Business"
   date: "2/2017"
   year: 2017
@@ -374,6 +416,7 @@
   lng: -75.155
 
 - institution: "Uber"
+  logo: "/assets/img/talk-logos/non-fbs-library/Uber.png"
   date: "10/2016"
   year: 2016
   month: 10
@@ -382,6 +425,7 @@
   lng: -122.419
 
 - institution: "Arizona State University"
+  logo: "/assets/img/talk-logos/fbs-library/Arizona_State_Sun_Devils_logo-300x300.png"
   venue: "Information Systems Research Workshop"
   date: "2/2016"
   year: 2016
@@ -391,6 +435,7 @@
   lng: -111.935
 
 - institution: "Temple University"
+  logo: "/assets/img/talk-logos/fbs-library/Temple_Owls_logo-300x300.png"
   venue: "CIBER"
   date: "4/2014"
   year: 2014
@@ -400,6 +445,7 @@
   lng: -75.150
 
 - institution: "Arizona State University"
+  logo: "/assets/img/talk-logos/fbs-library/Arizona_State_Sun_Devils_logo-300x300.png"
   venue: "W. P. Carey School of Business"
   date: "11/2013"
   year: 2013
@@ -409,6 +455,7 @@
   lng: -111.938
 
 - institution: "University of Virginia"
+  logo: "/assets/img/talk-logos/fbs-library/Virginia_Cavaliers_logo-300x300.png"
   venue: "McIntire School of Commerce"
   date: "10/2013"
   year: 2013
@@ -418,6 +465,7 @@
   lng: -78.508
 
 - institution: "Nanyang Technological University"
+  logo: "/assets/img/talk-logos/non-fbs-library/Nanyang_Technological_University.png"
   venue: "Nanyang Business School"
   date: "10/2013"
   year: 2013
@@ -425,6 +473,7 @@
   sort_key: 201310
 
 - institution: "HKUST"
+  logo: "/assets/img/talk-logos/non-fbs-library/Hong_Kong_University_of_Science_and_Technology.svg"
   venue: "School of Business"
   date: "7/2013"
   year: 2013
@@ -432,6 +481,7 @@
   sort_key: 201307
 
 - institution: "City University of Hong Kong"
+  logo: "/assets/img/talk-logos/non-fbs-library/City_University_of_Hong_Kong.png"
   venue: "School of Business"
   date: "7/2013"
   year: 2013
