@@ -31,6 +31,7 @@
   --text-mid: #666;
   --orange:   #F47321;
   --green-hi: #00a060;
+  --pub-meta-control-height: 1.45rem;
 }
 
 .header-link {
@@ -140,7 +141,7 @@
   display: grid;
   grid-template-columns: 44px 1fr;
   gap: 1.5rem;
-  padding: 1.5rem 0;
+  padding: 1.5rem 0 1.32rem;
   padding-left: 0;
   border-bottom: 1px solid var(--line);
   align-items: start;
@@ -198,7 +199,7 @@
 .pub-body {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.32rem;
 }
 
 .pub-title {
@@ -228,20 +229,35 @@
   gap: 0.75rem;
   flex-wrap: wrap;
   margin-top: 0.15rem;
+  height: var(--pub-meta-control-height);
+}
+.pub-meta > * {
+  align-self: center;
 }
 .pub-journal {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.8rem;
   font-weight: 300;
   font-style: italic;
   color: var(--text-mid);
+  height: var(--pub-meta-control-height);
+  line-height: 1;
 }
 .pub-year {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.8rem;
   font-weight: 300;
   color: var(--text-lo);
   letter-spacing: 0.05em;
+  height: var(--pub-meta-control-height);
+  line-height: 1;
 }
 .pub-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -249,6 +265,9 @@
   color: var(--green-hi);
   border: 1px solid rgba(0, 160, 96, 0.3);
   padding: 0.1rem 0.5rem;
+  height: var(--pub-meta-control-height);
+  box-sizing: border-box;
+  line-height: 1;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
 }
 .pub-badge {
@@ -272,10 +291,11 @@
 .pub-abstract-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.3rem;
   background: none;
   border: 1px solid var(--line);
-  padding: 0.1rem 0.5rem 0.1rem 0.4rem;
+  padding: 0.1rem 0.42rem 0.1rem 0.34rem;
   cursor: pointer;
   font-family: inherit;
   font-size: 0.6rem;
@@ -287,6 +307,8 @@
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   line-height: 1;
   flex-shrink: 0;
+  height: var(--pub-meta-control-height);
+  box-sizing: border-box;
 }
 .pub-abstract-btn:hover,
 .pub-abstract-btn--open {
@@ -329,6 +351,7 @@
 /* Inner wrapper — overflow:hidden is required for the grid trick */
 .pub-abstract-inner {
   overflow: hidden;
+  min-height: 0;
 }
 
 /* Styled content panel */
@@ -339,7 +362,14 @@
   line-height: 1.78;
   color: var(--text);
   letter-spacing: 0.01em;
-  border-left: 2px solid rgba(0, 160, 96, 0.22);
+  border-left: 0 solid rgba(0, 160, 96, 0.22);
+  background: transparent;
+  padding: 0 1.1rem 0 0;
+  clip-path: none;
+}
+
+.pub-abstract-body.pub-abstract-open .pub-abstract-inner {
+  border-left-width: 2px;
   background: rgba(0, 160, 96, 0.028);
   padding: 0.85rem 1.1rem;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
@@ -354,7 +384,7 @@
 .pub-cite {
   display: inline-flex;
   align-items: stretch;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 400;
   letter-spacing: 0.02em;
   border-radius: 3px;
@@ -366,6 +396,8 @@
   opacity: 0.35;
   transition: opacity 0.2s, border-color 0.2s;
   flex-shrink: 0;
+  height: var(--pub-meta-control-height);
+  box-sizing: border-box;
 }
 .pub-cite:hover {
   opacity: 0.85;
@@ -378,15 +410,18 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.28rem 0.5rem;
+  padding: 0.12rem 0.42rem;
   background: #e8e4d0;
   color: #333;
   white-space: nowrap;
   font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  line-height: 1;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 .pub-cite-label svg {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   flex-shrink: 0;
 }
 
@@ -395,12 +430,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.28rem 0.5rem;
+  padding: 0.12rem 0.42rem;
   background: #00a060;
   color: #fff;
   white-space: nowrap;
   min-width: 2.5ch;
   font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  line-height: 1;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 /* ── SCROLL REVEAL ── */
@@ -419,6 +457,9 @@
   .nh-section { grid-template-columns: 1fr; gap: 1.25rem; }
   .nh-section-label { position: static; }
   .pub-item { grid-template-columns: 32px 1fr; }
+  .pub-meta { height: auto; min-height: var(--pub-meta-control-height); }
+  .pub-journal,
+  .pub-year { height: auto; min-height: var(--pub-meta-control-height); }
   .pub-badge { display: none; }
   .pub-cite  { font-size: 0.6rem; }
   .pub-abstract-btn { font-size: 0.6rem; }
