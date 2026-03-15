@@ -11,9 +11,28 @@
   <section class="svc-section">
     <div class="talk-list">
       {% for talk in sorted %}
+      {% assign talk_initials = "" %}
+      {% assign institution_words = talk.institution | replace: "(", " " | replace: ")", " " | replace: "-", " " | split: " " %}
+      {% for word in institution_words %}
+        {% assign cleaned = word | strip %}
+        {% if cleaned != "" %}
+          {% assign first_char = cleaned | slice: 0, 1 | upcase %}
+          {% assign talk_initials = talk_initials | append: first_char %}
+        {% endif %}
+      {% endfor %}
+      {% assign talk_initials = talk_initials | slice: 0, 3 %}
       <div class="talk-item">
         <div class="talk-body">
-          <span class="talk-institution">{{ talk.institution }}</span>
+          <span class="talk-institution-wrap">
+            {% if talk.logo %}
+              <span class="talk-logo talk-logo--image">
+                <img src="{{ talk.logo | relative_url }}" alt="{{ talk.institution }} logo" loading="lazy">
+              </span>
+            {% else %}
+              <span class="talk-logo talk-logo--fallback" aria-hidden="true">{{ talk_initials }}</span>
+            {% endif %}
+            <span class="talk-institution">{{ talk.institution }}</span>
+          </span>
           {% if talk.venue %}<span class="talk-venue">{{ talk.venue }}</span>{% endif %}
         </div>
         <div class="talk-meta">

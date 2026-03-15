@@ -39,6 +39,40 @@
   gap: 0.6rem;
   flex-wrap: wrap;
 }
+.talk-institution-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+.talk-logo {
+  width: 1.65rem;
+  height: 1.65rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
+  overflow: hidden;
+}
+.talk-logo--image img {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  filter: none;
+  opacity: 1;
+}
+.talk-logo--fallback {
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #8f8f8f;
+  text-transform: uppercase;
+}
 .talk-institution {
   font-size: 0.88rem;
   font-weight: 400;
@@ -83,4 +117,8 @@
 @media (max-width: 600px) {
   .talk-item { grid-template-columns: 1fr; }
   .talk-meta { margin-top: 0.2rem; }
+  .talk-logo {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
 }
