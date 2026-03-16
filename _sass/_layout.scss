@@ -27,6 +27,10 @@ body.sticky-bottom-footer {
   padding-bottom: 0;
 }
 
+body.fixed-top-nav .container[role="main"] {
+  margin-top: 0.7rem !important;
+}
+
 .container {
   max-width: $max-content-width;
 }
