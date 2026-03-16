@@ -11,6 +11,7 @@
 #   lat/lng:     (optional) — add for US talks to appear on the talk map
 
 - institution: "University of South Florida"
+  football_name: "South Florida Bulls"
   logo: "/assets/img/talk-logos/fbs-library/South_Florida_Bulls_logo-300x300.png"
   venue: "Muma College of Business"
   date: "Fall 2026"
@@ -22,6 +23,7 @@
   lng: -82.413
 
 - institution: "Tulane University"
+  football_name: "Tulane Green Wave"
   logo: "/assets/img/talk-logos/fbs-library/Tulane_Green_Wave_logo-300x300.png"
   venue: "The Murphy Institute"
   date: "4/2026"
@@ -33,6 +35,7 @@
   lng: -90.120
 
 - institution: "University of Texas at Austin"
+  football_name: "Texas Longhorns"
   logo: "/assets/img/talk-logos/fbs-library/Texas_Longhorns_logo-300x300.png"
   venue: "McCombs School of Business"
   date: "3/2026"
@@ -43,6 +46,7 @@
   lng: -97.734
 
 - institution: "Ohio State University"
+  football_name: "Ohio State Buckeyes"
   logo: "/assets/img/talk-logos/fbs-library/Ohio_State_Buckeyes_logo-300x300.png"
   venue: "Fisher College of Business"
   date: "11/2025"
@@ -53,6 +57,7 @@
   lng: -83.030
 
 - institution: "Virginia Tech"
+  football_name: "Virginia Tech Hokies"
   logo: "/assets/img/talk-logos/fbs-library/Virginia_Tech_Hokies_logo-300x300.png"
   venue: "Pamplin College of Business"
   date: "9/2025"
@@ -77,6 +82,7 @@
   sort_key: 202411
 
 - institution: "University of Illinois Urbana-Champaign"
+  football_name: "Illinois Fighting Illini"
   logo: "/assets/img/talk-logos/fbs-library/Illinois_Fighting_Illini_logo-300x300.png"
   venue: "Gies College of Business"
   date: "11/2024"
@@ -125,6 +131,7 @@
   lng: -75.751
 
 - institution: "University of Southern California"
+  football_name: "USC Trojans"
   logo: "/assets/img/talk-logos/fbs-library/USC_Trojans_logo-300x300.png"
   venue: "Marshall School of Business"
   date: "12/2022"
@@ -135,6 +142,7 @@
   lng: -118.285
 
 - institution: "Florida State University"
+  football_name: "Florida State Seminoles"
   logo: "/assets/img/talk-logos/fbs-library/Florida_State_Seminoles_logo-300x300.png"
   venue: "College of Business"
   date: "10/2022"
@@ -145,6 +153,7 @@
   lng: -84.298
 
 - institution: "University of Georgia"
+  football_name: "Georgia Bulldogs"
   logo: "/assets/img/talk-logos/fbs-library/Georgia_Bulldogs_logo-300x300.png"
   venue: "Terry College of Business"
   date: "4/2022"
@@ -165,6 +174,7 @@
   lng: -77.627
 
 - institution: "University of Pittsburgh"
+  football_name: "Pitt Panthers"
   logo: "/assets/img/talk-logos/fbs-library/Pitt_Panthers_logo-300x300.png"
   venue: "Katz Graduate School of Business"
   date: "11/2021"
@@ -175,6 +185,7 @@
   lng: -79.960
 
 - institution: "University of Miami"
+  football_name: "Miami Hurricanes"
   logo: "/assets/img/talk-logos/fbs-library/Miami_Hurricanes_logo-300x300.png"
   venue: "Herbert Business School"
   date: "11/2021"
@@ -185,6 +196,7 @@
   lng: -80.375
 
 - institution: "University of Wisconsin-Madison"
+  football_name: "Wisconsin Badgers"
   logo: "/assets/img/talk-logos/fbs-library/Wisconsin_Badgers_logo-300x300.png"
   venue: "Wisconsin School of Business"
   date: "11/2021"
@@ -211,6 +223,7 @@
   sort_key: 202110
 
 - institution: "University of Maryland"
+  football_name: "Maryland Terrapins"
   logo: "/assets/img/talk-logos/fbs-library/Maryland_Terrapins_logo-300x300.png"
   venue: "R. H. Smith School of Business"
   date: "9/2021"
@@ -229,6 +242,7 @@
   sort_key: 202105
 
 - institution: "University of Houston"
+  football_name: "Houston Cougars"
   logo: "/assets/img/talk-logos/fbs-library/Houston_Cougars_logo-300x300.png"
   venue: "Hewlett Packard Enterprise Data Science Institute"
   date: "4/2021"
@@ -239,6 +253,7 @@
   lng: -95.342
 
 - institution: "University of Oklahoma"
+  football_name: "Oklahoma Sooners"
   logo: "/assets/img/talk-logos/fbs-library/Oklahoma_Sooners_logo-300x300.png"
   venue: "Price College of Business"
   date: "4/2021"
@@ -269,6 +284,7 @@
   lng: -75.378
 
 - institution: "University of Washington"
+  football_name: "Washington Huskies"
   logo: "/assets/img/talk-logos/fbs-library/Washington_Huskies_logo-300x300.png"
   venue: "Foster School of Business"
   date: "2/2020"
@@ -279,6 +295,7 @@
   lng: -122.303
 
 - institution: "University of Houston"
+  football_name: "Houston Cougars"
   logo: "/assets/img/talk-logos/fbs-library/Houston_Cougars_logo-300x300.png"
   venue: "Bauer College of Business"
   date: "12/2019"
@@ -289,6 +306,7 @@
   lng: -95.350
 
 - institution: "Georgia State University"
+  football_name: "Georgia State Panthers"
   logo: "/assets/img/talk-logos/fbs-library/Georgia_State_Panthers_logo-300x300.png"
   venue: "Robinson College of Business"
   date: "11/2019"
@@ -299,6 +317,7 @@
   lng: -84.386
 
 - institution: "University of Arizona"
+  football_name: "Arizona Wildcats"
   logo: "/assets/img/talk-logos/fbs-library/Arizona_Wildcats_logo-300x300.png"
   venue: "Eller College of Management"
   date: "10/2019"
@@ -309,6 +328,7 @@
   lng: -110.950
 
 - institution: "University of North Carolina at Charlotte"
+  football_name: "Charlotte 49ers"
   logo: "/assets/img/talk-logos/fbs-library/Charlotte_49ers_logo-300x300.png"
   venue: "Belk College of Business"
   date: "10/2019"
@@ -319,6 +339,7 @@
   lng: -80.735
 
 - institution: "University of Utah"
+  football_name: "Utah Utes"
   logo: "/assets/img/talk-logos/fbs-library/Utah_Utes_logo-300x300.png"
   venue: "Eccles School of Business"
   date: "9/2019"
@@ -337,6 +358,7 @@
   sort_key: 201906
 
 - institution: "Boston College"
+  football_name: "Boston College Eagles"
   logo: "/assets/img/talk-logos/fbs-library/Boston_College_Eagles_logo-300x300.png"
   venue: "Carroll School of Management"
   date: "5/2019"
@@ -375,6 +397,7 @@
   lng: -122.084
 
 - institution: "University of Minnesota"
+  football_name: "Minnesota Golden Gophers"
   logo: "/assets/img/talk-logos/fbs-library/Minnesota_Golden_Gophers_logo-300x300.png"
   venue: "Carlson School of Management"
   date: "3/2018"
@@ -396,6 +419,7 @@
   lng: -96.797
 
 - institution: "Arizona State University"
+  football_name: "Arizona State Sun Devils"
   logo: "/assets/img/talk-logos/fbs-library/Arizona_State_Sun_Devils_logo-300x300.png"
   venue: "Ira A. Fulton School of Engineering"
   date: "3/2017"
@@ -406,6 +430,7 @@
   lng: -111.940
 
 - institution: "Temple University"
+  football_name: "Temple Owls"
   logo: "/assets/img/talk-logos/fbs-library/Temple_Owls_logo-300x300.png"
   venue: "Fox School of Business"
   date: "2/2017"
@@ -425,6 +450,7 @@
   lng: -122.419
 
 - institution: "Arizona State University"
+  football_name: "Arizona State Sun Devils"
   logo: "/assets/img/talk-logos/fbs-library/Arizona_State_Sun_Devils_logo-300x300.png"
   venue: "Information Systems Research Workshop"
   date: "2/2016"
@@ -435,6 +461,7 @@
   lng: -111.935
 
 - institution: "Temple University"
+  football_name: "Temple Owls"
   logo: "/assets/img/talk-logos/fbs-library/Temple_Owls_logo-300x300.png"
   venue: "CIBER"
   date: "4/2014"
@@ -445,6 +472,7 @@
   lng: -75.150
 
 - institution: "Arizona State University"
+  football_name: "Arizona State Sun Devils"
   logo: "/assets/img/talk-logos/fbs-library/Arizona_State_Sun_Devils_logo-300x300.png"
   venue: "W. P. Carey School of Business"
   date: "11/2013"
@@ -455,6 +483,7 @@
   lng: -111.938
 
 - institution: "University of Virginia"
+  football_name: "Virginia Cavaliers"
   logo: "/assets/img/talk-logos/fbs-library/Virginia_Cavaliers_logo-300x300.png"
   venue: "McIntire School of Commerce"
   date: "10/2013"
