@@ -85,6 +85,85 @@ nav_order: 4
       <div id="football-map-container"></div>
     </div>
   </div>
+
+  <div class="fb-pills fb-pills--section fb-pills--open" id="football-teams-toggle" role="button" aria-expanded="true" tabindex="0">
+    <div class="fb-pill fb-pill--green">
+      <span class="fb-pill-l">My Favorate Teams</span>
+    </div>
+    <div class="fb-pill-sep"></div>
+    <div class="fb-pill fb-pill--geo">
+      <span class="fb-pill-l" id="fb-pill-hint-teams">Hide the Teams</span>
+    </div>
+  </div>
+
+  <div class="fb-body fb-body--open" id="football-teams-body">
+    <div class="fb-body-inner">
+      <div class="fb-card-grid">
+        {% for team in site.data.football_favorite_teams %}
+        <article class="fb-feature-card fb-feature-card--team">
+          <div class="fb-feature-card-media fb-feature-card-media--logo">
+            <img src="{{ team.logo | relative_url }}" alt="{{ team.school }}">
+          </div>
+          <div class="fb-feature-card-body">
+            <div class="fb-feature-card-title">{{ team.school }}</div>
+            <div class="fb-feature-card-rows">
+              <div class="fb-feature-card-row">
+                <span class="fb-feature-card-label">QB1</span>
+                <span class="fb-feature-card-value">{{ team.qb1 }}</span>
+              </div>
+              <div class="fb-feature-card-row">
+                <span class="fb-feature-card-label">Record</span>
+                <span class="fb-feature-card-value">{{ team.record }}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="fb-pills fb-pills--section fb-pills--open" id="football-players-toggle" role="button" aria-expanded="true" tabindex="0">
+    <div class="fb-pill fb-pill--orange">
+      <span class="fb-pill-l">My Favorate Players</span>
+    </div>
+    <div class="fb-pill-sep"></div>
+    <div class="fb-pill fb-pill--geo">
+      <span class="fb-pill-l" id="fb-pill-hint-players">Hide the Players</span>
+    </div>
+  </div>
+
+  <div class="fb-body fb-body--open" id="football-players-body">
+    <div class="fb-body-inner">
+      <div class="fb-card-grid">
+        {% for player in site.data.football_favorite_players %}
+        <article class="fb-feature-card fb-feature-card--player">
+          <div class="fb-feature-card-media fb-feature-card-media--headshot">
+            <img src="{{ player.image | relative_url }}" alt="{{ player.name }}" loading="lazy">
+          </div>
+          <div class="fb-feature-card-body">
+            <div class="fb-feature-card-title">{{ player.name }}</div>
+            <div class="fb-feature-card-rows">
+              <div class="fb-feature-card-row">
+                <span class="fb-feature-card-label">Position</span>
+                <span class="fb-feature-card-value">{{ player.position }}</span>
+              </div>
+              <div class="fb-feature-card-row">
+                <span class="fb-feature-card-label">Year</span>
+                <span class="fb-feature-card-value">{{ player.year }}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="fb-lightbox" id="fb-lightbox" aria-hidden="true">
+    <button class="fb-lightbox-close" id="fb-lightbox-close" type="button" aria-label="Close stadium image">Close</button>
+    <img class="fb-lightbox-image" id="fb-lightbox-image" alt="">
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>

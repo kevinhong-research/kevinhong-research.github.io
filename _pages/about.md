@@ -65,5 +65,5 @@ My work has received sustained recognition across information systems and operat
 
 Before entering academia, I spent time as an analyst at a leading investment bank and as a language specialist for the International Olympics Committee. I continue to work closely with industry — advising technology companies including Freelancer, Alibaba, Livad, fits.me, Summer, Extole, Ookong, and Picmonic on digital transformation, large-scale data analytics, and experimentation.
 
-When I am not doing research, I enjoy reading, writing code, and watching American football. I am an avid [Emacs](https://www.spacemacs.org/) user, a [typography](https://fontsinuse.com/) enthusiast, a frequent [Redditor](https://www.reddit.com/), and a `mechanical keyboard` designer and collector.
+When I am not doing research, I enjoy reading, writing code, and watching `American football`. I was an avid [Emacs](https://www.spacemacs.org/) user (before Claude Code and Codex), a [typography](https://fontsinuse.com/) enthusiast, a frequent [Redditor](https://www.reddit.com/), and a `mechanical keyboard` designer and collector.
 <script src="{{ '/assets/js/about.js' | relative_url }}"></script>

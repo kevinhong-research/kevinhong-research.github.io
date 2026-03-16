@@ -245,7 +245,6 @@ ul.task-list input[type="checkbox"] {
 
 .navbar {
   box-shadow: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background-color: var(--global-bg-color);
   backdrop-filter: blur(10px);
   opacity: 1;
@@ -253,6 +252,9 @@ ul.task-list input[type="checkbox"] {
   .container {
     position: relative;
     justify-content: center;
+    padding-top: 0.35rem;
+    padding-bottom: 0.22rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .navbar-collapse {
@@ -318,12 +320,12 @@ ul.task-list input[type="checkbox"] {
     background-image: linear-gradient(
       90deg,
       rgba(0, 160, 96, 0),
-      rgba(0, 160, 96, 0.38),
+      rgba(0, 160, 96, 0.54),
       rgba(0, 160, 96, 0)
     );
     background-repeat: no-repeat;
     background-position: center calc(100% - 1px);
-    background-size: calc(100% - 0.7rem) 1px;
+    background-size: calc(100% - 0.5rem) 1px;
 
     &:hover {
       color: var(--global-hover-color);
@@ -936,7 +938,7 @@ progress {
   /* Positioning */
   position: fixed;
   left: 0;
-  top: 56px;
+  top: 62px;
   z-index: 10;
 
   /* Dimensions */
@@ -974,7 +976,7 @@ progress::-moz-progress-bar {
   width: 100%;
   background-color: transparent;
   position: fixed;
-  top: 56px;
+  top: 62px;
   left: 0;
   height: 5px;
   display: block;

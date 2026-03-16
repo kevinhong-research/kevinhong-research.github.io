@@ -118,7 +118,8 @@
       'Future of Work': '/publications/#future-of-work',
       'Digital Platforms': '/publications/#digital-platforms',
       'Digital Media': '/publications/#digital-media',
-      'Human-Algorithm Interactions': '/publications/#human-ai-interaction'
+      'Human-Algorithm Interactions': '/publications/#human-ai-interaction',
+      'American football': '/football/'
     };
 
     document.querySelectorAll('article code, .post-content code').forEach(function (el) {
@@ -133,7 +134,7 @@
       }
 
       el.classList.add('nh-topic-link');
-      el.setAttribute('title', 'View ' + key + ' publications');
+      el.setAttribute('title', key === 'American football' ? 'View football page' : 'View ' + key + ' publications');
       el.addEventListener('click', function () {
         window.location.href = href;
       });

@@ -31,6 +31,10 @@
   --text-mid: #666;
   --orange:   #F47321;
   --green-hi: #00a060;
+  --pub-control-text: rgba(222, 240, 232, 0.9);
+  --pub-control-border: rgba(0, 160, 96, 0.26);
+  --pub-control-bg: rgba(0, 160, 96, 0.045);
+  --pub-control-bg-hover: rgba(0, 160, 96, 0.09);
   --pub-meta-control-height: 1.45rem;
 }
 
@@ -141,14 +145,16 @@
   display: grid;
   grid-template-columns: 44px 1fr;
   gap: 1.5rem;
-  padding: 1.5rem 0 1.32rem;
-  padding-left: 0;
+  padding: 1.5rem 0 1.16rem;
   border-bottom: 1px solid var(--line);
   align-items: start;
   position: relative;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease, padding-left 0.25s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    background-color 0.28s ease;
 }
 .pub-item:first-child {
   border-top: 1px solid var(--line);
@@ -160,15 +166,14 @@
   width: 2px;
   background: #F47321;
   transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.3s ease;
+  transform-origin: center;
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.pub-item:hover { padding-left: 12px; }
+.pub-item:hover { background: rgba(244, 115, 33, 0.02); }
 .pub-item:hover::before { transform: scaleY(1); }
 .pub-item.nh-visible { opacity: 1; transform: translateY(0); }
 .pub-item.hidden { display: none; }
 .pub-item.pub-target-flash {
-  padding-left: 12px;
   background: linear-gradient(90deg, rgba(244, 115, 33, 0.12), rgba(244, 115, 33, 0.02) 18%, rgba(0, 0, 0, 0) 72%);
   animation: pubTargetFlash 2.4s ease;
 }
@@ -192,14 +197,20 @@
   letter-spacing: 0.06em;
   color: var(--text-lo);
   padding-top: 4px;
-  transition: color 0.2s;
+  transition: color 0.2s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .pub-item:hover .pub-num { color: #F47321; }
 
 .pub-body {
   display: flex;
   flex-direction: column;
-  gap: 0.32rem;
+  gap: 0.28rem;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.pub-item:hover .pub-num,
+.pub-item:hover .pub-body {
+  transform: translateX(8px);
 }
 
 .pub-title {
@@ -228,7 +239,7 @@
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 0.15rem;
+  margin-top: 0.08rem;
   height: var(--pub-meta-control-height);
 }
 .pub-meta > * {
@@ -254,6 +265,18 @@
   height: var(--pub-meta-control-height);
   line-height: 1;
 }
+.pub-meta-sep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.64rem;
+  line-height: 1;
+  color: rgba(226, 232, 240, 0.72);
+  letter-spacing: 0;
+  margin-inline: -0.42rem;
+  transform: translateY(-0.02rem);
+  height: var(--pub-meta-control-height);
+}
 .pub-note {
   display: inline-flex;
   align-items: center;
@@ -262,8 +285,9 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--green-hi);
-  border: 1px solid rgba(0, 160, 96, 0.3);
+  color: var(--pub-control-text);
+  border: 1px solid var(--pub-control-border);
+  background: var(--pub-control-bg);
   padding: 0.1rem 0.5rem;
   height: var(--pub-meta-control-height);
   box-sizing: border-box;
@@ -294,7 +318,8 @@
   justify-content: center;
   gap: 0.3rem;
   background: none;
-  border: 1px solid var(--line);
+  border: 1px solid var(--pub-control-border);
+  background: var(--pub-control-bg);
   padding: 0.1rem 0.42rem 0.1rem 0.34rem;
   cursor: pointer;
   font-family: inherit;
@@ -302,7 +327,7 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text);
+  color: var(--pub-control-text);
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   line-height: 1;
@@ -312,9 +337,9 @@
 }
 .pub-abstract-btn:hover,
 .pub-abstract-btn--open {
-  color: #00a060;
-  border-color: rgba(0, 160, 96, 0.35);
-  background: rgba(0, 160, 96, 0.05);
+  color: #ffffff;
+  border-color: rgba(244, 115, 33, 0.42);
+  background: rgba(244, 115, 33, 0.08);
 }
 
 /* Chevron SVG — rotates 180° when open */
@@ -375,6 +400,75 @@
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
 }
 
+.pub-citation-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  background: none;
+  border: 1px solid var(--pub-control-border);
+  background: var(--pub-control-bg);
+  padding: 0.1rem 0.46rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pub-control-text);
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  line-height: 1;
+  flex-shrink: 0;
+  height: var(--pub-meta-control-height);
+  box-sizing: border-box;
+}
+.pub-citation-btn:hover,
+.pub-citation-btn--open {
+  color: #ffffff;
+  border-color: rgba(244, 115, 33, 0.42);
+  background: rgba(244, 115, 33, 0.08);
+}
+
+.pub-citation-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity            0.35s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+.pub-citation-body.pub-citation-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 0.65rem;
+}
+
+.pub-citation-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.pub-citation-body.pub-citation-open .pub-citation-inner {
+  border-left: 2px solid rgba(244, 115, 33, 0.24);
+  background: rgba(244, 115, 33, 0.03);
+  padding: 0.8rem 1.1rem;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+}
+
+.pub-citation-text {
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: 1.72;
+  color: var(--text);
+  word-break: break-word;
+}
+.pub-citation-text em {
+  font-style: italic;
+  color: var(--text-hi);
+}
+
 /* ── CITATION COUNT BADGE ──────────────────────────────────
    Two-tone pill: beige left half (icon + "scholar" label),
    Google blue right half (citation count). Matches the
@@ -383,41 +477,40 @@
 ──────────────────────────────────────────────────────────── */
 .pub-cite {
   display: inline-flex;
-  align-items: stretch;
-  font-size: 0.62rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  border-radius: 3px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   line-height: 1;
   text-decoration: none;
   vertical-align: middle;
-  opacity: 0.35;
-  transition: opacity 0.2s, border-color 0.2s;
+  color: var(--pub-control-text);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   flex-shrink: 0;
   height: var(--pub-meta-control-height);
   box-sizing: border-box;
+  padding: 0.1rem 0.52rem 0.1rem 0.46rem;
+  border: 1px solid var(--pub-control-border);
+  background: transparent;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
 }
 .pub-cite:hover {
-  opacity: 0.85;
-  border-color: rgba(0, 160, 96, 0.4);
+  color: #ffffff;
   text-decoration: none;
+  border-color: rgba(244, 115, 33, 0.42);
+  background: rgba(244, 115, 33, 0.08);
 }
 
-/* Left half — icon + "scholar" label */
 .pub-cite-label {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.12rem 0.42rem;
-  background: #e8e4d0;
-  color: #333;
+  color: inherit;
   white-space: nowrap;
-  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-family: inherit;
   line-height: 1;
-  min-height: 100%;
-  box-sizing: border-box;
 }
 .pub-cite-label svg {
   width: 10px;
@@ -425,20 +518,21 @@
   flex-shrink: 0;
 }
 
-/* Right half — numeric citation count */
+.pub-cite-sep {
+  color: #00a060;
+  letter-spacing: 0;
+  transform: translateY(-0.02rem);
+}
+
 .pub-cite-count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.12rem 0.42rem;
-  background: #00a060;
-  color: #fff;
   white-space: nowrap;
-  min-width: 2.5ch;
-  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-family: inherit;
   line-height: 1;
-  min-height: 100%;
-  box-sizing: border-box;
+  min-width: 1.4ch;
+  color: inherit;
 }
 
 /* ── SCROLL REVEAL ── */
@@ -719,16 +813,18 @@
 }
 .tl-meta-sep {
   font-size: 0.65rem;
-  color: var(--text-lo);
-  opacity: 0.5;
+  color: rgba(226, 232, 240, 0.72);
+  opacity: 1;
+  margin-inline: -0.18rem;
 }
 .tl-forthcoming {
   font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--green-hi);
-  border: 1px solid rgba(0, 160, 96, 0.3);
+  color: var(--pub-control-text);
+  border: 1px solid var(--pub-control-border);
+  background: var(--pub-control-bg);
   padding: 0.1rem 0.45rem;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
 }
