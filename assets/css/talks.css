@@ -7,8 +7,8 @@
 .talk-list { display: flex; flex-direction: column; }
 
 .talk-item {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  justify-content: space-between;
   gap: 1rem;
   padding: 0.65rem 0;
   padding-left: 0;
@@ -35,15 +35,19 @@
 /* ── BODY: institution + venue inline ───────────────────── */
 .talk-body {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.6rem;
-  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
 }
 .talk-institution-wrap {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
   min-width: 0;
+  flex-shrink: 1;
+  white-space: nowrap;
 }
 .talk-logo {
   width: 1.65rem;
@@ -85,14 +89,17 @@
   font-style: italic;
   color: var(--text-mid);
   line-height: 1.4;
+  white-space: nowrap;
 }
 
 /* ── RIGHT META: badges + date ──────────────────────────── */
 .talk-meta {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.4rem;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .talk-date {
   font-size: 0.72rem;
@@ -115,8 +122,17 @@
 
 /* ── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .talk-item { grid-template-columns: 1fr; }
-  .talk-meta { margin-top: 0.2rem; }
+  .talk-item {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .talk-body {
+    flex-wrap: wrap;
+  }
+  .talk-meta {
+    margin-top: 0.2rem;
+    justify-content: flex-start;
+  }
   .talk-logo {
     width: 1.45rem;
     height: 1.45rem;
