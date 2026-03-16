@@ -11,9 +11,11 @@ nav_order: 4
 
 <div class="fb-page">
   <p class="fb-intro">
-    College football is one of my favorite spectacles in daily life: regional identity, tradition,
-    pageantry, noise, and complete chaos. This map tracks Power 4 FBS schools I have visited, along
-    with stadium snapshots, championship years, and a few favorite players who made each stop memorable.
+    College football is one of the great spectacles in my life: a world of regional identity,
+    strategy, tradition, pageantry, noise, and complete chaos. I follow the sport closely, and
+    whenever I travel for a research talk, I make a point of visiting the host school's stadium.
+    This map tracks the Power 4 FBS campuses I have visited, along with stadium snapshots, national
+    championship history, and a few players and coaches who make each stop memorable.
   </p>
 
   <script>
