@@ -326,6 +326,48 @@
     openMap();
   }
 
+  function initSectionToggle(toggleId, bodyId, hintId) {
+    const strip = document.getElementById(toggleId);
+    const body = document.getElementById(bodyId);
+    const hint = document.getElementById(hintId);
+    if (!strip || !body) return;
+
+    function openSection() {
+      strip.setAttribute("aria-expanded", "true");
+      strip.classList.add("fb-pills--open");
+      body.classList.add("fb-body--open");
+      if (hint) {
+        hint.textContent = hintId === "fb-pill-hint-teams" ? "Hide the Teams" : "Hide the Players";
+      }
+    }
+
+    function closeSection() {
+      strip.setAttribute("aria-expanded", "false");
+      strip.classList.remove("fb-pills--open");
+      body.classList.remove("fb-body--open");
+      if (hint) {
+        hint.textContent = hintId === "fb-pill-hint-teams" ? "Show the Teams" : "Show the Players";
+      }
+    }
+
+    strip.addEventListener("click", () => {
+      if (strip.getAttribute("aria-expanded") === "true") {
+        closeSection();
+      } else {
+        openSection();
+      }
+    });
+
+    strip.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        strip.click();
+      }
+    });
+
+    openSection();
+  }
+
   function buildEmptyState(container) {
     container.innerHTML = `
       <div class="fb-wrap">
@@ -463,10 +505,34 @@
     const svg = d3.select("#fb-svg");
     const tip = document.getElementById("fb-tip");
     const area = container.querySelector(".fb-map-area");
+    const lightbox = document.getElementById("fb-lightbox");
+    const lightboxImage = document.getElementById("fb-lightbox-image");
+    const lightboxClose = document.getElementById("fb-lightbox-close");
     const projection = d3.geoAlbersUsa().scale(1100).translate([480, 270]);
     const pathFn = d3.geoPath().projection(projection);
     let activeGroup = null;
     let hideTimer = null;
+    let lightboxOpen = false;
+
+    function openLightbox(src, alt) {
+      if (!lightbox || !lightboxImage) return;
+      lightboxImage.src = src;
+      lightboxImage.alt = alt || "";
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      lightboxOpen = true;
+    }
+
+    function closeLightbox() {
+      if (!lightbox || !lightboxImage) return;
+      lightbox.classList.remove("is-open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImage.removeAttribute("src");
+      lightboxImage.alt = "";
+      document.body.style.overflow = "";
+      lightboxOpen = false;
+    }
 
     function clearHideTimer() {
       if (!hideTimer) return;
@@ -487,6 +553,7 @@
     }
 
     function hideTooltipSoon() {
+      if (lightboxOpen) return;
       clearHideTimer();
       hideTimer = window.setTimeout(() => {
         tip.style.display = "none";
@@ -504,6 +571,37 @@
     tip.addEventListener("mouseleave", () => {
       hideTooltipSoon();
     });
+
+    tip.addEventListener("click", (event) => {
+      const link = event.target.closest(".fb-tip-photo-link, .fb-tip-stadium-link");
+      if (!link) return;
+      const href = link.getAttribute("href");
+      if (!href) return;
+      event.preventDefault();
+      openLightbox(href, link.textContent.trim() || "Stadium image");
+    });
+
+    if (lightbox && !lightbox.dataset.bound) {
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox || event.target === lightboxImage) {
+          closeLightbox();
+        }
+      });
+
+      if (lightboxClose) {
+        lightboxClose.addEventListener("click", () => {
+          closeLightbox();
+        });
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && lightboxOpen) {
+          closeLightbox();
+        }
+      });
+
+      lightbox.dataset.bound = "true";
+    }
 
     fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json")
       .then((response) => response.json())
@@ -605,6 +703,8 @@
     const merged = mergeEntries(window.FOOTBALL_MAP_DATA || [], window.FOOTBALL_OVERRIDES || {});
     const cleaned = cleanEntries(merged);
     initToggle(cleaned);
+    initSectionToggle("football-teams-toggle", "football-teams-body", "fb-pill-hint-teams");
+    initSectionToggle("football-players-toggle", "football-players-body", "fb-pill-hint-players");
   }
 
   if (document.readyState === "loading") {

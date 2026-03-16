@@ -1,0 +1,14 @@
+- school: "Miami Hurricanes"
+  logo: "/assets/img/talk-logos/fbs-library/Miami_Hurricanes_logo-300x300.png"
+  qb1: "Carson Beck"
+  record: "10-3"
+
+- school: "Texas Longhorns"
+  logo: "/assets/img/talk-logos/fbs-library/Texas_Longhorns_logo-300x300.png"
+  qb1: "Arch Manning"
+  record: "13-3"
+
+- school: "Ohio State Buckeyes"
+  logo: "/assets/img/talk-logos/fbs-library/Ohio_State_Buckeyes_logo-300x300.png"
+  qb1: "Julian Sayin"
+  record: "14-2"

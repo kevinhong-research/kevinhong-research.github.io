@@ -52,6 +52,89 @@
     return '';
   }
 
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function cleanAuthor(author) {
+    return String(author || '').replace(/\*\*/g, '').trim();
+  }
+
+  function formatApaAuthor(author) {
+    const cleaned = cleanAuthor(author);
+    if (!cleaned) return '';
+    const parts = cleaned.split(/\s+/);
+    if (parts.length === 1) return cleaned;
+
+    const surname = parts.slice(0, -1).join(' ');
+    const initials = parts[parts.length - 1]
+      .replace(/\./g, '')
+      .split('')
+      .filter(Boolean)
+      .map(ch => `${ch}.`)
+      .join(' ');
+
+    return `${surname}, ${initials}`;
+  }
+
+  function formatApaAuthors(authors) {
+    const formatted = (authors || []).map(formatApaAuthor).filter(Boolean);
+    if (!formatted.length) return '';
+    if (formatted.length === 1) return formatted[0];
+    if (formatted.length === 2) return `${formatted[0]}, & ${formatted[1]}`;
+    return `${formatted.slice(0, -1).join(', ')}, & ${formatted[formatted.length - 1]}`;
+  }
+
+  function formatApaCitation(pub, options = {}) {
+    const { html = false } = options;
+    const authors = formatApaAuthors(pub.authors);
+    const year = pub.year ? `(${pub.year}).` : '(n.d.).';
+    const title = `${String(pub.title || '').trim().replace(/\s+/g, ' ')}.`;
+    const journal = (JOURNAL_META[pub.journal] || { label: pub.journal }).label || '';
+    const volume = String(pub.volume || '').trim();
+    const doi = extractDoi(pub);
+    const url = String(pub.url || '').trim();
+
+    let source = '';
+    if (journal) {
+      const journalText = html ? `<em>${escapeHtml(journal)}</em>` : journal;
+      if (pub.forthcoming) {
+        source = `${journalText}. Forthcoming.`;
+      } else if (volume) {
+        source = `${journalText}, ${html ? escapeHtml(volume) : volume}.`;
+      } else {
+        source = `${journalText}.`;
+      }
+    }
+
+    const link = doi ? `https://doi.org/${doi}` : url;
+    const titleText = html ? escapeHtml(title) : title;
+    return [authors, year, titleText, source, link].filter(Boolean).join(' ');
+  }
+
+  async function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+
+    const temp = document.createElement('textarea');
+    temp.value = text;
+    temp.setAttribute('readonly', '');
+    temp.style.position = 'absolute';
+    temp.style.left = '-9999px';
+    document.body.appendChild(temp);
+    temp.select();
+    const copied = document.execCommand('copy');
+    document.body.removeChild(temp);
+    return copied;
+  }
+
   /* ── RENDER PUBLICATIONS ───────────────────────────────────*/
   function renderPubs(pubs) {
     allPubs = pubs;   /* cache for view switching */
@@ -73,6 +156,7 @@
            target="_blank" rel="noopener"
            title="View on Google Scholar">
           <span class="pub-cite-label">${SCHOLAR_ICON}scholar</span>
+          <span class="pub-cite-sep">·</span>
           <span class="pub-cite-count">—</span>
         </a>` : '';
 
@@ -87,6 +171,18 @@
         <div class="pub-abstract-body" aria-hidden="true">
           <div class="pub-abstract-inner">${pub.abstract.trim()}</div>
         </div>` : '';
+      const apaCitation = formatApaCitation(pub);
+      const apaCitationHtml = formatApaCitation(pub, { html: true });
+      const citationBtn = apaCitation ? `
+        <button class="pub-citation-btn" aria-expanded="false" aria-label="Show APA citation and copy it" data-citation="${escapeHtml(apaCitation)}">
+          <span class="pub-citation-btn-label">Cite</span>
+        </button>` : '';
+      const citationBody = apaCitationHtml ? `
+        <div class="pub-citation-body" aria-hidden="true">
+          <div class="pub-citation-inner">
+            <div class="pub-citation-text">${apaCitationHtml}</div>
+          </div>
+        </div>` : '';
 
       return `
         <div class="pub-item" data-topics="${(pub.topics || []).join('|')}" data-paper-id="${pub.id || ''}">
@@ -96,12 +192,16 @@
             <div class="pub-authors">${authors}</div>
             <div class="pub-meta">
               <span class="pub-journal">${j.label}</span>
+              <span class="pub-meta-sep">·</span>
               <span class="pub-year">${pub.year}</span>
+              ${pub.volume ? `<span class="pub-meta-sep">·</span>` : ''}
+              ${pub.volume ? `<span class="pub-year">${pub.volume}</span>` : ''}
               ${pub.forthcoming ? `<span class="pub-note">Forthcoming</span>` : ''}
-              ${pub.volume      ? `<span class="pub-year">${pub.volume}</span>` : ''}
               ${citeBadge}
+              ${citationBtn}
               ${abstractBtn}
             </div>
+            ${citationBody}
             ${abstractBody}
           </div>
         </div>`;
@@ -111,6 +211,7 @@
     initPubAnimations();
     initFilter();
     initAbstracts();
+    initCitationButtons();
     initViewToggle();
     initPaperTarget();
   }
@@ -174,6 +275,41 @@
         body.setAttribute('aria-hidden', String(isOpen));
         body.classList.toggle('pub-abstract-open', !isOpen);
         btn.classList.toggle('pub-abstract-btn--open', !isOpen);
+      });
+    });
+  }
+
+  function initCitationButtons(scope) {
+    const root = scope || document;
+    root.querySelectorAll('.pub-citation-btn').forEach(btn => {
+      const body = btn.closest('.pub-body, .tl-paper').querySelector('.pub-citation-body');
+      if (!body) return;
+
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        body.setAttribute('aria-hidden', String(isOpen));
+        body.classList.toggle('pub-citation-open', !isOpen);
+        btn.classList.toggle('pub-citation-btn--open', !isOpen);
+
+        const citation = btn.dataset.citation;
+        if (!citation) return;
+
+        try {
+          await copyText(citation);
+          const label = btn.querySelector('.pub-citation-btn-label');
+          if (label) {
+            label.textContent = 'Copied';
+            window.clearTimeout(btn._copyResetTimer);
+            btn._copyResetTimer = window.setTimeout(() => {
+              label.textContent = 'Cite';
+            }, 1400);
+          }
+        } catch (_) {
+          /* Keep the citation open even if clipboard access fails. */
+        }
       });
     });
   }
@@ -286,12 +422,25 @@
           <div class="pub-abstract-body" aria-hidden="true">
             <div class="pub-abstract-inner">${p.abstract.trim()}</div>
           </div>` : '';
+        const apaCitation = formatApaCitation(p);
+        const apaCitationHtml = formatApaCitation(p, { html: true });
+        const citationBtn = apaCitation ? `
+          <button class="pub-citation-btn tl-citation-btn" aria-expanded="false" aria-label="Show APA citation and copy it" data-citation="${escapeHtml(apaCitation)}">
+            <span class="pub-citation-btn-label">Cite</span>
+          </button>` : '';
+        const citationBody = apaCitationHtml ? `
+          <div class="pub-citation-body" aria-hidden="true">
+            <div class="pub-citation-inner">
+              <div class="pub-citation-text">${apaCitationHtml}</div>
+            </div>
+          </div>` : '';
 
         return `
           <div class="tl-paper" data-topics="${(p.topics || []).join('|')}">
             <a class="tl-title" href="${p.url || '#'}" target="_blank">${p.title}</a>
             <div class="tl-authors">${authors}</div>
-            <div class="tl-meta">${meta}${abstractBtn}</div>
+            <div class="tl-meta">${meta}${citationBtn}${abstractBtn}</div>
+            ${citationBody}
             ${abstractBody}
           </div>`;
       }).join('');
@@ -321,6 +470,7 @@
         btn.classList.toggle('pub-abstract-btn--open', !isOpen);
       });
     });
+    initCitationButtons(container);
 
     /* Stagger entrance animation */
     const papers = container.querySelectorAll('.tl-paper');

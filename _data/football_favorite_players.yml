@@ -1,0 +1,14 @@
+- name: "Malachi Toney"
+  image: "/assets/img/football/players/malachi-toney.webp"
+  position: "WR"
+  year: "Freshman"
+
+- name: "Darian Mensah"
+  image: "/assets/img/football/players/darian-mensah.webp"
+  position: "QB"
+  year: "Redshirt Sophomore"
+
+- name: "Arch Manning"
+  image: "/assets/img/football/players/arch-manning.webp"
+  position: "QB"
+  year: "Sophomore"

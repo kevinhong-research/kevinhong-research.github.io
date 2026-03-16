@@ -37,13 +37,31 @@ article.post-content p code,
   font-size: 0.88em;
   font-weight: 400;
   color: #f0f0f0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 0;
   padding: 0.05em 0.4em;
   clip-path: polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%);
   white-space: nowrap;
   letter-spacing: 0.01em;
+  box-shadow: none !important;
+}
+
+.about-content code.language-plaintext.highlighter-rouge,
+article.post-content p code.language-plaintext.highlighter-rouge,
+.profile-wrapper ~ * p code.language-plaintext.highlighter-rouge {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.post article code.language-plaintext.highlighter-rouge,
+.post article p code.language-plaintext.highlighter-rouge,
+.post article .clearfix code.language-plaintext.highlighter-rouge {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* ── PARAGRAPH SPACING ───────────────────────────────────── */
@@ -67,7 +85,7 @@ article.post-content p {
 .nh-terminal {
   display: flex;
   align-items: center;
-  font-family: "SFMono-Regular", "Fira Code", "Fira Mono", "Roboto Mono", ui-monospace, monospace;
+  font-family: "Geist Mono", "SFMono-Regular", ui-monospace, monospace;
   font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.02em;
