@@ -1,0 +1,82 @@
+# _data/football.yml
+# One entry per visited FBS school.
+# `logo` should point to a local logo asset, usually from:
+#   /assets/img/talk-logos/fbs-library/
+# `stadium_image` should point to a local stadium photo you add, for example:
+#   /assets/img/football/ohio-stadium.jpg
+#
+# Example:
+# - school: "Ohio State University"
+#   logo: "/assets/img/talk-logos/fbs-library/Ohio_State_Buckeyes_logo-300x300.png"
+#   stadium: "Ohio Stadium"
+#   stadium_image: "/assets/img/football/ohio-stadium.jpg"
+#   city: "Columbus"
+#   state: "OH"
+#   conference: "Big Ten"
+#   lat: 40.0017
+#   lng: -83.0197
+#   championships: [1942, 1954, 1957, 1968, 2002, 2014]
+#   favorite_players:
+#     - "Eddie George"
+#     - "Troy Smith"
+#     - "Marvin Harrison Jr."
+#   note: "The Horseshoe is even louder in person."
+- school: "University of Texas at Austin"
+  stadium_image: "/assets/img/football/stadiums/darrell-k-royal-texas-memorial-stadium.jpg"
+
+- school: "Ohio State University"
+  stadium_image: "/assets/img/football/stadiums/ohio-stadium.jpg"
+
+- school: "Virginia Tech"
+  stadium_image: "/assets/img/football/stadiums/lane-stadium.jpg"
+
+- school: "University of Illinois Urbana-Champaign"
+  stadium_image: "/assets/img/football/stadiums/gies-memorial-stadium.jpg"
+
+- school: "University of Southern California"
+  stadium_image: "/assets/img/football/stadiums/los-angeles-memorial-coliseum.png"
+
+- school: "Florida State University"
+  stadium_image: "/assets/img/football/stadiums/doak-campbell-stadium.jpg"
+
+- school: "University of Georgia"
+  stadium_image: "/assets/img/football/stadiums/sanford-stadium.jpg"
+
+- school: "University of Pittsburgh"
+  stadium_image: "/assets/img/football/stadiums/acrisure-stadium.jpg"
+
+- school: "University of Miami"
+  stadium_image: "/assets/img/football/stadiums/hard-rock-stadium.jpg"
+
+- school: "University of Wisconsin-Madison"
+  stadium_image: "/assets/img/football/stadiums/camp-randall-stadium.jpg"
+
+- school: "University of Maryland"
+  stadium_image: "/assets/img/football/stadiums/secu-stadium.jpg"
+
+- school: "University of Houston"
+  stadium_image: "/assets/img/football/stadiums/tdecu-stadium.jpg"
+
+- school: "University of Oklahoma"
+  stadium_image: "/assets/img/football/stadiums/gaylord-family-oklahoma-memorial-stadium.jpg"
+
+- school: "University of Washington"
+  stadium_image: "/assets/img/football/stadiums/husky-stadium.jpg"
+
+- school: "University of Arizona"
+  stadium_image: "/assets/img/football/stadiums/arizona-stadium.jpg"
+
+- school: "University of Utah"
+  stadium_image: "/assets/img/football/stadiums/rice-eccles-stadium.jpg"
+
+- school: "Boston College"
+  stadium_image: "/assets/img/football/stadiums/alumni-stadium-boston-college.png"
+
+- school: "University of Minnesota"
+  stadium_image: "/assets/img/football/stadiums/huntington-bank-stadium.jpg"
+
+- school: "Arizona State University"
+  stadium_image: "/assets/img/football/stadiums/mountain-america-stadium.jpg"
+
+- school: "University of Virginia"
+  stadium_image: "/assets/img/football/stadiums/scott-stadium.jpg"
