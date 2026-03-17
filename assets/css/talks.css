@@ -3,52 +3,130 @@
    Extends research.css variables and base classes.
    ============================================================ */
 
-/* ── TALK LIST ───────────────────────────────────────────── */
-.talk-list { display: flex; flex-direction: column; }
+.talk-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  padding-top: 1.4rem;
+}
+
+.talk-year-group {
+  position: relative;
+  padding-left: 3.9rem;
+}
+
+.talk-year-group::before {
+  content: "";
+  position: absolute;
+  left: 1.05rem;
+  top: 0.7rem;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 160, 96, 0.18);
+}
+
+.talk-year-group:last-child::before {
+  bottom: auto;
+  height: 2.1rem;
+}
+
+.talk-year-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
+}
+
+.talk-year-node {
+  position: absolute;
+  left: -3.25rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  border: 1.5px solid #00a060;
+  background: rgba(10, 14, 24, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.talk-year-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: #00a060;
+}
+
+.talk-year-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #00a060;
+}
+
+.talk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
 
 .talk-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.65rem 0;
-  padding-left: 0;
-  border-bottom: 1px solid var(--line);
-  align-items: center;
   position: relative;
-  transition: padding-left 0.2s ease;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+  transition:
+    padding-left 0.2s ease,
+    background-color 0.22s ease;
 }
-.talk-list .talk-item:first-child { border-top: 1px solid var(--line); }
 
 .talk-item::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: 0; top: 0; bottom: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 2px;
-  background: #F47321;
+  background: #f47321;
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 0.25s ease;
 }
-.talk-item:hover { padding-left: 10px; }
-.talk-item:hover::before { transform: scaleY(1); }
 
-/* ── BODY: institution + venue inline ───────────────────── */
-.talk-body {
+.talk-item:hover {
+  padding-left: 10px;
+  background: rgba(244, 115, 33, 0.02);
+}
+
+.talk-item:hover::before {
+  transform: scaleY(1);
+}
+
+.talk-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem 1rem;
+  flex-wrap: wrap;
+}
+
+.talk-institution-wrap {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  flex: 1 1 auto;
   min-width: 0;
-  flex-wrap: nowrap;
+  flex: 1 1 24rem;
 }
-.talk-institution-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
+
+.talk-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
   min-width: 0;
-  flex-shrink: 1;
-  white-space: nowrap;
 }
+
 .talk-logo {
   width: 1.65rem;
   height: 1.65rem;
@@ -61,80 +139,109 @@
   clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
   overflow: hidden;
 }
+
 .talk-logo--image img {
   width: 74%;
   height: 74%;
   object-fit: contain;
   object-position: center;
   display: block;
-  filter: none;
-  opacity: 1;
 }
+
 .talk-logo--fallback {
-  font-size: 0.56rem;
+  font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: #8f8f8f;
   text-transform: uppercase;
 }
+
 .talk-institution {
   font-size: 0.88rem;
   font-weight: 400;
   color: var(--text-hi);
   line-height: 1.4;
 }
+
 .talk-venue {
   font-size: 0.76rem;
   font-weight: 300;
-  font-style: italic;
   color: var(--text-mid);
   line-height: 1.4;
-  white-space: nowrap;
 }
 
-/* ── RIGHT META: badges + date ──────────────────────────── */
 .talk-meta {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.4rem;
-  flex-shrink: 0;
-  white-space: nowrap;
+  gap: 0.45rem;
+  flex-wrap: wrap;
 }
+
 .talk-date {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
   font-size: 0.72rem;
   font-weight: 300;
-  color: var(--text-lo);
+  color: rgba(200, 204, 212, 0.8);
   letter-spacing: 0.03em;
   white-space: nowrap;
 }
+
 .talk-badge {
-  font-size: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.55rem;
+  font-size: 0.58rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 0.1rem 0.45rem;
+  padding: 0.1rem 0.5rem;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
   white-space: nowrap;
 }
-.talk-badge--upcoming { color: #00a060; border: 1px solid rgba(0,160,96,0.35); }
-.talk-badge--keynote  { color: #F47321; border: 1px solid rgba(244,115,33,0.35); }
 
-/* ── RESPONSIVE ─────────────────────────────────────────── */
-@media (max-width: 600px) {
+.talk-badge--upcoming {
+  color: #00a060;
+  border: 1px solid rgba(0, 160, 96, 0.35);
+}
+
+.talk-badge--keynote {
+  color: #f47321;
+  border: 1px solid rgba(244, 115, 33, 0.35);
+}
+
+@media (max-width: 700px) {
+  .talk-timeline {
+    gap: 1.35rem;
+  }
+
+  .talk-year-group {
+    padding-left: 2.5rem;
+  }
+
+  .talk-year-group::before {
+    left: 0.65rem;
+  }
+
+  .talk-year-node {
+    left: -2.2rem;
+  }
+
   .talk-item {
-    display: grid;
-    grid-template-columns: 1fr;
+    padding: 0.75rem 0;
   }
-  .talk-body {
-    flex-wrap: wrap;
-  }
-  .talk-meta {
-    margin-top: 0.2rem;
-    justify-content: flex-start;
-  }
+
   .talk-logo {
     width: 1.45rem;
     height: 1.45rem;
+  }
+
+  .talk-meta {
+    justify-content: flex-start;
   }
 }

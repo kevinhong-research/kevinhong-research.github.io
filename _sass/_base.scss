@@ -23,6 +23,10 @@ hr {
   border-top: 1px solid var(--global-divider-color);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 table {
   td,
   th {
@@ -307,6 +311,7 @@ ul.task-list input[type="checkbox"] {
   .navbar-nav .nav-item .nav-link {
     color: var(--global-text-color);
     position: relative;
+    font-weight: 400;
 
     &:hover {
       color: var(--global-hover-color);
@@ -315,7 +320,7 @@ ul.task-list input[type="checkbox"] {
 
   .navbar-nav .nav-item.active > .nav-link {
     background-color: inherit;
-    font-weight: bolder;
+    font-weight: 400;
     color: var(--global-theme-color);
     background-image: linear-gradient(
       90deg,
@@ -582,6 +587,8 @@ footer.sticky-bottom {
 }
 
 .post-title {
+  font-weight: 400;
+
   mjx-container[jax="CHTML"][display="true"] {
     display: unset;
   }
