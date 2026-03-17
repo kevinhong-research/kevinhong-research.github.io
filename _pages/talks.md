@@ -78,14 +78,19 @@ nav_order: 2
   transition: color 0.2s;
   font-style: normal;
 }
+.tm-pill--green .tm-pill-l,
+.tm-pill--orange .tm-pill-l {
+  color: #8b8b8b;
+}
 .tm-pill--green .tm-pill-n { color: #00a060; }
-.tm-pill--blue  .tm-pill-n { color: #4db8ff; }
+.tm-pill--orange .tm-pill-n { color: #F47321; }
+.tm-pill--geo .tm-pill-l { color: #00a060; letter-spacing: 0.08em; }
 .tm-pills:hover .tm-pill--green .tm-pill-n,
 .tm-pills--open .tm-pill--green .tm-pill-n { color: #00c070; }
-.tm-pills:hover .tm-pill--blue .tm-pill-n,
-.tm-pills--open .tm-pill--blue .tm-pill-n  { color: #6dc8ff; }
-.tm-pills:hover .tm-pill-l,
-.tm-pills--open .tm-pill-l { color: #444; }
+.tm-pills:hover .tm-pill--orange .tm-pill-n,
+.tm-pills--open .tm-pill--orange .tm-pill-n  { color: #ff8a3c; }
+.tm-pills:hover .tm-pill--geo .tm-pill-l,
+.tm-pills--open .tm-pill--geo .tm-pill-l { color: #F47321; }
 
 .tm-pill-sep {
   display: inline-block !important;
@@ -146,7 +151,7 @@ window.TALKMAP_DATA = [
       <span class="tm-pill-l">talks</span>
     </div>
     <div class="tm-pill-sep"></div>
-    <div class="tm-pill tm-pill--blue" id="tm-pill-upcoming">
+    <div class="tm-pill tm-pill--orange" id="tm-pill-upcoming">
       <span class="tm-pill-n" id="tm-count-upcoming">—</span>
       <span class="tm-pill-l">upcoming</span>
     </div>

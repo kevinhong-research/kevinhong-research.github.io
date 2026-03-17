@@ -1,46 +1,62 @@
 {% comment %}
   _includes/talks_render.html
-  Renders _data/talks.yml as a flat reverse-chronological list.
-  Sorted by sort_key (YYYYMM) descending — single-field compound sort.
+  Renders _data/talks.yml as a reverse-chronological timeline grouped by year.
   Edit data in _data/talks.yml only.
 {% endcomment %}
 
 {% assign sorted = site.data.talks | sort: "sort_key" | reverse %}
+{% assign current_year = "" %}
 
 <div class="nh-research">
   <section class="svc-section">
-    <div class="talk-list">
+    <div class="talk-timeline">
       {% for talk in sorted %}
-      {% assign talk_initials = "" %}
-      {% assign institution_words = talk.institution | replace: "(", " " | replace: ")", " " | replace: "-", " " | split: " " %}
-      {% for word in institution_words %}
-        {% assign cleaned = word | strip %}
-        {% if cleaned != "" %}
-          {% assign first_char = cleaned | slice: 0, 1 | upcase %}
-          {% assign talk_initials = talk_initials | append: first_char %}
+        {% assign talk_initials = "" %}
+        {% assign institution_words = talk.institution | replace: "(", " " | replace: ")", " " | replace: "-", " " | split: " " %}
+        {% for word in institution_words %}
+          {% assign cleaned = word | strip %}
+          {% if cleaned != "" %}
+            {% assign first_char = cleaned | slice: 0, 1 | upcase %}
+            {% assign talk_initials = talk_initials | append: first_char %}
+          {% endif %}
+        {% endfor %}
+        {% assign talk_initials = talk_initials | slice: 0, 3 %}
+
+        {% if talk.year != current_year %}
+          {% unless forloop.first %}</div></section>{% endunless %}
+          {% assign current_year = talk.year %}
+          <section class="talk-year-group">
+            <div class="talk-year-header">
+              <div class="talk-year-node"><div class="talk-year-dot"></div></div>
+              <span class="talk-year-label">{{ talk.year }}</span>
+            </div>
+            <div class="talk-list">
         {% endif %}
-      {% endfor %}
-      {% assign talk_initials = talk_initials | slice: 0, 3 %}
-      <div class="talk-item">
-        <div class="talk-body">
-          <span class="talk-institution-wrap">
-            {% if talk.logo %}
-              <span class="talk-logo talk-logo--image">
-                <img src="{{ talk.logo | relative_url }}" alt="{{ talk.institution }} logo" loading="lazy">
-              </span>
-            {% else %}
-              <span class="talk-logo talk-logo--fallback" aria-hidden="true">{{ talk_initials }}</span>
-            {% endif %}
-            <span class="talk-institution">{{ talk.institution }}</span>
-          </span>
-          {% if talk.venue %}<span class="talk-venue">{{ talk.venue }}</span>{% endif %}
-        </div>
-        <div class="talk-meta">
-          {% if talk.upcoming %}<span class="talk-badge talk-badge--upcoming">Upcoming</span>{% endif %}
-          {% if talk.type == "keynote" %}<span class="talk-badge talk-badge--keynote">Keynote</span>{% endif %}
-          <span class="talk-date">{{ talk.date }}</span>
-        </div>
-      </div>
+
+        <article class="talk-item">
+          <div class="talk-card-top">
+            <div class="talk-institution-wrap">
+              {% if talk.logo %}
+                <span class="talk-logo talk-logo--image">
+                  <img src="{{ talk.logo | relative_url }}" alt="{{ talk.institution }} logo" loading="lazy">
+                </span>
+              {% else %}
+                <span class="talk-logo talk-logo--fallback" aria-hidden="true">{{ talk_initials }}</span>
+              {% endif %}
+              <div class="talk-heading">
+                <div class="talk-institution">{{ talk.institution }}</div>
+                {% if talk.venue %}<div class="talk-venue">{{ talk.venue }}</div>{% endif %}
+              </div>
+            </div>
+            <div class="talk-meta">
+              <span class="talk-date">{{ talk.date }}</span>
+              {% if talk.upcoming %}<span class="talk-badge talk-badge--upcoming">Upcoming</span>{% endif %}
+              {% if talk.type == "keynote" %}<span class="talk-badge talk-badge--keynote">Keynote</span>{% endif %}
+            </div>
+          </div>
+        </article>
+
+        {% if forloop.last %}</div></section>{% endif %}
       {% endfor %}
     </div>
   </section>
