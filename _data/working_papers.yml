@@ -3,6 +3,16 @@
 # Fields: title, url, authors (list), year
 # sort_key: YYYY (used for ordering)
 
+- title: "DeepAudio: A Theory-Guided Stacked Representation Architecture for Audio Content Quality Assessment"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6443919"
+  authors:
+    - "Nguyen N"
+    - "Johnson J"
+    - "Melzner  J"
+    - "**Hong Y**"
+  year: 2026
+  sort_key: 2026
+
 - title: "On the Double-Edged Effects of Peer-to-Peer Payment Systems: Evidence from Zelle Partnerships"
   url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4883176"
   authors:
