@@ -495,7 +495,7 @@ third_party_libraries:
     version: "5.5.0"
   google_fonts:
     url:
-      fonts: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700&family=Geist+Mono:wght@400;500&family=Material+Icons&display=swap"
+      fonts: "https://fonts.googleapis.com/css2?family=Material+Icons&display=swap"
   highlightjs:
     integrity:
       css:
