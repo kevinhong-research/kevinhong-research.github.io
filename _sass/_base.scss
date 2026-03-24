@@ -587,7 +587,12 @@ footer.sticky-bottom {
 }
 
 .post-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: normal;
   font-weight: 400;
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -0.8px;
 
   mjx-container[jax="CHTML"][display="true"] {
     display: unset;
