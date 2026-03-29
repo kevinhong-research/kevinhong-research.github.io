@@ -93,11 +93,15 @@ jobs:
           valueFile: "_config.yml"
           propertyPath: "giscus.repo"
           value: ${{ github.repository }}
-      - name: Install ImageMagick      # ← add this
-        run: sudo apt-get install -y imagemagick
-      - name: Install and Build 🔧
+      - name: Cache ImageMagick apt packages 📦
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: imagemagick
+          version: 1.0
+      - name: Install Python dependencies 🐍
+        run: pip3 install -r requirements.txt
+      - name: Build site 🔧
         run: |
-          pip3 install --upgrade nbconvert
           export JEKYLL_ENV=production
           bundle exec jekyll build
       - name: Purge unused CSS 🧹
