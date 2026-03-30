@@ -22,6 +22,17 @@
   lat: 28.058
   lng: -82.413
 
+- institution: "JUSWIS ’26"
+  logo: "/assets/img/talk-logos/non-fbs-library/Hong_Kong_Polytechnic_University.png"
+  venue: "PolyU-CUHK-HKU"
+  date: "7/2026"
+  year: 2026
+  month: 7
+  sort_key: 202607
+  upcoming: true
+  lat: 22.08
+  lng: 113.49
+
 - institution: "Tulane University"
   football_name: "Tulane Green Wave"
   logo: "/assets/img/talk-logos/fbs-library/Tulane_Green_Wave_logo-300x300.png"
