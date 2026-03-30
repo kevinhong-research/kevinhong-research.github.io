@@ -599,14 +599,15 @@
 .view-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.38rem;
+  justify-content: center;
+  gap: 0.25rem;
   margin-left: auto;
   flex-shrink: 0;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.4rem 0.9rem;
+  padding: 0.3rem 0.55rem;
   border: 1px solid var(--line);
   color: var(--text-lo);
   background: transparent;
@@ -622,8 +623,8 @@
   background: rgba(0, 160, 96, 0.06);
 }
 .view-toggle-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 11px;
+  height: 11px;
   flex-shrink: 0;
 }
 /* When timeline is active, button label reads "List" — tint green
