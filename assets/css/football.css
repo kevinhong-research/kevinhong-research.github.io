@@ -3,15 +3,15 @@
    ============================================================ */
 
 .fb-page {
-  --fb-line: rgba(255, 255, 255, 0.06);
-  --fb-panel: rgba(10, 14, 24, 0.96);
-  --fb-panel-soft: rgba(255, 255, 255, 0.025);
-  --fb-text-hi: #e8e8e8;
-  --fb-text-mid: #7d7d7d;
-  --fb-text-lo: #4a4a4a;
+  --fb-line: #3A3A36;
+  --fb-panel: #2F2F2D;
+  --fb-panel-soft: rgba(58, 58, 54, 0.3);
+  --fb-text-hi: #C2C0B6;
+  --fb-text-mid: #8A8A7A;
+  --fb-text-lo: #3A3A36;
   --fb-green: #00a060;
   --fb-blue: #4db8ff;
-  --fb-orange: #f47321;
+  --fb-orange: #D97757;
 }
 
 .fb-intro {
@@ -72,7 +72,7 @@
   align-items: baseline;
   gap: 0.32rem;
   padding: 0.25rem 0.85rem 0.25rem 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(58, 58, 54, 0.5);
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   transition: border-color 0.2s ease, background 0.2s ease;
   line-height: 1;
@@ -81,14 +81,14 @@
 
 .fb-pills:hover .fb-pill,
 .fb-pills--open .fb-pill {
-  background: rgba(244, 115, 33, 0.04);
-  border-color: rgba(244, 115, 33, 0.18);
+  background: rgba(217, 119, 87, 0.04);
+  border-color: rgba(217, 119, 87, 0.18);
 }
 
 .fb-pill-n {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #383838;
+  color: #3A3A36;
   line-height: 1;
 }
 
@@ -97,12 +97,12 @@
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #2d2d2d;
+  color: #3A3A36;
 }
 
 .fb-pill--green .fb-pill-l,
 .fb-pill--orange .fb-pill-l {
-  color: #8b8b8b;
+  color: #8A8A7A;
 }
 
 .fb-pill--green .fb-pill-n { color: var(--fb-green); }
@@ -112,7 +112,7 @@
 .fb-pills:hover .fb-pill--green .fb-pill-n,
 .fb-pills--open .fb-pill--green .fb-pill-n { color: #00c070; }
 .fb-pills:hover .fb-pill--orange .fb-pill-n,
-.fb-pills--open .fb-pill--orange .fb-pill-n { color: #ff8a3c; }
+.fb-pills--open .fb-pill--orange .fb-pill-n { color: #c85a42; }
 .fb-pills:hover .fb-pill--geo .fb-pill-l,
 .fb-pills--open .fb-pill--geo .fb-pill-l { color: var(--fb-orange); }
 
@@ -121,7 +121,7 @@
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(58, 58, 54, 0.6);
 }
 
 .fb-body {
@@ -158,9 +158,9 @@
   min-height: 100%;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012)),
-    rgba(10, 14, 24, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+    linear-gradient(180deg, rgba(58, 58, 54, 0.3), rgba(58, 58, 54, 0.12)),
+    #2F2F2D;
+  border: 1px solid rgba(58, 58, 54, 0.6);
   border-radius: 16px;
   box-shadow: 0 22px 44px rgba(0, 0, 0, 0.2);
 }
@@ -170,14 +170,14 @@
   position: absolute;
   inset: 0 0 auto 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(120, 188, 152, 0.28), rgba(255, 255, 255, 0.04));
+  background: linear-gradient(90deg, rgba(58, 58, 54, 0.4), rgba(120, 188, 152, 0.28), rgba(58, 58, 54, 0.4));
 }
 
 .fb-feature-card-media {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0));
+  background: linear-gradient(180deg, rgba(58, 58, 54, 0.18), rgba(255, 255, 255, 0));
 }
 
 .fb-feature-card-media--logo {
@@ -198,7 +198,7 @@
   padding: 1rem 1rem 0;
   align-items: flex-end;
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 62%),
+    radial-gradient(circle at top, rgba(58, 58, 54, 0.5), rgba(255, 255, 255, 0) 62%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.01));
 }
 
@@ -236,7 +236,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-top: 0.48rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(58, 58, 54, 0.5);
   font-size: 0.78rem;
   line-height: 1.45;
 }
@@ -248,7 +248,7 @@
 }
 
 .fb-feature-card-value {
-  color: #c8c8c8;
+  color: #C2C0B6;
   text-align: right;
 }
 
@@ -267,14 +267,14 @@
 }
 
 .fb-state {
-  fill: rgba(14, 24, 20, 0.9);
+  fill: rgba(47, 47, 45, 0.9);
   stroke: rgba(92, 132, 113, 0.38);
   stroke-width: 0.7;
   transition: fill 0.18s;
 }
 
 .fb-state:hover {
-  fill: rgba(20, 34, 28, 0.96);
+  fill: rgba(58, 58, 54, 0.96);
 }
 
 .fb-state-lbl {
@@ -298,14 +298,14 @@
 }
 
 .fb-marker-frame {
-  fill: rgba(255, 255, 255, 0.02);
-  stroke: rgba(255, 255, 255, 0.1);
+  fill: rgba(58, 58, 54, 0.2);
+  stroke: rgba(58, 58, 54, 0.8);
   stroke-width: 1;
 }
 
 .fb-marker:hover .fb-marker-frame,
 .fb-marker.is-active .fb-marker-frame {
-  stroke: rgba(244, 115, 33, 0.5);
+  stroke: rgba(217, 119, 87, 0.5);
 }
 
 .fb-tip {
@@ -313,7 +313,7 @@
   width: 300px;
   pointer-events: auto;
   background: var(--fb-panel);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(58, 58, 54, 0.6);
   border-left: 2px solid rgba(0, 160, 96, 0.72);
   border-radius: 6px;
   overflow: hidden;
@@ -324,7 +324,7 @@
 
 .fb-tip-photo {
   height: 146px;
-  background: linear-gradient(135deg, rgba(244, 115, 33, 0.08), rgba(77, 184, 255, 0.08));
+  background: linear-gradient(135deg, rgba(217, 119, 87, 0.08), rgba(77, 184, 255, 0.08));
   overflow: hidden;
 }
 
@@ -369,7 +369,7 @@
 }
 
 .fb-tip-stadium-link {
-  color: rgba(232, 232, 232, 0.9);
+  color: rgba(194, 192, 182, 0.9);
   text-decoration: none;
   border-bottom: 1px solid rgba(120, 188, 152, 0.28);
   pointer-events: auto;
@@ -404,15 +404,15 @@
 }
 
 .fb-tip-row-value {
-  color: #bcbcbc;
+  color: #C2C0B6;
 }
 
 .fb-tip-note {
   margin-top: 0.65rem;
   padding-top: 0.6rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(58, 58, 54, 0.5);
   font-size: 0.72rem;
-  color: #979797;
+  color: #8A8A7A;
   line-height: 1.6;
 }
 
@@ -427,7 +427,7 @@
 
 .fb-empty code {
   color: var(--fb-text-hi);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(58, 58, 54, 0.4);
   padding: 0.1rem 0.28rem;
   border-radius: 3px;
 }
@@ -439,7 +439,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: rgba(4, 8, 14, 0.88);
+  background: rgba(38, 38, 36, 0.88);
   backdrop-filter: blur(4px);
   z-index: 1200;
   cursor: zoom-out;
@@ -463,9 +463,9 @@
   position: absolute;
   top: 1.2rem;
   right: 1.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(8, 12, 18, 0.72);
-  color: rgba(232, 232, 232, 0.92);
+  border: 1px solid rgba(58, 58, 54, 0.8);
+  background: rgba(47, 47, 45, 0.72);
+  color: rgba(194, 192, 182, 0.92);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;

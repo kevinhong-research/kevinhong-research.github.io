@@ -7,7 +7,7 @@
 /*#nhCursor {
   position: fixed; pointer-events: none; z-index: 9999;
   width: 8px; height: 8px;
-  background: #F47321;
+  background: #D97757;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.15s, height 0.15s;
@@ -15,7 +15,7 @@
 #nhCursorRing {
   position: fixed; pointer-events: none; z-index: 9998;
   width: 32px; height: 32px;
-  border: 1px solid rgba(244, 115, 33, 0.4);
+  border: 1px solid rgba(217, 119, 87, 0.4);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.25s, height 0.25s, border-color 0.25s;
@@ -23,15 +23,15 @@
 
 /* ── RESEARCH WRAPPER ── */
 .nh-research {
-  --line:     rgba(255, 255, 255, 0.06);
+  --line:     #3A3A36;
   --line-hi:  rgba(255, 255, 255, 0.12);
-  --text:     #aaaaaa;
-  --text-hi:  #f0f0f0;
+  --text:     #8A8A7A;
+  --text-hi:  #C2C0B6;
   --text-lo:  #3a3a3a;
-  --text-mid: #666;
-  --orange:   #F47321;
+  --text-mid: #8A8A7A;
+  --orange:   #D97757;
   --green-hi: #00a060;
-  --pub-control-text: rgba(222, 240, 232, 0.9);
+  --pub-control-text: rgba(194, 192, 182, 0.85);
   --pub-control-border: rgba(0, 160, 96, 0.26);
   --pub-control-bg: rgba(0, 160, 96, 0.045);
   --pub-control-bg-hover: rgba(0, 160, 96, 0.09);
@@ -83,7 +83,7 @@
   letter-spacing: 0.06em;
   padding: 0.5rem 1.1rem;
   border: 1px solid var(--line);
-  color: #ffffff;
+  color: #C2C0B6;
   background: transparent;
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   transition: all 0.2s ease;
@@ -91,9 +91,9 @@
   user-select: none;
 }
 .area-tag:hover {
-  border-color: #F47321;
-  color: #F47321;
-  background: rgba(244, 115, 33, 0.06);
+  border-color: #D97757;
+  color: #D97757;
+  background: rgba(217, 119, 87, 0.06);
 }
 
 /* ── FILTER BAR ── */
@@ -123,9 +123,9 @@
   color: var(--text);
 }
 .filter-btn.active {
-  border-color: #F47321;
-  color: #F47321;
-  background: rgba(244, 115, 33, 0.08);
+  border-color: #D97757;
+  color: #D97757;
+  background: rgba(217, 119, 87, 0.08);
 }
 .filter-count {
   font-size: 0.8rem;
@@ -164,30 +164,30 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 2px;
-  background: #F47321;
+  background: #D97757;
   transform: scaleY(0);
   transform-origin: center;
   transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.pub-item:hover { background: rgba(244, 115, 33, 0.02); }
+.pub-item:hover { background: rgba(217, 119, 87, 0.02); }
 .pub-item:hover::before { transform: scaleY(1); }
 .pub-item.nh-visible { opacity: 1; transform: translateY(0); }
 .pub-item.hidden { display: none; }
 .pub-item.pub-target-flash {
-  background: linear-gradient(90deg, rgba(244, 115, 33, 0.12), rgba(244, 115, 33, 0.02) 18%, rgba(0, 0, 0, 0) 72%);
+  background: linear-gradient(90deg, rgba(217, 119, 87, 0.12), rgba(217, 119, 87, 0.02) 18%, rgba(0, 0, 0, 0) 72%);
   animation: pubTargetFlash 2.4s ease;
 }
 .pub-item.pub-target-flash::before { transform: scaleY(1); }
 
 @keyframes pubTargetFlash {
   0% {
-    box-shadow: 0 0 0 1px rgba(244, 115, 33, 0.22), 0 0 0 0 rgba(244, 115, 33, 0.24);
+    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.22), 0 0 0 0 rgba(217, 119, 87, 0.24);
   }
   30% {
-    box-shadow: 0 0 0 1px rgba(244, 115, 33, 0.4), 0 0 0 10px rgba(244, 115, 33, 0.08);
+    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.4), 0 0 0 10px rgba(217, 119, 87, 0.08);
   }
   100% {
-    box-shadow: 0 0 0 1px rgba(244, 115, 33, 0.05), 0 0 0 0 rgba(244, 115, 33, 0);
+    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.05), 0 0 0 0 rgba(217, 119, 87, 0);
   }
 }
 
@@ -199,7 +199,7 @@
   padding-top: 4px;
   transition: color 0.2s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.pub-item:hover .pub-num { color: #F47321; }
+.pub-item:hover .pub-num { color: #D97757; }
 
 .pub-body {
   display: flex;
@@ -260,7 +260,7 @@
   align-items: center;
   font-size: 0.8rem;
   font-weight: 300;
-  color: var(--text-lo);
+  color: var(--text-mid);
   letter-spacing: 0.05em;
   height: var(--pub-meta-control-height);
   line-height: 1;
@@ -271,7 +271,7 @@
   justify-content: center;
   font-size: 0.64rem;
   line-height: 1;
-  color: rgba(226, 232, 240, 0.72);
+  color: rgba(138, 138, 122, 0.7);
   letter-spacing: 0;
   margin-inline: -0.42rem;
   transform: translateY(-0.02rem);
@@ -337,9 +337,9 @@
 }
 .pub-abstract-btn:hover,
 .pub-abstract-btn--open {
-  color: #ffffff;
-  border-color: rgba(244, 115, 33, 0.42);
-  background: rgba(244, 115, 33, 0.08);
+  color: #C2C0B6;
+  border-color: rgba(217, 119, 87, 0.42);
+  background: rgba(217, 119, 87, 0.08);
 }
 
 /* Chevron SVG — rotates 180° when open */
@@ -425,9 +425,9 @@
 }
 .pub-citation-btn:hover,
 .pub-citation-btn--open {
-  color: #ffffff;
-  border-color: rgba(244, 115, 33, 0.42);
-  background: rgba(244, 115, 33, 0.08);
+  color: #C2C0B6;
+  border-color: rgba(217, 119, 87, 0.42);
+  background: rgba(217, 119, 87, 0.08);
 }
 
 .pub-citation-body {
@@ -451,8 +451,8 @@
 }
 
 .pub-citation-body.pub-citation-open .pub-citation-inner {
-  border-left: 2px solid rgba(244, 115, 33, 0.24);
-  background: rgba(244, 115, 33, 0.03);
+  border-left: 2px solid rgba(217, 119, 87, 0.24);
+  background: rgba(217, 119, 87, 0.03);
   padding: 0.8rem 1.1rem;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
 }
@@ -497,10 +497,10 @@
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
 }
 .pub-cite:hover {
-  color: #ffffff;
+  color: #C2C0B6;
   text-decoration: none;
-  border-color: rgba(244, 115, 33, 0.42);
-  background: rgba(244, 115, 33, 0.08);
+  border-color: rgba(217, 119, 87, 0.42);
+  background: rgba(217, 119, 87, 0.08);
 }
 
 .pub-cite-label {
@@ -691,7 +691,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--bg, #111);
+  background: var(--bg, #262624);
   border: 1.5px solid #00a060;
   display: flex;
   align-items: center;
@@ -729,8 +729,8 @@
 
 .tl-paper {
   padding: 0.95rem 0 0.95rem 1.1rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-left: 1px solid rgba(58, 58, 54, 0.5);
+  border-bottom: 1px solid rgba(58, 58, 54, 0.5);
   position: relative;
   transition: padding-left 0.2s ease, border-left-color 0.2s ease;
 }
@@ -810,11 +810,11 @@
 .tl-volume {
   font-size: 0.78rem;
   font-weight: 300;
-  color: var(--text-lo);
+  color: var(--text-mid);
 }
 .tl-meta-sep {
   font-size: 0.65rem;
-  color: rgba(226, 232, 240, 0.72);
+  color: rgba(138, 138, 122, 0.7);
   opacity: 1;
   margin-inline: -0.18rem;
 }

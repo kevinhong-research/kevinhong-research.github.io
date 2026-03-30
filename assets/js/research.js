@@ -646,12 +646,12 @@
       el.addEventListener('mouseenter', () => {
         dot.style.width = dot.style.height = '14px';
         ring.style.width = ring.style.height = '44px';
-        ring.style.borderColor = 'rgba(244,115,33,0.7)';
+        ring.style.borderColor = 'rgba(217,119,87,0.7)';
       });
       el.addEventListener('mouseleave', () => {
         dot.style.width = dot.style.height = '8px';
         ring.style.width = ring.style.height = '32px';
-        ring.style.borderColor = 'rgba(244,115,33,0.4)';
+        ring.style.borderColor = 'rgba(217,119,87,0.4)';
       });
     });
   }
