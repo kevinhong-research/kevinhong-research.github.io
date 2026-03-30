@@ -354,6 +354,31 @@ ul.task-list input[type="checkbox"] {
     border-bottom-color: rgba(0, 0, 0, 0.06);
   }
 
+  html[data-theme="light"] & .dropdown-menu {
+    background-color: #f5f4ef;
+    border-color: #dad9d4;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+    a:not(.active) {
+      color: #3d3929;
+    }
+
+    a:hover {
+      color: #CC785C;
+      background-color: #ede9de;
+    }
+
+    .dropdown-divider {
+      border-top-color: #dad9d4 !important;
+    }
+  }
+
+  html[data-theme="light"] & .dropdown-item.active,
+  html[data-theme="light"] & .dropdown-item:active {
+    background-color: #CC785C;
+    color: #ffffff !important;
+  }
+
   .navbar-brand.social {
     padding-bottom: 0;
     padding-top: 0;
