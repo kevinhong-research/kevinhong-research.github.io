@@ -340,6 +340,20 @@ ul.task-list input[type="checkbox"] {
     }
   }
 
+  // Light mode navbar overrides
+  html[data-theme="light"] & .nav-item.active > .nav-link {
+    background-image: linear-gradient(
+      90deg,
+      rgba(204, 120, 92, 0),
+      rgba(204, 120, 92, 0.54),
+      rgba(204, 120, 92, 0)
+    );
+  }
+
+  html[data-theme="light"] & .container {
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+  }
+
   .navbar-brand.social {
     padding-bottom: 0;
     padding-top: 0;
@@ -423,7 +437,8 @@ ul.task-list input[type="checkbox"] {
 }
 
 #light-toggle {
-  display: none;
+  display: inline-flex;
+  cursor: pointer;
 }
 
 // Social (bottom)

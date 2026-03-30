@@ -141,3 +141,43 @@
   .tm-pill-n { font-size: 0.85rem; }
   .tm-pill-hint { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE — Claude Light Parchment
+══════════════════════════════════════════════════════════════ */
+html[data-theme="light"] .tm-pill--geo .tm-pill-l {
+  color: #CC785C;
+}
+html[data-theme="light"] .tm-pills:hover .tm-pill--geo .tm-pill-l,
+html[data-theme="light"] .tm-pills--open .tm-pill--geo .tm-pill-l {
+  color: #B26842;
+}
+html[data-theme="light"] .tm-state {
+  fill: #ede9de;
+  stroke: #dad9d4;
+}
+html[data-theme="light"] .tm-state:hover {
+  fill: #e9e6dc;
+}
+html[data-theme="light"] .tm-state-lbl {
+  fill: #b4b2a7;
+}
+html[data-theme="light"] .tm-tip {
+  background: #f5f4ef;
+  border-color: #dad9d4;
+  border-left-color: #CC785C;
+  color: #6e6d68;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .tm-tip.upcoming {
+  border-left-color: #61AAF2;
+}
+html[data-theme="light"] .tm-tip-entry strong {
+  color: #3d3929;
+}
+html[data-theme="light"] .tm-tip-meta {
+  color: #b4b2a7;
+}
+html[data-theme="light"] .tm-tip-divider {
+  background: rgba(0, 0, 0, 0.06);
+}

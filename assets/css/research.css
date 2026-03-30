@@ -848,3 +848,161 @@
   .tl-year-group::before { left: 15px; }
   .view-toggle-btn { padding: 0.4rem 0.6rem; font-size: 0.7rem; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE — Claude Light Parchment palette
+   All rules scoped to html[data-theme="light"].
+   Dark mode is NOT modified.
+══════════════════════════════════════════════════════════════ */
+html[data-theme="light"] .nh-research {
+  --line:     rgba(0, 0, 0, 0.07);
+  --line-hi:  rgba(0, 0, 0, 0.12);
+  --text:     #535146;
+  --text-hi:  #3d3929;
+  --text-lo:  #b4b2a7;
+  --text-mid: #6e6d68;
+  --orange:   #B26842;
+  --green-hi: #CC785C;
+  --pub-control-text: #535146;
+  --pub-control-border: rgba(204, 120, 92, 0.3);
+  --pub-control-bg: rgba(204, 120, 92, 0.05);
+  --pub-control-bg-hover: rgba(204, 120, 92, 0.1);
+}
+
+html[data-theme="light"] .header-link {
+  color: #CC785C;
+}
+
+html[data-theme="light"] .nav-item.active > .nav-link {
+  color: #CC785C !important;
+}
+
+html[data-theme="light"] .area-tag {
+  color: #3d3929;
+}
+html[data-theme="light"] .area-tag:hover {
+  border-color: #B26842;
+  color: #B26842;
+  background: rgba(178, 104, 66, 0.06);
+}
+
+html[data-theme="light"] .filter-btn.active {
+  border-color: #B26842;
+  color: #B26842;
+  background: rgba(178, 104, 66, 0.08);
+}
+
+html[data-theme="light"] .pub-item::before {
+  background: #B26842;
+}
+html[data-theme="light"] .pub-item:hover {
+  background: rgba(178, 104, 66, 0.03);
+}
+html[data-theme="light"] .pub-item.pub-target-flash {
+  background: linear-gradient(90deg, rgba(178, 104, 66, 0.12), rgba(178, 104, 66, 0.02) 18%, rgba(0, 0, 0, 0) 72%);
+}
+html[data-theme="light"] .pub-item:hover .pub-num {
+  color: #B26842;
+}
+
+html[data-theme="light"] .pub-title:hover {
+  color: #CC785C;
+}
+
+html[data-theme="light"] .pub-meta-sep {
+  color: rgba(61, 57, 41, 0.3);
+}
+
+html[data-theme="light"] .pub-abstract-btn:hover,
+html[data-theme="light"] .pub-abstract-btn--open {
+  color: #3d3929;
+  border-color: rgba(178, 104, 66, 0.42);
+  background: rgba(178, 104, 66, 0.08);
+}
+
+html[data-theme="light"] .pub-abstract-body.pub-abstract-open .pub-abstract-inner {
+  border-left-color: rgba(204, 120, 92, 0.3);
+  background: rgba(204, 120, 92, 0.04);
+}
+
+html[data-theme="light"] .pub-citation-btn:hover,
+html[data-theme="light"] .pub-citation-btn--open {
+  color: #3d3929;
+  border-color: rgba(178, 104, 66, 0.42);
+  background: rgba(178, 104, 66, 0.08);
+}
+
+html[data-theme="light"] .pub-citation-body.pub-citation-open .pub-citation-inner {
+  border-left-color: rgba(178, 104, 66, 0.3);
+  background: rgba(178, 104, 66, 0.04);
+}
+
+html[data-theme="light"] .pub-cite:hover {
+  color: #3d3929;
+  border-color: rgba(178, 104, 66, 0.42);
+  background: rgba(178, 104, 66, 0.08);
+}
+
+html[data-theme="light"] .pub-cite-sep {
+  color: #CC785C;
+}
+
+html[data-theme="light"] .scholar-btn {
+  border-color: rgba(204, 120, 92, 0.4);
+  color: #CC785C;
+}
+html[data-theme="light"] .scholar-btn:hover {
+  border-color: #CC785C;
+  background: rgba(204, 120, 92, 0.08);
+  color: #CC785C;
+}
+
+html[data-theme="light"] .view-toggle-btn:hover {
+  color: #CC785C;
+  border-color: rgba(204, 120, 92, 0.35);
+  background: rgba(204, 120, 92, 0.06);
+}
+html[data-theme="light"] .view-toggle-btn[data-current="timeline"] {
+  color: #CC785C;
+  border-color: rgba(204, 120, 92, 0.35);
+  background: rgba(204, 120, 92, 0.06);
+}
+html[data-theme="light"] .view-toggle-btn[data-current="timeline"]:hover {
+  color: #B26842;
+  border-color: rgba(204, 120, 92, 0.55);
+  background: rgba(204, 120, 92, 0.1);
+}
+
+/* Timeline light mode */
+html[data-theme="light"] .tl-year-group::before {
+  background: rgba(204, 120, 92, 0.2);
+}
+html[data-theme="light"] .tl-year-node {
+  background: #faf9f5;
+  border-color: #CC785C;
+}
+html[data-theme="light"] .tl-year-dot {
+  background: #CC785C;
+}
+html[data-theme="light"] .tl-year-label {
+  color: #CC785C;
+}
+html[data-theme="light"] .tl-paper {
+  border-left-color: rgba(0, 0, 0, 0.04);
+  border-bottom-color: rgba(0, 0, 0, 0.04);
+}
+html[data-theme="light"] .tl-paper::before {
+  background: #CC785C;
+}
+html[data-theme="light"] .tl-paper:hover {
+  border-left-color: rgba(204, 120, 92, 0.12);
+}
+html[data-theme="light"] .tl-paper::after {
+  background: rgba(204, 120, 92, 0.12);
+}
+html[data-theme="light"] .tl-title:hover {
+  color: #CC785C;
+}
+html[data-theme="light"] .tl-meta-sep {
+  color: rgba(61, 57, 41, 0.3);
+}
