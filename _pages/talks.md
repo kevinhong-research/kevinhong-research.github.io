@@ -32,7 +32,7 @@ nav_order: 2
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0; width: 2px;
-  background: #F47321;
+  background: #D97757;
   transform: scaleY(0); transform-origin: top;
   transition: transform 0.25s ease;
 }
@@ -46,7 +46,7 @@ nav_order: 2
   align-items: baseline;
   gap: 0.32rem;
   padding: 0.25rem 0.85rem 0.25rem 0.75rem;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid #3A3A36;
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   transition: border-color 0.2s ease, background 0.2s ease;
   flex-shrink: 0;
@@ -57,13 +57,13 @@ nav_order: 2
 }
 .tm-pills:hover .tm-pill,
 .tm-pills--open .tm-pill {
-  border-color: rgba(244,115,33,0.18);
-  background: rgba(244,115,33,0.04);
+  border-color: rgba(217,119,87,0.18);
+  background: rgba(217,119,87,0.04);
 }
 .tm-pill-n {
   font-size: 0.95rem !important;
   font-weight: 500 !important;
-  color: #3a3a3a;
+  color: #3A3A36;
   letter-spacing: 0;
   line-height: 1;
   transition: color 0.2s;
@@ -74,28 +74,28 @@ nav_order: 2
   font-weight: 400 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #2e2e2e;
+  color: #3A3A36;
   transition: color 0.2s;
   font-style: normal;
 }
 .tm-pill--green .tm-pill-l,
 .tm-pill--orange .tm-pill-l {
-  color: #8b8b8b;
+  color: #8A8A7A;
 }
 .tm-pill--green .tm-pill-n { color: #00a060; }
-.tm-pill--orange .tm-pill-n { color: #F47321; }
+.tm-pill--orange .tm-pill-n { color: #D97757; }
 .tm-pill--geo .tm-pill-l { color: #00a060; letter-spacing: 0.08em; }
 .tm-pills:hover .tm-pill--green .tm-pill-n,
 .tm-pills--open .tm-pill--green .tm-pill-n { color: #00c070; }
 .tm-pills:hover .tm-pill--orange .tm-pill-n,
-.tm-pills--open .tm-pill--orange .tm-pill-n  { color: #ff8a3c; }
+.tm-pills--open .tm-pill--orange .tm-pill-n  { color: #c85a42; }
 .tm-pills:hover .tm-pill--geo .tm-pill-l,
-.tm-pills--open .tm-pill--geo .tm-pill-l { color: #F47321; }
+.tm-pills--open .tm-pill--geo .tm-pill-l { color: #D97757; }
 
 .tm-pill-sep {
   display: inline-block !important;
   width: 3px; height: 3px; border-radius: 50%;
-  background: rgba(255,255,255,0.07);
+  background: rgba(58,58,54,0.6);
   flex-shrink: 0;
   transition: background 0.2s;
   align-self: center;
