@@ -513,3 +513,135 @@
     max-height: calc(100vh - 4rem);
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE — Claude Light Parchment
+══════════════════════════════════════════════════════════════ */
+html[data-theme="light"] .fb-page {
+  --fb-line: rgba(0, 0, 0, 0.07);
+  --fb-panel: #f5f4ef;
+  --fb-panel-soft: rgba(0, 0, 0, 0.02);
+  --fb-text-hi: #3d3929;
+  --fb-text-mid: #6e6d68;
+  --fb-text-lo: #b4b2a7;
+  --fb-green: #CC785C;
+  --fb-blue: #61AAF2;
+  --fb-orange: #B26842;
+}
+
+html[data-theme="light"] .fb-pill {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .fb-pills:hover .fb-pill,
+html[data-theme="light"] .fb-pills--open .fb-pill {
+  background: rgba(178, 104, 66, 0.04);
+  border-color: rgba(178, 104, 66, 0.18);
+}
+html[data-theme="light"] .fb-pill-n {
+  color: #6e6d68;
+}
+html[data-theme="light"] .fb-pill-l {
+  color: #b4b2a7;
+}
+html[data-theme="light"] .fb-pill--green .fb-pill-l,
+html[data-theme="light"] .fb-pill--orange .fb-pill-l {
+  color: #6e6d68;
+}
+html[data-theme="light"] .fb-pills:hover .fb-pill--green .fb-pill-n,
+html[data-theme="light"] .fb-pills--open .fb-pill--green .fb-pill-n {
+  color: #B26842;
+}
+html[data-theme="light"] .fb-pills:hover .fb-pill--orange .fb-pill-n,
+html[data-theme="light"] .fb-pills--open .fb-pill--orange .fb-pill-n {
+  color: #CC785C;
+}
+html[data-theme="light"] .fb-pill-sep {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .fb-feature-card {
+  background: #f5f4ef;
+  border-color: #dad9d4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+html[data-theme="light"] .fb-feature-card::before {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.02), rgba(204, 120, 92, 0.28), rgba(0, 0, 0, 0.02));
+}
+html[data-theme="light"] .fb-feature-card-media {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.015), rgba(0, 0, 0, 0));
+}
+html[data-theme="light"] .fb-feature-card-media--headshot {
+  background:
+    radial-gradient(circle at top, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0) 62%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.005));
+}
+html[data-theme="light"] .fb-feature-card-row {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+html[data-theme="light"] .fb-feature-card-value {
+  color: #535146;
+}
+
+html[data-theme="light"] .fb-state {
+  fill: #ede9de;
+  stroke: #dad9d4;
+}
+html[data-theme="light"] .fb-state:hover {
+  fill: #e9e6dc;
+}
+html[data-theme="light"] .fb-state-lbl {
+  fill: #b4b2a7;
+}
+
+html[data-theme="light"] .fb-marker-frame {
+  fill: rgba(255, 255, 255, 0.7);
+  stroke: rgba(0, 0, 0, 0.12);
+}
+html[data-theme="light"] .fb-marker:hover .fb-marker-frame,
+html[data-theme="light"] .fb-marker.is-active .fb-marker-frame {
+  stroke: rgba(178, 104, 66, 0.5);
+}
+
+html[data-theme="light"] .fb-tip {
+  border-color: #dad9d4;
+  border-left-color: rgba(204, 120, 92, 0.72);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .fb-tip-photo {
+  background: linear-gradient(135deg, rgba(178, 104, 66, 0.06), rgba(97, 170, 242, 0.06));
+}
+html[data-theme="light"] .fb-tip-kicker {
+  color: #CC785C;
+}
+html[data-theme="light"] .fb-tip-stadium-link {
+  color: #3d3929;
+  border-bottom-color: rgba(204, 120, 92, 0.3);
+}
+html[data-theme="light"] .fb-tip-stadium-link:hover {
+  color: #CC785C;
+  border-bottom-color: rgba(204, 120, 92, 0.72);
+}
+html[data-theme="light"] .fb-tip-row-value {
+  color: #535146;
+}
+html[data-theme="light"] .fb-tip-note {
+  border-top-color: rgba(0, 0, 0, 0.06);
+  color: #6e6d68;
+}
+
+html[data-theme="light"] .fb-empty code {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+html[data-theme="light"] .fb-lightbox {
+  background: rgba(250, 249, 245, 0.88);
+}
+html[data-theme="light"] .fb-lightbox-close {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(245, 244, 239, 0.9);
+  color: #3d3929;
+}
+html[data-theme="light"] .fb-lightbox-close:hover {
+  border-color: rgba(204, 120, 92, 0.48);
+  color: #CC785C;
+}

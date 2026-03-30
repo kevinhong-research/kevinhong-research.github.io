@@ -245,3 +245,44 @@
     justify-content: flex-start;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE — Claude Light Parchment
+══════════════════════════════════════════════════════════════ */
+html[data-theme="light"] .talk-year-group::before {
+  background: rgba(204, 120, 92, 0.2);
+}
+html[data-theme="light"] .talk-year-node {
+  border-color: #CC785C;
+  background: #faf9f5;
+}
+html[data-theme="light"] .talk-year-dot {
+  background: #CC785C;
+}
+html[data-theme="light"] .talk-year-label {
+  color: #CC785C;
+}
+html[data-theme="light"] .talk-item::before {
+  background: #B26842;
+}
+html[data-theme="light"] .talk-item:hover {
+  background: rgba(178, 104, 66, 0.03);
+}
+html[data-theme="light"] .talk-logo {
+  border-color: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.02);
+}
+html[data-theme="light"] .talk-logo--fallback {
+  color: #6e6d68;
+}
+html[data-theme="light"] .talk-date {
+  color: #6e6d68;
+}
+html[data-theme="light"] .talk-badge--upcoming {
+  color: #CC785C;
+  border-color: rgba(204, 120, 92, 0.35);
+}
+html[data-theme="light"] .talk-badge--keynote {
+  color: #B26842;
+  border-color: rgba(178, 104, 66, 0.35);
+}

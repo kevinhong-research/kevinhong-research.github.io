@@ -119,6 +119,47 @@ html[data-theme="dark"] {
   }
 }
 
+html[data-theme="light"] {
+  --global-bg-color: #faf9f5;
+  --global-code-bg-color: #ede9de;
+  --global-text-color: #3d3929;
+  --global-text-color-light: #6e6d68;
+  --global-theme-color: #CC785C;
+  --global-hover-color: #B26842;
+  --global-hover-text-color: #{$white-color};
+  --global-footer-bg-color: #3d3929;
+  --global-footer-text-color: #b4b2a7;
+  --global-footer-link-color: #faf9f5;
+  --global-distill-app-color: #6e6d68;
+  --global-divider-color: #dad9d4;
+  --global-card-bg-color: #f5f4ef;
+  --global-highlight-color: #B26842;
+  --global-back-to-top-bg-color: rgba(61, 57, 41, 0.4);
+  --global-back-to-top-text-color: #faf9f5;
+  --global-newsletter-bg-color: #faf9f5;
+  --global-newsletter-text-color: #3d3929;
+
+  --global-tip-block: #42b983;
+  --global-tip-block-bg: #e2f5ec;
+  --global-tip-block-text: #215d42;
+  --global-tip-block-title: #359469;
+  --global-warning-block: #c9a000;
+  --global-warning-block-bg: #fff8d8;
+  --global-warning-block-text: #6b5900;
+  --global-warning-block-title: #b29400;
+  --global-danger-block: #c00;
+  --global-danger-block-bg: #ffe0e0;
+  --global-danger-block-text: #600;
+  --global-danger-block-title: #c00;
+
+  .repo-img-light {
+    display: block;
+  }
+  .repo-img-dark {
+    display: none;
+  }
+}
+
 html[data-theme-setting="dark"] {
   #light-toggle-system {
     display: none;
