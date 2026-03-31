@@ -270,8 +270,9 @@ ul.task-list input[type="checkbox"] {
 }
 
 .navbar .dropdown-menu {
-  background-color: var(--global-bg-color);
-  border: 1px solid var(--global-divider-color);
+  background-color: var(--global-card-bg-color) !important;
+  border: 1px solid var(--global-divider-color) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
 
   a:not(.active) {
     color: var(--global-text-color);
@@ -279,6 +280,7 @@ ul.task-list input[type="checkbox"] {
 
   a:hover {
     color: var(--global-hover-color);
+    background-color: rgba(255, 255, 255, 0.04);
   }
 
   .dropdown-divider {
@@ -287,11 +289,11 @@ ul.task-list input[type="checkbox"] {
 }
 
 .dropdown-item {
-  color: var(--global-text-color);
+  color: var(--global-text-color) !important;
 
   &:hover {
-    color: var(--global-hover-color);
-    background-color: var(--global-bg-color);
+    color: var(--global-hover-color) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
   }
 }
 
