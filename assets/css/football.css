@@ -645,3 +645,56 @@ html[data-theme="light"] .fb-lightbox-close:hover {
   border-color: rgba(204, 120, 92, 0.48);
   color: #CC785C;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE
+   The base .fb-page vars use a dark palette but --fb-text-lo
+   (#3A3A36) is near-invisible on the dark card (#2F2F2D).
+   Also harden border/separator colors that use rgba(58,58,54,*)
+   which blend into the dark page background (#262624).
+══════════════════════════════════════════════════════════════ */
+html[data-theme="dark"] .fb-page {
+  --fb-text-lo: #6A6A5E;
+  --fb-line:    #4A4A46;
+}
+
+html[data-theme="dark"] .fb-pill {
+  border-color: rgba(194, 192, 182, 0.12);
+}
+
+html[data-theme="dark"] .fb-pills:hover .fb-pill,
+html[data-theme="dark"] .fb-pills--open .fb-pill {
+  border-color: rgba(217, 119, 87, 0.22);
+}
+
+html[data-theme="dark"] .fb-pill-sep {
+  background: rgba(194, 192, 182, 0.2);
+}
+
+html[data-theme="dark"] .fb-feature-card {
+  border-color: rgba(194, 192, 182, 0.1);
+}
+
+html[data-theme="dark"] .fb-feature-card-row {
+  border-top-color: rgba(194, 192, 182, 0.08);
+}
+
+html[data-theme="dark"] .fb-marker-frame {
+  stroke: rgba(194, 192, 182, 0.25);
+}
+
+html[data-theme="dark"] .fb-tip {
+  border-color: rgba(194, 192, 182, 0.12);
+}
+
+html[data-theme="dark"] .fb-tip-note {
+  border-top-color: rgba(194, 192, 182, 0.1);
+}
+
+html[data-theme="dark"] .fb-empty code {
+  background: rgba(194, 192, 182, 0.08);
+}
+
+html[data-theme="dark"] .fb-lightbox-close {
+  border-color: rgba(194, 192, 182, 0.25);
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Auto-fix publication title case before every commit.
+# Activate with: git config core.hooksPath .githooks
+
+ROOT="$(git rev-parse --show-toplevel)"
+PUB_FILE="$ROOT/_data/publications.yml"
+
+# Only run if publications.yml is staged
+if ! git diff --cached --name-only | grep -q "_data/publications.yml"; then
+  exit 0
+fi
+
+echo "→ Checking publication title case…"
+python3 "$ROOT/scripts/fix_pub_titles.py"
+
+# Re-stage the file in case the script made changes
+git add "$PUB_FILE"

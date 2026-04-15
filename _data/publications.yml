@@ -246,7 +246,7 @@
     IS phenomena.
     
 
-- title: "Monitoring and the cold start problem in digital platforms: Theory and evidence from online labor markets"
+- title: "Monitoring and the Cold Start Problem in Digital Platforms: Theory and Evidence from Online Labor Markets"
   url: "https://doi.org/10.1287/isre.2021.0146"
   doi: "10.1287/isre.2021.0146"
   authors:
@@ -286,7 +286,7 @@
     we observe no significant decrease in project completion and review rating. Our results collectively
     suggest that monitoring systems alleviate the cold-start problem in online platforms.
 
-- title: "Enhancing user privacy through ephemeral sharing design: Experimental evidence from online dating"
+- title: "Enhancing User Privacy through Ephemeral Sharing Design: Experimental Evidence from Online Dating"
   url: "https://doi.org/10.1287/isre.2021.0379"
   doi: "10.1287/isre.2021.0379"
   authors:
@@ -322,7 +322,7 @@
     contributes to the literature and practice on privacy-enhancing designs for online matching
     platforms.
 
-- title: "Monitoring and home bias in global hiring: Evidence from an online labor platform"
+- title: "Monitoring and Home Bias in Global Hiring: Evidence from an Online Labor Platform"
   url: "https://doi.org/10.1287/isre.2021.0526"
   doi: "10.1287/isre.2021.0526"
   authors:
@@ -358,7 +358,7 @@
     through enhancing contractual control and coordination. Our findings provide important managerial
     implications for the design of online labor platforms.
 
-- title: "Platform governance with algorithm-based content moderation: An empirical study on Reddit"
+- title: "Platform Governance with Algorithm-Based Content Moderation: An Empirical Study on Reddit"
   url: "https://doi.org/10.1287/isre.2021.0036"
   doi: "10.1287/isre.2021.0036"
   authors:
@@ -391,7 +391,7 @@
     algorithm-based content moderation into platform governance is beneficial for sustaining digital
     communities.
 
-- title: "When the clock strikes: A multimethod investigation of on-the-hour effects in online learning"
+- title: "When the Clock Strikes: A Multimethod Investigation of On-the-Hour Effects in Online Learning"
   url: "https://doi.org/10.1287/isre.2023.1234"
   doi: "10.1287/isre.2023.1234"
   authors:
@@ -420,7 +420,7 @@
     temporal cues in user-system interactions, which provides implications for notification and reminder
     strategies that can be implemented to further enhance the effectiveness of online learning.
 
-- title: "Voice-based AI in call center customer service: A natural field experiment"
+- title: "Voice-Based AI in Call Center Customer Service: A Natural Field Experiment"
   url: "https://doi.org/10.1111/poms.13953"
   doi: "10.1111/poms.13953"
   authors:
@@ -455,7 +455,7 @@
     human service and customer complaints. The results from this study provide implications for the
     implementation of an AI system in call center operations.
 
-- title: "The hidden costs and benefits of monitoring in the gig economy"
+- title: "The Hidden Costs and Benefits of Monitoring in the Gig Economy"
   url: "https://doi.org/10.1287/isre.2022.1130"
   doi: "10.1287/isre.2022.1130"
   authors:
@@ -491,7 +491,7 @@
     for Prolific workers, which translate to roughly 37.5% and 28.6% of their average hourly wages,
     respectively.
 
-- title: "Putting religious bias in context: How offline and online contexts shape religious bias in online prosocial lending"
+- title: "Putting Religious Bias in Context: How Offline and Online Contexts Shape Religious Bias in Online Prosocial Lending"
   url: "https://doi.org/10.25300/MISQ/2022/16959"
   doi: "10.25300/MISQ/2022/16959"
   authors:
@@ -527,7 +527,7 @@
     global philanthropic behavior, and they highlight design implications for online platforms with an
     eye toward managing religious bias.
 
-- title: "Direct and indirect spillovers from content providers’ switching: Evidence from online livestreaming"
+- title: "Direct and Indirect Spillovers from Content Providers’ Switching: Evidence from Online Livestreaming"
   url: "https://doi.org/10.1287/isre.2022.1160"
   doi: "10.1287/isre.2022.1160"
   authors:
@@ -565,7 +565,7 @@
     dynamics of content creation on social media platforms in the emerging context of livestreaming. We
     discuss the managerial implications of this study for streaming strategies and platform management.
 
-- title: "Some thoughts on reviewing for Information Systems Research and other leading information systems journals"
+- title: "Some Thoughts on Reviewing for Information Systems Research and Other Leading Information Systems Journals"
   url: "https://doi.org/10.1287/isre.2023.editorial.v34.n4"
   doi: "10.1287/isre.2023.editorial.v34.n4"
   authors:
@@ -586,7 +586,7 @@
     - "Editorial"
   abstract: ""
 
-- title: "Differential effects of multidimensional review evaluations on product sales for mainstream vs. niche products"
+- title: "Differential Effects of Multidimensional Review Evaluations on Product Sales for Mainstream vs. Niche Products"
   url: "https://doi.org/10.25300/MISQ/2022/15469"
   doi: "10.25300/MISQ/2022/15469"
   authors:
@@ -614,7 +614,7 @@
     niche products than for mainstream products. Our research provides important managerial implications
     for both product providers and review platforms.
 
-- title: "SHEDR: an end-to-end deep neural event detection and recommendation framework for hyperlocal news using social media"
+- title: "SHEDR: An End-to-End Deep Neural Event Detection and Recommendation Framework for Hyperlocal News Using Social Media"
   url: "https://doi.org/10.1287/ijoc.2021.1112"
   doi: "10.1287/ijoc.2021.1112"
   authors:
@@ -649,7 +649,7 @@
     consistently and significantly outperform other approaches in terms of precision, recall, and F-1
     scores.
 
-- title: "How do on-demand ridesharing services affect traffic congestion? The moderating role of urban compactness"
+- title: "How Do On-Demand Ridesharing Services Affect Traffic Congestion? The Moderating Role of Urban Compactness"
   id: "ridesharing-traffic-congestion"
   url: "https://doi.org/10.1111/poms.13530"
   doi: "10.1111/poms.13530"
@@ -684,7 +684,7 @@
     varies according to different levels of urban compactness. We provide circumstantial evidence for
     the underlying mechanisms by analyzing public transit and commuting characteristic data.
 
-- title: "How do peer awards motivate creative content? Experimental evidence from Reddit"
+- title: "How Do Peer Awards Motivate Creative Content? Experimental Evidence from Reddit"
   id: "peer-awards-reddit"
   url: "https://doi.org/10.1287/mnsc.2021.4040"
   doi: "10.1287/mnsc.2021.4040"
@@ -711,7 +711,7 @@
     of established members to begin with, this process yields a desirable outcome: larger volumes of
     generally novel UGC for the community.
 
-- title: "The screening role of design parameters for service procurement auctions in online service outsourcing platforms"
+- title: "The Screening Role of Design Parameters for Service Procurement Auctions in Online Service Outsourcing Platforms"
   url: "https://doi.org/10.1287/isre.2022.1168"
   doi: "10.1287/isre.2022.1168"
   authors:
@@ -744,7 +744,7 @@
     shortening auction durations and item descriptions, buyers can expect higher quality bidders,
     increase contracting probability, and enhance utility.
 
-- title: "Managing congestion in a matching market via demand information disclosure"
+- title: "Managing Congestion in a Matching Market via Demand Information Disclosure"
   url: "https://doi.org/10.1287/isre.2022.1148"
   doi: "10.1287/isre.2022.1148"
   authors:
@@ -779,7 +779,7 @@
     congestion in the form of competition, namely, male users and those who rely more heavily upon
     outbound messages for matches.
 
-- title: "On factors that moderate the effect of buyer-supplier experience on e-procurement platforms"
+- title: "On Factors That Moderate the Effect of Buyer-Supplier Experience on E-Procurement Platforms"
   url: "https://doi.org/10.1111/poms.13291"
   doi: "10.1111/poms.13291"
   authors:
@@ -810,7 +810,7 @@
     contribute to a better understanding of the e‐procurement platform for global outsourcing and
     procurement. Limitations are discussed and topics are identified for future research.
 
-- title: "Measuring product type and purchase uncertainty with online product ratings: A theoretical model and empirical application"
+- title: "Measuring Product Type and Purchase Uncertainty with Online Product Ratings: A Theoretical Model and Empirical Application"
   url: "https://doi.org/10.1287/isre.2021.1041"
   doi: "10.1287/isre.2021.1041"
   authors:
@@ -844,7 +844,7 @@
     positioning to support marketing strategy for retailers and manufacturers, covering an expanded
     group of products.
 
-- title: "When does dispute resolution substitute for a reputation system? Empirical evidence from a service procurement platform"
+- title: "When Does Dispute Resolution Substitute for a Reputation System? Empirical Evidence from a Service Procurement Platform"
   url: "https://doi.org/10.1111/poms.13341"
   doi: "10.1111/poms.13341"
   authors:
@@ -876,7 +876,7 @@
     place of ex‐ante signals of provider quality. However, this is particularly true in settings where
     the output of work contracted can be objectively evaluated by a third party.
 
-- title: "Just DM me (politely): Direct messaging, politeness, and hiring outcomes in online labor markets"
+- title: "Just DM Me (Politely): Direct Messaging, Politeness, and Hiring Outcomes in Online Labor Markets"
   url: "https://doi.org/10.1287/isre.2021.1003"
   doi: "10.1287/isre.2021.1003"
   authors:
@@ -909,7 +909,7 @@
     important insights into when and what to message to achieve favorable hiring outcomes in online
     employment settings.
 
-- title: "Unemployment and worker participation in the gig economy: Evidence from an online labor market"
+- title: "Unemployment and Worker Participation in the Gig Economy: Evidence from an Online Labor Market"
   url: "https://doi.org/10.1287/isre.2019.0896"
   doi: "10.1287/isre.2019.0896"
   authors:
@@ -944,7 +944,7 @@
     and populations whose social ties are dispersed over a wider geographic area. We discuss the
     theoretical and practical implications for workers, online labor markets, and policy makers.
 
-- title: "Motivating user-generated content with performance feedback: Evidence from randomized field experiments"
+- title: "Motivating User-Generated Content with Performance Feedback: Evidence from Randomized Field Experiments"
   url: "https://doi.org/10.1287/mnsc.2017.2944"
   doi: "10.1287/mnsc.2017.2944"
   authors:
@@ -978,7 +978,7 @@
     work also contributes to the message-framing literature in considering competition as a novel
     addition to the altruism–egoism dichotomy oft explored in public good settings.
 
-- title: "Stimulating online reviews by combining financial incentives and social norms"
+- title: "Stimulating Online Reviews by Combining Financial Incentives and Social Norms"
   url: "https://doi.org/10.1287/mnsc.2016.2715"
   doi: "10.1287/mnsc.2016.2715"
   authors:
@@ -1006,7 +1006,7 @@
     further assess treatment-induced self-selection and sentiment bias by triangulating the experimental
     results with findings from an observational study.
 
-- title: "Embeddedness, prosociality, and social influence: Evidence from online crowdfunding"
+- title: "Embeddedness, Prosociality, and Social Influence: Evidence from Online Crowdfunding"
   url: "https://doi.org/10.25300/MISQ/2018/14105"
   doi: "10.25300/MISQ/2018/14105"
   authors:
@@ -1040,7 +1040,7 @@
     and private contributions to public goods. Finally, we highlight the practical implications for
     marketers, campaign organizers, and crowdfunding platform operators.
 
-- title: "The value of multidimensional rating systems: Evidence from a natural experiment and randomized experiments"
+- title: "The Value of Multidimensional Rating Systems: Evidence from a Natural Experiment and Randomized Experiments"
   url: "https://doi.org/10.1287/mnsc.2017.2852"
   doi: "10.1287/mnsc.2017.2852"
   authors:
@@ -1074,7 +1074,7 @@
     and provide implications for designing online rating systems that help consumers match their
     preferences with product attributes.
 
-- title: "Surviving in global online labor markets for IT services: A geo-economic analysis"
+- title: "Surviving in Global Online Labor Markets for IT Services: A Geo-Economic Analysis"
   url: "https://doi.org/10.1287/isre.2017.0751"
   doi: "10.1287/isre.2017.0751"
   authors:
@@ -1103,7 +1103,7 @@
     signal their individual quality through reputation. We explain and discuss the mechanisms underlying
     these effects, and highlight implications for OLMs for IT services.
 
-- title: "On the role of fairness and social distance in designing effective social referral systems"
+- title: "On the Role of Fairness and Social Distance in Designing Effective Social Referral Systems"
   url: "https://doi.org/10.25300/MISQ/2017/41.3.06"
   doi: "10.25300/MISQ/2017/41.3.06"
   authors:
@@ -1137,7 +1137,7 @@
     effectiveness of fairness on the success of online social referrals largely depends on social
     distance.
 
-- title: "On buyer selection of service providers in online outsourcing platforms for IT services"
+- title: "On Buyer Selection of Service Providers in Online Outsourcing Platforms for IT Services"
   url: "https://doi.org/10.1287/isre.2017.0709"
   doi: "10.1287/isre.2017.0709"
   authors:
@@ -1168,7 +1168,7 @@
     discuss the study’s theoretical and managerial implications for understanding the global dynamics of
     online outsourcing platforms and better designing these platforms.
 
-- title: "Social network integration and user content generation: Evidence from natural experiments"
+- title: "Social Network Integration and User Content Generation: Evidence from Natural Experiments"
   url: "https://doi.org/10.25300/MISQ/2017/41.4.02"
   doi: "10.25300/MISQ/2017/41.4.02"
   authors:
@@ -1199,7 +1199,7 @@
     to be less helpful. We discuss the implications of these results as they relate to the creation of
     sustainable online social platforms for user content generation.
 
-- title: "Comparing open and sealed bid auctions: Evidence from online labor markets"
+- title: "Comparing Open and Sealed Bid Auctions: Evidence from Online Labor Markets"
   url: "https://doi.org/10.1287/isre.2015.0606"
   doi: "10.1287/isre.2015.0606"
   authors:
@@ -1235,7 +1235,7 @@
     higher competition uncertainty in sealed bid auctions, which renders open bid auctions a superior
     auction design in online labor markets.
 
-- title: "Product fit uncertainty in online markets: Nature, effects, and antecedents"
+- title: "Product Fit Uncertainty in Online Markets: Nature, Effects, and Antecedents"
   url: "https://doi.org/10.1287/isre.2014.0520"
   doi: "10.1287/isre.2014.0520"
   authors:
@@ -1272,7 +1272,7 @@
     prevalent information problem of product fit uncertainty in online markets with the aid of
     Internet-enabled systems.
 
-- title: "On product uncertainty in online markets: Theory and evidence"
+- title: "On Product Uncertainty in Online Markets: Theory and Evidence"
   url: "https://doi.org/10.2307/41703461"
   doi: "10.2307/41703461"
   authors:
