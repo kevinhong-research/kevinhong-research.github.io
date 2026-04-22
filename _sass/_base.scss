@@ -237,6 +237,8 @@ ul.task-list input[type="checkbox"] {
 .post-description {
   margin-bottom: 2rem;
   font-size: 0.875rem;
+  color: var(--global-text-color-light);
+  line-height: 1.6;
 
   a {
     color: inherit;
@@ -327,9 +329,9 @@ ul.task-list input[type="checkbox"] {
     color: var(--global-theme-color);
     background-image: linear-gradient(
       90deg,
-      rgba(0, 160, 96, 0),
-      rgba(0, 160, 96, 0.54),
-      rgba(0, 160, 96, 0)
+      rgba(25, 182, 111, 0),
+      rgba(25, 182, 111, 0.54),
+      rgba(25, 182, 111, 0)
     );
     background-repeat: no-repeat;
     background-position: center calc(100% - 1px);
@@ -344,9 +346,9 @@ ul.task-list input[type="checkbox"] {
   html[data-theme="light"] & .nav-item.active > .nav-link {
     background-image: linear-gradient(
       90deg,
-      rgba(204, 120, 92, 0),
-      rgba(204, 120, 92, 0.54),
-      rgba(204, 120, 92, 0)
+      rgba(143, 85, 56, 0),
+      rgba(143, 85, 56, 0.48),
+      rgba(143, 85, 56, 0)
     );
   }
 
@@ -547,12 +549,26 @@ footer.fixed-bottom {
 
 footer.sticky-bottom {
   border-top: 1px solid var(--global-divider-color);
-  padding-top: 40px;
-  padding-bottom: 40px;
-  font-size: 0.9rem;
+  background-color: var(--global-card-bg-color);
+  color: var(--global-text-color-light);
+  padding-top: 28px;
+  padding-bottom: 28px;
+  font-size: 0.82rem;
 
   .container {
+    color: inherit;
     text-align: center;
+  }
+
+  a {
+    color: var(--global-theme-color);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+    text-decoration-thickness: 1px;
+
+    &:hover {
+      color: var(--global-hover-color);
+    }
   }
 }
 

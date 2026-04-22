@@ -5,27 +5,37 @@
 
 /* ── SUBTITLE LINK ───────────────────────────────────────── */
 .post-description a,
-.post-description a:visited {
-  color: #D97757;
-  text-decoration: none;
-  transition: color 0.2s;
+.post-description a:visited,
+.desc a,
+.desc a:visited {
+  color: var(--global-theme-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
-.post-description a:hover { color: #c85a42; }
+.post-description a:hover,
+.desc a:hover {
+  color: var(--global-hover-color);
+}
 
 /* ── BODY LINKS ──────────────────────────────────────────── */
 .about-content a,
 .about-content a:visited,
 article.post-content a,
-article.post-content a:visited {
-  color: #00a060;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(0, 160, 96, 0.25);
-  transition: border-color 0.2s, color 0.2s;
+article.post-content a:visited,
+.clearfix p a,
+.clearfix p a:visited {
+  color: var(--global-theme-color);
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 0.16em !important;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 .about-content a:hover,
-article.post-content a:hover {
-  color: #00c07a;
-  border-bottom-color: rgba(0, 160, 96, 0.6);
+article.post-content a:hover,
+.clearfix p a:hover {
+  color: var(--global-hover-color);
 }
 
 /* ── INLINE CODE (backtick highlights) ───────────────────── */
@@ -69,7 +79,7 @@ article.post-content p code.language-plaintext.highlighter-rouge,
 article.post-content p {
   margin-bottom: 1.25rem;
   line-height: 1.75;
-  color: #8A8A7A;
+  color: var(--global-text-color-light);
 }
 
 /* ── PROFILE IMAGE ───────────────────────────────────────── */
@@ -99,7 +109,7 @@ article.post-content p {
 }
 
 .nh-terminal-prompt {
-  color: #00a060;
+  color: var(--global-theme-color);
   margin-right: 0.55em;
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -114,14 +124,14 @@ article.post-content p {
 }
 
 .nh-terminal-text {
-  color: #8A8A7A;
+  color: var(--global-text-color-light);
 }
 
 .nh-terminal-cursor {
   display: inline-block;
   width: 0.48em;
   height: 1.05em;
-  background: #00a060;
+  background: var(--global-theme-color);
   margin-left: 2px;
   vertical-align: text-bottom;
   border-radius: 1px;
@@ -152,7 +162,7 @@ article.post-content p {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00a060;
+  background: var(--global-theme-color);
   margin-right: 0.6em;
   flex-shrink: 0;
   animation: nh-pulse 2.2s ease-in-out infinite;
@@ -171,15 +181,28 @@ article.post-content p {
 
 .nh-terminal-inline-link,
 .nh-terminal-inline-link:visited {
-  color: #00a060 !important;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(0, 160, 96, 0.3) !important;
-  transition: border-color 0.2s, color 0.2s;
+  color: var(--global-theme-color) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 0.16em !important;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
 .nh-terminal-inline-link:hover {
-  color: #00c07a !important;
-  border-bottom-color: rgba(0, 160, 96, 0.7) !important;
+  color: var(--global-hover-color) !important;
+}
+
+.nh-paper-link,
+.nh-paper-link:visited {
+  position: relative;
+  color: var(--global-theme-color) !important;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.nh-paper-link:hover {
+  color: var(--global-hover-color) !important;
 }
 
 /* Research topic badges */
@@ -208,11 +231,6 @@ article code.nh-topic-link:hover,
   color: #D97757 !important;
   background: rgba(217, 119, 87, 0.15) !important;
   border-color: rgba(217, 119, 87, 0.6) !important;
-}
-
-.nh-paper-link,
-.nh-paper-link:visited {
-  position: relative;
 }
 
 .nh-paper-preview {
@@ -350,24 +368,27 @@ article code.nh-topic-link:hover,
    LIGHT MODE — Claude Light Parchment
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .post-description a,
-html[data-theme="light"] .post-description a:visited {
-  color: #B26842;
+html[data-theme="light"] .post-description a:visited,
+html[data-theme="light"] .desc a,
+html[data-theme="light"] .desc a:visited {
+  color: var(--global-theme-color);
 }
 html[data-theme="light"] .post-description a:hover {
-  color: #CC785C;
+  color: var(--global-hover-color);
 }
 
 html[data-theme="light"] .about-content a,
 html[data-theme="light"] .about-content a:visited,
 html[data-theme="light"] article.post-content a,
-html[data-theme="light"] article.post-content a:visited {
-  color: #CC785C;
-  border-bottom-color: rgba(204, 120, 92, 0.25);
+html[data-theme="light"] article.post-content a:visited,
+html[data-theme="light"] .clearfix p a,
+html[data-theme="light"] .clearfix p a:visited {
+  color: var(--global-theme-color);
 }
 html[data-theme="light"] .about-content a:hover,
-html[data-theme="light"] article.post-content a:hover {
-  color: #B26842;
-  border-bottom-color: rgba(204, 120, 92, 0.6);
+html[data-theme="light"] article.post-content a:hover,
+html[data-theme="light"] .clearfix p a:hover {
+  color: var(--global-hover-color);
 }
 
 html[data-theme="light"] .about-content code,
@@ -379,7 +400,7 @@ html[data-theme="light"] .profile-wrapper ~ * p code {
 
 html[data-theme="light"] .about-content p,
 html[data-theme="light"] article.post-content p {
-  color: #535146;
+  color: var(--global-text-color-light);
 }
 
 html[data-theme="light"] .profile img {
@@ -387,37 +408,35 @@ html[data-theme="light"] .profile img {
 }
 
 html[data-theme="light"] .nh-terminal-prompt {
-  color: #CC785C;
+  color: var(--global-theme-color);
 }
 html[data-theme="light"] .nh-terminal-text {
-  color: #6e6d68;
+  color: var(--global-text-color-light);
 }
 html[data-theme="light"] .nh-terminal-cursor {
-  background: #CC785C;
+  background: var(--global-theme-color);
 }
 html[data-theme="light"] #nhTerminal2::before {
-  background: #CC785C;
+  background: var(--global-theme-color);
 }
 
 html[data-theme="light"] .nh-terminal-inline-link,
 html[data-theme="light"] .nh-terminal-inline-link:visited {
-  color: #CC785C !important;
-  border-bottom-color: rgba(204, 120, 92, 0.3) !important;
+  color: var(--global-theme-color) !important;
 }
 html[data-theme="light"] .nh-terminal-inline-link:hover {
-  color: #B26842 !important;
-  border-bottom-color: rgba(204, 120, 92, 0.7) !important;
+  color: var(--global-hover-color) !important;
 }
 
 html[data-theme="light"] article code.nh-topic-link,
 html[data-theme="light"] .post-content code.nh-topic-link {
-  color: #B26842 !important;
+  color: #9f5d39 !important;
   background: rgba(178, 104, 66, 0.08) !important;
   border-color: rgba(178, 104, 66, 0.35) !important;
 }
 html[data-theme="light"] article code.nh-topic-link:hover,
 html[data-theme="light"] .post-content code.nh-topic-link:hover {
-  color: #B26842 !important;
+  color: #9f5d39 !important;
   background: rgba(178, 104, 66, 0.15) !important;
   border-color: rgba(178, 104, 66, 0.6) !important;
 }
