@@ -18,7 +18,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #00a060;
+  color: var(--green-hi);
   margin-bottom: 1.75rem;
 }
 
@@ -29,7 +29,7 @@
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #D97757;
+  color: #f1a689;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--line);
@@ -117,7 +117,7 @@
 .svc-role-years {
   font-size: 0.75rem;
   font-weight: 300;
-  color: #8A8A7A;
+  color: var(--text-mid);
   letter-spacing: 0.04em;
   white-space: nowrap;
   padding-top: 2px;
@@ -162,11 +162,11 @@
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.03em;
-  color: #8A8A7A;
+  color: var(--text-mid);
   flex-shrink: 0;
   transition: color 0.2s;
 }
-.svc-student-item:hover .svc-student-year { color: #00a060; }
+.svc-student-item:hover .svc-student-year { color: var(--green-hi); }
 
 .svc-student-body {
   display: contents;
@@ -201,8 +201,8 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #D97757;
-  border: 1px solid rgba(217, 119, 87, 0.35);
+  color: #f1a689;
+  border: 1px solid rgba(241, 166, 137, 0.42);
   padding: 0.1rem 0.45rem;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
   white-space: nowrap;
@@ -218,27 +218,27 @@
    LIGHT MODE — Claude Light Parchment
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .svc-section-header {
-  color: #CC785C;
+  color: #8f5538;
 }
 html[data-theme="light"] .svc-block-label {
-  color: #B26842;
+  color: #734127;
 }
 html[data-theme="light"] .svc-role-item::before {
-  background: #B26842;
+  background: #8f5538;
 }
 html[data-theme="light"] .svc-role-years {
-  color: #6e6d68;
+  color: #595549;
 }
 html[data-theme="light"] .svc-student-item::before {
-  background: #CC785C;
+  background: #8f5538;
 }
 html[data-theme="light"] .svc-student-year {
-  color: #6e6d68;
+  color: #595549;
 }
 html[data-theme="light"] .svc-student-item:hover .svc-student-year {
-  color: #CC785C;
+  color: #8f5538;
 }
 html[data-theme="light"] .svc-award {
-  color: #B26842;
-  border-color: rgba(178, 104, 66, 0.35);
+  color: #8f5538;
+  border-color: rgba(143, 85, 56, 0.38);
 }

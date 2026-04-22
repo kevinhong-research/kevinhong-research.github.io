@@ -9,9 +9,11 @@
   transition: color 0.2s;
 }
 .nav-item.dropdown > .nav-link:hover,
-.nav-item.dropdown > .nav-link:focus,
+.nav-item.dropdown > .nav-link:focus {
+  color: var(--global-hover-color) !important;
+}
 .nav-item.dropdown.show > .nav-link {
-  color: #00a060 !important;
+  color: var(--global-theme-color) !important;
 }
 
 /* Caret — hide the default Bootstrap one, draw a minimal one */
@@ -31,7 +33,7 @@
 }
 .nav-item.dropdown.show > .nav-link::after {
   transform: translateY(2px) rotate(-135deg);
-  border-color: #00a060;
+  border-color: currentColor;
 }
 
 /* ── DROPDOWN MENU PANEL ─────────────────────────────────── */
@@ -78,8 +80,8 @@
 */
 .nav-item.dropdown .dropdown-item:hover,
 .nav-item.dropdown .dropdown-item:focus {
-  color: #C2C0B6;
-  background: rgba(0, 160, 96, 0.08);
+  color: var(--global-text-color);
+  background: rgba(25, 182, 111, 0.08);
   padding-left: 1.1rem;   /* keep same as default so text doesn't shift */
 }
 /*
@@ -92,8 +94,8 @@
 /* Active page highlight */
 .nav-item.dropdown .dropdown-item.active,
 .nav-item.dropdown .dropdown-item:active {
-  color: #00a060;
-  background: transparent;
+  color: var(--global-hover-text-color) !important;
+  background-color: var(--global-hover-color);
 }
 
 /* ── DIVIDER ─────────────────────────────────────────────── */
@@ -106,6 +108,27 @@
 .nav-item.dropdown.show .dropdown-menu {
   border-color: rgba(0, 160, 96, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 160, 96, 0.15);
+}
+
+html[data-theme="light"] .nav-item.dropdown > .nav-link:hover,
+html[data-theme="light"] .nav-item.dropdown > .nav-link:focus {
+  color: var(--global-hover-color) !important;
+}
+
+html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
+  color: var(--global-theme-color) !important;
+}
+
+html[data-theme="light"] .nav-item.dropdown .dropdown-item:hover,
+html[data-theme="light"] .nav-item.dropdown .dropdown-item:focus {
+  color: #CC785C;
+  background: #ede9de;
+}
+
+html[data-theme="light"] .nav-item.dropdown .dropdown-item.active,
+html[data-theme="light"] .nav-item.dropdown .dropdown-item:active {
+  color: #ffffff !important;
+  background-color: #CC785C;
 }
 
 /* ── REMOVE BROWSER'S FOCUS RING ─────────────────────────── */

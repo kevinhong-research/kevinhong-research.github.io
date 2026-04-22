@@ -12,7 +12,9 @@
   let currentView   = 'list';
   let allPubs       = [];   /* full unfiltered set, kept for view switching */
   let currentFilter = 'all';
+  let currentQuery  = '';
   let pendingPaperId = null;
+  let searchDebounceTimer = null;
 
   /* ── JOURNAL METADATA ──────────────────────────────────────*/
   const JOURNAL_META = {
@@ -63,6 +65,30 @@
 
   function cleanAuthor(author) {
     return String(author || '').replace(/\*\*/g, '').trim();
+  }
+
+  function normalizeSearchValue(value) {
+    return String(value || '')
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function getJournalLabel(journal) {
+    return (JOURNAL_META[journal] || { label: journal }).label || '';
+  }
+
+  function buildSearchText(pub) {
+    return normalizeSearchValue([
+      pub.title,
+      ...(pub.authors || []).map(cleanAuthor),
+      getJournalLabel(pub.journal),
+      pub.journal,
+      pub.year,
+      pub.volume,
+    ].filter(Boolean).join(' '));
   }
 
   function formatApaAuthor(author) {
@@ -138,11 +164,14 @@
   /* ── RENDER PUBLICATIONS ───────────────────────────────────*/
   function renderPubs(pubs) {
     allPubs = pubs;   /* cache for view switching */
+    allPubs.forEach(pub => {
+      if (!pub._searchText) pub._searchText = buildSearchText(pub);
+    });
     const list = document.getElementById('pubList');
     if (!list || !pubs || !pubs.length) return;
 
     list.innerHTML = pubs.map((pub, i) => {
-      const j       = JOURNAL_META[pub.journal] || { label: pub.journal };
+      const j       = { label: getJournalLabel(pub.journal) };
       const num     = String(i + 1).padStart(2, '0');
       const authors = (pub.authors || [])
         .map(a => a.startsWith('**') ? `<strong>${a.slice(2, -2)}</strong>` : a)
@@ -185,7 +214,7 @@
         </div>` : '';
 
       return `
-        <div class="pub-item" data-topics="${(pub.topics || []).join('|')}" data-paper-id="${pub.id || ''}">
+        <div class="pub-item" data-pub-index="${i}" data-topics="${(pub.topics || []).join('|')}" data-paper-id="${pub.id || ''}">
           <span class="pub-num">${num}</span>
           <div class="pub-body">
             <a class="pub-title" href="${pub.url || '#'}" target="_blank">${pub.title}</a>
@@ -207,12 +236,14 @@
         </div>`;
     }).join('');
 
-    updateCount();
     initPubAnimations();
     initFilter();
+    initSearch();
     initAbstracts();
     initCitationButtons();
     initViewToggle();
+    initResetControls();
+    applyCurrentState({ animateList: false });
     initPaperTarget();
   }
 
@@ -232,7 +263,18 @@
       return;
     }
 
-    if (currentFilter !== 'all' && target.classList.contains('hidden')) {
+    const targetPub = allPubs.find(pub => pub.id === pendingPaperId);
+    if (!targetPub) {
+      pendingPaperId = null;
+      return;
+    }
+
+    if (currentQuery && !matchesQuery(targetPub)) {
+      clearSearch();
+      return;
+    }
+
+    if (currentFilter !== 'all' && !matchesFilter(targetPub)) {
       const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
       if (allBtn) {
         allBtn.click();
@@ -315,9 +357,96 @@
   }
 
   /* ── FILTER BAR ────────────────────────────────────────────*/
+  function matchesFilter(pub) {
+    return currentFilter === 'all' || (pub.topics || []).includes(currentFilter);
+  }
+
+  function matchesQuery(pub) {
+    if (!currentQuery) return true;
+    if (!pub._searchText) pub._searchText = buildSearchText(pub);
+    return pub._searchText.includes(currentQuery);
+  }
+
   function getFiltered() {
-    if (currentFilter === 'all') return allPubs;
-    return allPubs.filter(p => (p.topics || []).includes(currentFilter));
+    return allPubs.filter(pub => matchesFilter(pub) && matchesQuery(pub));
+  }
+
+  function animateVisibleListItems() {
+    const visible = Array.from(document.querySelectorAll('.pub-item')).filter(item => !item.classList.contains('hidden'));
+    visible.forEach(item => item.classList.remove('nh-visible'));
+    visible.forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 40));
+  }
+
+  function updateSearchControls() {
+    const input = document.getElementById('pubSearchInput');
+    const clearBtn = document.getElementById('pubSearchClear');
+    if (!input || !clearBtn) return;
+    clearBtn.hidden = !input.value.trim();
+  }
+
+  function updateResetControls() {
+    const showReset = Boolean(currentQuery) || currentFilter !== 'all';
+    ['pubResultsReset', 'pubEmptyReset'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.hidden = !showReset;
+    });
+  }
+
+  function updateEmptyState(count) {
+    const empty = document.getElementById('pubEmptyState');
+    if (!empty) return;
+    empty.hidden = count !== 0;
+  }
+
+  function applyCurrentState(options = {}) {
+    const { animateList = true } = options;
+    const visiblePubs = getFiltered();
+    const items = document.querySelectorAll('.pub-item');
+
+    items.forEach(item => {
+      const pubIndex = Number(item.dataset.pubIndex);
+      const pub = allPubs[pubIndex];
+      const show = !!pub && matchesFilter(pub) && matchesQuery(pub);
+      item.classList.toggle('hidden', !show);
+    });
+
+    updateCount(visiblePubs.length);
+    updateSearchControls();
+    updateResetControls();
+    updateEmptyState(visiblePubs.length);
+
+    if (currentView === 'timeline') {
+      renderTimeline(visiblePubs);
+    } else if (animateList) {
+      animateVisibleListItems();
+    }
+
+    initPaperTarget();
+    return visiblePubs;
+  }
+
+  function clearSearch() {
+    const input = document.getElementById('pubSearchInput');
+    currentQuery = '';
+    window.clearTimeout(searchDebounceTimer);
+    if (input) input.value = '';
+    applyCurrentState();
+  }
+
+  function resetSearchAndFilter() {
+    currentFilter = 'all';
+    currentQuery = '';
+    window.clearTimeout(searchDebounceTimer);
+
+    const input = document.getElementById('pubSearchInput');
+    if (input) input.value = '';
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === 'all');
+    });
+
+    history.replaceState(null, '', location.pathname);
+    applyCurrentState();
   }
 
   function initFilter() {
@@ -334,30 +463,46 @@
           : location.pathname + '#' + currentFilter.toLowerCase().replace(/ /g, '-');
         history.replaceState(null, '', slug);
 
-        if (currentView === 'list') {
-          /* Filter list items in-place with animation */
-          const items = document.querySelectorAll('.pub-item');
-          let count = 0;
-          items.forEach(item => {
-            const topics = (item.dataset.topics || '').split('|');
-            const show = currentFilter === 'all' || topics.includes(currentFilter);
-            show ? item.classList.remove('hidden') : item.classList.add('hidden');
-            if (show) count++;
-          });
-          updateCount(count);
-          const visible = Array.from(items).filter(i => !i.classList.contains('hidden'));
-          visible.forEach(item => item.classList.remove('nh-visible'));
-          visible.forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 40));
-        } else {
-          /* Re-render timeline with filtered pubs */
-          renderTimeline(getFiltered());
-        }
+        applyCurrentState();
+      });
+    });
+  }
+
+  function initSearch() {
+    const input = document.getElementById('pubSearchInput');
+    const clearBtn = document.getElementById('pubSearchClear');
+    if (!input || !clearBtn) return;
+
+    input.addEventListener('input', () => {
+      updateSearchControls();
+      window.clearTimeout(searchDebounceTimer);
+      const nextValue = input.value;
+      searchDebounceTimer = window.setTimeout(() => {
+        currentQuery = normalizeSearchValue(nextValue);
+        applyCurrentState();
+      }, 150);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      clearSearch();
+      input.focus();
+    });
+  }
+
+  function initResetControls() {
+    ['pubResultsReset', 'pubEmptyReset'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        resetSearchAndFilter();
       });
     });
   }
 
   function updateCount(n) {
-    /* Count display removed — no filterCount element in the new layout */
+    const countEl = document.getElementById('pubResultsCount');
+    if (!countEl) return;
+    countEl.textContent = `${n} result${n === 1 ? '' : 's'}`;
   }
 
   /* ── SCROLL-REVEAL ─────────────────────────────────────────*/
@@ -385,8 +530,7 @@
     if (!container) return;
 
     if (!pubs || !pubs.length) {
-      container.innerHTML = '<div class="tl-empty">No publications match this filter.</div>';
-      updateCount(0);
+      container.innerHTML = '';
       return;
     }
 
@@ -401,7 +545,7 @@
     container.innerHTML = years.map(yr => {
       const papers = byYear[yr];
       const paperHTML = papers.map(p => {
-        const j       = JOURNAL_META[p.journal] || { label: p.journal };
+        const j       = { label: getJournalLabel(p.journal) };
         const authors = (p.authors || [])
           .map(a => a.startsWith('**') ? `<strong>${a.slice(2, -2)}</strong>` : a)
           .join(', ');
@@ -455,8 +599,6 @@
           <div class="tl-papers">${paperHTML}</div>
         </div>`;
     }).join('');
-
-    updateCount(pubs.length);
 
     /* Wire abstract toggles in timeline */
     container.querySelectorAll('.pub-abstract-btn').forEach(btn => {

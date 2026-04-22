@@ -2,9 +2,15 @@
 layout: page
 permalink: /publications/
 title: publications
-description: Selected publications in <a href='https://jsom.utdallas.edu/the-utd-top-100-business-school-research-rankings/list-of-journals' target='_blank' class='header-link' style='color:#00a060;'>UTD-24 journals</a>, using this <a href='https://nihuang.me/research/' target='_blank' class='header-link' style='color:#00a060;'>template style</a>.
-nav: false
-nav_order: 2
+description: Selected publications in UTD-24 journals and related outlets.
+nav: true
+nav_order: 1
+dropdown: true
+children:
+  - title: publications
+    permalink: /publications/
+  - title: working papers
+    permalink: /working/
 ---
 
 <!-- Cursor elements (referenced by research.js) -->
@@ -23,6 +29,17 @@ nav_order: 2
     </svg>
     Google Scholar
   </a>
+  <div class="pub-search-field">
+    <input
+      class="pub-search-input"
+      id="pubSearchInput"
+      type="search"
+      inputmode="search"
+      placeholder="Search title, author, journal, or year"
+      autocomplete="off"
+      spellcheck="false">
+    <button class="pub-search-clear" id="pubSearchClear" type="button" hidden>Clear</button>
+  </div>
   </div>
 
 <div class="filter-bar">
@@ -54,6 +71,16 @@ nav_order: 2
     <span class="vtb-label" id="viewToggleLabel">Timeline</span>
   </button>
 </div>
+
+  <div class="pub-results-bar">
+    <div class="pub-results-count" id="pubResultsCount" aria-live="polite"></div>
+    <button class="pub-results-reset" id="pubResultsReset" type="button" hidden>Reset</button>
+  </div>
+
+  <div class="pub-empty-state" id="pubEmptyState" hidden>
+    <p class="pub-empty-state__title">No publications match the current search or filter.</p>
+    <button class="pub-empty-state__action" id="pubEmptyReset" type="button">Reset search and filter</button>
+  </div>
 
   <!-- List view — populated by research.js -->
   <div class="pub-list" id="pubList"></div>

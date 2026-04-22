@@ -44,7 +44,7 @@
   width: 1.15rem;
   height: 1.15rem;
   border-radius: 50%;
-  border: 1.5px solid #00a060;
+  border: 1.5px solid var(--green-hi);
   background: #2F2F2D;
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@
   width: 0.42rem;
   height: 0.42rem;
   border-radius: 50%;
-  background: #00a060;
+  background: var(--green-hi);
 }
 
 .talk-year-label {
@@ -64,7 +64,7 @@
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #00a060;
+  color: var(--green-hi);
 }
 
 .talk-list {
@@ -152,7 +152,7 @@
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: #8A8A7A;
+  color: var(--text-mid);
   text-transform: uppercase;
 }
 
@@ -186,7 +186,7 @@
   padding: 0;
   font-size: 0.72rem;
   font-weight: 300;
-  color: #8A8A7A;
+  color: var(--text-mid);
   letter-spacing: 0.03em;
   white-space: nowrap;
 }
@@ -206,13 +206,13 @@
 }
 
 .talk-badge--upcoming {
-  color: #00a060;
-  border: 1px solid rgba(0, 160, 96, 0.35);
+  color: var(--green-hi);
+  border: 1px solid rgba(25, 182, 111, 0.42);
 }
 
 .talk-badge--keynote {
-  color: #D97757;
-  border: 1px solid rgba(217, 119, 87, 0.35);
+  color: #f1a689;
+  border: 1px solid rgba(241, 166, 137, 0.42);
 }
 
 @media (max-width: 700px) {
@@ -253,17 +253,17 @@ html[data-theme="light"] .talk-year-group::before {
   background: rgba(204, 120, 92, 0.2);
 }
 html[data-theme="light"] .talk-year-node {
-  border-color: #CC785C;
+  border-color: #8f5538;
   background: #faf9f5;
 }
 html[data-theme="light"] .talk-year-dot {
-  background: #CC785C;
+  background: #8f5538;
 }
 html[data-theme="light"] .talk-year-label {
-  color: #CC785C;
+  color: #8f5538;
 }
 html[data-theme="light"] .talk-item::before {
-  background: #B26842;
+  background: #8f5538;
 }
 html[data-theme="light"] .talk-item:hover {
   background: rgba(178, 104, 66, 0.03);
@@ -273,16 +273,16 @@ html[data-theme="light"] .talk-logo {
   background: rgba(0, 0, 0, 0.02);
 }
 html[data-theme="light"] .talk-logo--fallback {
-  color: #6e6d68;
+  color: #595549;
 }
 html[data-theme="light"] .talk-date {
-  color: #6e6d68;
+  color: #595549;
 }
 html[data-theme="light"] .talk-badge--upcoming {
-  color: #CC785C;
-  border-color: rgba(204, 120, 92, 0.35);
+  color: #8f5538;
+  border-color: rgba(143, 85, 56, 0.38);
 }
 html[data-theme="light"] .talk-badge--keynote {
-  color: #B26842;
-  border-color: rgba(178, 104, 66, 0.35);
+  color: #734127;
+  border-color: rgba(115, 65, 39, 0.38);
 }

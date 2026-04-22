@@ -3,7 +3,7 @@ layout: page
 permalink: /football/
 title: football
 description: A map of visited FBS schools, stadiums, and a few favorite college football memories.
-nav: true
+nav: false
 nav_order: 4
 ---
 
