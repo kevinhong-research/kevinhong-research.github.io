@@ -4,7 +4,7 @@ permalink: /talks/
 title: talks
 description: Previous and upcoming invited research talks.
 nav: true
-nav_order: 2
+nav_order: 3
 ---
 
 <link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
@@ -80,11 +80,11 @@ nav_order: 2
 }
 .tm-pill--green .tm-pill-l,
 .tm-pill--orange .tm-pill-l {
-  color: #8A8A7A;
+  color: var(--text-lo);
 }
 .tm-pill--green .tm-pill-n { color: #00a060; }
 .tm-pill--orange .tm-pill-n { color: #D97757; }
-.tm-pill--geo .tm-pill-l { color: #00a060; letter-spacing: 0.08em; }
+.tm-pill--geo .tm-pill-l { color: var(--green-hi); letter-spacing: 0.08em; }
 .tm-pills:hover .tm-pill--green .tm-pill-n,
 .tm-pills--open .tm-pill--green .tm-pill-n { color: #00c070; }
 .tm-pills:hover .tm-pill--orange .tm-pill-n,
