@@ -4,7 +4,7 @@ permalink: /services/
 title: services
 description: Editorial services, professional activities, and student advising.
 nav: true
-nav_order: 3
+nav_order: 4
 ---
 
 <link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
