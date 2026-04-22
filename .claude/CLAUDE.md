@@ -33,12 +33,78 @@ Always use the full rbenv path or run via `.claude/launch.json`.
 
 ---
 
-## Coding Rules
+## Workflow Orchestration Rules
 
-- Read the latest 3-5 handover records at .claude/HANDOVER.md at start of each session
-- Right before pushing to remote main (when instructed to push to main or remote main), document current session's handover information as the latest entry at .claude/HANDOVER.md. After handover is written, commit and push. Then stop the session and start a new session via /clear.
-- Save each plan in an individual .md file under .claude/plans so the plans can be revisited and checked in the future. Include the date and a short description for the plan file name.
-- Follow a consistent template for documenting session handover.
+### 1. Write Handover before Push
+
+- Read the latest 3-5 handover records at `.claude/HANDOVER.md` at start of each session
+- When instructed to push to main or remote main, do **not** push yet — first commit the changes, then document current session's handover information as the latest entry at `.claude/HANDOVER.md`. After handover is written, commit and push. Prompt the user to stop the session and start a new session via `/clear`.
+
+### 2. Handover Format and Template
+
+- The handover template is at `.claude/handover-template.md`
+
+### 3. Plan Mode Default
+
+- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
+- If something goes sideways, STOP and re-plan immediately — don't keep pushing
+- Use plan mode for verification steps, not just building
+- Write detailed specs upfront to reduce ambiguity
+
+### 4. Subagent Strategy
+
+- Use subagents liberally to keep the main context window clean
+- Offload research, exploration, and parallel analysis to subagents
+- For complex problems, throw more compute at it via subagents
+- One task per subagent for focused execution
+
+### 5. Self-Improvement Loop
+
+- After ANY correction from the user: update `.claude/lessons.md` with the pattern
+- Write rules for yourself that prevent the same mistake
+- Ruthlessly iterate on these lessons until mistake rate drops
+- Review lessons at session start for relevant context
+
+### 6. Verification Before Done
+
+- Never mark a task complete without proving it works
+- Diff behavior between main and your changes when relevant
+- Ask yourself: "Would a staff engineer approve this?"
+- Run tests, check logs, demonstrate correctness
+
+### 7. Demand Elegance (Balanced)
+
+- For non-trivial changes: pause and ask "is there a more elegant way?"
+- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Skip this for simple, obvious fixes — don't over-engineer
+- Challenge your own work before presenting it
+
+### 8. Autonomous Bug Fixing
+
+- When given a bug report: just fix it. Don't ask for hand-holding
+- Point at logs, errors, failing tests — then resolve them
+- Zero context switching required from the user
+- Go fix failing CI tests without being told how
+
+---
+
+## Task Management Rules
+
+1. **Plan First**: Write plan and save to `.claude/plans/` with checkable items
+2. **Plan File Name**: Name the plan with a simple description and date so plans can be revisited in the future
+3. **Verify Plan**: Check in before starting implementation
+4. **Track Progress**: Mark items complete as you go
+5. **Explain Changes**: High-level summary at each step
+6. **Document Results**: Add review section to the same plan file
+7. **Capture Lessons**: Update `.claude/lessons.md` after corrections
+
+---
+
+## Core Principles
+
+- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
+- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
+- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
 
 ---
 
