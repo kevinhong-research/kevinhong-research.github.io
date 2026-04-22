@@ -29,10 +29,18 @@ Merge the `MacStudio-ui-ux-audit` branch into `main` and push — bringing navig
 **Gemfile.lock**
 - Platform-specific ffi gems regenerated on this machine (aarch64-linux entries replaced with local platform set); expected side-effect of `bundle install` on a new host
 
+**Dropdown panel consistency fix (`_sass/_dropdown.scss`, commit `5c50464`)**
+- User reported About vs Publications dropdowns looking inconsistent in both light and dark mode
+- Root cause: the panels themselves had identical computed styles, but the active-item treatment was a full-width solid colored block (`var(--global-hover-color)` in dark = green fill; `#CC785C` in light = terracotta fill), which gave whichever panel contained the current page's child a much heavier visual weight than the other one
+- Replaced the solid-fill active state with a subtle `color: var(--global-theme-color)` + `font-weight: 500` + `background: transparent !important` marker
+- Same treatment in the light-mode override (`#CC785C` text, transparent bg)
+- Removed commented-out dead CSS from earlier `::before` accent-bar experiment
+- Verified in browser via preview_screenshot on `/` and `/publications/` in both modes — panels now read as uniform regardless of which has an active child
+
 ### Current status
-- **Done**: UI/UX audit merged; CLAUDE.md workflow rules + handover template committed locally; Gemfile.lock refreshed
-- **Pending**: Push 2 commits (plus the chore commit for CLAUDE.md/Gemfile/template) to `origin/main`
-- **Not yet verified in browser**: the refined nav and publications UI — worth smoke-testing after GitHub Pages redeploys
+- **Done**: UI/UX audit merged; CLAUDE.md workflow rules + handover template committed locally; Gemfile.lock refreshed; dropdown consistency fix committed locally (`5c50464`)
+- **Pending**: Push all local commits to `origin/main` (4 pushed earlier, plus `5c50464` still to push)
+- **Not yet verified in browser on live site**: everything currently verified on local dev server only — watch GitHub Pages rebuild
 
 ### Important context
 - Local branch `MacStudio-ui-ux-audit` is retained post-merge; safe to delete later if no further work expected on it
@@ -44,7 +52,8 @@ Merge the `MacStudio-ui-ux-audit` branch into `main` and push — bringing navig
 - Committed Gemfile.lock platform change rather than `.gitignore`ing it — lockfile drift per-machine is the team/repo's accepted norm here
 
 ### Next best step
-- **Primary action**: After push lands, visit the live site (`/`, `/publications/`, `/football/`, `/services/`) in both light and dark mode to confirm the nav/publications UI refinements rendered as intended
+- **Primary action**: After push lands, visit the live site (`/`, `/publications/`, `/football/`, `/services/`) in both light and dark mode to confirm the nav/publications UI refinements and the dropdown consistency fix both rendered as intended
+- If the user still perceives the two dropdowns as different after the fix, the next thing to investigate is the *trigger* (nav-link) treatment — the active dropdown trigger picks up `color: var(--global-theme-color)` + a gradient underline from `_sass/_base.scss:326` (`.navbar-nav .nav-item.active > .nav-link`), which the inactive one doesn't. That is the remaining asymmetry by design
 - Consider deleting local `MacStudio-ui-ux-audit` branch once GitHub Pages build confirms the merge is clean
 - Continue populating `.claude/plans/` for any substantive next change
 
