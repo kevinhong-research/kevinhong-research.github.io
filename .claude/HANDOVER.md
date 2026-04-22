@@ -4,7 +4,53 @@
 
 ---
 
-## 2026-04-15 — Session 1 (latest)
+## 2026-04-21 — Session 2 (latest)
+
+### Goal
+Merge the `MacStudio-ui-ux-audit` branch into `main` and push — bringing navigation, publications, and site-wide UI refinements live; also formalise workflow/task rules in `.claude/CLAUDE.md` and add a handover template.
+
+### What was done
+
+**UI/UX audit merge (commit `9a497d9` + merge `25c46f6`)**
+- Merged `MacStudio-ui-ux-audit` (developed on MacStudio, brought over and fast-merged here)
+- Touches 17 files, +712 / −261 lines
+- Site navigation (`_includes/header.liquid`, `_sass/_dropdown.scss`, `_pages/dropdown.md`, `_pages/football.md`, `_pages/services.md`, `_pages/talks.md`, `_pages/working.md`)
+- Publications page overhaul (`_pages/publications.md`, `assets/css/research.css` +382 lines, `assets/js/research.js` +202 lines)
+- Supporting theme + base tweaks (`_sass/_base.scss`, `_sass/_themes.scss`, `_config.yml`)
+- Page-level CSS polish (`assets/css/about.css`, `football.css`, `services.css`, `talks.css`)
+
+**Workflow rules formalised (`.claude/CLAUDE.md`)**
+- Expanded the minimal "Coding Rules" into 8 numbered Workflow Orchestration Rules + 7 Task Management Rules + Core Principles (mirrors the global `~/.claude/CLAUDE.md` pattern)
+- Added explicit rule: before pushing to main, write handover → commit → push → prompt `/clear`
+
+**Handover template (`.claude/handover-template.md`)**
+- New file, defines the canonical format for future HANDOVER.md entries
+
+**Gemfile.lock**
+- Platform-specific ffi gems regenerated on this machine (aarch64-linux entries replaced with local platform set); expected side-effect of `bundle install` on a new host
+
+### Current status
+- **Done**: UI/UX audit merged; CLAUDE.md workflow rules + handover template committed locally; Gemfile.lock refreshed
+- **Pending**: Push 2 commits (plus the chore commit for CLAUDE.md/Gemfile/template) to `origin/main`
+- **Not yet verified in browser**: the refined nav and publications UI — worth smoke-testing after GitHub Pages redeploys
+
+### Important context
+- Local branch `MacStudio-ui-ux-audit` is retained post-merge; safe to delete later if no further work expected on it
+- `_bibliography/papers.bib` remains commented-out (not rendered) — publications source of truth is still `_data/publications.yml`
+- Football dark mode fix and title-case tooling from Session 1 were already on `main` before this merge
+
+### Decisions already made
+- Kept CLAUDE.md workflow rules near-identical to the user's global `~/.claude/CLAUDE.md` for consistency (same numbered structure)
+- Committed Gemfile.lock platform change rather than `.gitignore`ing it — lockfile drift per-machine is the team/repo's accepted norm here
+
+### Next best step
+- **Primary action**: After push lands, visit the live site (`/`, `/publications/`, `/football/`, `/services/`) in both light and dark mode to confirm the nav/publications UI refinements rendered as intended
+- Consider deleting local `MacStudio-ui-ux-audit` branch once GitHub Pages build confirms the merge is clean
+- Continue populating `.claude/plans/` for any substantive next change
+
+---
+
+## 2026-04-15 — Session 1
 
 ### Goal
 Fix dark mode text visibility on the football page; normalise all publication titles to consistent Chicago-style title case; set up dev server and automated tooling.
