@@ -4,7 +4,67 @@
 
 ---
 
-## 2026-04-21 — Session 2 (latest)
+## 2026-04-29 — Session 3 (latest)
+
+### Goal
+Shrink the bloated `.git/` (was 129 MB) by purging four large history-only blobs via `git filter-repo`, then opportunistically remove seven unused al-folio template pages — all force-pushed and redeployed live without disrupting the deployed site.
+
+### What was done
+
+**History filter (commit `0bd194f` → `319fc38`, force-pushed)**
+- Installed `git-filter-repo` via Homebrew
+- Pre-flight audit confirmed all four target paths absent from current tree and unreferenced by anything that ships to the live site
+- Removed from every commit: `assets/video/tutorial_al_folio.mp4` (24.79 MB), `assets/img/prof_pic_color.png` (13.72 MB), `assets/img/prof_pic.jpg` (2.20 MB), `assets/css/main.css.map` (21 versions)
+- Cryptographic invariant verified: HEAD tree SHA `51bd5cf069f3d2d48f7bc0f1736224bf648151bc` byte-identical pre/post filter — proves the rendered site cannot change
+- Reclaim: pack 122 MiB → 81 MiB (~41 MB packed); commit count preserved (209 commits, all rewritten)
+
+**Unused page removal (commit `319fc38`, on top of filter)**
+- Deleted 7 page files + 1 orphan content file + 1 obsolete `_config.yml` exclude entry: `_pages/teaching.md`, `_pages/archived pages/{profiles,blog,news,projects,cv,repositories,about_einstein}.md`, removed line `- _pages/about_einstein.md` from `_config.yml` exclude block
+- 9 files changed, 372 deletions
+- Verified all 7 URLs now 404 on dev server, all 6 kept routes (`/`, `/publications/`, `/working/`, `/talks/`, `/services/`, `/football/`) still 200
+- Deploy to `gh-pages` succeeded (commit `7d405d5`); same verified against `https://kevinhong.ai`
+
+**Dev environment rebuild** (machine had drifted since Session 2)
+- rbenv had been removed from `/Users/hong/.rbenv/`; reinstalled via `brew install rbenv ruby-build` and `rbenv install 3.3.7`
+- New bundler 4.x deprecated `--path`; switched to `bundle config set --local path 'vendor/bundle'`
+- Installed ImageMagick (`brew install imagemagick`) — required locally so `jekyll-imagemagick` plugin can produce `prof_pic-{480,800,1400}.webp` variants; missing it caused dev-preview-only 404s on those `<picture>` sources
+- Dev preview verified working at `http://127.0.0.1:4000` — homepage, all kept pages, light-mode parchment colors render correctly
+
+**Local repo cleanup**
+- Swapped filtered clone in for original; kept `.OLD` directory briefly then `rm -rf`'d it (438 MB)
+- Deleted `origin/backup/pre-filter-2026-04-29` (the in-session safety branch)
+- Restricted `remote.origin.fetch` to main only (`+refs/heads/main:refs/remotes/origin/main`)
+- Dropped local `refs/remotes/origin/gh-pages` and ran `git gc --aggressive --prune=now`
+- Final `.git/`: 90 MB on disk, 80.56 MiB pack — down from 129 MB / 122 MiB at session start
+
+### Current status
+- **Done**: All technical work complete; live site verified at `https://kevinhong.ai`
+- **In progress**: nothing
+- **Pending**: Eyeball check after Fastly CDN cache (max-age 600s) clears — the deleted-page URLs will return 200 for ~10 min after deploy due to CDN cache, then 404. Verified on the `gh-pages` git tree itself that they're absent.
+
+### Important context
+- **Recovery is no longer possible for pre-filter SHAs** — backup branch deleted, `.OLD` clone deleted. The current clone's reflog only contains the filtered SHAs (`319fc38`, `e14cf54`, …). The original tip `0bd194f` exists nowhere user-accessible. The decision was deliberate after live-site verification.
+- **`CLAUDE.md` rbenv path is correct again** — `/Users/hong/.rbenv/versions/3.3.7/bin/bundle` is back in place after this session's rbenv reinstall. If rbenv gets removed again, dev preview will fail with the exact same "Failed to spawn process: No such file or directory" message.
+- **ImageMagick is required for parity** between local dev and the deployed site. Without it, `prof_pic-*.webp` and talk-logo webp variants 404 locally — confusing because the deployed site (built on GHA where ImageMagick exists) is fine.
+- **`gh-pages` is not fetched locally** anymore. To inspect what's deployed: `git fetch origin gh-pages` brings it back into a remote-tracking ref temporarily.
+- **`_pages/archived pages/publications_scholar.md` was NOT removed** — only the 7 explicitly listed by the user. That folder still has one file in it; consider removing if also unused.
+- The dev preview defaults to dark mode (`default_theme: dark` in `_config.yml`); cross-device color comparisons need both browsers in the same theme.
+
+### Decisions already made
+- **Force-push over a test PR** — pre-flight tree-SHA equivalence proof gave mathematical certainty the deployed site couldn't break, so the slower PR-test-then-merge path added no information
+- **Filter + page removal in a single push pair** — clean two-commit history (`e14cf54` filtered base, `319fc38` cleanup) instead of two separate force-pushes
+- **Did not also clean inert blog-related entries in `_config.yml`** (lines 136, 307–309: pagination, permalink patterns) — they're harmless dead config and the user didn't ask
+- **Manual `gh workflow run deploy.yml` was redundant** — the chore commit's `**.md` deletions already matched the deploy workflow's `paths:` filter and auto-triggered it. Knowing this for future history-only force-pushes (which would NOT auto-trigger): use `workflow_dispatch` if no path-matched changes are part of the push.
+- **Did not update `CLAUDE.md`** to record the ImageMagick dependency — out of scope for this session, but a candidate add for any "Dev server" doc cleanup
+
+### Next best step
+- **Primary action**: Spot-check `https://kevinhong.ai/teaching/` (or any other deleted route) returns 404 after CDN expires (~10 min from `2026-04-30 02:56 UTC` deploy). If 200s persist past 30 min, force a hard refresh; if still 200 then, something didn't deploy as expected — check `git ls-tree origin/gh-pages teaching/` to see if the file actually got removed (already confirmed absent at deploy time, so this would be unusual).
+- Consider whether to add an `ImageMagick (brew install imagemagick)` line to `CLAUDE.md`'s "Dev server" section so future sessions on a fresh machine don't hit the same diagnostic detour.
+- Optional: remove `_pages/archived pages/publications_scholar.md` if also unused (the only remaining occupant of `archived pages/`).
+
+---
+
+## 2026-04-21 — Session 2
 
 ### Goal
 Merge the `MacStudio-ui-ux-audit` branch into `main` and push — bringing navigation, publications, and site-wide UI refinements live; also formalise workflow/task rules in `.claude/CLAUDE.md` and add a handover template.
