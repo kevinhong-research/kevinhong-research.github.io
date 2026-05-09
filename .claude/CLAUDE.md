@@ -184,7 +184,6 @@ Key issue that was fixed: `--fb-text-lo` was `#3A3A36` (invisible on dark card
 | `/talks/` | `_pages/talks.md` + `_data/talks.yml` |
 | `/services/` | `_pages/services.md` + `_data/services.yml` |
 | `/football/` | `_pages/football.md` + `assets/css/football.css` + `assets/js/footballmap.js` |
-| `/teaching/` | `_pages/teaching.md` |
 
 ---
 

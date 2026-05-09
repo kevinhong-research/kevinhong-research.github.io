@@ -347,9 +347,15 @@ article code.nh-topic-link:hover,
 }
 
 @media (max-width: 768px) {
-  #nhTerminal,
-  #nhTerminal2 {
-    display: none;
+  /* Unfloat the profile so the terminals + body text don't squeeze
+     into a narrow column next to the photo. */
+  .profile,
+  .profile.float-right,
+  .profile.float-left {
+    float: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: center;
   }
 
   .profile img {
@@ -357,6 +363,34 @@ article code.nh-topic-link:hover,
     width: 70%;
     margin: 1.2rem auto 1.5rem auto;
     display: block;
+  }
+
+  /* Allow the terminal lines to wrap naturally instead of being clipped
+     to a single 1.5em line height. The dot/prompt stays at the start. */
+  .nh-terminal {
+    height: auto;
+    min-height: 1.5em;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-bottom: 0.85rem;
+    user-select: text;
+  }
+
+  .nh-terminal-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  #nhTerminal2 {
+    margin-top: 0;
+  }
+
+  #nhTerminal2::before {
+    margin-top: 0.45em;
   }
 
   .nh-paper-preview {

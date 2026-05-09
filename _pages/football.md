@@ -88,7 +88,7 @@ nav_order: 4
 
   <div class="fb-pills fb-pills--section fb-pills--open" id="football-teams-toggle" role="button" aria-expanded="true" tabindex="0">
     <div class="fb-pill fb-pill--green">
-      <span class="fb-pill-l">My Favorate Teams</span>
+      <span class="fb-pill-l">My Favorite Teams</span>
     </div>
     <div class="fb-pill-sep"></div>
     <div class="fb-pill fb-pill--geo">
@@ -125,7 +125,7 @@ nav_order: 4
 
   <div class="fb-pills fb-pills--section fb-pills--open" id="football-players-toggle" role="button" aria-expanded="true" tabindex="0">
     <div class="fb-pill fb-pill--orange">
-      <span class="fb-pill-l">My Favorate Players</span>
+      <span class="fb-pill-l">My Favorite Players</span>
     </div>
     <div class="fb-pill-sep"></div>
     <div class="fb-pill fb-pill--geo">
