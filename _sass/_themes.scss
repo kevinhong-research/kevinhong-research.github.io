@@ -54,6 +54,15 @@
   --fs-2xl: 2rem;      // page section titles (h2)
   --fs-3xl: 2.5rem;    // hero / post titles (h1)
 
+  // Text palette — warm parchment, applies to base/dark mode.
+  // Single source of truth across all pages; light theme overrides below.
+  --text-hi:  #ddd8cb;          // primary: list-row item titles, headings
+  --text:     #a29e92;          // body / paragraph
+  --text-mid: #9c988b;          // metadata, secondary line in list rows
+  --text-lo:  #928d7f;          // tertiary: separators, faint counts
+  --line:     #3A3A36;          // borders, dividers
+  --line-hi:  rgba(255, 255, 255, 0.12);
+
   #light-toggle-system {
     padding-left: 10px;
     padding-top: 12px;
@@ -132,6 +141,16 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="light"] {
+  // Text palette — Claude Light Parchment (overrides base values).
+  // --text-hi matches --global-text-color (#3d3929) so high-emphasis
+  // text and body share a color; hierarchy comes from weight + size.
+  --text-hi:  #3d3929;
+  --text:     #4f4b41;
+  --text-mid: #595549;
+  --text-lo:  #6c6659;
+  --line:     rgba(0, 0, 0, 0.08);
+  --line-hi:  rgba(0, 0, 0, 0.14);
+
   --global-bg-color: #faf9f5;
   --global-code-bg-color: #ede9de;
   --global-text-color: #3d3929;

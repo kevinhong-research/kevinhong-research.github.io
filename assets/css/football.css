@@ -3,12 +3,16 @@
    ============================================================ */
 
 .fb-page {
-  --fb-line: #3A3A36;
+  /* Text + line tokens alias the global --text-*, --line palette
+     (defined in _themes.scss :root). Football page-specific tokens
+     below stay scoped here. */
+  --fb-line:     var(--line);
+  --fb-text-hi:  var(--text-hi);
+  --fb-text-mid: var(--text-mid);
+  --fb-text-lo:  var(--text-lo);
+
   --fb-panel: #2F2F2D;
   --fb-panel-soft: rgba(58, 58, 54, 0.3);
-  --fb-text-hi: #C2C0B6;
-  --fb-text-mid: #8A8A7A;
-  --fb-text-lo: #3A3A36;
   --fb-green: #00a060;
   --fb-blue: #4db8ff;
   --fb-orange: #D97757;
@@ -253,7 +257,7 @@
 }
 
 .fb-feature-card-value {
-  color: #C2C0B6;
+  color: var(--text-hi);
   text-align: right;
 }
 
@@ -409,7 +413,7 @@
 }
 
 .fb-tip-row-value {
-  color: #C2C0B6;
+  color: var(--text-hi);
 }
 
 .fb-tip-note {
@@ -523,12 +527,10 @@
    LIGHT MODE — Claude Light Parchment
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .fb-page {
-  --fb-line: rgba(0, 0, 0, 0.07);
+  /* Text/line cascade from html[data-theme="light"] global tokens.
+     Page-specific overrides only below. */
   --fb-panel: #f5f4ef;
   --fb-panel-soft: rgba(0, 0, 0, 0.02);
-  --fb-text-hi: #3d3929;
-  --fb-text-mid: #595549;
-  --fb-text-lo: #6c6659;
   --fb-green: #8f5538;
   --fb-blue: #61AAF2;
   --fb-orange: #734127;
@@ -651,17 +653,12 @@ html[data-theme="light"] .fb-lightbox-close:hover {
   color: #8f5538;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   DARK MODE
-   The base .fb-page vars use a dark palette but --fb-text-lo
-   (#3A3A36) is near-invisible on the dark card (#2F2F2D).
-   Also harden border/separator colors that use rgba(58,58,54,*)
-   which blend into the dark page background (#262624).
-══════════════════════════════════════════════════════════════ */
+/* ── DARK MODE ──
+   --fb-text-* and --fb-line cascade from the global --text- and --line
+   palette in _themes.scss. Only page-specific tweaks remain here:
+   --fb-line gets a dark-only bump for separator visibility on the
+   page background, and accent hues warm up. */
 html[data-theme="dark"] .fb-page {
-  --fb-text-hi:  #ddd8cb;
-  --fb-text-mid: #9d998d;
-  --fb-text-lo:  #8a8578;
   --fb-line:     #4A4A46;
   --fb-green:    #19b66f;
   --fb-orange:   #e79b78;

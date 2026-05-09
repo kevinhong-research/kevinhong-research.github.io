@@ -109,7 +109,7 @@
 .tm-tip-entry { padding: 1px 0; }
 
 .tm-tip-entry strong {
-  color: #C2C0B6;
+  color: var(--text-hi);
   font-weight: 400;
   font-size: 12px;
   display: block;

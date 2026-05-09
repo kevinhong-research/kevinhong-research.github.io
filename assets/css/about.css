@@ -46,7 +46,7 @@ article.post-content p code,
   font-family: inherit;
   font-size: 0.88em;
   font-weight: 400;
-  color: #C2C0B6;
+  color: var(--text-hi);
   background: transparent !important;
   background-color: transparent !important;
   border: 1px solid rgba(58, 58, 54, 0.4);
@@ -268,7 +268,7 @@ article code.nh-topic-link:hover,
 .nh-paper-preview__title {
   font-size: var(--fs-base);
   line-height: 1.45;
-  color: #C2C0B6;
+  color: var(--text-hi);
   margin-bottom: 0.45rem;
 }
 
@@ -281,7 +281,7 @@ article code.nh-topic-link:hover,
 
 .nh-paper-preview__authors strong {
   font-weight: 500;
-  color: #C2C0B6;
+  color: var(--text-hi);
 }
 
 .nh-paper-preview__meta {
@@ -294,7 +294,7 @@ article code.nh-topic-link:hover,
 .nh-paper-preview__abstract {
   font-size: var(--fs-sm);
   line-height: 1.7;
-  color: #C2C0B6;
+  color: var(--text-hi);
   border-left: 2px solid rgba(0, 160, 96, 0.22);
   background: rgba(0, 160, 96, 0.03);
   padding: 0.72rem 0.9rem;

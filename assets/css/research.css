@@ -21,14 +21,10 @@
   transition: width 0.25s, height 0.25s, border-color 0.25s;
 }*/
 
-/* ── RESEARCH WRAPPER ── */
+/* ── RESEARCH WRAPPER ──
+   Page-specific tokens only. --text-*, --line, --line-hi cascade from
+   :root in _themes.scss (single source of truth across the site). */
 .nh-research {
-  --line:     #3A3A36;
-  --line-hi:  rgba(255, 255, 255, 0.12);
-  --text:     #a29e92;
-  --text-hi:  #ddd8cb;
-  --text-lo:  #928d7f;
-  --text-mid: #9c988b;
   --orange:   #D97757;
   --green-hi: #19b66f;
   --pub-control-text: rgba(221, 216, 203, 0.92);
@@ -95,7 +91,7 @@
   letter-spacing: 0.06em;
   padding: 0.5rem 1.1rem;
   border: 1px solid var(--line);
-  color: #C2C0B6;
+  color: var(--text-hi);
   background: transparent;
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   transition: all 0.2s ease;
@@ -1023,12 +1019,6 @@
    Dark mode is NOT modified.
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .nh-research {
-  --line:     rgba(0, 0, 0, 0.08);
-  --line-hi:  rgba(0, 0, 0, 0.14);
-  --text:     #4f4b41;
-  --text-hi:  #2f2b21;
-  --text-lo:  #6c6659;
-  --text-mid: #595549;
   --orange:   #8f5538;
   --green-hi: #8f5538;
   --pub-control-text: #4f4b41;
