@@ -553,8 +553,9 @@ footer.sticky-bottom {
   border-top: 1px solid var(--global-divider-color);
   background-color: var(--global-card-bg-color);
   color: var(--global-text-color-light);
-  padding-top: 28px;
-  padding-bottom: 28px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-top: 2rem !important; // Tighten Bootstrap's `mt-5` (3rem) to 2rem.
   font-size: 0.82rem;
 
   .container {
