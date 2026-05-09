@@ -4,7 +4,93 @@
 
 ---
 
-## 2026-05-08 — Session 7 (latest)
+## 2026-05-08 — Session 8 (latest)
+
+### Goal
+Implement six items from across Tier 2/3/4: title-case the publications filter chips (T2.8), generate a profile-photo srcset (T2.10), migrate top-level Sass partials from `@import` to `@use` (T3.12), verify the typewriter localStorage gate (T3.15), audit the services + working pages (T4.16), and add a Browserslist config (T4.18). Plan, audit-the-plan, implement, verify, ship.
+
+### What was done
+
+**Plan + plan-audit** (`.claude/plans/2026-05-08_tier-2-3-4-bundle.md`)
+- Wrote a structured plan covering all six items: rationale, file paths, risks, verification checklist, plan-self-critique, rollback, commit strategy.
+- Self-critique caught: Sass scope creep on font-awesome internals (deferred); the `$max-content-width` Liquid templating constraint (`@use ... with (...)` is the right pattern); cwebp quality matched to existing 800px effective quality; T2.8 selector isolation (only `.filter-btn`, not the other 10 `text-transform: uppercase` rules); T3.15 confirmed read-only verification unless broken; T4.16 hard-capped at 15 minutes total of inline fixes.
+
+**T4.18 — Browserslist** (commit `9af524e`, `chore: …`)
+- New `.browserslistrc` at repo root with `last 2 chrome versions / last 2 safari versions / last 2 firefox versions / last 2 edge versions / not dead`. No tool currently consumes it; preventative for future build chain.
+
+**T2.8 — Title-case filter chips** (commit `f9638f3`, `style: …`)
+- `assets/css/research.css` `.filter-btn`: removed `text-transform: uppercase`; reduced `letter-spacing` from `0.1em` to `0.01em`; bumped `font-weight: 400 → 500` and `font-size: 0.8rem → 0.85rem` to compensate for lost uppercase weight.
+- Verified other UPPERCASE rules (eyebrows like "39 RESULTS", `.pub-results-count`, "TIMELINE" view-toggle) are unchanged — they use different selectors.
+
+**T3.15 — Typewriter localStorage gate verification** (no commit — code already correct)
+- Verified all three states via runtime test:
+  1. **Cleared localStorage** → `run()` runs, animates, writes timestamp.
+  2. **Within 24h TTL** → `showStatic()` runs, no animation.
+  3. **Expired (>24h)** → `run()` runs again, refreshes timestamp.
+- Robust verification: set timestamp 30h ago, reload, wait 12s, confirm timestamp got refreshed (`runExecuted: true`). Gate works as designed; documented finding.
+
+**T2.10 — Profile photo srcset** (commit `097369a`, `perf: …`)
+- Generated `assets/img/prof_pic-home-300.webp` (7.2KB) and `prof_pic-home-600.webp` (24KB) from the JPEG source via `cwebp -q 82 -resize`.
+- Updated `_layouts/about.liquid` `<picture><source>` to emit a 3-width `srcset` (300w/600w/800w) plus `sizes="(max-width: 768px) 220px, 268px"`.
+- Verified at 375×812 mobile (DPR 1): browser pulls the 300w variant (`currentSrc` confirmed). 87% byte reduction vs the previous 800px-only file at this viewport.
+
+**T3.12 — Sass `@import` → `@use` migration (top-level partials)** (commit `c0dead7`, `build: …`)
+- `_sass/_variables.scss`: added `!default` to `$max-content-width` so main.scss can override.
+- 5 partials that reference variables (`_themes`, `_base`, `_layout`, `_fonts`, `_geist`) each get `@use "variables" as *;` prepended.
+- `assets/css/main.scss` rewritten:
+  - `@use "variables" with ($max-content-width: {{ site.max_width }})` configures the module from Liquid.
+  - Each top-level partial loaded via `@use` instead of `@import`. `_dropdown` stays last to preserve cascade order.
+  - **Crucial fix:** vendored font-awesome and tabler-icons partials still use `@import` and reference `$fa-font-path` / `$ti-font-path` from the global scope. With `@use`, `_variables.scss`'s vars are namespaced, not global. Re-declared `$ti-font-path` and `$fa-font-path` at module scope **before** the legacy `@import` block so the vendored CSS resolves font URLs correctly.
+- Build warnings dropped from 13+ to ~7 (only the font-awesome × 4 + tabler-icons × 3 vendor-internal warnings remain). The 11 top-level partials are clean.
+- Visual sweep across `/`, `/publications/`, `/talks/`, `/services/`, `/football/`, `/working/` in both light and dark themes: identical rendering. Tabler-icon fonts return 200; theme toggle, skip link, mobile layout, and the new srcset all still work.
+
+**T4.16 — Brand audit on /services/ and /working/** (no commit — findings only)
+- Audited both pages at 1280×900 desktop and 375×812 mobile in both themes. No console errors. No horizontal overflow. All images carry alt text.
+- Findings (none warranted inline fix):
+  - **F1 (medium): dark-mode metadata text contrast borderline.** `--text-lo: #928d7f` on `#262624` bg ≈ 4.3:1 — fails WCAG AA Normal-text 4.5:1 by a hair. Affects services/working/publications metadata. Bumping to ~`#a8a394` would give ~5:1. **Deferred** — design call, alters the visual register of the entire site's "muted" text register.
+  - **F2 (low): services special-issue editorships have no date column.** Inconsistent with the regular editorial appointments above which show year/range. Possibly intentional (timeless commitment).
+  - **F3 (resolved): working-papers row appeared "highlighted".** Verified via `matches(':hover')` that this was just hover-state from the cursor's last position; not a feature, not a bug.
+  - **F4 (low): working-papers has no filter/search.** Acceptable today (10 papers); revisit if it grows past ~20.
+
+### Current status
+
+- **Done**: All six items implemented (or verified). Five code commits, one verification-only result, one audit-only result with documented findings. Visual sweep across six pages in both themes confirms no regressions.
+- **In progress**: nothing.
+- **Pending**: push to `origin/main` + `gh-pages` rebuild + deploy verification.
+
+### Important context
+
+- **Sass migration is partial.** Top-level partials are on `@use`; vendored font-awesome and tabler-icons subdirectories still use internal `@import` chains. They emit ~7 deprecation warnings each build. They will hard-break under Dart Sass 3.0 unless the vendor packages are upgraded or replaced. Tracked in next-set queue.
+- **Variable re-declaration in main.scss is intentional, not duplication.** `$ti-font-path` and `$fa-font-path` are declared at module-file scope inside main.scss because the `@use`d variables module namespaces them away from the legacy `@import`'d vendor partials. The vendored CSS reads them as global Sass variables. If `_variables.scss` ever changes those paths, both copies need updating until the vendor migration completes.
+- **Profile photo `naturalWidth` reports 220 in the verification eval, not 300.** Suspected measurement quirk in the headless browser (CSS-rendered size leaking into the IDL property). The actual file IS 300×300 (`file` command confirmed), and `currentSrc` correctly resolves to the 300w URL. Not a bug.
+- The `[2026-05-08 ...] ERROR Errno::ECONNRESET: Connection reset by peer` lines that appear in Webrick logs are stale browser connection drops during livereload — unrelated to any code change.
+- `AGENTS.md` remains untracked (per session-5 decision).
+- ImageMagick errors for `assets/img/football/players/{arch-manning,malachi-toney}.jpg` are still pre-existing (those files are HTML/JSON masquerading as `.jpg`).
+
+### Decisions already made
+
+- **Title-case filter chips, kept all-caps elsewhere.** Editorial sites use uppercase for short eyebrow labels (counters, taxonomic markers); filter chips are interactive nouns and read better in title case. Audit M3 fully addressed; not extended to other selectors.
+- **`$max-content-width` exposed via `!default` + `with (...)`** instead of being moved out of `_variables.scss` or hard-coded. Preserves the `_config.yml site.max_width` Liquid binding.
+- **Vendored font-awesome and tabler-icons NOT migrated.** Out of scope for this session — would require either upgrading those vendor libraries to module-system versions or refactoring the included files. Documented as a known remainder.
+- **`--text-lo` contrast NOT bumped.** F1 finding is design-sensitive; deferred to a session where Kevin can weigh in.
+- **No filter/search added to working-papers.** Premature with only 10 papers.
+
+### Next best step
+
+- **Primary action**: After deploy, on the live site:
+  1. DevTools Network tab on `/`: confirm the homepage portrait pulls `prof_pic-home-300.webp` or `-600.webp` (NOT `-home.webp`) at the active DPR.
+  2. Visit `/publications/` and confirm the filter chips render in title case ("All / Future of Work / …"), and the click-through filter still works.
+  3. Sanity check: navigate through `/`, `/publications/`, `/talks/`, `/services/`, `/football/`, `/working/` — page background, fonts, theme toggle, mobile photo behavior, skip link should all work as before. The Sass migration should be invisible.
+- **Next-set queue (Tier 2 / 3 / 4 remainder)**:
+  - **Tier 2 left**: T2.6 promote lede sentence to a deck; T2.7 fold awards run-on into `<details>`; T2.9 promote `working papers` to top-level nav.
+  - **Tier 3 left**: T3.11 replace jQuery + Bootstrap-bundle with vanilla nav (~100KB cut); T3.13 earn the green Currently dot via data file; T3.14 cross-link football map ↔ talks page.
+  - **Tier 4 left**: T4.17 OG/Twitter card meta; T4.19 Bootstrap utility-only build (pairs with T3.11); T4.20 last-updated stamp in footer.
+  - **From this session's audit**: F1 dark-mode `--text-lo` contrast bump (design call); F2 services special-issue date column (decide intentional vs gap).
+  - **External-deadline cleanup**: vendored font-awesome + tabler-icons Sass migration when those libraries get module-system updates, OR replace with CSS-only variants before Dart Sass 3.0 ships.
+
+---
+
+## 2026-05-08 — Session 7
 
 ### Goal
 Implement the four Tier-1 follow-ups the user picked from the session-6 audit: theme-toggle a11y, homepage tag canonicalization, skip-to-main-content link, and citations console-log cleanup. Plan, audit-the-plan, implement, verify, ship.
