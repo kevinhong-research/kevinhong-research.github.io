@@ -118,7 +118,7 @@
       'Future of Work': '/publications/#future-of-work',
       'Digital Platforms': '/publications/#digital-platforms',
       'Digital Media': '/publications/#digital-media',
-      'Human-Algorithm Interactions': '/publications/#human-ai-interaction',
+      'Human-AI Interaction': '/publications/#human-ai-interaction',
       'American football': '/football/'
     };
 
