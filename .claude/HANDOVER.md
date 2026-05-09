@@ -4,7 +4,46 @@
 
 ---
 
-## 2026-04-29 — Session 3 (latest)
+## 2026-05-08 — Session 4 (latest)
+
+### Goal
+Recover local `main` after the April 29 history rewrite, add the DOI link for the educational crowdfunding publication, and push the resulting `main` update.
+
+### What was done
+
+**Remote history recovery**
+- Investigated why `git pull --ff-only` failed: `origin/main` had been force-updated from the pre-filter tip `0bd194f` to rewritten history at `247a514`.
+- Confirmed the rewrite was intentional from Session 3: `git filter-repo` preserved the old HEAD tree and added two real commits afterward.
+- Preserved the old local pre-filter tip on local branch `backup/pre-filter-main-20260508-211708`.
+- Reset local `main` to `origin/main`; verified `main...origin/main = 0 0`.
+
+**Publication DOI update** (`_data/publications.yml`)
+- Updated "When Do Equity Appeals Increase Giving? Evidence from Educational Crowdfunding" with:
+  - `url: "https://pubsonline.informs.org/doi/10.1287/isre.2024.1190"`
+  - `doi: "10.1287/isre.2024.1190"`
+- Verified `_data/publications.yml` parses as YAML.
+- Pre-commit publication title-case hook passed with no changes.
+
+### Current status
+- **Done**: Local `main` aligned to rewritten `origin/main`; DOI update committed; handover prepared for push.
+- **In progress**: nothing.
+- **Pending**: GitHub Pages rebuild/live-site verification after push.
+
+### Important context
+- `AGENTS.md` exists as an untracked local file and was intentionally not staged.
+- The backup branch `backup/pre-filter-main-20260508-211708` is local only; it points to old pre-filter commit `0bd194f`.
+- Do not merge the backup/pre-filter branch back into `main`; doing so would reintroduce the pre-filter history shape.
+
+### Decisions already made
+- Adopted the rewritten remote history instead of merging, because the remote was intentionally cleaned with `git filter-repo`.
+- Used the INFORMS article URL for the rendered publication link and kept the bare DOI for citation-count logic.
+
+### Next best step
+- **Primary action**: Verify the publication title link on `/publications/` after the GitHub Pages deploy completes.
+
+---
+
+## 2026-04-29 — Session 3
 
 ### Goal
 Shrink the bloated `.git/` (was 129 MB) by purging four large history-only blobs via `git filter-repo`, then opportunistically remove seven unused al-folio template pages — all force-pushed and redeployed live without disrupting the deployed site.
