@@ -1,6 +1,22 @@
 <!-- Metadata, OpenGraph and Schema.org -->
 {% include metadata.liquid %}
 
+<!-- Preload critical LCP fonts. URLs match the @font-face declarations in
+     _sass/_geist.scss and _sass/_fonts.scss exactly (no cache-bust query),
+     so the browser uses these preloads to satisfy the @font-face fetch. -->
+<link
+  rel="preload"
+  href="{{ '/assets/fonts/geist/Geist-Variable.woff2' | relative_url }}"
+  as="font"
+  type="font/woff2"
+  crossorigin>
+<link
+  rel="preload"
+  href="{{ '/assets/fonts/cormorant-garamond/cormorant-garamond-latin-wght-normal.woff2' | relative_url }}"
+  as="font"
+  type="font/woff2"
+  crossorigin>
+
 <!-- Bootstrap (MDB removed — was unused) -->
 <link rel="stylesheet" href="{{ '/assets/css/bootstrap.min.css' | relative_url | bust_file_cache }}">
 
