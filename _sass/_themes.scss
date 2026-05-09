@@ -63,6 +63,22 @@
   --line:     #3A3A36;          // borders, dividers
   --line-hi:  rgba(255, 255, 255, 0.12);
 
+  // Motion tokens — used by hover, focus, and reveal transitions.
+  // 0.2s + ease covers ~80% of project transitions; the cubic-bezier
+  // is a gentle ease-out-quint for expressive transforms.
+  --duration-fast: 0.2s;
+  --duration-base: 0.28s;
+  --ease-default:  ease;
+  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+
+  // Brand accent palette — applies to base/dark mode.
+  // Single source of truth; light theme overrides below.
+  --accent-warm:        #D97757;   // primary orange (hover stripes, links)
+  --accent-warm-soft:   #f1a689;   // lighter coral (badges, awards)
+  --accent-warm-strong: #CC785C;   // deeper variant (active, hover-emphasis)
+  --accent-cool:        #19b66f;   // primary green (status, section labels)
+  --accent-cool-deep:   #00a060;   // deeper green (abstracts, secondary links)
+
   #light-toggle-system {
     padding-left: 10px;
     padding-top: 12px;
@@ -150,6 +166,13 @@ html[data-theme="light"] {
   --text-lo:  #6c6659;
   --line:     rgba(0, 0, 0, 0.08);
   --line-hi:  rgba(0, 0, 0, 0.14);
+
+  // Brand accent palette — parchment-brown family for light theme.
+  --accent-warm:        #8f5538;
+  --accent-warm-soft:   #B26842;
+  --accent-warm-strong: #734127;
+  --accent-cool:        #8f5538;   // light mode unifies green→brown
+  --accent-cool-deep:   #734127;
 
   --global-bg-color: #faf9f5;
   --global-code-bg-color: #ede9de;

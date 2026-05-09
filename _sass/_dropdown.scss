@@ -104,13 +104,13 @@ html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
 
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:hover,
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:focus {
-  color: #CC785C;
+  color: var(--accent-warm-strong);
   background: #ede9de;
 }
 
 html[data-theme="light"] .nav-item.dropdown .dropdown-item.active,
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:active {
-  color: #CC785C !important;
+  color: var(--accent-warm-strong) !important;
   background-color: transparent !important;
   font-weight: 500;
 }

@@ -368,7 +368,7 @@ ul.task-list input[type="checkbox"] {
     }
 
     a:hover {
-      color: #CC785C;
+      color: var(--accent-warm-strong);
       background-color: #ede9de;
     }
 
@@ -379,7 +379,7 @@ ul.task-list input[type="checkbox"] {
 
   html[data-theme="light"] & .dropdown-item.active,
   html[data-theme="light"] & .dropdown-item:active {
-    background-color: #CC785C;
+    background-color: var(--accent-warm-strong);
     color: #ffffff !important;
   }
 

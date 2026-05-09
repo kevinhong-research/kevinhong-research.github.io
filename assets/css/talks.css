@@ -78,8 +78,8 @@
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--line);
   transition:
-    padding-left 0.2s ease,
-    background-color 0.22s ease;
+    padding-left var(--duration-fast) var(--ease-default),
+    background-color var(--duration-fast) var(--ease-default);
 }
 
 .talk-item::before {
@@ -89,10 +89,10 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: #D97757;
+  background: var(--accent-warm);
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.25s ease;
+  transition: transform var(--duration-fast) var(--ease-default);
 }
 
 .talk-item:hover {
@@ -215,7 +215,7 @@
 }
 
 .talk-badge--keynote {
-  color: #f1a689;
+  color: var(--accent-warm-soft);
   border: 1px solid rgba(241, 166, 137, 0.42);
 }
 
@@ -257,17 +257,17 @@ html[data-theme="light"] .talk-year-group::before {
   background: rgba(204, 120, 92, 0.2);
 }
 html[data-theme="light"] .talk-year-node {
-  border-color: #8f5538;
+  border-color: var(--accent-warm);
   background: #faf9f5;
 }
 html[data-theme="light"] .talk-year-dot {
-  background: #8f5538;
+  background: var(--accent-warm);
 }
 html[data-theme="light"] .talk-year-label {
-  color: #8f5538;
+  color: var(--accent-warm);
 }
 html[data-theme="light"] .talk-item::before {
-  background: #8f5538;
+  background: var(--accent-warm);
 }
 html[data-theme="light"] .talk-item:hover {
   background: rgba(178, 104, 66, 0.03);
@@ -283,10 +283,10 @@ html[data-theme="light"] .talk-date {
   color: #595549;
 }
 html[data-theme="light"] .talk-badge--upcoming {
-  color: #8f5538;
+  color: var(--accent-warm);
   border-color: rgba(143, 85, 56, 0.38);
 }
 html[data-theme="light"] .talk-badge--keynote {
-  color: #734127;
+  color: var(--accent-warm-strong);
   border-color: rgba(115, 65, 39, 0.38);
 }

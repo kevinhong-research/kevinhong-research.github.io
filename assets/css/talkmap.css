@@ -7,12 +7,12 @@
    Slightly warmer than the plain grey to hint it's an action.
 ──────────────────────────────────────────────────────────── */
 .tm-pill--geo .tm-pill-l {
-  color: #00a060;
+  color: var(--accent-cool-deep);
   letter-spacing: 0.08em;
 }
 .tm-pills:hover .tm-pill--geo .tm-pill-l,
 .tm-pills--open .tm-pill--geo .tm-pill-l {
-  color: #D97757;
+  color: var(--accent-warm);
 }
 
 /* ── COLLAPSIBLE BODY ───────────────────────────────────────
@@ -24,9 +24,10 @@
   grid-template-rows: 0fr !important;
   opacity: 0 !important;
   overflow: hidden;
+  /* outliers: 0.46s/0.36s timed to the cubic-bezier curve for the expand */
   transition:
-    grid-template-rows 0.46s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity            0.36s ease;
+    grid-template-rows 0.46s var(--ease-out),
+    opacity            0.36s var(--ease-default);
 }
 
 .tm-body--open {
@@ -58,7 +59,7 @@
   fill: rgba(47, 47, 45, 0.72);
   stroke: #3A3A36;
   stroke-width: 0.7;
-  transition: fill 0.18s;
+  transition: fill var(--duration-fast);
 }
 
 .tm-state:hover {
@@ -93,7 +94,7 @@
   pointer-events: none;
   background: #2F2F2D;
   border: 1px solid #3A3A36;
-  border-left: 2px solid #00a060;
+  border-left: 2px solid var(--accent-cool-deep);
   border-radius: 4px;
   padding: 9px 13px;
   font-size: 12px;
@@ -146,11 +147,11 @@
    LIGHT MODE — Claude Light Parchment
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .tm-pill--geo .tm-pill-l {
-  color: #CC785C;
+  color: var(--accent-warm-strong);
 }
 html[data-theme="light"] .tm-pills:hover .tm-pill--geo .tm-pill-l,
 html[data-theme="light"] .tm-pills--open .tm-pill--geo .tm-pill-l {
-  color: #B26842;
+  color: var(--accent-warm-soft);
 }
 html[data-theme="light"] .tm-state {
   fill: #ede9de;
@@ -165,7 +166,7 @@ html[data-theme="light"] .tm-state-lbl {
 html[data-theme="light"] .tm-tip {
   background: #f5f4ef;
   border-color: #dad9d4;
-  border-left-color: #CC785C;
+  border-left-color: var(--accent-warm-strong);
   color: #6e6d68;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }

@@ -29,7 +29,7 @@
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #f1a689;
+  color: var(--accent-warm-soft);
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--line);
@@ -47,7 +47,7 @@
   padding-left: 0;
   border-bottom: 1px solid var(--line);
   position: relative;
-  transition: padding-left 0.25s ease;
+  transition: padding-left var(--duration-fast) var(--ease-default);
 }
 .svc-role-item:first-child { border-top: 1px solid var(--line); }
 .svc-role-item::before {
@@ -55,10 +55,10 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 2px;
-  background: #D97757;
+  background: var(--accent-warm);
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.3s ease;
+  transition: transform var(--duration-base) var(--ease-default);
 }
 .svc-role-item:hover { padding-left: 12px; }
 .svc-role-item:hover::before { transform: scaleY(1); }
@@ -137,7 +137,7 @@
   padding-left: 0;
   border-bottom: 1px solid var(--line);
   position: relative;
-  transition: padding-left 0.25s ease;
+  transition: padding-left var(--duration-fast) var(--ease-default);
 }
 .svc-student-item:first-child { border-top: 1px solid var(--line); }
 .svc-student-item::before {
@@ -145,10 +145,10 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 2px;
-  background: #00a060;
+  background: var(--accent-cool-deep);
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.3s ease;
+  transition: transform var(--duration-base) var(--ease-default);
 }
 .svc-student-item:hover { padding-left: 12px; }
 .svc-student-item:hover::before { transform: scaleY(1); }
@@ -164,7 +164,7 @@
   letter-spacing: 0.03em;
   color: var(--text-mid);
   flex-shrink: 0;
-  transition: color 0.2s;
+  transition: color var(--duration-fast);
 }
 .svc-student-item:hover .svc-student-year { color: var(--green-hi); }
 
@@ -201,7 +201,7 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #f1a689;
+  color: var(--accent-warm-soft);
   border: 1px solid rgba(241, 166, 137, 0.42);
   padding: 0.1rem 0.45rem;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
@@ -218,27 +218,27 @@
    LIGHT MODE — Claude Light Parchment
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .svc-section-header {
-  color: #8f5538;
+  color: var(--accent-warm);
 }
 html[data-theme="light"] .svc-block-label {
-  color: #734127;
+  color: var(--accent-warm-strong);
 }
 html[data-theme="light"] .svc-role-item::before {
-  background: #8f5538;
+  background: var(--accent-warm);
 }
 html[data-theme="light"] .svc-role-years {
   color: #595549;
 }
 html[data-theme="light"] .svc-student-item::before {
-  background: #8f5538;
+  background: var(--accent-warm);
 }
 html[data-theme="light"] .svc-student-year {
   color: #595549;
 }
 html[data-theme="light"] .svc-student-item:hover .svc-student-year {
-  color: #8f5538;
+  color: var(--accent-warm);
 }
 html[data-theme="light"] .svc-award {
-  color: #8f5538;
+  color: var(--accent-warm);
   border-color: rgba(143, 85, 56, 0.38);
 }
