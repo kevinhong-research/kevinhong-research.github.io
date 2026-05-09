@@ -140,6 +140,10 @@
   overflow: hidden;
 }
 
+.talk-logo--image picture {
+  display: contents;
+}
+
 .talk-logo--image img {
   width: 74%;
   height: 74%;
