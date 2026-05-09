@@ -43,6 +43,17 @@
   --global-danger-block-text: #600;
   --global-danger-block-title: #c00;
 
+  // Type scale — single source of truth for font-sizes across pages.
+  // Step ratio ≈ 1.18× for tight academic rhythm.
+  --fs-2xs: 0.65rem;   // award badges, eyebrows, micro labels
+  --fs-xs:  0.75rem;   // sub-labels, kickers, sub-descriptions
+  --fs-sm:  0.85rem;   // metadata, captions, journal/venue/year columns
+  --fs-base: 1rem;     // body text, list-row item titles
+  --fs-lg:  1.25rem;   // small headings (h5)
+  --fs-xl:  1.5rem;    // medium headings (h3 / h4)
+  --fs-2xl: 2rem;      // page section titles (h2)
+  --fs-3xl: 2.5rem;    // hero / post titles (h1)
+
   #light-toggle-system {
     padding-left: 10px;
     padding-top: 12px;

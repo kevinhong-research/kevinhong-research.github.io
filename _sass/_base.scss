@@ -238,7 +238,7 @@ ul.task-list input[type="checkbox"] {
 
 .post-description {
   margin-bottom: 2rem;
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   color: var(--global-text-color-light);
   line-height: 1.6;
 
@@ -530,7 +530,7 @@ ul.task-list input[type="checkbox"] {
 // Footer
 footer.fixed-bottom {
   background-color: var(--global-footer-bg-color);
-  font-size: 0.75rem;
+  font-size: var(--fs-xs);
 
   .container {
     color: var(--global-footer-text-color);
@@ -556,7 +556,7 @@ footer.sticky-bottom {
   padding-top: 12px;
   padding-bottom: 12px;
   margin-top: 2rem !important; // Tighten Bootstrap's `mt-5` (3rem) to 2rem.
-  font-size: 0.82rem;
+  font-size: var(--fs-sm);
 
   .container {
     color: inherit;
@@ -652,9 +652,9 @@ footer.sticky-bottom {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
-  line-height: 48px;
-  letter-spacing: -0.8px;
+  font-size: var(--fs-3xl);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 
   mjx-container[jax="CHTML"][display="true"] {
     display: unset;
@@ -1073,7 +1073,7 @@ progress::-moz-progress-bar {
     border-radius: 0.3rem;
     border-style: none;
     color: var(--global-text-color);
-    font-size: medium;
+    font-size: var(--fs-base);
     opacity: 0;
     position: absolute;
     right: 0.2rem;
@@ -1436,7 +1436,7 @@ ninja-keys::part(ninja-input-wrapper) {
   border-radius: 4px;
   text-decoration: none;
   font-family: "Geist", -apple-system, "system-ui", "Segoe UI", sans-serif;
-  font-size: 0.95rem;
+  font-size: var(--fs-base);
   font-weight: 500;
   line-height: 1;
   transition: top 120ms ease;

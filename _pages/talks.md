@@ -61,7 +61,7 @@ nav_order: 3
   background: rgba(217,119,87,0.04);
 }
 .tm-pill-n {
-  font-size: 0.95rem !important;
+  font-size: var(--fs-base) !important;
   font-weight: 500 !important;
   color: #3A3A36;
   letter-spacing: 0;
@@ -70,7 +70,7 @@ nav_order: 3
   font-style: normal;
 }
 .tm-pill-l {
-  font-size: 0.68rem !important;
+  font-size: var(--fs-xs) !important;
   font-weight: 400 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;

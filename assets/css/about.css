@@ -96,7 +96,7 @@ article.post-content p {
   display: flex;
   align-items: center;
   font-family: "Geist Mono", "SFMono-Regular", ui-monospace, monospace;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   font-weight: 400;
   letter-spacing: 0.02em;
   height: 1.5em;
@@ -258,7 +258,7 @@ article code.nh-topic-link:hover,
 }
 
 .nh-paper-preview__eyebrow {
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #D97757;
@@ -266,14 +266,14 @@ article code.nh-topic-link:hover,
 }
 
 .nh-paper-preview__title {
-  font-size: 0.96rem;
+  font-size: var(--fs-base);
   line-height: 1.45;
   color: #C2C0B6;
   margin-bottom: 0.45rem;
 }
 
 .nh-paper-preview__authors {
-  font-size: 0.76rem;
+  font-size: var(--fs-sm);
   line-height: 1.55;
   color: #8A8A7A;
   margin-bottom: 0.42rem;
@@ -285,14 +285,14 @@ article code.nh-topic-link:hover,
 }
 
 .nh-paper-preview__meta {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   font-style: italic;
   color: #8A8A7A;
   margin-bottom: 0.65rem;
 }
 
 .nh-paper-preview__abstract {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   line-height: 1.7;
   color: #C2C0B6;
   border-left: 2px solid rgba(0, 160, 96, 0.22);
@@ -308,7 +308,7 @@ article code.nh-topic-link:hover,
   display: inline-flex;
   align-items: center;
   gap: 0.42rem;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.04em;
   text-transform: none;
   color: #D97757 !important;
@@ -331,7 +331,7 @@ article code.nh-topic-link:hover,
   height: 1.05rem;
   border: 1px solid rgba(217, 119, 87, 0.32);
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   line-height: 1;
 }
 
@@ -372,7 +372,7 @@ article code.nh-topic-link:hover,
     min-height: 1.5em;
     align-items: flex-start;
     flex-wrap: nowrap;
-    font-size: 0.78rem;
+    font-size: var(--fs-sm);
     line-height: 1.5;
     margin-bottom: 0.85rem;
     user-select: text;
