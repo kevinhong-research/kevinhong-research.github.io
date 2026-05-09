@@ -4,7 +4,66 @@
 
 ---
 
-## 2026-05-08 — Session 6 (latest)
+## 2026-05-08 — Session 7 (latest)
+
+### Goal
+Implement the four Tier-1 follow-ups the user picked from the session-6 audit: theme-toggle a11y, homepage tag canonicalization, skip-to-main-content link, and citations console-log cleanup. Plan, audit-the-plan, implement, verify, ship.
+
+### What was done
+
+**Plan + plan-audit** (`.claude/plans/2026-05-08_tier1-a11y-and-fixes.md`)
+- Wrote a structured plan covering all four items: rationale, file paths, risks, verification checklist, rollback.
+- Self-critiqued the plan and revised: rejected `aria-pressed` for the tri-state toggle (misleading semantics; used dynamic `aria-label` instead); split the toggle aria update into a small `updateToggleAria()` helper called from both `setThemeSetting` AND `DOMContentLoaded` (because the first `setThemeSetting` call runs synchronously in `<head>` before the button exists in the DOM); confirmed via `_sass/_layout.scss` that `body.fixed-top-nav` already has `padding-top: 56px`, so a `z-index: 10000` skip link sits cleanly above the navbar.
+
+**Theme-toggle a11y + skip link** (commit `1190e33`, `a11y: …`)
+- `_includes/header.liquid`: added `type="button"` + `aria-label="Theme"` to `<button id="light-toggle">`; added `aria-hidden="true"` to each of the three child `<i>` icons.
+- `assets/js/theme.js`: introduced `updateToggleAria(themeSetting)` helper. Sets aria-label to `"Theme: system"` / `"Theme: dark"` / `"Theme: light"`. Null-safe (early-returns when `#light-toggle` doesn't exist yet). Called from `setThemeSetting` and from the `DOMContentLoaded` handler in `initTheme`.
+- `_layouts/default.liquid`: added `<a class="skip-link" href="#main">Skip to main content</a>` as the very first thing in `<body>`; added `id="main" tabindex="-1"` to the existing main container.
+- `_sass/_base.scss`: skip-link styles. `position: fixed` (so it stays anchored to the viewport regardless of scroll), `top: -3rem` off-screen, `top: 0.75rem` on `:focus` / `:focus-visible`, with the same warm-rust border + parchment/dark-bg as the rest of the brand. Verified visually in both themes.
+
+**Homepage tag canonicalization** (commit `2398c53`, `fix: …`)
+- `_pages/about.md`: bio chip `#Human-Algorithm Interactions` → `#Human-AI Interaction` (aligns with the canonical name in `_data/publications.yml` and the publications-page filter button).
+- `assets/js/about.js`: `TOPIC_MAP` key updated to match. URL stays `/publications/#human-ai-interaction`.
+- End-to-end verified: clicking the homepage chip navigates to `/publications/#human-ai-interaction`, the "Human-AI Interaction" filter button activates, and 5 of 39 papers are filtered.
+
+**Citations log + idempotence guard** (commit `88cc6c6`, `chore: …`)
+- `assets/js/research.js`: removed the `console.log('[citations] Applied …')` line in `applyCountsToDOM`. Added module-scope `let citationsApplied = false;` and an early-return at the top of `fetchCitations`. Counts still populate (verified: 39 `.pub-cite-count` spans rendered). `console.error` on fetch failure preserved.
+- The audit's claim of "8x per visit" was wrong — `applyCountsToDOM` is called exactly once per page life. The 8 messages we saw were accumulated console state across multiple page navigations during the audit. Documented this in the plan and the commit.
+
+### Current status
+
+- **Done**: All four Tier-1 fixes implemented, three code commits made, all verified end-to-end via Jekyll preview at desktop+mobile in both light and dark themes. No console errors. No regressions to session-6 perf wins (mathjax/polyfill/altmetric/dimensions/MDB/Material Icons all still absent from the bundle). Tag click-through works to the filter.
+- **In progress**: nothing.
+- **Pending**: push to `origin/main` + `gh-pages` rebuild + deploy verification.
+
+### Important context
+
+- The `:focus` pseudo-class doesn't always update under programmatic `Element.focus()` in headless Chrome / CDP-driven script evaluation — known harness quirk. Verified the skip-link styles work via a forced-state demo screenshot in both themes; for real keyboard users pressing Tab, the pseudo-class will engage normally. If automated a11y tests are added later, `axe` or `pa11y` should be configured to use real keyboard simulation, not `.focus()`.
+- `body.fixed-top-nav` in `_sass/_layout.scss:29` adds `padding-top: 56px` for the fixed navbar. The skip link's `position: fixed; z-index: 10000` rides above this when focused — no extra layout work needed.
+- The publications page filter logic (`research.js:805-816 applyHashFilter`) slugifies button `data-filter` via `.toLowerCase().replace(/ /g, '-')`. So `/publications/#human-ai-interaction` already matched both the old and new chip text — the rename was purely about visible string consistency, not wiring.
+- `AGENTS.md` is still untracked (per session-5 decision).
+- ImageMagick errors during build for `assets/img/football/players/{arch-manning,malachi-toney}.jpg` are pre-existing (these files are HTML/JSON masquerading as `.jpg`); unrelated to this session.
+
+### Decisions already made
+
+- `aria-pressed` deliberately not added to the theme toggle — three states means binary toggle semantics don't fit; `aria-pressed="mixed"` is misleading. Dynamic `aria-label` is the WAI-ARIA Authoring Practices recommendation for tri-state cycles.
+- aria-label kept terse (`"Theme: dark"`, not `"Theme: dark — press to switch to system"`). Verbose stateful labels hurt screen-reader UX more than they help.
+- Skip link is `position: fixed`, not `absolute` — `absolute` made it scroll with the document, which would have left it inaccessible mid-scroll. Caught during plan-audit.
+- Did **not** title-case the publications filter chips (audit M3) — out of scope for Tier 1; queued for the next pass.
+- Did **not** also fix the audit's M5 ("earn the green dot" — link the ISR / Endowed Chair / Assoc. Dean labels in the Currently line) — also out of scope.
+
+### Next best step
+
+- **Primary action**: After deploy, on the live site:
+  1. On a real laptop, hard-reload the homepage and press `Tab` once. Verify the "Skip to main content" pill appears in the top-left, focused. Press Enter — focus should jump past the nav to the main content.
+  2. With a screen reader on (VoiceOver, NVDA, or Orca), focus the theme toggle and confirm it announces "Theme: system" / "Theme: dark" / "Theme: light" and updates as you press it.
+  3. From the homepage, click the `#Human-AI Interaction` chip. URL should become `/publications/#human-ai-interaction`, the filter button should activate, and only matching papers should be visible.
+  4. DevTools → Console on `/publications/`. Confirm zero `[citations] Applied …` log lines.
+- **Next-set queue (Tier 1 remainder + Tier 2)**: from the session-6 audit, untouched items are: title-case publications filter chips (M3), promote `working papers` to top-level nav (audit recommendation H7 partial), tighten/fold the awards run-on with `<details>` (M1), promote the lede sentence to a deck (M6), smaller `prof_pic-home` srcset for mobile LCP (H2), Sass `@import` → `@use/@forward` migration (L1, getting urgent before Dart Sass 3.0), homepage footer affordances (H6 — explicitly declined this round, can revisit).
+
+---
+
+## 2026-05-08 — Session 6
 
 ### Goal
 Run a top-to-bottom QA + design audit, then implement the highest-priority fixes the audit surfaced: visible typos, mobile-hidden identity content, and over-eager 3rd-party JS loading.
