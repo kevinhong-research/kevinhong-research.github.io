@@ -37,8 +37,12 @@
           <div class="talk-card-top">
             <div class="talk-institution-wrap">
               {% if talk.logo %}
+                {% assign logo_webp = talk.logo | replace: '.png', '-480.webp' | replace: '.jpg', '-480.webp' | replace: '.jpeg', '-480.webp' %}
                 <span class="talk-logo talk-logo--image">
-                  <img src="{{ talk.logo | relative_url }}" alt="{{ talk.institution }} logo" loading="lazy">
+                  <picture>
+                    <source srcset="{{ logo_webp | relative_url }}" type="image/webp">
+                    <img src="{{ talk.logo | relative_url }}" alt="{{ talk.institution }} logo" loading="lazy" width="48" height="48">
+                  </picture>
                 </span>
               {% else %}
                 <span class="talk-logo talk-logo--fallback" aria-hidden="true">{{ talk_initials }}</span>
