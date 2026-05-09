@@ -18,7 +18,26 @@
   forthcoming: true
   topics:
     - "Digital Platforms"
-  abstract: ""
+  abstract: >
+    Educational crowdfunding platforms seek to reduce funding disparities by directing financial
+    support from a broad donor base to disadvantaged students. One approach to achieving this goal
+    is through attentional interventions highlighting student needs, but their effectiveness
+    remains uncertain. Using data from DonorsChoose.org, we examine the impact of such an
+    intervention—the "equity focus" project label—which signals student disadvantage based on
+    poverty and racial minority status. Employing a regression discontinuity design that leverages
+    arbitrary cutoffs in label assignment, we find that although the equity focus label increases
+    fundraising for disadvantaged students, its impact is largely driven by projects signaling
+    poverty, with only a marginal effect when highlighting racial minority status. These
+    differences in effectiveness appear to be influenced, in part, by the social identities of
+    local donors. Schools in lower-income zip codes tend to attract more donations when projects
+    highlight poverty, whereas schools in racially diverse areas benefit more from projects
+    emphasizing racial minority status. Political ideology also plays a role. Although both
+    liberal and conservative communities respond positively to poverty-focused labels, only
+    liberal areas show increased support for projects that highlight racial minority status.
+    In contrast, conservative areas exhibit little to no response—and in some cases, even a
+    negative response. Our findings highlight the importance of carefully designing equity focus
+    fundraising strategies as simply drawing attention to student disadvantage does not guarantee
+    increased support.
 
 - title: "Can Regulation Restore Authenticity? Evidence from Policies Against Online Review Suppression"
   url: "https://pubsonline.informs.org/doi/10.1287/isre.2023.0436"
