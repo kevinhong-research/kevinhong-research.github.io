@@ -4,7 +4,44 @@
 
 ---
 
-## 2026-05-08 — Session 4 (latest)
+## 2026-05-08 — Session 5 (latest)
+
+### Goal
+Audit and fix the intermittent broken homepage profile picture, then commit and push the fix.
+
+### What was done
+
+**Profile image audit**
+- Reproduced the deployed failure at the asset level: live `index.html` referenced `/assets/img/prof_pic-{480,800,1400}.webp`, but those generated WebP files returned `404` on `https://kevinhong.ai`.
+- Confirmed the original fallback JPEG existed and returned `200`, explaining why refreshes sometimes recovered after fallback/caching.
+- Confirmed `origin/gh-pages` had `assets/img/prof_pic.jpeg` but not the generated `prof_pic-*.webp` variants.
+
+**Profile image fix** (`f1c6a21`)
+- Added committed homepage-specific WebP asset: `assets/img/prof_pic-home.webp`.
+- Updated `_pages/about.md` with `image_webp: prof_pic-home.webp` and alt text `Kevin Y. Hong`.
+- Updated `_layouts/about.liquid` so the homepage profile picture uses the committed cache-busted WebP with the original JPEG fallback instead of generated responsive WebP names.
+- Hardened `_includes/figure.liquid` by removing the trailing comma from generated `srcset` values and replacing the jQuery-dependent `onerror` fallback with vanilla JS.
+
+### Current status
+- **Done**: Profile image fix implemented, committed, and verified locally.
+- **In progress**: nothing.
+- **Pending**: GitHub Pages rebuild/live-site verification after push.
+
+### Important context
+- `AGENTS.md` remains an untracked local file and was intentionally not staged.
+- Local verification used `http://127.0.0.1:4177/` served from `_site`.
+- Production build completed in `141.42s`; existing ImageMagick warnings for malformed football player `.jpg` files are unrelated to the profile picture.
+
+### Decisions already made
+- Did not rely on generated `prof_pic-480.webp`, `prof_pic-800.webp`, or `prof_pic-1400.webp` for the homepage because those names were missing on the deployed `gh-pages` branch.
+- Used one committed, cache-busted WebP (`prof_pic-home.webp`) plus JPEG fallback for deterministic deployment.
+
+### Next best step
+- **Primary action**: After deploy completes, verify `https://kevinhong.ai/assets/img/prof_pic-home.webp` returns `200` and the homepage portrait survives repeated refreshes.
+
+---
+
+## 2026-05-08 — Session 4
 
 ### Goal
 Recover local `main` after the April 29 history rewrite, add the DOI link for the educational crowdfunding publication, and push the resulting `main` update.
