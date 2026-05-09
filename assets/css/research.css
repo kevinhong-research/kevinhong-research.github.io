@@ -60,7 +60,7 @@
 /* ── SECTION ── */
 .nh-section {
   border-top: 1px solid var(--line);
-  padding-top: 2rem;
+  padding-top: var(--space-4xl);
   margin-bottom: 0;
   display: block;
 }
@@ -84,7 +84,7 @@
 .area-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   padding: 1rem 0 1.5rem;
 }
 .area-tag {
@@ -110,7 +110,7 @@
 .filter-bar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   flex-wrap: wrap;
   padding: 0 0 1.3rem;
 }
@@ -153,7 +153,7 @@
 .pub-item {
   display: grid;
   grid-template-columns: 44px 1fr;
-  gap: 1.5rem;
+  gap: var(--space-3xl);
   padding: 1.5rem 0 1.16rem;
   border-bottom: 1px solid var(--line);
   align-items: start;
@@ -212,7 +212,7 @@
 .pub-body {
   display: flex;
   flex-direction: column;
-  gap: 0.28rem;
+  gap: var(--space-2xs);
   transition: transform var(--duration-base) var(--ease-out);
   will-change: transform;
 }
@@ -245,7 +245,7 @@
 .pub-meta {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-md);
   flex-wrap: wrap;
   margin-top: 0.08rem;
   height: var(--pub-meta-control-height);
@@ -324,7 +324,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: var(--space-2xs);
   background: none;
   border: 1px solid var(--pub-control-border);
   background: var(--pub-control-bg);
@@ -379,7 +379,7 @@
 .pub-abstract-body.pub-abstract-open {
   grid-template-rows: 1fr;
   opacity: 1;
-  margin-top: 0.65rem;
+  margin-top: var(--space-base);
 }
 
 /* Inner wrapper — overflow:hidden is required for the grid trick */
@@ -413,7 +413,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: var(--space-2xs);
   background: none;
   border: 1px solid var(--pub-control-border);
   background: var(--pub-control-bg);
@@ -452,7 +452,7 @@
 .pub-citation-body.pub-citation-open {
   grid-template-rows: 1fr;
   opacity: 1;
-  margin-top: 0.65rem;
+  margin-top: var(--space-base);
 }
 
 .pub-citation-inner {
@@ -488,7 +488,7 @@
 .pub-cite {
   display: inline-flex;
   align-items: center;
-  gap: 0.28rem;
+  gap: var(--space-2xs);
   font-size: var(--fs-2xs);
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -516,7 +516,7 @@
 .pub-cite-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--space-2xs);
   color: inherit;
   white-space: nowrap;
   font-family: inherit;
@@ -578,13 +578,13 @@
 .scholar-bar {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-xl);
   padding: 0 0 1.1rem;
 }
 .scholar-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   font-size: var(--fs-sm);
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -684,7 +684,7 @@
 .pub-results-bar {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: var(--space-md);
   padding: 0 0 1.2rem;
 }
 
@@ -723,7 +723,7 @@
 }
 
 .pub-empty-state__action {
-  margin-top: 0.8rem;
+  margin-top: var(--space-lg);
 }
 
 /* ── VIEW TOGGLE BUTTON ─────────────────────────────────────
@@ -737,7 +737,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: var(--space-2xs);
   margin-left: auto;
   flex-shrink: 0;
   font-size: var(--fs-2xs);
@@ -813,12 +813,12 @@
 .tl-year-header {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: var(--space-base);
   padding: 2rem 0 0.8rem;
   position: relative;
 }
 .tl-year-group:first-child .tl-year-header {
-  padding-top: 0.25rem;
+  padding-top: var(--space-2xs);
 }
 
 /* Circle node on the spine */
@@ -873,7 +873,7 @@
 }
 .tl-paper:last-child {
   border-bottom: none;
-  padding-bottom: 0.25rem;
+  padding-bottom: var(--space-2xs);
 }
 
 /* Left green bar on hover */
@@ -888,7 +888,7 @@
   transition: transform var(--duration-fast) var(--ease-default);
 }
 .tl-paper:hover {
-  padding-left: 1.5rem;
+  padding-left: var(--space-3xl);
   border-left-color: rgba(0, 160, 96, 0.12);
 }
 .tl-paper:hover::before { transform: scaleY(1); }
@@ -924,7 +924,7 @@
   font-size: var(--fs-sm);
   font-weight: 300;
   color: var(--text-mid);
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-2xs);
 }
 .tl-authors strong {
   color: var(--text);
@@ -935,7 +935,7 @@
 .tl-meta {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 .tl-journal {
@@ -982,8 +982,8 @@
   .scholar-bar {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.45rem;
-    padding-bottom: 0.8rem;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-lg);
   }
   .scholar-btn {
     align-self: flex-start;
@@ -994,14 +994,14 @@
     font-size: var(--fs-sm);
   }
   .filter-bar {
-    gap: 0.4rem;
-    padding-bottom: 1rem;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-xl);
   }
   .pub-results-bar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
-    padding-bottom: 1rem;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-xl);
   }
   .pub-results-reset,
   .pub-empty-state__action {

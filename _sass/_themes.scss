@@ -79,6 +79,21 @@
   --accent-cool:        #19b66f;   // primary green (status, section labels)
   --accent-cool-deep:   #00a060;   // deeper green (abstracts, secondary links)
 
+  // Spacing scale — used by padding, margin, gap. ~10 tiers covering the
+  // full range from clip-path edges to page-level breathing room.
+  // Cluster centers chosen from existing usage: 0.4, 0.65, 0.85, 1.1 each
+  // bucket ~22 declarations of near-duplicate values.
+  --space-2xs:  0.25rem;   // tight inline padding, micro gap
+  --space-xs:   0.4rem;    // chip padding, small gap (collapses 0.42–0.48)
+  --space-sm:   0.5rem;    // standard small gap
+  --space-base: 0.65rem;   // tight default padding (collapses 0.6–0.7)
+  --space-md:   0.75rem;   // medium padding (collapses 0.72–0.78)
+  --space-lg:   0.85rem;   // spacious padding (collapses 0.8–0.9)
+  --space-xl:   1rem;      // standard card padding, common gap
+  --space-2xl:  1.1rem;    // larger card padding (collapses 1.1–1.2)
+  --space-3xl:  1.5rem;    // section gap (collapses 1.4–1.5)
+  --space-4xl:  2rem;      // major break
+
   #light-toggle-system {
     padding-left: 10px;
     padding-top: 12px;

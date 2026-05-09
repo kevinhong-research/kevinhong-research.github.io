@@ -30,9 +30,9 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: var(--space-xs);
   padding: 0.7rem 0;
-  padding-left: 0.8rem;
+  padding-left: var(--space-lg);
   border-top: 1px solid var(--fb-line);
   border-bottom: 1px solid var(--fb-line);
   position: relative;
@@ -74,7 +74,7 @@
 .fb-pill {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.32rem;
+  gap: var(--space-2xs);
   padding: 0.25rem 0.85rem 0.25rem 0.75rem;
   border: 1px solid rgba(58, 58, 54, 0.5);
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
@@ -152,7 +152,7 @@
 .fb-card-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: var(--space-xl);
   padding: 1rem 0.05rem 0.25rem;
 }
 
@@ -237,14 +237,14 @@
 .fb-feature-card-rows {
   margin-top: 0.96rem;
   display: grid;
-  gap: 0.48rem;
+  gap: var(--space-sm);
 }
 
 .fb-feature-card-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-xl);
   padding-top: 0.48rem;
   border-top: 1px solid rgba(58, 58, 54, 0.5);
   font-size: var(--fs-sm);
@@ -394,15 +394,15 @@
 }
 
 .fb-tip-rows {
-  margin-top: 0.7rem;
+  margin-top: var(--space-md);
   display: grid;
-  gap: 0.45rem;
+  gap: var(--space-xs);
 }
 
 .fb-tip-row {
   display: grid;
   grid-template-columns: 4.5rem 1fr;
-  gap: 0.55rem;
+  gap: var(--space-sm);
   font-size: var(--fs-xs);
   line-height: 1.5;
 }
@@ -418,8 +418,8 @@
 }
 
 .fb-tip-note {
-  margin-top: 0.65rem;
-  padding-top: 0.6rem;
+  margin-top: var(--space-base);
+  padding-top: var(--space-base);
   border-top: 1px solid rgba(58, 58, 54, 0.5);
   font-size: var(--fs-xs);
   color: #8A8A7A;
@@ -510,8 +510,8 @@
 
   .fb-card-grid {
     grid-template-columns: 1fr;
-    gap: 0.85rem;
-    padding-top: 0.85rem;
+    gap: var(--space-lg);
+    padding-top: var(--space-lg);
   }
 
   .fb-lightbox {

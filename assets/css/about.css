@@ -262,14 +262,14 @@ article code.nh-topic-link:hover,
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent-warm);
-  margin-bottom: 0.45rem;
+  margin-bottom: var(--space-xs);
 }
 
 .nh-paper-preview__title {
   font-size: var(--fs-base);
   line-height: 1.45;
   color: var(--text-hi);
-  margin-bottom: 0.45rem;
+  margin-bottom: var(--space-xs);
 }
 
 .nh-paper-preview__authors {
@@ -288,7 +288,7 @@ article code.nh-topic-link:hover,
   font-size: var(--fs-xs);
   font-style: italic;
   color: #8A8A7A;
-  margin-bottom: 0.65rem;
+  margin-bottom: var(--space-base);
 }
 
 .nh-paper-preview__abstract {
@@ -304,10 +304,10 @@ article code.nh-topic-link:hover,
 
 .nh-paper-preview__cta,
 .nh-paper-preview__cta:visited {
-  margin-top: 0.7rem;
+  margin-top: var(--space-md);
   display: inline-flex;
   align-items: center;
-  gap: 0.42rem;
+  gap: var(--space-xs);
   font-size: var(--fs-xs);
   letter-spacing: 0.04em;
   text-transform: none;
@@ -374,7 +374,7 @@ article code.nh-topic-link:hover,
     flex-wrap: nowrap;
     font-size: var(--fs-sm);
     line-height: 1.5;
-    margin-bottom: 0.85rem;
+    margin-bottom: var(--space-lg);
     user-select: text;
   }
 
