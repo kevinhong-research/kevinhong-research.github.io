@@ -31,6 +31,7 @@
 // legacy @import resolution finds them. Keep these in sync with
 // _variables.scss until vendor partials migrate to @use.
 $ti-font-path: "../fonts";
+$ti-font-display: swap; // Override the partial's `null !default` to avoid icon-font FOIT.
 $fa-font-path: "../webfonts";
 
 @import
