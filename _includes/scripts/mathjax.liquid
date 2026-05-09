@@ -1,6 +1,6 @@
-{% if site.enable_math %}
+{% if site.enable_math and page.math %}
   {% unless page.pseudocode %}
-    <!-- MathJax -->
+    <!-- MathJax (opt-in per page via `math: true` front-matter) -->
     <script type="text/javascript">
       window.MathJax = {
         tex: {
