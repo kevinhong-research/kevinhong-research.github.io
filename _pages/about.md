@@ -7,6 +7,8 @@ subtitle: <a href='https://people.miami.edu/profile/f7508a21683d334770fe03a231e4
 profile:
   align: right
   image: prof_pic.jpeg
+  image_webp: prof_pic-home.webp
+  image_alt: Kevin Y. Hong
   image_circular: true # crops the image to make it circular
   more_info: >
 
