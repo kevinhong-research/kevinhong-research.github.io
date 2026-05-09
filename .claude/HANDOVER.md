@@ -4,7 +4,85 @@
 
 ---
 
-## 2026-05-09 — Session 10 (latest)
+## 2026-05-09 — Session 11 (latest)
+
+### Goal
+Three threads, all triggered mid-session by user observations on the live site after session 10's WebP work landed:
+1. Talk-logo images appeared upper-left in their parallelogram-clipped containers (centering broken by the new `<picture>` wrapper).
+2. Audit font-size consistency — services felt smaller than publications.
+3. Audit text-color consistency — some near-white text was warm parchment, others a cooler grey.
+
+### What was done
+
+**Image-centering fix** (commit `810ba33`, `fix(images): set <picture> to display:contents so wrapped <img> centers`)
+- The session-10 WebP rollout wrapped each logo `<img>` in `<picture>`. The CSS centering relied on `.talk-logo--image img { width: 74%; height: 74% }` measured against the wrapper, but with `<picture>` in the middle (block-display, content-sized height), the percentages cycled and the img sat at the top-left of the wrapper.
+- Fix: `display: contents` on the wrapped `<picture>` so it disappears from layout while keeping its source-selection role. Applied at three locations: `.talk-logo--image picture`, `.fb-feature-card-media--logo picture`, `.fb-tip-photo picture`.
+- Verified centering math: `horizCenterOffset: 0`, `vertCenterOffset: 0` on all three.
+
+**Font-size audit + 8-step type scale** (commit `db2d5d0`, `style(type): introduce 8-step type scale, unify sizes across all pages`)
+- Pre-state: 47 distinct font-size values across the project's CSS, with 18 packed into the 0.58–0.85rem range. Services/talks list-row titles were 0.88rem while publication titles sat at 1rem — a 14% gap that read as "services feels smaller."
+- Defined a canonical scale at `:root` in `_themes.scss`: `--fs-2xs` 0.65rem → `--fs-3xl` 2.5rem, ~1.18× ratio between adjacent steps.
+- Re-leveled services/talks list-row titles up to `--fs-base` (1rem) so they read at the same weight as publication titles. Mapped all metadata, sub-labels, and badges to the canonical tiers.
+- Fixed two pre-existing outliers: `.post-title { font-size: 40px }` → `var(--fs-3xl)` (now scales with root); `.code-display-wrapper { font-size: medium }` (the lone keyword in a rem system) → `var(--fs-base)`.
+- Verified each page uses 5 distinct sizes that all snap to the canonical scale (modulo intentional em-based inline `<code>` and SVG state-label cartographic sizing).
+
+**Text-color audit + dark-mode consolidation** (commit `b48485e`, `style(color): unify dark-mode text palette + fix comment-termination bug`)
+- Pre-state: dark mode had three competing values for "high-emphasis text" — `#ddd8cb` (warm parchment, used by research `--text-hi`), `#C2C0B6` (cooler/dimmer, used by football base `--fb-text-hi` plus 8 hardcoded literals scattered across CSS files), and `#dad9d4` (a few border accents). Plus drift in the mid tier and a base-state bug where football's `--fb-text-lo: #3A3A36` matched the line color (near-invisible on the dark card bg).
+- Light mode was already internally consistent — user explicitly said don't touch it. Scope limited to dark mode + base-state defaults that leak into dark.
+- Promoted `--text-hi/text/text-mid/text-lo` and `--line/--line-hi` from the `.nh-research` scope up to `:root` in `_themes.scss`, with matching light-theme overrides. Single source of truth now.
+- Aliased football's `--fb-text-*` and `--fb-line` to `var(--text-*)` and `var(--line)` so the football page picks up the same palette and switches with theme automatically. Stripped redundant text/line overrides; only genuine page-specific tweaks remain (dark-mode `--fb-line: #4A4A46` for separator visibility, accent hue warming).
+- Replaced 8 hardcoded `#C2C0B6` literals with `var(--text-hi)` across `research.css`, `about.css`, `football.css`, `talkmap.css`. Most-visible payoff: home-page paper-preview title/abstract and football team-card values now match publication titles in warmth and brightness.
+
+**CSS comment-termination landmine — bug found and recipe documented** (commit `40267b6`, `docs: lessons file — CSS comment-termination landmine`)
+- While verifying the color consolidation, the dark-theme `.fb-page` overrides silently failed to apply despite passing every standard check (file content correct, `el.matches()` returns true, specificity beats the base, no console errors). After ~30 minutes of bisecting via `document.styleSheets[].cssRules`, the missing rule was traced to a comment block above it: `/* ... --text-*/--line palette ... */` contained the substring `*/` inside the body, which prematurely terminated the comment. The remaining text got parsed as broken CSS that swallowed the next rule.
+- Fix: rewrote the comment without the `*/` substring (replaced `--text-*/--line` with `--text-* and --line`).
+- Recorded the rule, the incident, and a pre-commit grep recipe to `.claude/lessons.md` (a new file the project CLAUDE.md was already pointing at). Future sessions will read it at start.
+
+### Current status
+
+- **Done**: All four threads fully implemented, verified across `/`, `/publications/`, `/services/`, `/talks/`, `/football/` in both dark and light modes via DOM eval (computed font-sizes match the scale; computed colors match the canonical palette). Build clean (~0.5s incremental).
+- **In progress**: nothing.
+- **Pending**: Push three local commits to `origin/main` (`db2d5d0`, `b48485e`, `40267b6`). After push: confirm Lighthouse hasn't regressed (the type-scale change made services/talks/football page heights ~10–15% taller — could affect LCP positioning, though headings are already above the fold).
+
+### Important context
+
+- **The `<picture>` `display:contents` pattern is now the convention** for images that need percentage-based sizing inside a styled wrapper. If a future PR adds a new `<picture>`-wrapped image and it sits oddly in its container, this is the fix. The convention is documented implicitly in the CSS at the three sites that use it.
+- **Font-size custom properties** (`--fs-*`) are at `:root` in `_themes.scss`. New CSS should use `var(--fs-base)` etc. — never hardcode `0.85rem`/`14px` again. Same for text colors: use `var(--text-hi)` not `#ddd8cb`.
+- **Light mode `--text-hi` is now `#3d3929`** (was `#2f2b21` for research). This is a ~5% lightening for publication titles in light mode, traded for site-wide consistency. User explicitly approved.
+- **Light-mode flash on the home page**: after my edits, the page may flash light briefly before JS sets `data-theme="dark"`. This pre-existed my changes (it's about the `:root` default and the JS theme-init order, not about specific colors). If it becomes annoying, the fix is in `_includes/head.liquid` — set `data-theme="dark"` on `<html>` directly via Liquid before JS runs.
+- **`.claude/lessons.md` is now the canonical project-lessons file.** Per project CLAUDE.md "review lessons at session start," future sessions should read it before working in CSS files.
+- The `*/` comment landmine is the kind of bug a linter would catch — but stylelint isn't currently configured. If future maintenance gets painful, adding stylelint with `block-no-empty` and `comment-no-empty` plus a custom rule for `*/`-in-comment-body would help.
+- **AGENTS.md still untracked.** Same as previous sessions.
+
+### Decisions already made
+
+- **Type scale `--fs-*` ratio: ~1.18×.** Slightly tighter than the conventional 1.25× minor third — chosen because that's where the existing values already clustered, so the migration is mostly a snap-to-grid rather than a redesign.
+- **Services/talks list-row titles promoted to `--fs-base` (1rem)** rather than dropping publication titles down to `--fs-sm`. The user perceives publications as "the right size"; making services match it (rather than the inverse) preserves the page that already feels good.
+- **Single canonical text palette in dark mode**, aliased everywhere. Football page's separate `--fb-text-*` namespace stays as a thin alias layer rather than being deleted — preserves the option to give football a distinctive palette later without touching every CSS file.
+- **Lightbox click-through on stadiums still loads the original JPG/PNG, not a `-1400.webp` variant.** Deferred from session 10; still deferred. Rare interaction; bandwidth is not the bottleneck.
+- **Lessons file is for future-Claude (and human readers), not for the user.** The project CLAUDE.md was already pointing at this path; I just created the file. Format intentionally short and rule-first so it stays useful as it grows.
+
+### Next best step
+
+- **Primary action**: Push, then confirm on `kevinhong.ai`:
+  1. Visual: open `/`, `/services/`, `/talks/`, `/publications/` in dark mode — paper-preview titles, role/student names, talk institutions, pub titles all read with the same warm parchment color and same size weight.
+  2. DevTools: pick a `.svc-role-title` and a `.pub-title` — `getComputedStyle(...).color` should be `rgb(221, 216, 203)` on both. `fontSize` should be `16px` on both.
+  3. Toggle to light mode — same elements should both render at `rgb(61, 57, 41)` (`#3d3929`).
+  4. Football page: hover a marker — tooltip stadium image loads via WebP, tooltip text reads in the same palette as publications metadata.
+- **Carried from session 10** (still queued):
+  - **Tier 2 left**: T2.6 lede deck, T2.7 awards `<details>`, T2.9 promote working papers in nav.
+  - **Tier 3 left**: T3.11 jQuery/Bootstrap-bundle replacement (~100 KB cut, biggest remaining perf lever), T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
+  - **Tier 4 left**: T4.17 OG/Twitter card meta, T4.19 Bootstrap utility-only build (pairs with T3.11), T4.20 last-updated stamp.
+  - **From session 8 audit**: F1 dark-mode `--text-lo` contrast bump (the new `--text-lo: #928d7f` may still be borderline for WCAG AA on body text — worth measuring), F2 services special-issue date column.
+  - **External deadline (still)**: vendored font-awesome + tabler-icons Sass migration before Dart Sass 3.0.
+- **Nice-to-haves surfaced this session**:
+  - The 1-bit-per-channel drift between `--global-text-color-light: #9b978c` (al-folio dark mid) and `--text-mid: #9c988b` (research dark mid) is visually identical but technically inconsistent. Could be unified in a follow-up. Low priority.
+  - Stylelint configuration to catch `*/` inside comment bodies and other CSS landmines. Low priority but cheap to add.
+  - Light-mode `--text-hi` choice (`#3d3929`) was a judgment call vs. research's old `#2f2b21`. If publications page feels too soft in light mode now, switch back to `#2f2b21` and accept the 5% gap with football.
+
+---
+
+## 2026-05-09 — Session 10
 
 ### Goal
 Investigate user bug report — "school logos not showing in /talks/, except Rochester and Lehigh, since session 9's WebP commit." Find the root cause, fix it properly (no quick revert), and extend the fix to the football page where the same WebP-vs-PNG asymmetry was bleeding bandwidth on stadium thumbnails.
