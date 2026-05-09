@@ -18,7 +18,22 @@ let setThemeSetting = (themeSetting) => {
 
   document.documentElement.setAttribute("data-theme-setting", themeSetting);
 
+  updateToggleAria(themeSetting);
+
   applyTheme();
+};
+
+// Keep the theme toggle's aria-label in sync with the active mode.
+// Null-safe: the toggle button doesn't exist yet during the first
+// setThemeSetting call from initTheme (which runs in <head>).
+let updateToggleAria = (themeSetting) => {
+  let toggle = document.getElementById("light-toggle");
+  if (!toggle) return;
+  let label =
+    themeSetting === "light" ? "Theme: light"
+    : themeSetting === "dark" ? "Theme: dark"
+    : "Theme: system";
+  toggle.setAttribute("aria-label", label);
 };
 
 // Apply the computed dark or light theme to the website.
@@ -233,6 +248,9 @@ let initTheme = () => {
   // Add event listener to the theme toggle button.
   document.addEventListener("DOMContentLoaded", function () {
     const mode_toggle = document.getElementById("light-toggle");
+
+    // Sync the initial aria-label now that the button exists in the DOM.
+    updateToggleAria(themeSetting);
 
     mode_toggle.addEventListener("click", function () {
       toggleThemeSetting();
