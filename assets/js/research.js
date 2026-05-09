@@ -15,6 +15,7 @@
   let currentQuery  = '';
   let pendingPaperId = null;
   let searchDebounceTimer = null;
+  let citationsApplied = false;  /* idempotence guard for fetchCitations */
 
   /* ── JOURNAL METADATA ──────────────────────────────────────*/
   const JOURNAL_META = {
@@ -710,17 +711,21 @@
      Falls back gracefully on any error — dash stays in place.
   ──────────────────────────────────────────────────────────── */
   function applyCountsToDOM(counts, doiMap) {
-    let applied = 0;
     Object.entries(counts).forEach(([doi, count]) => {
       const anchor = doiMap[doi];
       if (!anchor || count == null) return;
       const span = anchor.querySelector('.pub-cite-count');
-      if (span) { span.textContent = Number(count).toLocaleString(); applied++; }
+      if (span) { span.textContent = Number(count).toLocaleString(); }
     });
-    console.log('[citations] Applied', applied, 'of', Object.keys(counts).length, 'counts to DOM');
   }
 
   async function fetchCitations() {
+    /* Idempotence guard: if a future caller (e.g. a re-render after filter
+       change) re-invokes this, skip the network and DOM walk. The DOI counts
+       don't change between filter clicks within a single page life. */
+    if (citationsApplied) return;
+    citationsApplied = true;
+
     const CACHE_KEY = 'nh_openalex_citations';
     const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
