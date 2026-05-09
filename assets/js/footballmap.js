@@ -425,8 +425,11 @@
     const photoHref = entry.stadium_image
       ? entry.stadium_image
       : `https://www.bing.com/images/search?q=${encodeURIComponent(photoQuery)}`;
+    const stadiumWebp = entry.stadium_image
+      ? entry.stadium_image.replace(/\.(jpe?g|png)$/i, '.webp')
+      : "";
     const image = entry.stadium_image
-      ? `<a class="fb-tip-photo-link" href="${photoHref}" target="_blank" rel="noopener noreferrer"><div class="fb-tip-photo"><img src="${entry.stadium_image}" alt="${stadium}"></div></a>`
+      ? `<a class="fb-tip-photo-link" href="${photoHref}" target="_blank" rel="noopener noreferrer"><div class="fb-tip-photo"><picture><source srcset="${stadiumWebp}" type="image/webp"><img src="${entry.stadium_image}" alt="${stadium}" loading="lazy"></picture></div></a>`
       : "";
     const note = entry.note ? `<div class="fb-tip-note">${entry.note}</div>` : "";
     const conference = entry.conference || "Not listed";
