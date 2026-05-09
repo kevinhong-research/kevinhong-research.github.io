@@ -1,5 +1,7 @@
 // Additional self-hosted fonts via fontsource npm packages
 
+@use "variables" as *;
+
 // Cormorant Garamond (variable font, weight 300-700)
 @font-face {
   font-family: "Cormorant Garamond";

@@ -3,20 +3,37 @@
 ---
 @charset "utf-8";
 
-// Dimensions
-$max-content-width: {{ site.max_width }};
+// Configure $max-content-width from _config.yml site.max_width.
+// Liquid templating only works in this file (not in _sass/ partials), so
+// we forward the configured value into the variables module here.
+@use "variables" with (
+  $max-content-width: {{ site.max_width }}
+);
+
+// Top-level project partials (migrated from @import to @use).
+// Order matters for cascade — _dropdown stays last to override earlier rules.
+@use "geist";
+@use "fonts";
+@use "themes";
+@use "layout";
+@use "base";
+@use "distill";
+@use "cv";
+@use "tabs";
+@use "typograms";
+@use "dropdown";
+
+// Vendored icon libraries — still use @import internally (separate migration).
+// These trigger their own deprecation warnings; will be addressed when the
+// vendor packages are upgraded to module-system syntax.
+//
+// Re-declare the variables vendor partials reference at this scope so
+// legacy @import resolution finds them. Keep these in sync with
+// _variables.scss until vendor partials migrate to @use.
+$ti-font-path: "../fonts";
+$fa-font-path: "../webfonts";
 
 @import
-  "variables",
-  "geist",
-  "fonts",
-  "themes",
-  "layout",
-  "base",
-  "distill",
-  "cv",
-  "tabs",
-  "typograms",
   "font-awesome/fontawesome",
   "font-awesome/brands",
   "font-awesome/solid",
@@ -25,5 +42,3 @@ $max-content-width: {{ site.max_width }};
   "tabler-icons/tabler-icons-filled.scss",
   "tabler-icons/tabler-icons-outline.scss"
 ;
-
-@import "dropdown";

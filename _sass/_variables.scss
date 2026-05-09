@@ -59,3 +59,9 @@ $back-to-top-right: 30px;
 $back-to-top-diameter: 40px;
 $back-to-top-height: $back-to-top-diameter;
 $back-to-top-width: $back-to-top-diameter;
+
+// Layout — overridable from main.scss via `@use "variables" with (...)`.
+// Liquid templating only works in main.scss (Jekyll's front-matter dashes),
+// so we expose this var here for partials to consume and let main.scss
+// inject the value from `_config.yml site.max_width`.
+$max-content-width: 930px !default;
