@@ -30,7 +30,12 @@ layout: default
             <picture>
               {% if page.profile.image_webp %}
                 {% assign profile_image_webp_path = page.profile.image_webp | prepend: 'assets/img/' %}
-                <source srcset="{{ profile_image_webp_path | relative_url | bust_file_cache }}" type="image/webp">
+                {% assign profile_image_webp_300 = page.profile.image_webp | replace: '.webp', '-300.webp' | prepend: 'assets/img/' %}
+                {% assign profile_image_webp_600 = page.profile.image_webp | replace: '.webp', '-600.webp' | prepend: 'assets/img/' %}
+                <source
+                  srcset="{{ profile_image_webp_300 | relative_url | bust_file_cache }} 300w, {{ profile_image_webp_600 | relative_url | bust_file_cache }} 600w, {{ profile_image_webp_path | relative_url | bust_file_cache }} 800w"
+                  sizes="(max-width: 768px) 220px, 268px"
+                  type="image/webp">
               {% endif %}
               <img
                 src="{{ profile_image_path | relative_url | bust_file_cache }}"
