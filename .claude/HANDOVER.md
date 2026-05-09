@@ -4,7 +4,57 @@
 
 ---
 
-## 2026-05-08 — Session 5 (latest)
+## 2026-05-08 — Session 6 (latest)
+
+### Goal
+Run a top-to-bottom QA + design audit, then implement the highest-priority fixes the audit surfaced: visible typos, mobile-hidden identity content, and over-eager 3rd-party JS loading.
+
+### What was done
+
+**Multi-skill site audit** (recommendations only — no commit)
+- Drove `/audit`, `/optimize`, `/delight`, `/polish` lenses against rendered pages at desktop 1280×900 and mobile 375×812, in both dark and light themes, using the local Jekyll preview.
+- Anti-patterns verdict: **pass** (the typography pairing, warm-tinted neutrals, and bespoke football page survive the AI-slop test). Two flags raised: monospace terminal aesthetic on the homepage, and verifying the profile portrait isn't compositing a CSS hero glow.
+- Produced a prioritized findings list (4 critical, 7 high, 8 medium, 9 low/polish) with mappings to the impeccable command set for fixes.
+
+**Audit follow-ups** (commit `2059199`, `fix: audit follow-ups …`)
+- `_pages/football.md`: `Favorate` → `Favorite` on the team and player pills (visible uppercase typo on the personality page).
+- `assets/css/about.css`: dropped the mobile `display: none` for `#nhTerminal` / `#nhTerminal2`. Unfloat `.profile` on `≤768px` so the photo centers as a block and the two intro lines (`> researcher · professor · builder`, `• Currently: Senior Editor, ISR · Centennial Endowed Chair · Assoc. Dean`) render below the photo with natural wrapping. Phone visitors now see the editorship/dean status that was previously desktop-only.
+- `.claude/CLAUDE.md`: removed the `/teaching/` row from the Pages table. The page was deleted in session 3 but the doc still asserted it existed.
+
+**Per-page 3rd-party JS gating** (commit `676f9fb`, `perf: drop unused 3rd-party JS …`)
+- `_includes/scripts/mathjax.liquid`: now requires `page.math: true` in front-matter (opt-in) in addition to `site.enable_math`. Polyfill follows (it's inside the same include).
+- `_includes/scripts/badges.liquid`: now requires `page.publication_badges: true`. The Altmetric / Dimensions badges were not rendering anywhere on the live site — the legacy `bib.liquid` layout isn't in use; `_pages/publications.md` renders its own list from `_data/publications.yml` — so this is a clean removal with an opt-in path for future.
+- `_includes/head.liquid`: removed the MDBootstrap CSS link and the Google Material Icons stylesheet (both confirmed unused via grep).
+- `_includes/scripts/bootstrap.liquid`: removed the MDBootstrap JS CDN script. Local `bootstrap.bundle.min.js` stays for the nav dropdown.
+
+### Current status
+
+- **Done**: Audit complete, two code commits made, both verified end-to-end via Jekyll preview (homepage desktop+mobile in dark, publications, football). No console errors. No layout regressions. Bootstrap nav dropdowns, jQuery, theme toggle, livereload all still work.
+- **In progress**: nothing.
+- **Pending**: push to `origin/main`; verify on `https://kevinhong.ai` after GitHub Pages rebuild.
+
+### Important context
+
+- `AGENTS.md` remains an untracked local file and was intentionally not staged (matching session 5 decision). The `/teaching/` row was edited locally there too but isn't being committed.
+- `assets/css/about.css` has an `@media (max-width: 768px)` block that now also unfloats `.profile`. If anything else later assumes the photo is right-floated on mobile, it will need to be aware of this.
+- ImageMagick errors during build for `assets/img/football/players/{arch-manning,malachi-toney,…}.jpg` are pre-existing (noted in session 5 handover) — these files are HTML/JSON masquerading as `.jpg`. Unrelated to this session.
+- The `[citations] Applied 38 of 38 counts to DOM` console log still fires 8× per visit on the publications page — flagged in the audit as H3, not yet fixed.
+
+### Decisions already made
+
+- Two-commit split: `fix:` for visible/textual changes, `perf:` for the JS gating. Lets either be reverted independently.
+- Did **not** opt `_pages/publications.md` into `publication_badges: true`, because the page never actually renders those badges. If a future page wants them it adds the flag.
+- Did **not** replace jQuery / Bootstrap-bundle this session — that's a Tier 3 follow-up because it requires writing a small vanilla nav-dropdown to replace Bootstrap 4's jQuery-dependent dropdown.
+- Did **not** address the homepage tag → publications-filter naming inconsistency (`#Human-Algorithm Interactions` vs `HUMAN-AI INTERACTION`). It's in the next-set list.
+
+### Next best step
+
+- **Primary action**: After `git push`, verify on the deployed site that (a) the homepage renders identically at desktop, (b) on a real phone the "Currently:" line is visible below the photo, (c) DevTools Network tab on `/` shows no requests to `cdn.jsdelivr.net/npm/mdbootstrap`, `cdn.jsdelivr.net/npm/mathjax`, `cdnjs.cloudflare.com/polyfill`, `embed.altmetric.com`, `badge.dimensions.ai`, or `fonts.googleapis.com/css2?family=Material+Icons`.
+- **Next-set queue**: Tier 1 follow-ups from the audit are `aria-label` on `#light-toggle`, footer with email/CV/Scholar/ORCID, homepage tag chips → publications filter wiring, skip-to-main link, `[citations]` repeat-log fix. Full prioritized list is in this session's chat transcript.
+
+---
+
+## 2026-05-08 — Session 5
 
 ### Goal
 Audit and fix the intermittent broken homepage profile picture, then commit and push the fix.
