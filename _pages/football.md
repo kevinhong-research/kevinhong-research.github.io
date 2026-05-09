@@ -21,10 +21,11 @@ nav_order: 4
   <script>
   window.FOOTBALL_OVERRIDES = {
     {% for school in site.data.football %}
+    {% assign override_logo_webp = school.logo | replace: '.png', '.webp' | replace: '.jpg', '.webp' | replace: '.jpeg', '.webp' %}
     {{ school.school | jsonify }}: {
       "school":           {{ school.school | jsonify }},
       "football_name":    {{ school.football_name | default: "" | jsonify }},
-      "logo":             {% if school.logo %}{{ school.logo | relative_url | jsonify }}{% else %}""{% endif %},
+      "logo":             {% if school.logo %}{{ override_logo_webp | relative_url | jsonify }}{% else %}""{% endif %},
       "stadium":          {{ school.stadium | default: "" | jsonify }},
       "stadium_image":    {% if school.stadium_image %}{{ school.stadium_image | relative_url | jsonify }}{% else %}""{% endif %},
       "city":             {{ school.city | default: "" | jsonify }},
@@ -43,10 +44,11 @@ nav_order: 4
   window.FOOTBALL_MAP_DATA = [
     {% for talk in site.data.talks %}
       {% if talk.lat and talk.logo and talk.logo contains '/assets/img/talk-logos/fbs-library/' %}
+      {% assign talk_logo_webp = talk.logo | replace: '.png', '.webp' | replace: '.jpg', '.webp' | replace: '.jpeg', '.webp' %}
       {
         "school":           {{ talk.institution | jsonify }},
         "football_name":    {{ talk.football_name | default: "" | jsonify }},
-        "logo":             {{ talk.logo | relative_url | jsonify }},
+        "logo":             {{ talk_logo_webp | relative_url | jsonify }},
         "stadium":          "",
         "stadium_image":    "",
         "city":             "",
@@ -100,9 +102,18 @@ nav_order: 4
     <div class="fb-body-inner">
       <div class="fb-card-grid">
         {% for team in site.data.football_favorite_teams %}
+        {% assign team_logo_ext = team.logo | split: '.' | last | downcase %}
         <article class="fb-feature-card fb-feature-card--team">
           <div class="fb-feature-card-media fb-feature-card-media--logo">
-            <img src="{{ team.logo | relative_url }}" alt="{{ team.school }}">
+            {% if team_logo_ext == 'png' or team_logo_ext == 'jpg' or team_logo_ext == 'jpeg' %}
+              {% assign team_logo_webp = team.logo | replace: '.png', '.webp' | replace: '.jpg', '.webp' | replace: '.jpeg', '.webp' %}
+              <picture>
+                <source srcset="{{ team_logo_webp | relative_url }}" type="image/webp">
+                <img src="{{ team.logo | relative_url }}" alt="{{ team.school }}">
+              </picture>
+            {% else %}
+              <img src="{{ team.logo | relative_url }}" alt="{{ team.school }}">
+            {% endif %}
           </div>
           <div class="fb-feature-card-body">
             <div class="fb-feature-card-title">{{ team.school }}</div>

@@ -69,13 +69,6 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
-      - name: Cache ImageMagick outputs 🖼️
-        uses: actions/cache@v4
-        with:
-          path: _site/assets/img
-          key: imagemagick-${{ hashFiles('assets/img/**/*.jpg', 'assets/img/**/*.jpeg', 'assets/img/**/*.png') }}
-          restore-keys: |
-            imagemagick-
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
@@ -93,11 +86,6 @@ jobs:
           valueFile: "_config.yml"
           propertyPath: "giscus.repo"
           value: ${{ github.repository }}
-      - name: Cache ImageMagick apt packages 📦
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: imagemagick
-          version: 1.0
       - name: Install Python dependencies 🐍
         run: pip3 install -r requirements.txt
       - name: Build site 🔧
