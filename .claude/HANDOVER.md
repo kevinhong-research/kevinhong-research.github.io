@@ -4,7 +4,75 @@
 
 ---
 
-## 2026-05-08 — Session 8 (latest)
+## 2026-05-08 — Session 9 (latest)
+
+### Goal
+Implement four perf items from the original session-6 audit's `/optimize` lens: serve talk logos as WebP via `<picture>` (#1), set tabler-icons `font-display: swap` (#2), preload Cormorant Garamond + Geist for LCP (#3), and audit GitHub Pages cache headers (#4). Plan, audit-the-plan, implement, verify, ship.
+
+### What was done
+
+**Plan + plan-audit** (`.claude/plans/2026-05-08_perf-fonts-and-images.md`)
+- Wrote a structured plan covering all four items with rationale, file paths, risks, and verification checklist.
+- Honest framing of #4: GitHub Pages serves a hard-coded `cache-control: max-age=14400` (4 hours, confirmed via `curl -I` on production); per-file rules aren't possible on GH Pages. Documented as not actionable, included infrastructure notes for future consideration.
+- Self-critique caught: the `bust_file_cache` filter would have caused double-fetching of preloaded fonts (the @font-face URLs in compiled CSS don't have the cache-bust query string, so a preload URL with `?<md5>` would not match → browser fetches twice). Plan revised to use bare URLs for preloads.
+
+**#1 — Talk logos PNG → WebP via `<picture>`** (commit `dd7385f`, `perf: …`)
+- `_includes/talks_render.html`: wrapped each `<img src="{{ talk.logo }}">` in a `<picture>` with a WebP `<source>` pointing at the build-generated `-480.webp` variant (handles `.png`, `.jpg`, `.jpeg` source extensions).
+- Added explicit `width="48" height="48"` to prevent CLS as lazy-loaded logos paint.
+- Verified end-to-end: 50 picture elements, all `currentSrc` end in `-480.webp`, zero PNGs served. The Jekyll build was already producing the WebP variants — they were just being ignored by the markup.
+
+**#2 — Tabler-icons `font-display: swap`** (commit `8aa575a`, `perf: …`)
+- `assets/css/main.scss`: added `$ti-font-display: swap;` before the legacy `@import` block. The vendored partials use `$ti-font-display: null !default;` so a pre-set value in the importing scope wins.
+- Compiled CSS `font-display` count went from 12 swap (Geist 7 + Cormorant/Instrument/SpaceGrotesk 5) to 15 swap (+ 3 from tabler outline / filled / base). The 3 remaining `font-display: block` declarations are font-awesome, which is intentional for icon fonts.
+
+**#3 — Preload Cormorant Garamond + Geist** (commit `d95ef16`, `perf: …`)
+- `_includes/head.liquid`: added two `<link rel="preload" as="font" type="font/woff2" crossorigin>` directives at the very top of `<head>`, before the bootstrap.min.css link. URLs match the `@font-face` declarations in `_sass/_geist.scss` and `_sass/_fonts.scss` exactly.
+- Verified: 2 preload links present at desktop AND mobile; no "preloaded but not used" console warning (which would indicate URL mismatch); Cormorant Garamond resolves correctly in H1 computed styles, Geist in body.
+
+**#4 — GitHub Pages cache headers (documented, not implemented)**
+- `curl -I https://kevinhong.ai/assets/css/main.css` returns `cache-control: max-age=14400` (4h), `expires: <4h from now>`, weak `etag` for revalidation, and `last-modified`.
+- Per-file cache rules are NOT supported on GitHub Pages — there is no `_headers` file mechanism (that's Netlify/Cloudflare).
+- For longer cache TTL on hashed assets (the typical "1 year for hashed, short for HTML" pattern), would need to either front GH Pages with Cloudflare and override at the edge, or migrate to Netlify/Vercel. **Not worth doing today** — 4h + ETag is fine for an academic personal site; revisit if traffic patterns change.
+
+### Current status
+
+- **Done**: Three code commits made; all four plan items complete or documented. Build passes. Visual sweep across `/`, `/talks/`, `/publications/` in dark theme confirms identical rendering. All previous-session wins (sessions 6 + 7 + 8) intact: no MathJax/polyfill/MDB/Material-Icons, theme aria-label, skip link, homepage tag canonicalized, `[citations]` log gone, profile srcset, title-case filter chips, top-level Sass migration.
+- **In progress**: nothing.
+- **Pending**: push to `origin/main` + `gh-pages` rebuild + deploy verification.
+
+### Important context
+
+- **Preload URLs are deliberately bare** (no `bust_file_cache`). This is correct, not an oversight: the @font-face URLs in compiled CSS use static paths, so a hashed preload URL would mismatch and trigger a double fetch. If a font file ever changes, the preload URL needs manual update — but variable woff2 files are immutable in practice (versioned by package).
+- **Talk logos use `-480.webp` only** (not a multi-width srcset). Logos render at ~48 CSS px in the timeline cards; even DPR 3 mobile only needs ~144px. The `-480.webp` variant covers all DPRs without extra HTML weight. The build produces `-800.webp` and `-1400.webp` too but they're not currently used — kept available for future high-density scenarios.
+- **Why not also fix font-awesome's font-display:** it requires modifying vendored partials (FA 6 free's `_variables.scss` doesn't expose a `$fa-font-display` knob). Lower-impact than tabler-icons because FA isn't used in the visible nav. Defer with the rest of the vendor migration.
+- **GitHub Pages 4h cache TTL is the floor for any asset improvement on this hosting.** If LCP becomes critical for return visitors, switching infrastructure is the next lever — but it's a structural change, not a code change.
+- ImageMagick errors for `assets/img/football/players/{arch-manning,malachi-toney}.jpg` remain pre-existing.
+- `AGENTS.md` still untracked.
+
+### Decisions already made
+
+- **Preload only Cormorant Garamond and Geist** (not Geist Mono, Cormorant italic, Space Grotesk, Instrument Sans). Those are below-the-fold or specialized; preloading too many fonts wastes bandwidth and competes with critical resources.
+- **Single `-480.webp` source on talk logos**, not srcset. Visual size doesn't justify multi-width.
+- **No `bust_file_cache` on preload URLs.** Avoids URL mismatch with @font-face. Tradeoff: font URL must be updated manually if the file changes.
+- **`$ti-font-display: swap` not `block` or `optional`.** swap is the right balance for icon fonts that pair with rendered text — text never blocks, icon swaps in when ready. `block` (FOIT) is what the implicit default was; `optional` would skip the icon entirely if not cached, which is too aggressive for the theme toggle.
+- **GH Pages cache is acceptable as-is.** Documented; not migrating infrastructure.
+
+### Next best step
+
+- **Primary action**: After deploy, on the live site:
+  1. DevTools Network on `/`: confirm Cormorant Garamond and Geist Variable woff2 fetches happen high in the request waterfall (priority high, parallel with main.css). Check that there's NO "preload but not used" warning.
+  2. DevTools Network on `/talks/`: confirm at least one `-480.webp` request (ideally many). Confirm no `*-300x300.png` requests for FBS logos that have WebP variants.
+  3. Run Lighthouse on `/`: "Preload key requests" recommendation should be gone or significantly reduced. LCP score should improve (cold-cache).
+- **Next-set queue**:
+  - **Tier 2 left**: T2.6 lede deck, T2.7 awards `<details>`, T2.9 promote working papers in nav.
+  - **Tier 3 left**: T3.11 jQuery/Bootstrap-bundle replacement (~100KB cut, biggest remaining perf lever), T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
+  - **Tier 4 left**: T4.17 OG/Twitter card meta, T4.19 Bootstrap utility-only build (pairs with T3.11), T4.20 last-updated stamp.
+  - **From session 8 audit**: F1 dark-mode `--text-lo` contrast bump, F2 services special-issue date column.
+  - **External deadline (still)**: vendored font-awesome + tabler-icons Sass migration before Dart Sass 3.0.
+
+---
+
+## 2026-05-08 — Session 8
 
 ### Goal
 Implement six items from across Tier 2/3/4: title-case the publications filter chips (T2.8), generate a profile-photo srcset (T2.10), migrate top-level Sass partials from `@import` to `@use` (T3.12), verify the typewriter localStorage gate (T3.15), audit the services + working pages (T4.16), and add a Browserslist config (T4.18). Plan, audit-the-plan, implement, verify, ship.
