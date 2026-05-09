@@ -4,7 +4,80 @@
 
 ---
 
-## 2026-05-08 — Session 9 (latest)
+## 2026-05-09 — Session 10 (latest)
+
+### Goal
+Investigate user bug report — "school logos not showing in /talks/, except Rochester and Lehigh, since session 9's WebP commit." Find the root cause, fix it properly (no quick revert), and extend the fix to the football page where the same WebP-vs-PNG asymmetry was bleeding bandwidth on stadium thumbnails.
+
+### What was done
+
+**Bug diagnosis** (no commit — investigation only)
+- The dd7385f `<picture>` markup added `<source srcset="…-480.webp" type="image/webp">` per logo. With WebP support universal, browsers commit to that source; if its URL 404s, the `<img>` fallback does **not** trigger (fallback is only for `type` mismatch, not network errors).
+- `git ls-tree origin/gh-pages | grep talk-logos.*webp` returned exactly one file (Rochester, the committed source). The deploy workflow's `jekyll-imagemagick` step was failing silently every run: `sh: 1: magick: not found`. The plugin called the v7 binary `magick`; Ubuntu's `imagemagick` apt package ships v6 (`convert`). The custom `_plugins/imagemagick_fix.rb` monkey-patch hardcoded `magick` too. So zero `-480.webp` variants ever reached production — the perf optimization never landed, only the markup change did.
+- Why Rochester + Lehigh worked: Rochester's source IS already `.webp` (committed). Lehigh + 3 others are SVG; the Liquid `replace` chain didn't change SVG paths, so the source URL was the SVG itself, which browsers fetch and render even though the declared `type` is `image/webp` (browser sniffs content). All PNG/JPG/JPEG-sourced logos broke.
+
+**Quick mitigation considered then rejected**: a one-line revert of the `<picture>` wrapper would restore live logos but lose the perf intent, and the broken-CI infrastructure would still pollute every deploy log.
+
+**Commit 1 — Talk logos at 256px + drop jekyll-imagemagick** (`2624775`, `perf(images): commit talk-logo WebPs at 256px, drop jekyll-imagemagick`)
+- Generated 160 sibling WebP files locally with `magick "$f" -resize 256x256 -quality 85 "${f%.*}.webp"` over PNG/JPG/JPEG in `assets/img/talk-logos/`. Total: ~1.23 MB committed to source.
+- 256px chosen as the single shared variant covering both pages: talks-page logos render at ~19.5 CSS px (3× DPR = 60px source needed), football team-card logos render at 120px (3× DPR = 360px ideal, but 256/120 = 2.13× still acceptable for retina). Avoids per-page-specific variants.
+- Re-added `<picture>` markup with extension-aware Liquid in `_includes/talks_render.html` and `_pages/football.md`: PNG/JPG/JPEG get `<source>`, SVG and `.webp` sources render as plain `<img>`.
+- Football SVG `<image>` map markers swap PNG→WebP directly in the Liquid JSON generation at `_pages/football.md:49` (SVG `<image>` doesn't accept `<picture>`, so direct path swap). Verified all 20 markers load `.webp` after the change.
+- **Removed jekyll-imagemagick infrastructure entirely**: gem from `Gemfile`, plugin entry from `_config.yml` plugins list, the entire `imagemagick:` config block from `_config.yml`, the custom `_plugins/imagemagick_fix.rb` monkey-patch, and both imagemagick steps from `.github/workflows/deploy.yml` (apt-cache-pkgs step + `_site/assets/img` cache step).
+- 167 files changed: 160 new WebPs, 6 modified template/config/workflow files, 1 deleted plugin, +23 −72 lines on the non-image files.
+
+**Commit 2 — Stadium thumbnails at 800px via `<picture>` in JS** (`b0da3fb`, `perf(images): add 800px stadium WebPs and serve via <picture> in tooltips`)
+- Generated 20 sibling WebP files with `magick "$f" -resize 800x800 -quality 82 "${f%.*}.webp"` over the JPG/PNG sources in `assets/img/football/stadiums/`. Total: ~1.78 MB committed. Largest individual: Sanford 174 KB; average ~93 KB.
+- 800px chosen for tooltip rendering (~280×146 CSS px) — covers 3× DPR plus headroom; lightbox click-through still uses the original full-quality JPG/PNG (separate optimization, deferred).
+- Updated `assets/js/footballmap.js:428-432` `buildTooltip()`: the JS template literal that emits the `.fb-tip-photo` markup now wraps the `<img>` in `<picture>` with a WebP `<source>`. Path derived via `entry.stadium_image.replace(/\.(jpe?g|png)$/i, '.webp')`.
+- Verified by triggering a marker `mouseenter` event in the running browser: tooltip renders, `<picture>` element present, `currentSrc` ends in `.webp`, `naturalWidth=800`, JPG fallback path correct.
+
+### Current status
+
+- **Done**: Both commits land locally. All visible images verified rendering via WebP at the right sizes. Build clean (~1.2s) — no more imagemagick "Generating image" output, no `magick: not found` errors in deploy logs once pushed.
+- **In progress**: nothing.
+- **Pending**: Push to `origin/main`. Then verify on live `kevinhong.ai`:
+  1. `curl -I https://kevinhong.ai/assets/img/talk-logos/fbs-library/South_Florida_Bulls_logo-300x300.webp` returns 200 (was 404).
+  2. Visual check on /talks/ — all 50 logos visible (was: only Rochester + 3 SVGs).
+  3. Visual check on /football/ — map markers, team-cards, and stadium tooltips all loading WebP.
+
+### Important context
+
+- **The previous session 9 commit message ("Verified at 1280x900: 50 picture elements, all with currentSrc ending in -480.webp, zero PNGs served. Visual rendering identical.") was true locally but false in production**, because the local `_site/` had imagemagick-generated WebPs (working `magick` binary) but CI's `_site/` had none (broken plugin). The verification script never tested the deployed gh-pages tree. **Lesson for future perf commits touching build-time-generated assets**: verify against `git ls-tree origin/gh-pages` or `curl -I` against the live URL, not just the local dev server.
+- **`<picture>` fallback semantics gotcha**: when a browser supports the `<source>` `type`, it commits to that source. Network errors do NOT trigger the `<img>` fallback — only `type` non-support does. So `<picture>` is fragile against missing-but-claimed-existing variants. The fix is to *guarantee* the variants exist (e.g., commit them to source) rather than rely on graceful degradation.
+- **The 256px / 800px sizing decisions** are conservative — could go lower (96px talks, 600px stadium) for ~50% more byte savings, but 256/800 leave headroom for layout changes and provide insurance against any DPR weirdness on future devices.
+- **Lightbox click-through on stadiums is intentionally still loading the original JPG/PNG**, not the 800px WebP. That's the right call: lightbox can hit 1100px CSS-wide, and the click-through is opt-in (rare interaction). If lightbox bandwidth becomes a concern later, generate `-1400.webp` variants and update the click-handler URL.
+- **Local imagemagick installation is at `/opt/homebrew/bin/magick` (v7.1.2-16)**. The repo no longer depends on it for build, but if anyone ever wants to regenerate WebPs (e.g., new logos added), the one-liner is in commit 1's body.
+- **AGENTS.md still untracked.** Same as previous sessions.
+- **Player headshots in `assets/img/football/players/` are already `.webp`** at source (3 files); no work needed there.
+
+### Decisions already made
+
+- **256px single variant for talk logos** (not multi-size srcset, not separate small/large for talks vs football). Simpler markup, ~1.2 MB repo cost vs ~400 KB for 96px-only or ~2 MB for two variants. Bandwidth headroom for 3× DPR on football's 120px cards.
+- **800px single variant for stadium thumbnails** (not multi-size). Tooltips render at one size; no responsive breakpoints in the JS template.
+- **Quality 85 for talk-logos, 82 for stadiums.** Stadium photos are photographic content where -3 quality is invisible; logos are line-art and benefit from the cleaner edges.
+- **Strip the imagemagick build pipeline entirely** rather than fixing the v6/v7 binary mismatch in CI. The pipeline was generating dead bytes (no markup ever referenced multi-width variants) and adding ~30s + brittleness to every deploy. Pre-generating and committing is simpler and deterministic.
+- **Lightbox click-through stays on original JPG/PNG.** Out of scope for "thumbnail tooltip optimization." Documented as a future option.
+- **No README/docs update.** The build setup is materially simpler now (no imagemagick, no monkey-patch); future maintainers reading the Gemfile + workflow file will see exactly what's needed. If new logos are added, follow the one-liner pattern.
+
+### Next best step
+
+- **Primary action**: After deploy, on `kevinhong.ai`:
+  1. `curl -sI https://kevinhong.ai/assets/img/talk-logos/fbs-library/South_Florida_Bulls_logo-300x300.webp` → 200.
+  2. `curl -sI https://kevinhong.ai/assets/img/football/stadiums/lane-stadium.webp` → 200.
+  3. Visual: /talks/ all 50 logos visible; /football/ map markers + 3 team-card logos visible; click a school marker, tooltip shows stadium photo loading via WebP (DevTools Network filter `webp`).
+  4. Confirm GitHub Actions deploy log no longer contains `magick: not found` lines.
+- **Next-set queue (carried from session 9)**:
+  - **Tier 2 left**: T2.6 lede deck, T2.7 awards `<details>`, T2.9 promote working papers in nav.
+  - **Tier 3 left**: T3.11 jQuery/Bootstrap-bundle replacement (~100 KB cut, biggest remaining perf lever), T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
+  - **Tier 4 left**: T4.17 OG/Twitter card meta, T4.19 Bootstrap utility-only build (pairs with T3.11), T4.20 last-updated stamp.
+  - **From session 8 audit**: F1 dark-mode `--text-lo` contrast bump, F2 services special-issue date column.
+  - **External deadline (still)**: vendored font-awesome + tabler-icons Sass migration before Dart Sass 3.0.
+- **If stadium lightbox bandwidth becomes a concern later**: generate `-1400.webp` for full-quality view, update `photoHref` derivation in `footballmap.js:425` to swap to webp.
+
+---
+
+## 2026-05-08 — Session 9
 
 ### Goal
 Implement four perf items from the original session-6 audit's `/optimize` lens: serve talk logos as WebP via `<picture>` (#1), set tabler-icons `font-display: swap` (#2), preload Cormorant Garamond + Geist for LCP (#3), and audit GitHub Pages cache headers (#4). Plan, audit-the-plan, implement, verify, ship.
