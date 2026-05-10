@@ -4,7 +4,90 @@
 
 ---
 
-## 2026-05-09 — Session 12 (latest)
+## 2026-05-10 — Session 13 (latest)
+
+### Goal
+Replace the multi-orange + brown-light-mode palette with the Codex "Absolutely" theme: ONE accent (#cc7d5e) shared by light + dark, surface + ink invert between modes, two semantic colors (success-green #00c853, danger-red #ff5f38). User explicitly accepted that light mode would shift from "parchment + brown" to "parchment + orange". Plan, audit, verify, implement, audit, commit per user's explicit workflow request.
+
+### What was done
+
+**Visual audit + plan + self-critique** (in conversation, not a file)
+- Confirmed 5 distinct oranges visible in dark mode (#D97757, #CC785C, #f1a689, #e79b78, #c85a42, #9f5d39 — last 3 strays).
+- Drafted the token mapping table (surface/ink/text-hierarchy + accents + derived tints).
+- Self-audit caught: light-mode aesthetic shift is BIG and irreversible without rolling back the commit; #00c853 is brighter than current #19b66f; ~75 rgba() literals would need updating; Bootstrap `--global-*` tokens needed bridging.
+- User approved all three risks (light-mode shift, brighter green, mid-state incoherence requiring a single commit).
+
+**Phase 1 — `_themes.scss` rewrite** (in commit `2df3c5f`)
+- Promoted Codex `surface`/`ink` to first-class tokens. Dark `:root` defines surface=#2d2d2b, ink=#f9f9f7; `html[data-theme="light"]` inverts to #f9f9f7/#2d2d2b. Accent palette stays in `:root` only (no light override needed — Codex spec uses unified accent).
+- Defined the accent palette: `--accent-warm` (#cc7d5e, primary), `--accent-warm-soft` (#e6a78b, lighter coral), `--accent-cool` (#00c853, success-green), `--accent-danger` (#ff5f38, reserved).
+- Defined derived alpha tier tokens via `color-mix(in oklch, var(--accent-*) N%, transparent)`: `--accent-warm-bg-{subtle,soft,medium,strong}` at 4/8/12/22%, `--accent-warm-border` / `--accent-warm-border-strong` at 42/58%, parallel `--accent-cool-bg-*` and `--accent-cool-border-*`. Future-changes-friendly: editing `--accent-warm` propagates everywhere.
+- Bridged Bootstrap `--global-bg-color` / `--global-text-color` / `--global-theme-color` etc. to use `var(--surface)`, `var(--ink)`, `var(--accent-cool)`, `var(--accent-warm)` so non-`.nh-research` surfaces (article body, post text) pick up the theme automatically.
+
+**Phase 2 — Mass rgba() → color-mix() conversion**
+- Per-file perl pass over all 6 page CSS files plus `_base.scss`/`_dropdown.scss`. Converted ~85 rgba() literals. Mappings:
+  - `rgba(217,119,87, X)` (old --accent-warm) → `color-mix(in oklch, var(--accent-warm) X%, transparent)`
+  - Same pattern for `rgba(204,120,92, X)` (warm-strong, collapsed to warm), `rgba(143,85,56, X)` (light-mode brown, now also accent-warm in unified theme), `rgba(115,65,39, X)` (warm-strong-light, collapsed), `rgba(241,166,137, X)` (warm-soft), `rgba(178,104,66, X)` (warm-soft-light), `rgba(25,182,111, X)` and `rgba(0,160,96, X)` (cool families collapsed), `rgba(221,216,203, X)` (text-hi alpha for `--pub-control-text`).
+  - `rgba(*,*,*,0)` cases → `transparent` keyword.
+
+**Phase 3 — Dropped redundant tokens**
+- Replaced ~13 `var(--accent-warm-strong)` references with `var(--accent-warm)`. Removed the token from `:root` and the light-theme override block.
+- Replaced ~12 `var(--accent-cool-deep)` references with `var(--accent-cool)`. Same removal.
+- Bonus: light-mode dropdown hover/active was using `#CC785C` (a dark-mode color) — collapsed to `var(--accent-warm)`, fixes a subtle pre-existing light-mode inconsistency.
+
+**Phase 4 — Snapped strays to tokens**
+- `#9f5d39` (2× in `about.css`, light-mode `.nh-topic-link`) → `var(--accent-warm)`.
+- `#c85a42` (1× in `football.css` pill hover) → `var(--accent-warm)`.
+- `#e79b78` (1× as `--fb-orange` dark override) → removed; cascades from `:root --accent-warm` (unified across modes).
+- Same pattern for stray greens `#00c070`, `#25c37b` → `var(--accent-cool)`.
+
+**Phase 5 — Visual verification**
+- Dev preview reload + hard CSS bust to bypass the (pre-existing) `bust_file_cache` filter bug that returns empty-MD5 hashes. Both dark and light mode rendered correctly: warm dark surface, off-white ink, vivid green nav, terracotta hover.
+- Compiled `_site/assets/css/main.css` audit confirmed all 33+ design tokens resolve to expected values; 16 `color-mix()` calls compiled correctly.
+
+### Current status
+
+- **Done**: Single cohesive commit `2df3c5f` landed locally. 9 files changed, +259/-222 lines. Build clean (~0.6s). All token consolidation complete.
+- **Pending**: Push to `origin/main`. Browser cache on visitor side may delay theme appearance up to 4 hours due to a separate (pre-existing) cache-bust bug — see "Known issues" below.
+
+### Important context
+
+- **`color-mix(in oklch, var(--*) N%, transparent)`** is now the canonical way to express "the accent at N% opacity" in this codebase. Reads as "the token at N% strength" rather than as opaque RGB triplets. Future hover bgs / borders should use this pattern, never raw rgba(R,G,B,A).
+- **All five orange variants and three brown variants are gone.** The site has 1 accent + 1 lighter coral derivation + 1 cool. Strays auto-snapped.
+- **Light mode aesthetic shifted significantly** — `--svc-section-header`, dropdown hover, hover stripes, link colors all shifted from parchment-brown (#8f5538/#734127 family) to terracotta-orange (#cc7d5e). Per user's explicit decision; if this reads as too modern/aggressive after living with it, reverting is just `--accent-warm: #8f5538` in the light-theme block (with light overriding the unified spec).
+- **`--accent-cool: #00c853`** is louder than the previous `#19b66f`. Affects every `.nh-section-label` (uppercase tracked-out section header), `.pub-note` badge, `.filter-count`, etc. If too loud, soften to `#0fb94f` or similar.
+- **Browser support**: `color-mix(in oklch, ...)` requires Chrome 111+, Safari 16.4+, Firefox 113+ (all shipped 2023, ~95% global support as of 2026). Older browsers will see broken hover states (transparent backgrounds). Acceptable for an academic site.
+- **Cache-bust bug** (`_plugins/cache-bust.rb`): the `bust_file_cache` filter reads from `assets/css/main.css` (source) but `main.css` is generated from `main.scss`, so the file read fails → MD5 of empty string → constant `?d41d8cd...` query param → browser caches indefinitely. Existing visitors will see stale CSS for up to 4 hours (GitHub Pages default `Cache-Control: max-age=14400`). New visitors get fresh CSS. **Worth fixing in a follow-up commit** — patch the filter to read from `_site/assets/css/main.css` or hash from `main.scss` source. Documented in `.claude/lessons.md` after this session.
+- **AGENTS.md still untracked**, same as previous sessions.
+
+### Decisions already made
+
+- **Single accent across light + dark per Codex spec.** No separate brown for light mode. The user explicitly approved this; reverting it to brown-light-mode would mean an additional `--accent-warm: #8f5538` override at `html[data-theme="light"]`.
+- **Use `color-mix(in oklch, ...)` instead of named alpha tokens at every call site.** Reasoning: every alpha is preserved exactly (no snapping to nearest tier), the source-of-truth is the token (`var(--accent-warm)`), and the calls are still readable. Named tier tokens (`--accent-warm-bg-medium`) ARE defined for the most common percentages (4/8/12/22/42/58%) but using inline `color-mix()` was chosen for one-off percentages where snapping would lose visual fidelity. Both forms are interchangeable.
+- **Drop `--accent-warm-strong` (was 5% darker) entirely.** The hover-emphasis effect can come from background tint instead of a slightly darker hue.
+- **Drop `--accent-cool-deep`.** Single green tier. `.pub-title:hover`, `.tl-title:hover`, `.nh-paper-preview__abstract` border now all use `var(--accent-cool)` (#00c853).
+- **`--accent-danger` defined but unused.** Reserved as the destructive/error semantic. Apply when needed (form errors, "destructive" buttons, etc.).
+- **Light-mode dropdown hover stays as `var(--accent-warm-strong)` no — collapsed to `var(--accent-warm)`.** Subtle change from the previous `#CC785C` (dark-mode color leaking into light) to `#cc7d5e` (the unified accent). Improves consistency.
+
+### Next best step
+
+- **Primary action**: Push, then verify on `kevinhong.ai`:
+  1. Visit `/` in dark mode, confirm warm dark surface + green-vivid nav + terracotta hover stripes match the Codex screenshot reference. If the page still shows the old theme, hard-refresh — the `?d41d8cd...` cache-bust hash is broken so browsers may serve old CSS for up to 4 hours.
+  2. Toggle to light mode. The big visible change: previously brown elements (block labels, hover stripes, dropdown hover) are now terracotta-orange `#cc7d5e`. Is the new feel acceptable?
+  3. Stress-test on `/services/` (lots of accent decoration), `/publications/` (filter-active, abstract toggles, citation badges), `/football/` (map markers, tooltip).
+- **Recommended follow-up commit**: fix `_plugins/cache-bust.rb` so `bust_file_cache('/assets/css/main.css')` actually computes MD5 of the *built* CSS. Either read from `_site/` or fall back to `main.scss` content hash. ~10 lines of code; one commit. This is the difference between "theme update is invisible for 4 hours" and "theme update is instant".
+- **If brand wants tweaks** later:
+  - Less vivid green: `--accent-cool: #0fb94f` or `#19b66f` (the old value).
+  - Different accent: change `--accent-warm` and `--accent-warm-soft` only — every derived tint propagates.
+  - Bring back brown light mode: add `--accent-warm: #8f5538` to `html[data-theme="light"]`.
+- **Carried from session 12** (still queued):
+  - **Tier 2 left**: T2.6 lede deck, T2.7 awards `<details>`, T2.9 promote working papers in nav.
+  - **Tier 3 left**: T3.11 jQuery/Bootstrap-bundle replacement, T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
+  - **Tier 4 left**: T4.17 OG/Twitter card meta, T4.19 Bootstrap utility-only build, T4.20 last-updated stamp.
+  - **External deadline**: vendored font-awesome + tabler-icons Sass migration before Dart Sass 3.0.
+
+---
+
+## 2026-05-09 — Session 12
 
 ### Goal
 After session 11 landed font-size and text-color consolidation, audit and tokenize the three remaining design-system dimensions: motion (transition durations + easing), brand accents (orange/coral/green hardcoded literals scattered across the site), and spacing (padding / margin / gap fragmentation). Same shape as the prior passes — token at `:root`, replace literals, verify in browser. Self-critique the audit before implementing.
