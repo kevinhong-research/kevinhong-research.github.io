@@ -4,7 +4,101 @@
 
 ---
 
-## 2026-05-10 — Session 13 (latest)
+## 2026-05-10 — Session 14 (latest)
+
+### Goal
+Six small but cumulative refinements after session 13's Codex theme adoption:
+1. Services page had a redundant top border under each block label (two parallel 1px lines stacked).
+2. The `bust_file_cache` / `bust_css_cache` filter was returning empty-string MD5 for `main.css`, defeating cache invalidation — visitors saw stale theme.
+3. The surface tier needed an explicit `--surface-raised` token, plus stale `#262624` / `#faf9f5` / `#3A3A36` / `#3d3929` leftovers needed cleaning up.
+4. List-row hover backgrounds should use `--surface-raised` (Codex-pure: surfaces stay neutral on interaction) rather than a warm-accent wash.
+5. All `<code>` text should render in `--accent-warm` (terracotta), not `--global-theme-color` (green).
+6. Build a live developer tool at `/dev/colors/` to tune token values interactively, plus bump `--surface-raised` to a more visible lift (~4% OKLCH) matching the Codex Absolutely reference UI.
+
+### What was done
+
+**Pre-existing `:first-child` redundant border fix** (commit `f1c070e`, `fix(services): remove redundant top-border under block-label`)
+- `.svc-role-item:first-child` and `.svc-student-item:first-child` were drawing a 1px top border that stacked directly below `.svc-block-label`'s 1px bottom border — two parallel lines ~12px apart on every block (`Editorial Appointments`, `Special Issue Editorships`, `Dissertation Chair`, `Dissertation Committee Member`, `PhD Students Mentoring`).
+- Scoped the role-item top border to direct children of `.svc-section` only — i.e. `Selected Professional Services`, which has no block-label above. Removed the student-item :first-child rule entirely (student lists are always inside `.svc-block`).
+
+**Cache-bust filter repair** (commit `63d98d1`, `fix(cache): repair bust_css_cache filter to actually bust on SCSS edits`)
+- The filter was reading `assets/css/main.css` (the URL path) to compute its MD5 — but `main.css` is generated from `main.scss`, no source file at that path. `File.read` failed silently, `file_contents` returned empty, `Digest::MD5.hexdigest('')` = the constant `d41d8cd98f00b204e9800998ecf8427e` query param on every page load. Returning visitors kept stale CSS until the 4-hour GH Pages cache TTL expired.
+- Patched `_plugins/cache-bust.rb`: added an `exists?` check + a `.scss` source fallback in `bust_file_cache`, and pointed `bust_css_cache` at the correct `_sass` directory (it was at the nonexistent `assets/_sass`). Added a `BUILD_FALLBACK` constant (set once per Jekyll build) for the rare case where neither file is readable.
+- Verified locally: editing `_themes.scss` now changes the `main.css` query string from one hash to another. The local-preview cache problems we'd been fighting via link replacement disappear too.
+
+**Surface tier naming + leftover cleanup** (commit `99b58be`, `style(theme): name the surface tier — add --surface-raised, snap leftovers`)
+- Promoted `--surface-raised` (cards, dropdowns, hover lift) to a named token in both `:root` (`#2F2F2D`) and `html[data-theme="light"]` (`#f5f4ef`). Replaced all hardcoded `#2F2F2D` and `#f5f4ef` usages — `.fb-feature-card`, `.fb-panel`, `.dropdown-menu`, `.talk-year-node`.
+- Bridged al-folio's `--global-card-bg-color` (both dark and light blocks) to `var(--surface-raised)` so Bootstrap-derived components pick up the unified value.
+- Cleaned up 17 stale literal references that survived session 13: `#262624 → var(--surface)`, `#faf9f5 → var(--surface)`, `#3A3A36 → var(--line)`, `#3d3929 → var(--text-hi)` (old light-mode text-hi, repurposed to the new unified ink), and `rgba(38,38,36, X)` → `color-mix(in oklch, var(--surface) X%, transparent)` in about.css.
+
+**Hover-bg unification** (commit `c4f0058`, `style(hover): list-row hover backgrounds use --surface-raised instead of accent tint`)
+- `.pub-item:hover`, `.tl-paper:hover`, `.talk-item:hover` (all of which used a `color-mix(accent-warm, 2%)` faint orange wash) → `background: var(--surface-raised)`. More Codex-pure: surface tier stays neutral on interaction; warm accent shows up only on the left-stripe and on text-color shifts.
+- Added the same hover-bg to `.svc-role-item:hover` and `.svc-student-item:hover` (previously had no bg change — only the padding-left shift).
+- Removed two redundant `html[data-theme="light"]` hover-bg overrides since `--surface-raised` is mode-aware via cascade.
+- `.pub-target-flash` (URL-anchored entries) kept its accent-warm gradient — its job is to attract attention.
+
+**Code text → accent-warm** (commit `645d3a6`, `style(code): inline code and pre blocks render in --accent-warm`)
+- Changed `code` and `pre` rules in `_base.scss` from `var(--global-theme-color)` (which resolves to `--accent-cool` green) to `var(--accent-warm)` (`#cc7d5e` terracotta).
+- Updated the about-page `code` override that was set to `var(--text-hi)` — making inline code blend into surrounding prose — to `var(--accent-warm)`. Now matches the `.nh-topic-link` chips that were already accent-warm.
+- Border on the about-page inline code chip switched from a hardcoded rgba to `var(--line)` for theme awareness.
+- Verified: 20 `<code>` elements on the home page now all render at `rgb(204, 125, 94)` = `#cc7d5e`.
+
+**Color Lab + surface-raised lift** (commit `e56784f`, `feat(dev): add /dev/colors/ color-lab page + bump --surface-raised lift`)
+- `--surface-raised` bumped from `#2F2F2D` (1% OKLCH lift) to `#363634` (~4% lift), and the light variant from `#f5f4ef` (cream) to `#ececea` (neutral darken). Matches the visible elevation in the reference Codex UI panel grey.
+- Added `_pages/dev-colors.md` — a single-file Jekyll page at `/dev/colors/` (not linked from the nav; `nav: false` in front-matter). Live editor for the design system tokens:
+  - 11 base tokens exposed as color-picker + hex-input pairs: surface tier (3), ink + text (4) — all split dark/light — plus accent (2 unified) and semantic (2 unified). Derived alpha tints aren't exposed; they update via `color-mix()` automatically.
+  - Live preview panel with cards, list-row hovers, code, links, badges — all consume the same tokens.
+  - "Toggle theme" switches the editor + page between dark/light.
+  - "Copy SCSS" opens a dialog with paste-ready blocks for `:root` and `html[data-theme="light"]`, plus copies to clipboard.
+  - "Reset to defaults" wipes localStorage overrides.
+- Implementation detail: the editor writes a dedicated `<style id="cl-override-style">` with explicit `:root` / `html[data-theme="dark"]` / `html[data-theme="light"]` selectors, so dark and light overrides remain separable. All DOM construction uses `createElement` + `textContent` (no `innerHTML`).
+- Workflow: tweak in the lab → see live changes (your view only, persists in `localStorage`) → click Copy SCSS → paste into `_sass/_themes.scss` → commit + push → GH Actions deploys to production.
+
+### Current status
+
+- **Done**: All six commits landed on `origin/main`. Site rebuild succeeded. The cache-bust filter is now working, so every CSS change will instantly invalidate caches on next deploy.
+- **In progress**: nothing.
+- **Pending**: This handover commit + push.
+
+### Important context
+
+- **Color Lab is publicly accessible at `https://kevinhong.ai/dev/colors/`.** Not linked from the nav, but anyone who knows the URL can visit. If you add destructive/save-to-server functionality later, gate it.
+- **`localStorage` overrides in the lab DO NOT propagate to other visitors.** Each browser stores its own overrides. To deploy a tweak: Copy SCSS → paste into source → commit + push. The lab is an iteration tool, not a CMS.
+- **The cache-bust fix is retroactive for new visitors** but not for visitors who already have the old `?d41d8cd...` hash cached. They'll see the new theme after their 4-hour cache expires (or a hard-refresh). Going forward, every CSS change yields a fresh hash, so future deploys land instantly.
+- **The new `--surface-raised` is significantly more visible** than the previous 1% lift. If a card or dropdown looks "too floating" or "too separated" from the page bg, the value to tweak is `_themes.scss:69` (dark) or `:218` (light) — or just use the lab page.
+- **Light-mode `--surface-raised` is now `#ececea` (neutral darken)**, departing from the previous `#f5f4ef` (cream tint). This is a deliberate move toward the Codex-aligned neutral; if you preferred the cream feel of the old card-bg, revert that one line.
+- **`<code>` color is now terracotta** (`--accent-warm`) site-wide. About-page topic chips were already accent-warm; now plain inline `code` matches.
+- **AGENTS.md still untracked.**
+
+### Decisions already made
+
+- **Surface tier gets a named raised variant rather than collapsing to flat.** The user asked for visible card lift via background, not pure-Codex flatness. The new `--surface-raised: #363634` provides that without departing from the spec's surface-derived approach.
+- **List-row hover bg uses surface-raised, not an accent tint.** More Codex-pure. The left stripe still provides the warm color cue.
+- **`.pub-target-flash` keeps its warm gradient** — its job is to attract attention, neutral lift would defeat the purpose.
+- **The color lab uses `localStorage` per-browser persistence**, not server-side save. GH Pages is static; no other workable option without external infrastructure. Lab serves as a fast iteration tool; production deploys are still git-driven.
+- **All `<code>` site-wide is terracotta now.** Matches research-topic chips, gives inline code a deliberate semantic highlight rather than blending into prose.
+- **`--surface-raised` light value moved from cream (`#f5f4ef`) to neutral (`#ececea`)**, sacrificing some warm parchment feel for a more Codex-consistent neutral elevation.
+
+### Next best step
+
+- **Primary action**: Push this handover commit, then verify on `kevinhong.ai`:
+  1. Visit `/dev/colors/` — confirm the editor renders, color pickers respond, theme toggle works, Copy SCSS dialog opens with paste-ready code.
+  2. Tweak `--surface-raised` (dark) — does the card lift in the preview feel right? If too much/too little, dial in the exact value, paste back into `_themes.scss:69`.
+  3. Toggle to light mode, do the same for `--surface-raised` light at `_themes.scss:218`.
+  4. Spot-check the live site: hover a pub-item / svc-role-item / talk-item — neutral surface-raised lift, not warm tint. Inline code reads in terracotta.
+- **Optional follow-ups**:
+  - **`bust_file_cache` on per-page CSS links** — `research.css`, `services.css`, `talks.css`, `football.css`, `talkmap.css`, `about.css` are linked WITHOUT cache-bust query strings (only main.css and the vendored CSS use the filter). When those files change, returning visitors still get stale CSS until the GH Pages 4-hour cache expires. Quick fix: pipe each `relative_url | bust_file_cache` in the `<link>` tags. ~6 lines of Liquid edits.
+  - **Gate `/dev/colors/` behind a query-string check** if you want trivial security-through-obscurity (e.g. `?key=foo`). Not real auth, but prevents drive-by visits.
+  - **Add a `--surface-raised` slider that goes by OKLCH steps** instead of arbitrary hex picking — would make "+4% lightness over surface" a single-knob interaction. Future improvement.
+- **Carried from earlier sessions** (still queued):
+  - **Tier 2 left**: T2.6 lede deck, T2.7 awards `<details>`, T2.9 promote working papers in nav.
+  - **Tier 3 left**: T3.11 jQuery/Bootstrap-bundle replacement, T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
+  - **Tier 4 left**: T4.17 OG/Twitter card meta, T4.19 Bootstrap utility-only build, T4.20 last-updated stamp.
+  - **External deadline**: vendored font-awesome + tabler-icons Sass migration before Dart Sass 3.0.
+
+---
+
+## 2026-05-10 — Session 13
 
 ### Goal
 Replace the multi-orange + brown-light-mode palette with the Codex "Absolutely" theme: ONE accent (#cc7d5e) shared by light + dark, surface + ink invert between modes, two semantic colors (success-green #00c853, danger-red #ff5f38). User explicitly accepted that light mode would shift from "parchment + brown" to "parchment + orange". Plan, audit, verify, implement, audit, commit per user's explicit workflow request.
