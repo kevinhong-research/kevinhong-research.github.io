@@ -57,7 +57,7 @@
 
 .tm-state {
   fill: rgba(47, 47, 45, 0.72);
-  stroke: #3A3A36;
+  stroke: var(--line);
   stroke-width: 0.7;
   transition: fill var(--duration-fast);
 }
@@ -69,7 +69,7 @@
 .tm-state-lbl {
   font-size: 7.5px;
   font-weight: 500;
-  fill: #3A3A36;
+  fill: var(--line);
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
@@ -92,8 +92,8 @@
 .tm-tip {
   position: absolute;
   pointer-events: none;
-  background: #2F2F2D;
-  border: 1px solid #3A3A36;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
   border-left: 2px solid var(--accent-cool);
   border-radius: 4px;
   padding: 9px 13px;
@@ -164,7 +164,7 @@ html[data-theme="light"] .tm-state-lbl {
   fill: #b4b2a7;
 }
 html[data-theme="light"] .tm-tip {
-  background: #f5f4ef;
+  background: var(--surface-raised);
   border-color: #dad9d4;
   border-left-color: var(--accent-warm);
   color: #6e6d68;
@@ -174,7 +174,7 @@ html[data-theme="light"] .tm-tip.upcoming {
   border-left-color: #61AAF2;
 }
 html[data-theme="light"] .tm-tip-entry strong {
-  color: #3d3929;
+  color: var(--text-hi);
 }
 html[data-theme="light"] .tm-tip-meta {
   color: #b4b2a7;

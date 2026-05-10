@@ -66,6 +66,7 @@
 
   // ── Surface + ink (DARK variant; Codex "absolutely" surface=#2d2d2b ink=#f9f9f7)
   --surface:        #2d2d2b;
+  --surface-raised: #2F2F2D;       // ~1% lighter than surface; subtle lift for cards/panels/dropdowns
   --ink:            #f9f9f7;
 
   // ── Text hierarchy (warm off-white at descending lightness in dark; light overrides)
@@ -172,7 +173,7 @@ html[data-theme="dark"] {
   --global-footer-link-color: #{$black-color};
   --global-distill-app-color: #{$grey-color-light};
   --global-divider-color: var(--line);
-  --global-card-bg-color: #{$grey-900};
+  --global-card-bg-color: var(--surface-raised);
   --global-back-to-top-bg-color: rgba(
     #{color.channel($white-color, "red", $space: rgb)},
     #{color.channel($white-color, "green", $space: rgb)},
@@ -213,8 +214,9 @@ html[data-theme="light"] {
   // ════════════════════════════════════════════════════════════════════════
 
   // ── Surface + ink invert
-  --surface:  #f9f9f7;
-  --ink:      #2d2d2b;
+  --surface:        #f9f9f7;
+  --surface-raised: #f5f4ef;       // ~1% darker than surface; subtle lift for cards/panels/dropdowns
+  --ink:            #2d2d2b;
 
   // ── Text hierarchy (warm near-black at descending lightness)
   --text-hi:  var(--ink);
@@ -239,7 +241,7 @@ html[data-theme="light"] {
   --global-footer-link-color: var(--surface);
   --global-distill-app-color: #6e6d68;
   --global-divider-color: #dad9d4;
-  --global-card-bg-color: #f5f4ef;
+  --global-card-bg-color: var(--surface-raised);
   --global-highlight-color: var(--accent-warm);
   --global-back-to-top-bg-color: rgba(45, 45, 43, 0.4);
   --global-back-to-top-text-color: var(--surface);

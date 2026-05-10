@@ -45,7 +45,7 @@
   height: 1.15rem;
   border-radius: 50%;
   border: 1.5px solid var(--green-hi);
-  background: #2F2F2D;
+  background: var(--surface-raised);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -258,7 +258,7 @@ html[data-theme="light"] .talk-year-group::before {
 }
 html[data-theme="light"] .talk-year-node {
   border-color: var(--accent-warm);
-  background: #faf9f5;
+  background: var(--surface);
 }
 html[data-theme="light"] .talk-year-dot {
   background: var(--accent-warm);

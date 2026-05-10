@@ -38,8 +38,8 @@
 
 /* ── DROPDOWN MENU PANEL ─────────────────────────────────── */
 .nav-item.dropdown .dropdown-menu {
-  background: #2F2F2D;
-  border: 1px solid #3A3A36;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
   border-left: none;
   border-radius: 0;
   border-right: none;
@@ -83,7 +83,7 @@
 
 /* ── DIVIDER ─────────────────────────────────────────────── */
 .nav-item.dropdown .dropdown-divider {
-  border-top: 1px solid #3A3A36;
+  border-top: 1px solid var(--line);
   margin: 0.3rem 0;
 }
 

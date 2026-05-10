@@ -828,7 +828,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--bg, #262624);
+  background: var(--bg, var(--surface));
   border: 1.5px solid var(--accent-cool);
   display: flex;
   align-items: center;
@@ -1049,7 +1049,7 @@ html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
 }
 
 html[data-theme="light"] .area-tag {
-  color: #3d3929;
+  color: var(--text-hi);
 }
 html[data-theme="light"] .area-tag:hover {
   border-color: var(--accent-warm-soft);
@@ -1175,7 +1175,7 @@ html[data-theme="light"] .tl-year-group::before {
   background: color-mix(in oklch, var(--accent-warm) 20%, transparent);
 }
 html[data-theme="light"] .tl-year-node {
-  background: #faf9f5;
+  background: var(--surface);
   border-color: var(--accent-warm);
 }
 html[data-theme="light"] .tl-year-dot {
