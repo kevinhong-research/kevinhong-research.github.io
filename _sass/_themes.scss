@@ -54,30 +54,59 @@
   --fs-2xl: 2rem;      // page section titles (h2)
   --fs-3xl: 2.5rem;    // hero / post titles (h1)
 
-  // Text palette — warm parchment, applies to base/dark mode.
-  // Single source of truth across all pages; light theme overrides below.
-  --text-hi:  #ddd8cb;          // primary: list-row item titles, headings
-  --text:     #a29e92;          // body / paragraph
-  --text-mid: #9c988b;          // metadata, secondary line in list rows
-  --text-lo:  #928d7f;          // tertiary: separators, faint counts
-  --line:     #3A3A36;          // borders, dividers
-  --line-hi:  rgba(255, 255, 255, 0.12);
+  // ════════════════════════════════════════════════════════════════════════
+  // DESIGN SYSTEM — "Absolutely" theme (adapted from Codex codex-theme-v1).
+  // Single source of truth: change --accent-warm here and every hover, link,
+  // border tint across the site updates via color-mix().
+  //
+  // The light + dark variants share the SAME accent. Only --surface and --ink
+  // invert; html[data-theme="light"] block below redefines those two and the
+  // text-tier ladder. Everything else cascades from :root.
+  // ════════════════════════════════════════════════════════════════════════
 
-  // Motion tokens — used by hover, focus, and reveal transitions.
-  // 0.2s + ease covers ~80% of project transitions; the cubic-bezier
-  // is a gentle ease-out-quint for expressive transforms.
-  --duration-fast: 0.2s;
-  --duration-base: 0.28s;
-  --ease-default:  ease;
-  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+  // ── Surface + ink (DARK variant; Codex "absolutely" surface=#2d2d2b ink=#f9f9f7)
+  --surface:        #2d2d2b;
+  --ink:            #f9f9f7;
 
-  // Brand accent palette — applies to base/dark mode.
-  // Single source of truth; light theme overrides below.
-  --accent-warm:        #D97757;   // primary orange (hover stripes, links)
-  --accent-warm-soft:   #f1a689;   // lighter coral (badges, awards)
-  --accent-warm-strong: #CC785C;   // deeper variant (active, hover-emphasis)
-  --accent-cool:        #19b66f;   // primary green (status, section labels)
-  --accent-cool-deep:   #00a060;   // deeper green (abstracts, secondary links)
+  // ── Text hierarchy (warm off-white at descending lightness in dark; light overrides)
+  --text-hi:        var(--ink);            // primary: list-row item titles, headings
+  --text:           #bfbeb8;               // body / paragraph
+  --text-mid:       #a3a39d;               // metadata, secondary line in list rows
+  --text-lo:        #737371;               // tertiary: separators, faint counts
+
+  // ── Lines / borders / dividers
+  --line:           #3d3d3a;
+  --line-hi:        rgba(255, 255, 255, 0.12);
+
+  // ── Motion tokens (unchanged from session 12)
+  --duration-fast:  0.2s;
+  --duration-base:  0.28s;
+  --ease-default:   ease;
+  --ease-out:       cubic-bezier(0.22, 1, 0.36, 1);
+
+  // ── Brand accent (UNIFIED across light + dark per Codex spec)
+  --accent-warm:         #cc7d5e;          // primary; hover stripes, links, active state
+  --accent-warm-soft:    #e6a78b;          // lighter derivation; low-emphasis labels & badges
+
+  // ── Derived alpha tints (auto-update if --accent-warm changes)
+  // Replace any future raw rgba() literals with these wherever possible.
+  --accent-warm-bg-subtle:     color-mix(in oklch, var(--accent-warm) 4%,  transparent);
+  --accent-warm-bg-soft:       color-mix(in oklch, var(--accent-warm) 8%,  transparent);
+  --accent-warm-bg-medium:     color-mix(in oklch, var(--accent-warm) 12%, transparent);
+  --accent-warm-bg-strong:     color-mix(in oklch, var(--accent-warm) 22%, transparent);
+  --accent-warm-border:        color-mix(in oklch, var(--accent-warm) 42%, transparent);
+  --accent-warm-border-strong: color-mix(in oklch, var(--accent-warm) 58%, transparent);
+  --accent-warm-soft-border:   color-mix(in oklch, var(--accent-warm-soft) 42%, transparent);
+
+  // ── Cool / success (Codex diffAdded — section labels, status pills)
+  --accent-cool:               #00c853;
+  --accent-cool-bg-soft:       color-mix(in oklch, var(--accent-cool) 8%,  transparent);
+  --accent-cool-bg-medium:     color-mix(in oklch, var(--accent-cool) 12%, transparent);
+  --accent-cool-border:        color-mix(in oklch, var(--accent-cool) 42%, transparent);
+  --accent-cool-border-strong: color-mix(in oklch, var(--accent-cool) 58%, transparent);
+
+  // ── Danger (Codex diffRemoved — reserved for future destructive UI)
+  --accent-danger:             #ff5f38;
 
   // Spacing scale — used by padding, margin, gap. ~10 tiers covering the
   // full range from clip-path edges to page-level breathing room.
@@ -127,18 +156,22 @@
 }
 
 html[data-theme="dark"] {
-  --global-bg-color: #{$grey-color-dark};
+  // Bootstrap-default token overrides aligned with the design system above.
+  // --surface/--ink/--text-* / --accent-* already cascade from :root (which
+  // is itself the dark variant). Below we just bridge those into the
+  // --global-* tokens that Bootstrap-derived styles consume.
+  --global-bg-color: var(--surface);
   --global-code-bg-color: #{$code-bg-color-dark};
-  --global-text-color: #{$grey-color-light};
-  --global-text-color-light: #9b978c;
-  --global-theme-color: #19b66f;
-  --global-hover-color: #25c37b;
+  --global-text-color: var(--ink);
+  --global-text-color-light: var(--text-mid);
+  --global-theme-color: var(--accent-cool);
+  --global-hover-color: var(--accent-cool);
   --global-hover-text-color: #{$white-color};
   --global-footer-bg-color: #{$grey-color-light};
   --global-footer-text-color: #{$grey-color-dark};
   --global-footer-link-color: #{$black-color};
   --global-distill-app-color: #{$grey-color-light};
-  --global-divider-color: #3A3A36;
+  --global-divider-color: var(--line);
   --global-card-bg-color: #{$grey-900};
   --global-back-to-top-bg-color: rgba(
     #{color.channel($white-color, "red", $space: rgb)},
@@ -172,41 +205,46 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="light"] {
-  // Text palette — Claude Light Parchment (overrides base values).
-  // --text-hi matches --global-text-color (#3d3929) so high-emphasis
-  // text and body share a color; hierarchy comes from weight + size.
-  --text-hi:  #3d3929;
-  --text:     #4f4b41;
-  --text-mid: #595549;
-  --text-lo:  #6c6659;
+  // ════════════════════════════════════════════════════════════════════════
+  // LIGHT VARIANT — "Absolutely" theme (Codex codex-theme-v1, light).
+  // surface=#f9f9f7, ink=#2d2d2b, accent=#cc7d5e (UNCHANGED — same as dark).
+  // Only --surface/--ink and the text-tier ladder are redefined here; the
+  // accent palette and all derived tints cascade unchanged from :root.
+  // ════════════════════════════════════════════════════════════════════════
+
+  // ── Surface + ink invert
+  --surface:  #f9f9f7;
+  --ink:      #2d2d2b;
+
+  // ── Text hierarchy (warm near-black at descending lightness)
+  --text-hi:  var(--ink);
+  --text:     #56564f;
+  --text-mid: #6c6c63;
+  --text-lo:  #9c9c8f;
+
+  // ── Lines on light bg
   --line:     rgba(0, 0, 0, 0.08);
   --line-hi:  rgba(0, 0, 0, 0.14);
 
-  // Brand accent palette — parchment-brown family for light theme.
-  --accent-warm:        #8f5538;
-  --accent-warm-soft:   #B26842;
-  --accent-warm-strong: #734127;
-  --accent-cool:        #8f5538;   // light mode unifies green→brown
-  --accent-cool-deep:   #734127;
-
-  --global-bg-color: #faf9f5;
+  // ── Bootstrap bridge (mirrors the dark block above)
+  --global-bg-color: var(--surface);
   --global-code-bg-color: #ede9de;
-  --global-text-color: #3d3929;
-  --global-text-color-light: #5f5b4f;
-  --global-theme-color: #8f5538;
-  --global-hover-color: #734127;
+  --global-text-color: var(--ink);
+  --global-text-color-light: var(--text-mid);
+  --global-theme-color: var(--accent-cool);
+  --global-hover-color: var(--accent-warm);
   --global-hover-text-color: #{$white-color};
-  --global-footer-bg-color: #3d3929;
+  --global-footer-bg-color: var(--ink);
   --global-footer-text-color: #b4b2a7;
-  --global-footer-link-color: #faf9f5;
+  --global-footer-link-color: var(--surface);
   --global-distill-app-color: #6e6d68;
   --global-divider-color: #dad9d4;
   --global-card-bg-color: #f5f4ef;
-  --global-highlight-color: #8f5538;
-  --global-back-to-top-bg-color: rgba(61, 57, 41, 0.4);
-  --global-back-to-top-text-color: #faf9f5;
-  --global-newsletter-bg-color: #faf9f5;
-  --global-newsletter-text-color: #3d3929;
+  --global-highlight-color: var(--accent-warm);
+  --global-back-to-top-bg-color: rgba(45, 45, 43, 0.4);
+  --global-back-to-top-text-color: var(--surface);
+  --global-newsletter-bg-color: var(--surface);
+  --global-newsletter-text-color: var(--ink);
 
   --global-tip-block: #42b983;
   --global-tip-block-bg: #e2f5ec;

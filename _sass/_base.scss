@@ -331,9 +331,9 @@ ul.task-list input[type="checkbox"] {
     color: var(--global-theme-color);
     background-image: linear-gradient(
       90deg,
-      rgba(25, 182, 111, 0),
-      rgba(25, 182, 111, 0.54),
-      rgba(25, 182, 111, 0)
+      transparent,
+      color-mix(in oklch, var(--accent-cool) 54%, transparent),
+      transparent
     );
     background-repeat: no-repeat;
     background-position: center calc(100% - 1px);
@@ -348,9 +348,9 @@ ul.task-list input[type="checkbox"] {
   html[data-theme="light"] & .nav-item.active > .nav-link {
     background-image: linear-gradient(
       90deg,
-      rgba(143, 85, 56, 0),
-      rgba(143, 85, 56, 0.48),
-      rgba(143, 85, 56, 0)
+      transparent,
+      color-mix(in oklch, var(--accent-warm) 48%, transparent),
+      transparent
     );
   }
 
@@ -368,7 +368,7 @@ ul.task-list input[type="checkbox"] {
     }
 
     a:hover {
-      color: var(--accent-warm-strong);
+      color: var(--accent-warm);
       background-color: #ede9de;
     }
 
@@ -379,7 +379,7 @@ ul.task-list input[type="checkbox"] {
 
   html[data-theme="light"] & .dropdown-item.active,
   html[data-theme="light"] & .dropdown-item:active {
-    background-color: var(--accent-warm-strong);
+    background-color: var(--accent-warm);
     color: #ffffff !important;
   }
 

@@ -13,7 +13,7 @@
 
   --fb-panel: #2F2F2D;
   --fb-panel-soft: rgba(58, 58, 54, 0.3);
-  --fb-green: var(--accent-cool-deep);
+  --fb-green: var(--accent-cool);
   --fb-blue: #4db8ff;
   --fb-orange: var(--accent-warm);
 }
@@ -85,8 +85,8 @@
 
 .fb-pills:hover .fb-pill,
 .fb-pills--open .fb-pill {
-  background: rgba(217, 119, 87, 0.04);
-  border-color: rgba(217, 119, 87, 0.18);
+  background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
+  border-color: color-mix(in oklch, var(--accent-warm) 18%, transparent);
 }
 
 .fb-pill-n {
@@ -114,9 +114,9 @@
 .fb-pill--geo .fb-pill-l { color: var(--fb-green); letter-spacing: 0.08em; }
 
 .fb-pills:hover .fb-pill--green .fb-pill-n,
-.fb-pills--open .fb-pill--green .fb-pill-n { color: #00c070; }
+.fb-pills--open .fb-pill--green .fb-pill-n { color: var(--accent-cool); }
 .fb-pills:hover .fb-pill--orange .fb-pill-n,
-.fb-pills--open .fb-pill--orange .fb-pill-n { color: #c85a42; }
+.fb-pills--open .fb-pill--orange .fb-pill-n { color: var(--accent-warm); }
 .fb-pills:hover .fb-pill--geo .fb-pill-l,
 .fb-pills--open .fb-pill--geo .fb-pill-l { color: var(--fb-orange); }
 
@@ -315,7 +315,7 @@
 
 .fb-marker:hover .fb-marker-frame,
 .fb-marker.is-active .fb-marker-frame {
-  stroke: rgba(217, 119, 87, 0.5);
+  stroke: color-mix(in oklch, var(--accent-warm) 50%, transparent);
 }
 
 .fb-tip {
@@ -324,7 +324,7 @@
   pointer-events: auto;
   background: var(--fb-panel);
   border: 1px solid rgba(58, 58, 54, 0.6);
-  border-left: 2px solid rgba(0, 160, 96, 0.72);
+  border-left: 2px solid color-mix(in oklch, var(--accent-cool) 72%, transparent);
   border-radius: 6px;
   overflow: hidden;
   display: none;
@@ -334,7 +334,7 @@
 
 .fb-tip-photo {
   height: 146px;
-  background: linear-gradient(135deg, rgba(217, 119, 87, 0.08), rgba(77, 184, 255, 0.08));
+  background: linear-gradient(135deg, color-mix(in oklch, var(--accent-warm) 8%, transparent), rgba(77, 184, 255, 0.08));
   overflow: hidden;
 }
 
@@ -534,7 +534,7 @@ html[data-theme="light"] .fb-page {
   --fb-panel-soft: rgba(0, 0, 0, 0.02);
   --fb-green: var(--accent-warm);
   --fb-blue: #61AAF2;
-  --fb-orange: var(--accent-warm-strong);
+  --fb-orange: var(--accent-warm);
 }
 
 html[data-theme="light"] .fb-pill {
@@ -542,8 +542,8 @@ html[data-theme="light"] .fb-pill {
 }
 html[data-theme="light"] .fb-pills:hover .fb-pill,
 html[data-theme="light"] .fb-pills--open .fb-pill {
-  background: rgba(178, 104, 66, 0.04);
-  border-color: rgba(178, 104, 66, 0.18);
+  background: color-mix(in oklch, var(--accent-warm-soft) 4%, transparent);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 18%, transparent);
 }
 html[data-theme="light"] .fb-pill-n {
   color: var(--fb-text-mid);
@@ -561,7 +561,7 @@ html[data-theme="light"] .fb-pills--open .fb-pill--green .fb-pill-n {
 }
 html[data-theme="light"] .fb-pills:hover .fb-pill--orange .fb-pill-n,
 html[data-theme="light"] .fb-pills--open .fb-pill--orange .fb-pill-n {
-  color: var(--accent-warm-strong);
+  color: var(--accent-warm);
 }
 html[data-theme="light"] .fb-pill-sep {
   background: rgba(0, 0, 0, 0.1);
@@ -573,7 +573,7 @@ html[data-theme="light"] .fb-feature-card {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 html[data-theme="light"] .fb-feature-card::before {
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.02), rgba(204, 120, 92, 0.28), rgba(0, 0, 0, 0.02));
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.02), color-mix(in oklch, var(--accent-warm) 28%, transparent), rgba(0, 0, 0, 0.02));
 }
 html[data-theme="light"] .fb-feature-card-media {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.015), rgba(0, 0, 0, 0));
@@ -607,27 +607,27 @@ html[data-theme="light"] .fb-marker-frame {
 }
 html[data-theme="light"] .fb-marker:hover .fb-marker-frame,
 html[data-theme="light"] .fb-marker.is-active .fb-marker-frame {
-  stroke: rgba(178, 104, 66, 0.5);
+  stroke: color-mix(in oklch, var(--accent-warm-soft) 50%, transparent);
 }
 
 html[data-theme="light"] .fb-tip {
   border-color: #dad9d4;
-  border-left-color: rgba(204, 120, 92, 0.72);
+  border-left-color: color-mix(in oklch, var(--accent-warm) 72%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 html[data-theme="light"] .fb-tip-photo {
-  background: linear-gradient(135deg, rgba(178, 104, 66, 0.06), rgba(97, 170, 242, 0.06));
+  background: linear-gradient(135deg, color-mix(in oklch, var(--accent-warm-soft) 6%, transparent), rgba(97, 170, 242, 0.06));
 }
 html[data-theme="light"] .fb-tip-kicker {
   color: var(--accent-warm);
 }
 html[data-theme="light"] .fb-tip-stadium-link {
   color: #3d3929;
-  border-bottom-color: rgba(204, 120, 92, 0.3);
+  border-bottom-color: color-mix(in oklch, var(--accent-warm) 30%, transparent);
 }
 html[data-theme="light"] .fb-tip-stadium-link:hover {
   color: var(--accent-warm);
-  border-bottom-color: rgba(204, 120, 92, 0.72);
+  border-bottom-color: color-mix(in oklch, var(--accent-warm) 72%, transparent);
 }
 html[data-theme="light"] .fb-tip-row-value {
   color: #535146;
@@ -642,7 +642,7 @@ html[data-theme="light"] .fb-empty code {
 }
 
 html[data-theme="light"] .fb-lightbox {
-  background: rgba(250, 249, 245, 0.88);
+  background: color-mix(in oklch, var(--surface) 88%, transparent);
 }
 html[data-theme="light"] .fb-lightbox-close {
   border-color: rgba(0, 0, 0, 0.12);
@@ -650,7 +650,7 @@ html[data-theme="light"] .fb-lightbox-close {
   color: #3d3929;
 }
 html[data-theme="light"] .fb-lightbox-close:hover {
-  border-color: rgba(204, 120, 92, 0.48);
+  border-color: color-mix(in oklch, var(--accent-warm) 48%, transparent);
   color: var(--accent-warm);
 }
 
@@ -661,8 +661,7 @@ html[data-theme="light"] .fb-lightbox-close:hover {
    page background, and accent hues warm up. */
 html[data-theme="dark"] .fb-page {
   --fb-line:     #4A4A46;
-  --fb-green:    var(--accent-cool);
-  --fb-orange:   #e79b78;
+  /* --fb-green and --fb-orange cascade from :root --accent-* (unified per Codex). */
 }
 
 html[data-theme="dark"] .fb-pill {
@@ -671,7 +670,7 @@ html[data-theme="dark"] .fb-pill {
 
 html[data-theme="dark"] .fb-pills:hover .fb-pill,
 html[data-theme="dark"] .fb-pills--open .fb-pill {
-  border-color: rgba(217, 119, 87, 0.22);
+  border-color: color-mix(in oklch, var(--accent-warm) 22%, transparent);
 }
 
 html[data-theme="dark"] .fb-pill-sep {

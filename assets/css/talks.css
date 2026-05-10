@@ -22,7 +22,7 @@
   top: 0.7rem;
   bottom: 0;
   width: 1px;
-  background: rgba(0, 160, 96, 0.18);
+  background: color-mix(in oklch, var(--accent-cool) 18%, transparent);
 }
 
 .talk-year-group:last-child::before {
@@ -97,7 +97,7 @@
 
 .talk-item:hover {
   padding-left: 10px;
-  background: rgba(217, 119, 87, 0.02);
+  background: color-mix(in oklch, var(--accent-warm) 2%, transparent);
 }
 
 .talk-item:hover::before {
@@ -211,12 +211,12 @@
 
 .talk-badge--upcoming {
   color: var(--green-hi);
-  border: 1px solid rgba(25, 182, 111, 0.42);
+  border: 1px solid color-mix(in oklch, var(--accent-cool) 42%, transparent);
 }
 
 .talk-badge--keynote {
   color: var(--accent-warm-soft);
-  border: 1px solid rgba(241, 166, 137, 0.42);
+  border: 1px solid color-mix(in oklch, var(--accent-warm-soft) 42%, transparent);
 }
 
 @media (max-width: 700px) {
@@ -254,7 +254,7 @@
    LIGHT MODE — Claude Light Parchment
 ══════════════════════════════════════════════════════════════ */
 html[data-theme="light"] .talk-year-group::before {
-  background: rgba(204, 120, 92, 0.2);
+  background: color-mix(in oklch, var(--accent-warm) 20%, transparent);
 }
 html[data-theme="light"] .talk-year-node {
   border-color: var(--accent-warm);
@@ -270,7 +270,7 @@ html[data-theme="light"] .talk-item::before {
   background: var(--accent-warm);
 }
 html[data-theme="light"] .talk-item:hover {
-  background: rgba(178, 104, 66, 0.03);
+  background: color-mix(in oklch, var(--accent-warm-soft) 3%, transparent);
 }
 html[data-theme="light"] .talk-logo {
   border-color: rgba(0, 0, 0, 0.08);
@@ -284,9 +284,9 @@ html[data-theme="light"] .talk-date {
 }
 html[data-theme="light"] .talk-badge--upcoming {
   color: var(--accent-warm);
-  border-color: rgba(143, 85, 56, 0.38);
+  border-color: color-mix(in oklch, var(--accent-warm) 38%, transparent);
 }
 html[data-theme="light"] .talk-badge--keynote {
-  color: var(--accent-warm-strong);
-  border-color: rgba(115, 65, 39, 0.38);
+  color: var(--accent-warm);
+  border-color: color-mix(in oklch, var(--accent-warm) 38%, transparent);
 }

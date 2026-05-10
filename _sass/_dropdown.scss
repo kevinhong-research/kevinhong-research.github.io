@@ -69,7 +69,7 @@
 .nav-item.dropdown .dropdown-item:hover,
 .nav-item.dropdown .dropdown-item:focus {
   color: var(--global-text-color);
-  background: rgba(25, 182, 111, 0.08);
+  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
 }
 
 /* Active page marker — subtle colored text, no full fill.
@@ -89,8 +89,8 @@
 
 /* ── DROPDOWN GLOW ON OPEN ───────────────────────────────── */
 .nav-item.dropdown.show .dropdown-menu {
-  border-color: rgba(0, 160, 96, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 160, 96, 0.15);
+  border-color: color-mix(in oklch, var(--accent-cool) 30%, transparent);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in oklch, var(--accent-cool) 15%, transparent);
 }
 
 html[data-theme="light"] .nav-item.dropdown > .nav-link:hover,
@@ -104,13 +104,13 @@ html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
 
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:hover,
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:focus {
-  color: var(--accent-warm-strong);
+  color: var(--accent-warm);
   background: #ede9de;
 }
 
 html[data-theme="light"] .nav-item.dropdown .dropdown-item.active,
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:active {
-  color: var(--accent-warm-strong) !important;
+  color: var(--accent-warm) !important;
   background-color: transparent !important;
   font-weight: 500;
 }

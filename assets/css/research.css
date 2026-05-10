@@ -15,7 +15,7 @@
 #nhCursorRing {
   position: fixed; pointer-events: none; z-index: 9998;
   width: 32px; height: 32px;
-  border: 1px solid rgba(217, 119, 87, 0.4);
+  border: 1px solid color-mix(in oklch, var(--accent-warm) 40%, transparent);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.25s, height 0.25s, border-color 0.25s;
@@ -29,10 +29,10 @@
 .nh-research {
   --orange:   var(--accent-warm);
   --green-hi: var(--accent-cool);
-  --pub-control-text: rgba(221, 216, 203, 0.92);
-  --pub-control-border: rgba(25, 182, 111, 0.42);
-  --pub-control-bg: rgba(25, 182, 111, 0.09);
-  --pub-control-bg-hover: rgba(25, 182, 111, 0.13);
+  --pub-control-text: color-mix(in oklch, var(--text-hi) 92%, transparent);
+  --pub-control-border: color-mix(in oklch, var(--accent-cool) 42%, transparent);
+  --pub-control-bg: color-mix(in oklch, var(--accent-cool) 9%, transparent);
+  --pub-control-bg-hover: color-mix(in oklch, var(--accent-cool) 13%, transparent);
   --pub-meta-control-height: 1.45rem;
 }
 
@@ -45,7 +45,7 @@
 
 /* Active nav link */
 .nav-item.active > .nav-link {
-  color: var(--accent-cool-deep) !important;
+  color: var(--accent-cool) !important;
 }
 
 .nav-item.dropdown > .nav-link:hover,
@@ -103,7 +103,7 @@
 .area-tag:hover {
   border-color: var(--accent-warm);
   color: var(--accent-warm);
-  background: rgba(217, 119, 87, 0.06);
+  background: color-mix(in oklch, var(--accent-warm) 6%, transparent);
 }
 
 /* ── FILTER BAR ── */
@@ -132,9 +132,9 @@
   color: var(--text-hi);
 }
 .filter-btn.active {
-  border-color: rgba(241, 166, 137, 0.58);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 58%, transparent);
   color: var(--accent-warm-soft);
-  background: rgba(217, 119, 87, 0.12);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 .filter-count {
   font-size: var(--fs-sm);
@@ -177,25 +177,25 @@
   transform-origin: center;
   transition: transform var(--duration-base) var(--ease-out);
 }
-.pub-item:hover { background: rgba(217, 119, 87, 0.02); }
+.pub-item:hover { background: color-mix(in oklch, var(--accent-warm) 2%, transparent); }
 .pub-item:hover::before { transform: scaleY(1); }
 .pub-item.nh-visible { opacity: 1; transform: translateY(0); }
 .pub-item.hidden { display: none; }
 .pub-item.pub-target-flash {
-  background: linear-gradient(90deg, rgba(217, 119, 87, 0.12), rgba(217, 119, 87, 0.02) 18%, rgba(0, 0, 0, 0) 72%);
+  background: linear-gradient(90deg, color-mix(in oklch, var(--accent-warm) 12%, transparent), color-mix(in oklch, var(--accent-warm) 2%, transparent) 18%, rgba(0, 0, 0, 0) 72%);
   animation: pubTargetFlash 2.4s ease;
 }
 .pub-item.pub-target-flash::before { transform: scaleY(1); }
 
 @keyframes pubTargetFlash {
   0% {
-    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.22), 0 0 0 0 rgba(217, 119, 87, 0.24);
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--accent-warm) 22%, transparent), 0 0 0 0 color-mix(in oklch, var(--accent-warm) 24%, transparent);
   }
   30% {
-    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.4), 0 0 0 10px rgba(217, 119, 87, 0.08);
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--accent-warm) 40%, transparent), 0 0 0 10px color-mix(in oklch, var(--accent-warm) 8%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.05), 0 0 0 0 rgba(217, 119, 87, 0);
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--accent-warm) 5%, transparent), 0 0 0 0 transparent;
   }
 }
 
@@ -229,7 +229,7 @@
   text-decoration: none;
   transition: color var(--duration-fast);
 }
-.pub-title:hover { color: var(--accent-cool-deep); }
+.pub-title:hover { color: var(--accent-cool); }
 
 .pub-authors {
   font-size: var(--fs-sm);
@@ -346,8 +346,8 @@
 .pub-abstract-btn:hover,
 .pub-abstract-btn--open {
   color: var(--text-hi);
-  border-color: rgba(241, 166, 137, 0.58);
-  background: rgba(217, 119, 87, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 /* Chevron SVG — rotates 180° when open */
@@ -396,7 +396,7 @@
   line-height: 1.78;
   color: var(--text);
   letter-spacing: 0.01em;
-  border-left: 0 solid rgba(0, 160, 96, 0.22);
+  border-left: 0 solid color-mix(in oklch, var(--accent-cool) 22%, transparent);
   background: transparent;
   padding: 0 1.1rem 0 0;
   clip-path: none;
@@ -404,7 +404,7 @@
 
 .pub-abstract-body.pub-abstract-open .pub-abstract-inner {
   border-left-width: 2px;
-  background: rgba(0, 160, 96, 0.028);
+  background: color-mix(in oklch, var(--accent-cool) 2.8%, transparent);
   padding: 0.85rem 1.1rem;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
 }
@@ -435,8 +435,8 @@
 .pub-citation-btn:hover,
 .pub-citation-btn--open {
   color: var(--text-hi);
-  border-color: rgba(241, 166, 137, 0.58);
-  background: rgba(217, 119, 87, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 .pub-citation-body {
@@ -461,8 +461,8 @@
 }
 
 .pub-citation-body.pub-citation-open .pub-citation-inner {
-  border-left: 2px solid rgba(217, 119, 87, 0.24);
-  background: rgba(217, 119, 87, 0.03);
+  border-left: 2px solid color-mix(in oklch, var(--accent-warm) 24%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 3%, transparent);
   padding: 0.8rem 1.1rem;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
 }
@@ -509,8 +509,8 @@
 .pub-cite:hover {
   color: var(--text-hi);
   text-decoration: none;
-  border-color: rgba(241, 166, 137, 0.58);
-  background: rgba(217, 119, 87, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 .pub-cite-label {
@@ -529,7 +529,7 @@
 }
 
 .pub-cite-sep {
-  color: var(--accent-cool-deep);
+  color: var(--accent-cool);
   letter-spacing: 0;
   transform: translateY(-0.02rem);
 }
@@ -590,7 +590,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 0.5rem 1.2rem;
-  border: 1px solid rgba(25, 182, 111, 0.54);
+  border: 1px solid color-mix(in oklch, var(--accent-cool) 54%, transparent);
   color: var(--green-hi);
   background: transparent;
   text-decoration: none;
@@ -599,7 +599,7 @@
 }
 .scholar-btn:hover {
   border-color: var(--green-hi);
-  background: rgba(25, 182, 111, 0.12);
+  background: color-mix(in oklch, var(--accent-cool) 12%, transparent);
   color: var(--green-hi);
 }
 
@@ -615,7 +615,7 @@
   min-height: 2.55rem;
   padding: 0.72rem 4.2rem 0.72rem 0.92rem;
   border: 1px solid var(--line);
-  background: rgba(25, 182, 111, 0.05);
+  background: color-mix(in oklch, var(--accent-cool) 5%, transparent);
   color: var(--text-hi);
   font-size: var(--fs-sm);
   font-weight: 300;
@@ -631,9 +631,9 @@
 
 .pub-search-input:focus {
   outline: none;
-  border-color: rgba(25, 182, 111, 0.44);
-  background: rgba(25, 182, 111, 0.08);
-  box-shadow: 0 0 0 1px rgba(25, 182, 111, 0.14);
+  border-color: color-mix(in oklch, var(--accent-cool) 44%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--accent-cool) 14%, transparent);
 }
 
 .pub-search-input::-webkit-search-cancel-button {
@@ -667,8 +667,8 @@
 .pub-empty-state__action:hover,
 .pub-empty-state__action:focus-visible {
   color: var(--text-hi);
-  border-color: rgba(241, 166, 137, 0.58);
-  background: rgba(217, 119, 87, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
   outline: none;
 }
 
@@ -710,7 +710,7 @@
   margin: 0 0 1.4rem;
   padding: 1rem 1rem 1.05rem;
   border: 1px solid var(--line);
-  background: rgba(217, 119, 87, 0.04);
+  background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
   clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
 }
 
@@ -756,8 +756,8 @@
 }
 .view-toggle-btn:hover {
   color: var(--green-hi);
-  border-color: rgba(25, 182, 111, 0.44);
-  background: rgba(25, 182, 111, 0.08);
+  border-color: color-mix(in oklch, var(--accent-cool) 44%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
 }
 .view-toggle-btn svg {
   width: 11px;
@@ -768,13 +768,13 @@
    so user knows they're currently in a non-default state */
 .view-toggle-btn[data-current="timeline"] {
   color: var(--green-hi);
-  border-color: rgba(25, 182, 111, 0.44);
-  background: rgba(25, 182, 111, 0.08);
+  border-color: color-mix(in oklch, var(--accent-cool) 44%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
 }
 .view-toggle-btn[data-current="timeline"]:hover {
-  color: #25c37b;
-  border-color: rgba(25, 182, 111, 0.58);
-  background: rgba(25, 182, 111, 0.12);
+  color: var(--accent-cool);
+  border-color: color-mix(in oklch, var(--accent-cool) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 12%, transparent);
 }
 
 /* ── TIMELINE CONTAINER ─────────────────────────────────────
@@ -802,7 +802,7 @@
   top: 8px;
   bottom: 0;
   width: 1px;
-  background: rgba(0, 160, 96, 0.18);
+  background: color-mix(in oklch, var(--accent-cool) 18%, transparent);
 }
 .tl-year-group:last-child::before {
   bottom: auto;
@@ -829,7 +829,7 @@
   height: 18px;
   border-radius: 50%;
   background: var(--bg, #262624);
-  border: 1.5px solid var(--accent-cool-deep);
+  border: 1.5px solid var(--accent-cool);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -840,7 +840,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--accent-cool-deep);
+  background: var(--accent-cool);
 }
 
 .tl-year-label {
@@ -882,14 +882,14 @@
   position: absolute;
   left: -1px; top: 0; bottom: 0;
   width: 2px;
-  background: var(--accent-cool-deep);
+  background: var(--accent-cool);
   transform: scaleY(0);
   transform-origin: top;
   transition: transform var(--duration-fast) var(--ease-default);
 }
 .tl-paper:hover {
   padding-left: var(--space-3xl);
-  border-left-color: rgba(0, 160, 96, 0.12);
+  border-left-color: color-mix(in oklch, var(--accent-cool) 12%, transparent);
 }
 .tl-paper:hover::before { transform: scaleY(1); }
 
@@ -901,7 +901,7 @@
   top: 50%;
   width: 43px;
   height: 1px;
-  background: rgba(25, 182, 111, 0.16);
+  background: color-mix(in oklch, var(--accent-cool) 16%, transparent);
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -917,7 +917,7 @@
   margin-bottom: 0.3rem;
   transition: color var(--duration-fast);
 }
-.tl-title:hover { color: var(--accent-cool-deep); }
+.tl-title:hover { color: var(--accent-cool); }
 
 /* Authors */
 .tl-authors {
@@ -1026,9 +1026,9 @@
 html[data-theme="light"] .nh-research {
   /* --orange / --green-hi inherit via aliasing from :root --accent-warm/cool. */
   --pub-control-text: #4f4b41;
-  --pub-control-border: rgba(143, 85, 56, 0.38);
-  --pub-control-bg: rgba(143, 85, 56, 0.08);
-  --pub-control-bg-hover: rgba(143, 85, 56, 0.12);
+  --pub-control-border: color-mix(in oklch, var(--accent-warm) 38%, transparent);
+  --pub-control-bg: color-mix(in oklch, var(--accent-warm) 8%, transparent);
+  --pub-control-bg-hover: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 html[data-theme="light"] .header-link {
@@ -1036,7 +1036,7 @@ html[data-theme="light"] .header-link {
 }
 
 html[data-theme="light"] .nav-item.active > .nav-link {
-  color: var(--accent-warm-strong) !important;
+  color: var(--accent-warm) !important;
 }
 
 html[data-theme="light"] .nav-item.dropdown > .nav-link:hover,
@@ -1054,30 +1054,30 @@ html[data-theme="light"] .area-tag {
 html[data-theme="light"] .area-tag:hover {
   border-color: var(--accent-warm-soft);
   color: var(--accent-warm-soft);
-  background: rgba(178, 104, 66, 0.06);
+  background: color-mix(in oklch, var(--accent-warm-soft) 6%, transparent);
 }
 
 html[data-theme="light"] .filter-btn.active {
-  border-color: rgba(143, 85, 56, 0.48);
+  border-color: color-mix(in oklch, var(--accent-warm) 48%, transparent);
   color: var(--accent-warm);
-  background: rgba(143, 85, 56, 0.1);
+  background: color-mix(in oklch, var(--accent-warm) 10%, transparent);
 }
 
 html[data-theme="light"] .pub-item::before {
   background: var(--accent-warm-soft);
 }
 html[data-theme="light"] .pub-item:hover {
-  background: rgba(178, 104, 66, 0.03);
+  background: color-mix(in oklch, var(--accent-warm-soft) 3%, transparent);
 }
 html[data-theme="light"] .pub-item.pub-target-flash {
-  background: linear-gradient(90deg, rgba(178, 104, 66, 0.12), rgba(178, 104, 66, 0.02) 18%, rgba(0, 0, 0, 0) 72%);
+  background: linear-gradient(90deg, color-mix(in oklch, var(--accent-warm-soft) 12%, transparent), color-mix(in oklch, var(--accent-warm-soft) 2%, transparent) 18%, rgba(0, 0, 0, 0) 72%);
 }
 html[data-theme="light"] .pub-item:hover .pub-num {
   color: var(--accent-warm-soft);
 }
 
 html[data-theme="light"] .pub-title:hover {
-  color: var(--accent-warm-strong);
+  color: var(--accent-warm);
 }
 
 html[data-theme="light"] .pub-meta-sep {
@@ -1087,31 +1087,31 @@ html[data-theme="light"] .pub-meta-sep {
 html[data-theme="light"] .pub-abstract-btn:hover,
 html[data-theme="light"] .pub-abstract-btn--open {
   color: var(--text-hi);
-  border-color: rgba(143, 85, 56, 0.48);
-  background: rgba(143, 85, 56, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm) 48%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 html[data-theme="light"] .pub-abstract-body.pub-abstract-open .pub-abstract-inner {
-  border-left-color: rgba(204, 120, 92, 0.3);
-  background: rgba(204, 120, 92, 0.04);
+  border-left-color: color-mix(in oklch, var(--accent-warm) 30%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
 }
 
 html[data-theme="light"] .pub-citation-btn:hover,
 html[data-theme="light"] .pub-citation-btn--open {
   color: var(--text-hi);
-  border-color: rgba(143, 85, 56, 0.48);
-  background: rgba(143, 85, 56, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm) 48%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 html[data-theme="light"] .pub-citation-body.pub-citation-open .pub-citation-inner {
-  border-left-color: rgba(178, 104, 66, 0.3);
-  background: rgba(178, 104, 66, 0.04);
+  border-left-color: color-mix(in oklch, var(--accent-warm-soft) 30%, transparent);
+  background: color-mix(in oklch, var(--accent-warm-soft) 4%, transparent);
 }
 
 html[data-theme="light"] .pub-cite:hover {
   color: var(--text-hi);
-  border-color: rgba(143, 85, 56, 0.48);
-  background: rgba(143, 85, 56, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm) 48%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 html[data-theme="light"] .pub-cite-sep {
@@ -1119,24 +1119,24 @@ html[data-theme="light"] .pub-cite-sep {
 }
 
 html[data-theme="light"] .scholar-btn {
-  border-color: rgba(143, 85, 56, 0.42);
+  border-color: color-mix(in oklch, var(--accent-warm) 42%, transparent);
   color: var(--accent-warm);
 }
 html[data-theme="light"] .scholar-btn:hover {
   border-color: var(--accent-warm);
-  background: rgba(143, 85, 56, 0.12);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
   color: var(--accent-warm);
 }
 
 html[data-theme="light"] .pub-search-input {
   border-color: rgba(0, 0, 0, 0.08);
-  background: rgba(143, 85, 56, 0.04);
+  background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
 }
 
 html[data-theme="light"] .pub-search-input:focus {
-  border-color: rgba(143, 85, 56, 0.42);
-  background: rgba(143, 85, 56, 0.08);
-  box-shadow: 0 0 0 1px rgba(143, 85, 56, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm) 42%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 8%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 html[data-theme="light"] .pub-search-clear:hover,
@@ -1146,40 +1146,40 @@ html[data-theme="light"] .pub-results-reset:focus-visible,
 html[data-theme="light"] .pub-empty-state__action:hover,
 html[data-theme="light"] .pub-empty-state__action:focus-visible {
   color: var(--text-hi);
-  border-color: rgba(143, 85, 56, 0.48);
-  background: rgba(143, 85, 56, 0.12);
+  border-color: color-mix(in oklch, var(--accent-warm) 48%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 
 html[data-theme="light"] .pub-empty-state {
-  background: rgba(143, 85, 56, 0.04);
+  background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
 }
 
 html[data-theme="light"] .view-toggle-btn:hover {
   color: var(--accent-warm);
-  border-color: rgba(143, 85, 56, 0.42);
-  background: rgba(143, 85, 56, 0.1);
+  border-color: color-mix(in oklch, var(--accent-warm) 42%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 10%, transparent);
 }
 html[data-theme="light"] .view-toggle-btn[data-current="timeline"] {
   color: var(--accent-warm);
-  border-color: rgba(143, 85, 56, 0.42);
-  background: rgba(143, 85, 56, 0.1);
+  border-color: color-mix(in oklch, var(--accent-warm) 42%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 10%, transparent);
 }
 html[data-theme="light"] .view-toggle-btn[data-current="timeline"]:hover {
-  color: var(--accent-warm-strong);
-  border-color: rgba(143, 85, 56, 0.58);
-  background: rgba(143, 85, 56, 0.14);
+  color: var(--accent-warm);
+  border-color: color-mix(in oklch, var(--accent-warm) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 14%, transparent);
 }
 
 /* Timeline light mode */
 html[data-theme="light"] .tl-year-group::before {
-  background: rgba(204, 120, 92, 0.2);
+  background: color-mix(in oklch, var(--accent-warm) 20%, transparent);
 }
 html[data-theme="light"] .tl-year-node {
   background: #faf9f5;
-  border-color: var(--accent-warm-strong);
+  border-color: var(--accent-warm);
 }
 html[data-theme="light"] .tl-year-dot {
-  background: var(--accent-warm-strong);
+  background: var(--accent-warm);
 }
 html[data-theme="light"] .tl-year-label {
   color: var(--accent-warm);
@@ -1189,16 +1189,16 @@ html[data-theme="light"] .tl-paper {
   border-bottom-color: rgba(0, 0, 0, 0.04);
 }
 html[data-theme="light"] .tl-paper::before {
-  background: var(--accent-warm-strong);
+  background: var(--accent-warm);
 }
 html[data-theme="light"] .tl-paper:hover {
-  border-left-color: rgba(204, 120, 92, 0.12);
+  border-left-color: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 html[data-theme="light"] .tl-paper::after {
-  background: rgba(204, 120, 92, 0.12);
+  background: color-mix(in oklch, var(--accent-warm) 12%, transparent);
 }
 html[data-theme="light"] .tl-title:hover {
-  color: var(--accent-warm-strong);
+  color: var(--accent-warm);
 }
 html[data-theme="light"] .tl-meta-sep {
   color: rgba(61, 57, 41, 0.45);

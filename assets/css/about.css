@@ -216,8 +216,8 @@ article code.nh-topic-link,
   text-transform: none !important;
   font-family: inherit !important;
   color: var(--accent-warm) !important;
-  background: rgba(217, 119, 87, 0.08) !important;
-  border: 1px solid rgba(217, 119, 87, 0.35) !important;
+  background: color-mix(in oklch, var(--accent-warm) 8%, transparent) !important;
+  border: 1px solid color-mix(in oklch, var(--accent-warm) 35%, transparent) !important;
   border-radius: 0 !important;
   padding: 0.08em 0.55em !important;
   clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%) !important;
@@ -229,8 +229,8 @@ article code.nh-topic-link,
 article code.nh-topic-link:hover,
 .post-content code.nh-topic-link:hover {
   color: var(--accent-warm) !important;
-  background: rgba(217, 119, 87, 0.15) !important;
-  border-color: rgba(217, 119, 87, 0.6) !important;
+  background: color-mix(in oklch, var(--accent-warm) 15%, transparent) !important;
+  border-color: color-mix(in oklch, var(--accent-warm) 60%, transparent) !important;
 }
 
 .nh-paper-preview {
@@ -238,9 +238,9 @@ article code.nh-topic-link:hover,
   z-index: 40;
   width: min(420px, calc(100vw - 2rem));
   padding: 1rem 1.05rem 0.95rem;
-  border: 1px solid rgba(217, 119, 87, 0.22);
+  border: 1px solid color-mix(in oklch, var(--accent-warm) 22%, transparent);
   background:
-    linear-gradient(180deg, rgba(217, 119, 87, 0.06), rgba(217, 119, 87, 0.02)),
+    linear-gradient(180deg, color-mix(in oklch, var(--accent-warm) 6%, transparent), color-mix(in oklch, var(--accent-warm) 2%, transparent)),
     rgba(38, 38, 36, 0.97);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
   opacity: 0;
@@ -295,8 +295,8 @@ article code.nh-topic-link:hover,
   font-size: var(--fs-sm);
   line-height: 1.7;
   color: var(--text-hi);
-  border-left: 2px solid rgba(0, 160, 96, 0.22);
-  background: rgba(0, 160, 96, 0.03);
+  border-left: 2px solid color-mix(in oklch, var(--accent-cool) 22%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 3%, transparent);
   padding: 0.72rem 0.9rem;
   max-height: 10.2rem;
   overflow: hidden;
@@ -329,7 +329,7 @@ article code.nh-topic-link:hover,
   justify-content: center;
   width: 1.05rem;
   height: 1.05rem;
-  border: 1px solid rgba(217, 119, 87, 0.32);
+  border: 1px solid color-mix(in oklch, var(--accent-warm) 32%, transparent);
   border-radius: 999px;
   font-size: var(--fs-xs);
   line-height: 1;
@@ -341,7 +341,7 @@ article code.nh-topic-link:hover,
 
 .nh-paper-preview__cta:hover span:last-child {
   text-decoration: underline;
-  text-decoration-color: rgba(217, 119, 87, 0.9);
+  text-decoration-color: color-mix(in oklch, var(--accent-warm) 90%, transparent);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.16em;
 }
@@ -464,21 +464,21 @@ html[data-theme="light"] .nh-terminal-inline-link:hover {
 
 html[data-theme="light"] article code.nh-topic-link,
 html[data-theme="light"] .post-content code.nh-topic-link {
-  color: #9f5d39 !important;
-  background: rgba(178, 104, 66, 0.08) !important;
-  border-color: rgba(178, 104, 66, 0.35) !important;
+  color: var(--accent-warm) !important;
+  background: color-mix(in oklch, var(--accent-warm-soft) 8%, transparent) !important;
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 35%, transparent) !important;
 }
 html[data-theme="light"] article code.nh-topic-link:hover,
 html[data-theme="light"] .post-content code.nh-topic-link:hover {
-  color: #9f5d39 !important;
-  background: rgba(178, 104, 66, 0.15) !important;
-  border-color: rgba(178, 104, 66, 0.6) !important;
+  color: var(--accent-warm) !important;
+  background: color-mix(in oklch, var(--accent-warm-soft) 15%, transparent) !important;
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 60%, transparent) !important;
 }
 
 html[data-theme="light"] .nh-paper-preview {
-  border-color: rgba(178, 104, 66, 0.22);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 22%, transparent);
   background:
-    linear-gradient(180deg, rgba(178, 104, 66, 0.04), rgba(178, 104, 66, 0.01)),
+    linear-gradient(180deg, color-mix(in oklch, var(--accent-warm-soft) 4%, transparent), color-mix(in oklch, var(--accent-warm-soft) 1%, transparent)),
     #f5f4ef;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
 }
@@ -499,13 +499,13 @@ html[data-theme="light"] .nh-paper-preview__meta {
 }
 html[data-theme="light"] .nh-paper-preview__abstract {
   color: #535146;
-  border-left-color: rgba(204, 120, 92, 0.25);
-  background: rgba(204, 120, 92, 0.04);
+  border-left-color: color-mix(in oklch, var(--accent-warm) 25%, transparent);
+  background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
 }
 html[data-theme="light"] .nh-paper-preview__cta,
 html[data-theme="light"] .nh-paper-preview__cta:visited {
   color: var(--accent-warm-soft) !important;
 }
 html[data-theme="light"] .nh-paper-preview__cta-icon {
-  border-color: rgba(178, 104, 66, 0.32);
+  border-color: color-mix(in oklch, var(--accent-warm-soft) 32%, transparent);
 }

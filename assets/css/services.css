@@ -150,7 +150,7 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 2px;
-  background: var(--accent-cool-deep);
+  background: var(--accent-cool);
   transform: scaleY(0);
   transform-origin: top;
   transition: transform var(--duration-base) var(--ease-default);
@@ -207,7 +207,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent-warm-soft);
-  border: 1px solid rgba(241, 166, 137, 0.42);
+  border: 1px solid color-mix(in oklch, var(--accent-warm-soft) 42%, transparent);
   padding: 0.1rem 0.45rem;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
   white-space: nowrap;
@@ -226,7 +226,7 @@ html[data-theme="light"] .svc-section-header {
   color: var(--accent-warm);
 }
 html[data-theme="light"] .svc-block-label {
-  color: var(--accent-warm-strong);
+  color: var(--accent-warm);
 }
 html[data-theme="light"] .svc-role-item::before {
   background: var(--accent-warm);
@@ -245,5 +245,5 @@ html[data-theme="light"] .svc-student-item:hover .svc-student-year {
 }
 html[data-theme="light"] .svc-award {
   color: var(--accent-warm);
-  border-color: rgba(143, 85, 56, 0.38);
+  border-color: color-mix(in oklch, var(--accent-warm) 38%, transparent);
 }
