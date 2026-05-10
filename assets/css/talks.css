@@ -97,7 +97,7 @@
 
 .talk-item:hover {
   padding-left: 10px;
-  background: color-mix(in oklch, var(--accent-warm) 2%, transparent);
+  background: var(--surface-raised);
 }
 
 .talk-item:hover::before {
@@ -269,9 +269,8 @@ html[data-theme="light"] .talk-year-label {
 html[data-theme="light"] .talk-item::before {
   background: var(--accent-warm);
 }
-html[data-theme="light"] .talk-item:hover {
-  background: color-mix(in oklch, var(--accent-warm-soft) 3%, transparent);
-}
+/* .talk-item:hover background is var(--surface-raised) — cascades from :root,
+   no light-theme override needed (surface-raised is mode-aware). */
 html[data-theme="light"] .talk-logo {
   border-color: rgba(0, 0, 0, 0.08);
   background: rgba(0, 0, 0, 0.02);

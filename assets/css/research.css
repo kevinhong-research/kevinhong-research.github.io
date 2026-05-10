@@ -177,7 +177,7 @@
   transform-origin: center;
   transition: transform var(--duration-base) var(--ease-out);
 }
-.pub-item:hover { background: color-mix(in oklch, var(--accent-warm) 2%, transparent); }
+.pub-item:hover { background: var(--surface-raised); }
 .pub-item:hover::before { transform: scaleY(1); }
 .pub-item.nh-visible { opacity: 1; transform: translateY(0); }
 .pub-item.hidden { display: none; }
@@ -890,6 +890,7 @@
 .tl-paper:hover {
   padding-left: var(--space-3xl);
   border-left-color: color-mix(in oklch, var(--accent-cool) 12%, transparent);
+  background: var(--surface-raised);
 }
 .tl-paper:hover::before { transform: scaleY(1); }
 
@@ -1066,9 +1067,8 @@ html[data-theme="light"] .filter-btn.active {
 html[data-theme="light"] .pub-item::before {
   background: var(--accent-warm-soft);
 }
-html[data-theme="light"] .pub-item:hover {
-  background: color-mix(in oklch, var(--accent-warm-soft) 3%, transparent);
-}
+/* .pub-item:hover background is var(--surface-raised) — cascades from :root,
+   no light-theme override needed (surface-raised is mode-aware). */
 html[data-theme="light"] .pub-item.pub-target-flash {
   background: linear-gradient(90deg, color-mix(in oklch, var(--accent-warm-soft) 12%, transparent), color-mix(in oklch, var(--accent-warm-soft) 2%, transparent) 18%, rgba(0, 0, 0, 0) 72%);
 }

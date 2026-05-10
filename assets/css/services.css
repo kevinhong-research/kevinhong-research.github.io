@@ -63,7 +63,7 @@
   transform-origin: top;
   transition: transform var(--duration-base) var(--ease-default);
 }
-.svc-role-item:hover { padding-left: 12px; }
+.svc-role-item:hover { padding-left: 12px; background: var(--surface-raised); }
 .svc-role-item:hover::before { transform: scaleY(1); }
 
 .svc-role-body {
@@ -155,7 +155,7 @@
   transform-origin: top;
   transition: transform var(--duration-base) var(--ease-default);
 }
-.svc-student-item:hover { padding-left: 12px; }
+.svc-student-item:hover { padding-left: 12px; background: var(--surface-raised); }
 .svc-student-item:hover::before { transform: scaleY(1); }
 
 .svc-current .svc-student-item::before {
