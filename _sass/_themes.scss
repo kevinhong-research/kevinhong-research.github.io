@@ -66,7 +66,7 @@
 
   // ── Surface + ink (DARK variant; Codex "absolutely" surface=#2d2d2b ink=#f9f9f7)
   --surface:        #2d2d2b;
-  --surface-raised: #2F2F2D;       // ~1% lighter than surface; subtle lift for cards/panels/dropdowns
+  --surface-raised: #363634;       // ~4% OKLCH lift over surface; visible elevation for cards/panels/dropdowns
   --ink:            #f9f9f7;
 
   // ── Text hierarchy (warm off-white at descending lightness in dark; light overrides)
@@ -215,7 +215,7 @@ html[data-theme="light"] {
 
   // ── Surface + ink invert
   --surface:        #f9f9f7;
-  --surface-raised: #f5f4ef;       // ~1% darker than surface; subtle lift for cards/panels/dropdowns
+  --surface-raised: #ececea;       // ~4% OKLCH darken from surface; matches dark variant's lift magnitude
   --ink:            #2d2d2b;
 
   // ── Text hierarchy (warm near-black at descending lightness)
