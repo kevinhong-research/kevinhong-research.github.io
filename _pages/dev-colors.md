@@ -118,11 +118,20 @@ nav: false
 .cl-modal-hint { font: var(--fs-xs)/1.5 "Geist", sans-serif; color: var(--text-mid); padding: var(--space-md); border-left: 2px solid var(--accent-cool); background: var(--accent-cool-bg-soft); margin-bottom: var(--space-2xl); }
 .cl-modal-hint code { font: var(--fs-xs)/1 "Geist Mono", monospace; color: var(--accent-warm); background: transparent; padding: 0 0.15rem; }
 
-dialog.cl-dialog { border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: var(--space-2xl); max-width: min(640px, calc(100vw - 4rem)); max-height: 80vh; overflow: auto; }
-dialog.cl-dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+dialog.cl-dialog { border: 1px solid var(--accent-cool-border); background: var(--surface); color: var(--text); padding: var(--space-2xl); max-width: min(720px, calc(100vw - 4rem)); max-height: 80vh; overflow: auto; }
+dialog.cl-dialog[open] { animation: cl-dialog-in var(--duration-base) var(--ease-default); }
+dialog.cl-dialog[open]::backdrop { animation: cl-backdrop-in var(--duration-base) var(--ease-default); }
+dialog.cl-dialog::backdrop { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px); }
+@keyframes cl-dialog-in { from { opacity: 0; transform: translateY(8px) scale(0.985); } to { opacity: 1; transform: none; } }
+@keyframes cl-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 dialog.cl-dialog h3 { font: 500 var(--fs-xs)/1 "Geist", sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-cool); margin: 0 0 var(--space-md); }
 dialog.cl-dialog pre { background: var(--surface-raised); color: var(--text-hi); padding: var(--space-md); font: var(--fs-xs)/1.5 "Geist Mono", monospace; white-space: pre-wrap; word-break: break-word; max-height: 50vh; overflow: auto; }
 dialog.cl-dialog .cl-btn { margin-top: var(--space-md); }
+dialog.cl-dialog .cl-dialog-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-lg); }
+dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monospace; color: var(--accent-cool); }
+
+/* Brief flash on the Copy SCSS button so the click is visibly acknowledged */
+.cl-btn.is-flashing { color: var(--accent-cool); border-color: var(--accent-cool-border); }
 </style>
 
 <div class="cl-modal-hint">
@@ -217,8 +226,12 @@ dialog.cl-dialog .cl-btn { margin-top: var(--space-md); }
   <h3>Paste this into _sass/_themes.scss</h3>
   <p class="cl-preview-intro" style="margin: 0 0 var(--space-md);">Locate the <strong>:root</strong> block (dark/base) and the <strong>html[data-theme="light"]</strong> block. Replace the matching lines.</p>
   <pre id="cl-scss-output"></pre>
-  <form method="dialog" style="text-align: right;">
-    <button class="cl-btn">Close</button>
+  <form method="dialog" class="cl-dialog-actions">
+    <span class="cl-dialog-status" id="cl-dialog-status">—</span>
+    <span style="display: flex; gap: var(--space-sm);">
+      <button class="cl-btn" type="button" data-action="copy-again">Copy to clipboard</button>
+      <button class="cl-btn" type="submit">Close</button>
+    </span>
   </form>
 </dialog>
 
@@ -422,32 +435,74 @@ dialog.cl-dialog .cl-btn { margin-top: var(--space-md); }
     }
 
     if (action === 'copy-scss') {
-      var dark = [], light = [], unified = [];
-      TOKEN_GROUPS.forEach(function (group) {
-        group.tokens.forEach(function (token) {
-          if (token.mode === 'unified') {
-            var v = overrides['unified.' + token.name] || defaults['unified.' + token.name];
-            unified.push('  ' + padRight(token.name, 22) + v + ';');
-          } else {
-            var dv = overrides['dark.' + token.name] || defaults['dark.' + token.name];
-            var lv = overrides['light.' + token.name] || defaults['light.' + token.name];
-            dark.push('  ' + padRight(token.name, 22) + dv + ';');
-            light.push('  ' + padRight(token.name, 22) + lv + ';');
-          }
-        });
-      });
-      var scss =
-        '// In :root (dark / base)\n' +
-        ':root {\n' + dark.join('\n') + '\n' + unified.join('\n') + '\n}\n\n' +
-        '// In html[data-theme="light"]\n' +
-        'html[data-theme="light"] {\n' + light.join('\n') + '\n}\n';
+      btn.classList.add('is-flashing');
+      setTimeout(function () { btn.classList.remove('is-flashing'); }, 420);
+      var scss = buildScss();
       document.getElementById('cl-scss-output').textContent = scss;
       var dlg = document.getElementById('cl-scss-dialog');
       if (typeof dlg.showModal === 'function') dlg.showModal();
       else dlg.setAttribute('open', '');
-      if (navigator.clipboard) navigator.clipboard.writeText(scss).then(function () { setStatus('Copied to clipboard'); });
+      copyToClipboard(scss);
+    }
+
+    if (action === 'copy-again') {
+      copyToClipboard(document.getElementById('cl-scss-output').textContent);
     }
   });
+
+  function buildScss() {
+    var dark = [], light = [], unified = [];
+    TOKEN_GROUPS.forEach(function (group) {
+      group.tokens.forEach(function (token) {
+        var label = padRight(token.name + ':', 24);
+        if (token.mode === 'unified') {
+          var v = overrides['unified.' + token.name] || defaults['unified.' + token.name];
+          unified.push('  ' + label + v + ';');
+        } else {
+          var dv = overrides['dark.' + token.name] || defaults['dark.' + token.name];
+          var lv = overrides['light.' + token.name] || defaults['light.' + token.name];
+          dark.push('  ' + label + dv + ';');
+          light.push('  ' + label + lv + ';');
+        }
+      });
+    });
+    return '// In :root (dark / base)\n' +
+      ':root {\n' + dark.join('\n') + '\n' + unified.join('\n') + '\n}\n\n' +
+      '// In html[data-theme="light"]\n' +
+      'html[data-theme="light"] {\n' + light.join('\n') + '\n}\n';
+  }
+
+  function copyToClipboard(text) {
+    var done = function (ok) {
+      setDialogStatus(ok ? 'Copied to clipboard ✓' : 'Select all + ⌘C to copy');
+      setStatus(ok ? 'Copied to clipboard' : 'Copy failed — select text manually');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+
+  function fallbackCopy(text, done) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      done(!!ok);
+    } catch (e) { done(false); }
+  }
+
+  function setDialogStatus(msg) {
+    var el = document.getElementById('cl-dialog-status');
+    if (!el) return;
+    el.textContent = msg;
+  }
 
   function padRight(str, len) {
     while (str.length < len) str += ' ';
