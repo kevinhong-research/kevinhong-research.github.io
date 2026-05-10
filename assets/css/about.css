@@ -46,10 +46,10 @@ article.post-content p code,
   font-family: inherit;
   font-size: 0.88em;
   font-weight: 400;
-  color: var(--text-hi);
+  color: var(--accent-warm);
   background: transparent !important;
   background-color: transparent !important;
-  border: 1px solid rgba(58, 58, 54, 0.4);
+  border: 1px solid color-mix(in oklch, var(--line) 100%, transparent);
   border-radius: 0;
   padding: 0.05em 0.4em;
   clip-path: polygon(3px 0%, 100% 0%, calc(100% - 3px) 100%, 0% 100%);
