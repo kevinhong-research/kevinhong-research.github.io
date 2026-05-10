@@ -49,7 +49,10 @@
   position: relative;
   transition: padding-left var(--duration-fast) var(--ease-default);
 }
-.svc-role-item:first-child { border-top: 1px solid var(--line); }
+/* First-child top border ONLY when there's no block-label drawing a border above
+   (i.e., direct child of .svc-section, like Selected Professional Services) — inside
+   .svc-block the block-label's border-bottom already divides label from list. */
+.svc-section > .svc-role-list > .svc-role-item:first-child { border-top: 1px solid var(--line); }
 .svc-role-item::before {
   content: '';
   position: absolute;
@@ -139,7 +142,9 @@
   position: relative;
   transition: padding-left var(--duration-fast) var(--ease-default);
 }
-.svc-student-item:first-child { border-top: 1px solid var(--line); }
+/* Student lists are always inside .svc-block (with a block-label above);
+   the block-label's border-bottom already divides the label from the list,
+   so no top-border on the first item. */
 .svc-student-item::before {
   content: '';
   position: absolute;
