@@ -9,15 +9,10 @@ nav: false
 <link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
 
 <style>
-/* Color Lab — page-local styles. */
-.cl-page {
-  display: grid;
-  grid-template-columns: minmax(0, 380px) 1fr;
-  gap: var(--space-4xl, 2rem);
-  align-items: start;
-  margin-top: var(--space-2xl, 1.1rem);
-}
-@media (max-width: 900px) { .cl-page { grid-template-columns: 1fr; } }
+/* Color Lab — page-local styles.
+   Layout: one stacked column of sections; each section is an editor block on
+   the left and a preview block on the right, paired so the visual rhythm
+   aligns. At <900px the section body collapses to a single column. */
 
 .cl-toolbar {
   display: flex;
@@ -43,42 +38,62 @@ nav: false
 .cl-btn:hover { border-color: var(--accent-warm-border); color: var(--accent-warm); }
 .cl-status { margin-left: auto; font: var(--fs-xs)/1.4 "Geist Mono", monospace; color: var(--text-mid); }
 
-.cl-editor { display: flex; flex-direction: column; gap: var(--space-2xl); }
-.cl-group { display: flex; flex-direction: column; gap: var(--space-sm); }
-.cl-group__title { font: 500 var(--fs-xs)/1 "Geist", sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-cool); margin: 0 0 var(--space-sm); }
-.cl-row { display: grid; grid-template-columns: 1fr; gap: var(--space-2xs); padding: var(--space-md); border: 1px solid var(--line); background: var(--surface-raised); }
+.cl-page { display: flex; flex-direction: column; gap: var(--space-4xl); }
+
+.cl-section { padding-top: var(--space-2xl); border-top: 1px solid var(--line); }
+.cl-section:first-of-type { border-top: none; padding-top: 0; }
+.cl-section__title {
+  font: 500 var(--fs-xs)/1 "Geist", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-cool);
+  margin: 0 0 var(--space-xl);
+}
+.cl-section__body {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  gap: var(--space-2xl);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .cl-section__body { grid-template-columns: minmax(0, 1fr); }
+}
+
+.cl-section__editor { display: flex; flex-direction: column; gap: var(--space-sm); }
+.cl-section__editor--note {
+  font: var(--fs-xs)/1.5 "Geist", sans-serif;
+  color: var(--text-mid);
+  padding: var(--space-md);
+  border-left: 2px solid var(--accent-warm-border);
+  background: var(--accent-warm-bg-subtle);
+}
+.cl-section__preview {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: var(--space-xl);
+  min-width: 0;
+}
+
+.cl-row { display: grid; grid-template-columns: 1fr; gap: var(--space-2xs); padding: var(--space-md); border: 1px solid var(--line); background: var(--surface-raised); min-width: 0; }
 .cl-row__head { display: flex; align-items: baseline; gap: var(--space-sm); font: 500 var(--fs-sm)/1.3 "Geist Mono", monospace; color: var(--text-hi); margin-bottom: var(--space-2xs); }
-.cl-row__desc { font: var(--fs-xs)/1.4 "Geist", sans-serif; color: var(--text-mid); flex: 1; font-weight: 400; letter-spacing: 0; text-transform: none; }
-.cl-row__inputs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); align-items: center; }
-.cl-row__inputs--unified { grid-template-columns: 1fr; }
-.cl-input { display: flex; align-items: center; gap: var(--space-2xs); }
-.cl-input__label { font: var(--fs-2xs)/1 "Geist", sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-lo); min-width: 32px; }
-.cl-input input[type="color"] { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 0; padding: 0; background: transparent; cursor: pointer; }
+.cl-row__desc { font: var(--fs-xs)/1.4 "Geist", sans-serif; color: var(--text-mid); flex: 1; font-weight: 400; letter-spacing: 0; text-transform: none; min-width: 0; }
+.cl-row__inputs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-sm); align-items: center; }
+.cl-row__inputs--unified { grid-template-columns: minmax(0, 1fr); }
+.cl-input { display: flex; align-items: center; gap: var(--space-2xs); min-width: 0; }
+.cl-input__label { font: var(--fs-2xs)/1 "Geist", sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-lo); flex-shrink: 0; }
+.cl-input input[type="color"] { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 0; padding: 0; background: transparent; cursor: pointer; flex-shrink: 0; }
 .cl-input input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .cl-input input[type="color"]::-webkit-color-swatch { border: none; }
 .cl-input input[type="text"] { flex: 1; font: var(--fs-xs)/1 "Geist Mono", monospace; padding: var(--space-2xs) var(--space-sm); border: 1px solid var(--line); background: transparent; color: var(--text-hi); min-width: 0; }
 .cl-input input[type="text"]:focus { outline: none; border-color: var(--accent-cool-border); }
 
-.cl-preview { display: flex; flex-direction: column; gap: var(--space-xl); }
-.cl-preview__section { border: 1px solid var(--line); background: var(--surface); padding: var(--space-xl); }
-.cl-preview__section h3 { font: 500 var(--fs-xs)/1 "Geist", sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-cool); margin: 0 0 var(--space-md); }
+/* Preview components */
+.cl-preview-intro { font: var(--fs-sm)/1.5 "Geist", sans-serif; color: var(--text-mid); margin: 0 0 var(--space-md); }
+.cl-preview-intro strong { color: var(--accent-warm); font-weight: 400; }
 
-.cl-card { background: var(--surface-raised); border: 1px solid var(--line); padding: var(--space-xl); margin-bottom: var(--space-sm); }
+.cl-card { background: var(--surface-raised); border: 1px solid var(--line); padding: var(--space-xl); }
 .cl-card__title { font: 500 var(--fs-base)/1.3 "Geist", sans-serif; color: var(--text-hi); margin: 0 0 var(--space-2xs); }
 .cl-card__meta  { font: var(--fs-sm)/1.5 "Geist", sans-serif; color: var(--text-mid); margin: 0; }
-
-.cl-row-sample { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-xl); padding: var(--space-md) 0; border-bottom: 1px solid var(--line); position: relative; transition: padding-left var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default); }
-.cl-row-sample::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent-warm); transform: scaleY(0); transform-origin: top; transition: transform var(--duration-base) var(--ease-default); }
-.cl-row-sample:hover { padding-left: var(--space-md); background: var(--surface-raised); }
-.cl-row-sample:hover::before { transform: scaleY(1); }
-.cl-row-sample__title { font: 500 var(--fs-base)/1.3 "Geist", sans-serif; color: var(--text-hi); }
-.cl-row-sample__meta  { font: var(--fs-sm)/1.3 "Geist", sans-serif; color: var(--text-mid); flex-shrink: 0; }
-
-.cl-chip { display: inline-block; font: 500 var(--fs-2xs)/1 "Geist", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.6rem; margin-right: var(--space-2xs); clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%); }
-.cl-chip--warm { color: var(--accent-warm); border: 1px solid var(--accent-warm-border); }
-.cl-chip--warm-soft { color: var(--accent-warm-soft); border: 1px solid var(--accent-warm-soft-border); }
-.cl-chip--cool { color: var(--accent-cool); border: 1px solid var(--accent-cool-border); background: var(--accent-cool-bg-medium); }
-.cl-chip--danger { color: var(--accent-danger); border: 1px solid color-mix(in oklch, var(--accent-danger) 42%, transparent); }
 
 .cl-text-tier { display: grid; grid-template-columns: 80px 1fr; gap: var(--space-sm); font: var(--fs-base)/1.5 "Geist", sans-serif; padding: var(--space-2xs) 0; }
 .cl-text-tier__label { font: 500 var(--fs-2xs)/1 "Geist Mono", monospace; letter-spacing: 0.08em; color: var(--text-lo); text-transform: uppercase; padding-top: 5px; }
@@ -86,6 +101,19 @@ nav: false
 .cl-t     { color: var(--text); }
 .cl-t-mid { color: var(--text-mid); }
 .cl-t-lo  { color: var(--text-lo); }
+
+.cl-chip { display: inline-block; font: 500 var(--fs-2xs)/1 "Geist", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.6rem; margin: 0 var(--space-2xs) var(--space-2xs) 0; clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%); }
+.cl-chip--warm { color: var(--accent-warm); border: 1px solid var(--accent-warm-border); }
+.cl-chip--warm-soft { color: var(--accent-warm-soft); border: 1px solid var(--accent-warm-soft-border); }
+.cl-chip--cool { color: var(--accent-cool); border: 1px solid var(--accent-cool-border); background: var(--accent-cool-bg-medium); }
+.cl-chip--danger { color: var(--accent-danger); border: 1px solid color-mix(in oklch, var(--accent-danger) 42%, transparent); }
+
+.cl-row-sample { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-xl); padding: var(--space-md) 0; border-bottom: 1px solid var(--line); position: relative; transition: padding-left var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default); }
+.cl-row-sample::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent-warm); transform: scaleY(0); transform-origin: top; transition: transform var(--duration-base) var(--ease-default); }
+.cl-row-sample:hover { padding-left: var(--space-md); background: var(--surface-raised); }
+.cl-row-sample:hover::before { transform: scaleY(1); }
+.cl-row-sample__title { font: 500 var(--fs-base)/1.3 "Geist", sans-serif; color: var(--text-hi); }
+.cl-row-sample__meta  { font: var(--fs-sm)/1.3 "Geist", sans-serif; color: var(--text-mid); flex-shrink: 0; }
 
 .cl-modal-hint { font: var(--fs-xs)/1.5 "Geist", sans-serif; color: var(--text-mid); padding: var(--space-md); border-left: 2px solid var(--accent-cool); background: var(--accent-cool-bg-soft); margin-bottom: var(--space-2xl); }
 .cl-modal-hint code { font: var(--fs-xs)/1 "Geist Mono", monospace; color: var(--accent-warm); background: transparent; padding: 0 0.15rem; }
@@ -109,50 +137,85 @@ dialog.cl-dialog .cl-btn { margin-top: var(--space-md); }
 </div>
 
 <div class="cl-page">
-  <div class="cl-editor" id="cl-editor"></div>
 
-  <div class="cl-preview">
-    <div class="cl-preview__section">
-      <h3>Surface tier</h3>
-      <p class="cl-card__meta" style="margin: 0 0 var(--space-md);">Outer box is on <strong style="color:var(--accent-warm);">--surface</strong>. The inner card is on <strong style="color:var(--accent-warm);">--surface-raised</strong>.</p>
-      <div class="cl-card">
-        <p class="cl-card__title">Card title (raised surface)</p>
-        <p class="cl-card__meta">Sample card body — meant to convey a subtle lift over the page surface, similar to a Codex card.</p>
+  <section class="cl-section">
+    <h2 class="cl-section__title">Surface tier</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor" data-group-idx="0"></div>
+      <div class="cl-section__preview">
+        <p class="cl-preview-intro">Outer box is on <strong>--surface</strong>. The inner card is on <strong>--surface-raised</strong>.</p>
+        <div class="cl-card">
+          <p class="cl-card__title">Card title (raised surface)</p>
+          <p class="cl-card__meta">Sample card body — meant to convey a subtle lift over the page surface, similar to a Codex card.</p>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="cl-preview__section">
-      <h3>Text tier</h3>
-      <div class="cl-text-tier"><div class="cl-text-tier__label">--text-hi</div><div class="cl-t-hi">Primary heading-class text at full ink contrast.</div></div>
-      <div class="cl-text-tier"><div class="cl-text-tier__label">--text</div><div class="cl-t">Body / paragraph text. Most ordinary content uses this tier.</div></div>
-      <div class="cl-text-tier"><div class="cl-text-tier__label">--text-mid</div><div class="cl-t-mid">Metadata, secondary descriptions, captions.</div></div>
-      <div class="cl-text-tier"><div class="cl-text-tier__label">--text-lo</div><div class="cl-t-lo">Faint elements — separators, dot indicators, low-emphasis labels.</div></div>
+  <section class="cl-section">
+    <h2 class="cl-section__title">Ink + text</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor" data-group-idx="1"></div>
+      <div class="cl-section__preview">
+        <div class="cl-text-tier"><div class="cl-text-tier__label">--text-hi</div><div class="cl-t-hi">Primary heading-class text at full ink contrast.</div></div>
+        <div class="cl-text-tier"><div class="cl-text-tier__label">--text</div><div class="cl-t">Body / paragraph text. Most ordinary content uses this tier.</div></div>
+        <div class="cl-text-tier"><div class="cl-text-tier__label">--text-mid</div><div class="cl-t-mid">Metadata, secondary descriptions, captions.</div></div>
+        <div class="cl-text-tier"><div class="cl-text-tier__label">--text-lo</div><div class="cl-t-lo">Faint elements — separators, dot indicators, low-emphasis labels.</div></div>
+      </div>
     </div>
+  </section>
 
-    <div class="cl-preview__section">
-      <h3>Accents</h3>
-      <p style="margin: 0 0 var(--space-md);">
-        <span class="cl-chip cl-chip--warm">accent-warm</span>
-        <span class="cl-chip cl-chip--warm-soft">accent-warm-soft</span>
-        <span class="cl-chip cl-chip--cool">accent-cool</span>
-        <span class="cl-chip cl-chip--danger">accent-danger</span>
-      </p>
-      <p style="font: var(--fs-sm)/1.5 'Geist', sans-serif; color: var(--text); margin: 0 0 var(--space-sm);">Inline <code>code text</code> uses <strong style="color:var(--accent-warm);">--accent-warm</strong>. Links like <a href="#" style="color: var(--accent-cool); text-decoration: underline; text-underline-offset: 0.16em;">this one</a> use <strong style="color:var(--accent-warm);">--accent-cool</strong>.</p>
+  <section class="cl-section">
+    <h2 class="cl-section__title">Brand accent (unified across modes)</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor" data-group-idx="2"></div>
+      <div class="cl-section__preview">
+        <p style="margin: 0 0 var(--space-md);">
+          <span class="cl-chip cl-chip--warm">accent-warm</span>
+          <span class="cl-chip cl-chip--warm-soft">accent-warm-soft</span>
+        </p>
+        <p class="cl-preview-intro" style="margin: 0;">
+          Inline <code>code text</code> uses <strong>--accent-warm</strong>. Hover stripes on list rows use the same token.
+        </p>
+      </div>
     </div>
+  </section>
 
-    <div class="cl-preview__section">
-      <h3>List row hover</h3>
-      <p style="font: var(--fs-sm)/1.5 'Geist', sans-serif; color: var(--text-mid); margin: 0 0 var(--space-md);">Hover any row — the left stripe is <strong style="color:var(--accent-warm);">--accent-warm</strong>, the row background lifts to <strong style="color:var(--accent-warm);">--surface-raised</strong>.</p>
-      <div class="cl-row-sample"><div class="cl-row-sample__title">Senior Editor · Information Systems Research</div><div class="cl-row-sample__meta">2026–</div></div>
-      <div class="cl-row-sample"><div class="cl-row-sample__title">Associate Editor · Production and Operations Management</div><div class="cl-row-sample__meta">2019–2025</div></div>
-      <div class="cl-row-sample"><div class="cl-row-sample__title">Editorial Board · Journal of the Association for Information Systems</div><div class="cl-row-sample__meta">2017–2019</div></div>
+  <section class="cl-section">
+    <h2 class="cl-section__title">Semantic (unified across modes)</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor" data-group-idx="3"></div>
+      <div class="cl-section__preview">
+        <p style="margin: 0 0 var(--space-md);">
+          <span class="cl-chip cl-chip--cool">accent-cool</span>
+          <span class="cl-chip cl-chip--danger">accent-danger</span>
+        </p>
+        <p class="cl-preview-intro" style="margin: 0;">
+          Section labels and status pills (the <code>SCHOLAR</code> / <code>FORTHCOMING</code> badges on the publications page) use <strong>--accent-cool</strong>. <strong>--accent-danger</strong> is reserved for future destructive UI.
+        </p>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <section class="cl-section">
+    <h2 class="cl-section__title">List row hover (uses surface-raised + accent-warm)</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor cl-section__editor--note">
+        No new editor controls here — this demo uses the tokens above. Hover any row: the left stripe paints with <strong style="color:var(--accent-warm);">--accent-warm</strong>, the row background lifts to <strong style="color:var(--accent-warm);">--surface-raised</strong>.
+      </div>
+      <div class="cl-section__preview">
+        <div class="cl-row-sample"><div class="cl-row-sample__title">Senior Editor · Information Systems Research</div><div class="cl-row-sample__meta">2026–</div></div>
+        <div class="cl-row-sample"><div class="cl-row-sample__title">Associate Editor · Production and Operations Management</div><div class="cl-row-sample__meta">2019–2025</div></div>
+        <div class="cl-row-sample"><div class="cl-row-sample__title">Editorial Board · Journal of the Association for Information Systems</div><div class="cl-row-sample__meta">2017–2019</div></div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <dialog class="cl-dialog" id="cl-scss-dialog">
   <h3>Paste this into _sass/_themes.scss</h3>
-  <p style="font: var(--fs-xs)/1.5 'Geist', sans-serif; color: var(--text-mid); margin: 0 0 var(--space-md);">Locate the <strong style="color:var(--accent-warm);">:root</strong> block (for dark/base) and the <strong style="color:var(--accent-warm);">html[data-theme="light"]</strong> block. Replace the matching lines.</p>
+  <p class="cl-preview-intro" style="margin: 0 0 var(--space-md);">Locate the <strong>:root</strong> block (dark/base) and the <strong>html[data-theme="light"]</strong> block. Replace the matching lines.</p>
   <pre id="cl-scss-output"></pre>
   <form method="dialog" style="text-align: right;">
     <button class="cl-btn">Close</button>
@@ -164,29 +227,30 @@ dialog.cl-dialog .cl-btn { margin-top: var(--space-md); }
   'use strict';
 
   // ────────────────────────────────────────────────────────────────────
-  // Tokens to expose. mode='split' shows separate dark+light pickers;
-  // mode='unified' shows one picker that applies to both modes.
-  // Add new tokens here to make them user-editable.
+  // Tokens to expose. Each top-level entry maps to one section in the
+  // page; the section's editor block uses data-group-idx="N" to receive
+  // its rows. mode='split' shows separate dark+light pickers; 'unified'
+  // shows one picker that applies to both modes.
   // ────────────────────────────────────────────────────────────────────
   var TOKEN_GROUPS = [
-    { title: 'Surface tier', tokens: [
+    { tokens: [
       { name: '--surface',        desc: 'Page background',         mode: 'split' },
       { name: '--surface-raised', desc: 'Cards, dropdowns, hover', mode: 'split' },
       { name: '--line',           desc: 'Dividers, borders',       mode: 'split' }
     ]},
-    { title: 'Ink + text', tokens: [
+    { tokens: [
       { name: '--ink',      desc: 'Highest-emphasis text (aliases --text-hi)', mode: 'split' },
       { name: '--text',     desc: 'Body / paragraph',                          mode: 'split' },
       { name: '--text-mid', desc: 'Metadata, secondary',                       mode: 'split' },
       { name: '--text-lo',  desc: 'Faint, separators',                         mode: 'split' }
     ]},
-    { title: 'Brand accent (unified across modes)', tokens: [
+    { tokens: [
       { name: '--accent-warm',      desc: 'Primary: hover, links, active', mode: 'unified' },
       { name: '--accent-warm-soft', desc: 'Lighter coral; labels, badges', mode: 'unified' }
     ]},
-    { title: 'Semantic (unified across modes)', tokens: [
-      { name: '--accent-cool',   desc: 'Success / "added"',         mode: 'unified' },
-      { name: '--accent-danger', desc: 'Destructive / "removed"',   mode: 'unified' }
+    { tokens: [
+      { name: '--accent-cool',   desc: 'Success / "added"',       mode: 'unified' },
+      { name: '--accent-danger', desc: 'Destructive / "removed"', mode: 'unified' }
     ]}
   ];
 
@@ -271,13 +335,11 @@ dialog.cl-dialog .cl-btn { margin-top: var(--space-md); }
   }
 
   function renderEditor() {
-    var root = document.getElementById('cl-editor');
-    while (root.firstChild) root.removeChild(root.firstChild);
-    TOKEN_GROUPS.forEach(function (group) {
-      var grp = createEl('div', { className: 'cl-group' });
-      grp.appendChild(createEl('h2', { className: 'cl-group__title', textContent: group.title }));
-      group.tokens.forEach(function (token) { grp.appendChild(buildRow(token)); });
-      root.appendChild(grp);
+    TOKEN_GROUPS.forEach(function (group, idx) {
+      var host = document.querySelector('[data-group-idx="' + idx + '"]');
+      if (!host) return;
+      while (host.firstChild) host.removeChild(host.firstChild);
+      group.tokens.forEach(function (token) { host.appendChild(buildRow(token)); });
     });
   }
 
