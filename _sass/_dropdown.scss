@@ -47,11 +47,37 @@
   padding: 0.4rem 0;
   min-width: 150px;
   margin-top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+}
 
-  /* Clip-path parallelogram to match site aesthetic */
-  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+/* Desktop / tablet (navbar-expand-sm = 576px+): center the floating
+   panel under its toggle and clip the parallelogram. */
+@media (min-width: 576px) {
+  .nav-item.dropdown .dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%);
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  }
+}
+
+/* Mobile (collapsed hamburger): render inline, full-width, no clip-path
+   or shadow — otherwise the desktop centering pushes the panel off-screen
+   left because the panel sits in static flow but transform: translateX(-50%)
+   shifts it by half its own width. */
+@media (max-width: 575.98px) {
+  .nav-item.dropdown .dropdown-menu {
+    position: static !important;
+    float: none;
+    width: 100%;
+    margin: 0.25rem 0 0.6rem;
+    padding: 0.2rem 0;
+    background: color-mix(in oklch, var(--surface-raised) 70%, transparent);
+    border: none;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    box-shadow: none;
+    clip-path: none;
+    transform: none;
+  }
 }
 
 /* ── DROPDOWN ITEMS ──────────────────────────────────────── */
