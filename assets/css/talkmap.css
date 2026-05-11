@@ -67,7 +67,7 @@
 }
 
 .tm-state-lbl {
-  font-size: 7.5px;
+  font-size: 9px;
   font-weight: 500;
   fill: var(--map-label);
   text-anchor: middle;
