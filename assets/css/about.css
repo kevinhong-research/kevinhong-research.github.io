@@ -298,12 +298,14 @@ article code.nh-topic-link:hover,
   border-left: 2px solid color-mix(in oklch, var(--accent-cool) 22%, transparent);
   background: color-mix(in oklch, var(--accent-cool) 3%, transparent);
   padding: 0.72rem 0.9rem;
+  box-sizing: content-box;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 6;
   line-clamp: 6;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  max-height: calc(1.7em * 6);
+  overflow: clip;
+  overflow-clip-margin: content-box;
 }
 
 .nh-paper-preview__cta,
