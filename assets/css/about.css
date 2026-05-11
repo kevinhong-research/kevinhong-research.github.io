@@ -87,7 +87,7 @@ article.post-content p {
   margin-left: 2.5rem !important;
 }
 .profile img {
-  border: 1px solid rgba(58, 58, 54, 0.5) !important;
+  border: 1px solid var(--line) !important;
   box-shadow: none !important;
 }
 
@@ -242,7 +242,7 @@ article code.nh-topic-link:hover,
   background:
     linear-gradient(180deg, color-mix(in oklch, var(--accent-warm) 6%, transparent), color-mix(in oklch, var(--accent-warm) 2%, transparent)),
     color-mix(in oklch, var(--surface) 97%, transparent);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 18px 40px var(--shadow-medium);
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
@@ -275,7 +275,7 @@ article code.nh-topic-link:hover,
 .nh-paper-preview__authors {
   font-size: var(--fs-sm);
   line-height: 1.55;
-  color: #8A8A7A;
+  color: var(--text-mid);
   margin-bottom: 0.42rem;
 }
 
@@ -287,7 +287,7 @@ article code.nh-topic-link:hover,
 .nh-paper-preview__meta {
   font-size: var(--fs-xs);
   font-style: italic;
-  color: #8A8A7A;
+  color: var(--text-mid);
   margin-bottom: var(--space-base);
 }
 
@@ -435,7 +435,7 @@ html[data-theme="light"] .about-content code,
 html[data-theme="light"] article.post-content p code,
 html[data-theme="light"] .profile-wrapper ~ * p code {
   color: var(--text-hi);
-  border-color: rgba(0, 0, 0, 0.08);
+  border-color: var(--line);
 }
 
 html[data-theme="light"] .about-content p,
@@ -444,7 +444,7 @@ html[data-theme="light"] article.post-content p {
 }
 
 html[data-theme="light"] .profile img {
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: var(--line) !important;
 }
 
 html[data-theme="light"] .nh-terminal-prompt {
@@ -486,7 +486,7 @@ html[data-theme="light"] .nh-paper-preview {
   background:
     linear-gradient(180deg, color-mix(in oklch, var(--accent-warm-soft) 4%, transparent), color-mix(in oklch, var(--accent-warm-soft) 1%, transparent)),
     var(--surface-raised);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 18px 40px var(--shadow-soft);
 }
 html[data-theme="light"] .nh-paper-preview__eyebrow {
   color: var(--accent-warm-soft);
@@ -495,16 +495,16 @@ html[data-theme="light"] .nh-paper-preview__title {
   color: var(--text-hi);
 }
 html[data-theme="light"] .nh-paper-preview__authors {
-  color: #6e6d68;
+  color: var(--text-mid);
 }
 html[data-theme="light"] .nh-paper-preview__authors strong {
   color: var(--text-hi);
 }
 html[data-theme="light"] .nh-paper-preview__meta {
-  color: #b4b2a7;
+  color: var(--text-lo);
 }
 html[data-theme="light"] .nh-paper-preview__abstract {
-  color: #535146;
+  color: var(--text);
   border-left-color: color-mix(in oklch, var(--accent-warm) 25%, transparent);
   background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
 }

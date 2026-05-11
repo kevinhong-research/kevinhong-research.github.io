@@ -134,8 +134,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(58, 58, 54, 0.6);
-  background: rgba(58, 58, 54, 0.3);
+  border: 1px solid var(--line);
+  background: color-mix(in oklch, var(--surface-raised) 60%, transparent);
   clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
   overflow: hidden;
 }
@@ -272,14 +272,14 @@ html[data-theme="light"] .talk-item::before {
 /* .talk-item:hover background is var(--surface-raised) — cascades from :root,
    no light-theme override needed (surface-raised is mode-aware). */
 html[data-theme="light"] .talk-logo {
-  border-color: rgba(0, 0, 0, 0.08);
-  background: rgba(0, 0, 0, 0.02);
+  border-color: var(--line);
+  background: color-mix(in oklch, var(--surface-raised) 60%, transparent);
 }
 html[data-theme="light"] .talk-logo--fallback {
-  color: #595549;
+  color: var(--text);
 }
 html[data-theme="light"] .talk-date {
-  color: #595549;
+  color: var(--text);
 }
 html[data-theme="light"] .talk-badge--upcoming {
   color: var(--accent-warm);

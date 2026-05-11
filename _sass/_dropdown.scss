@@ -43,7 +43,7 @@
   border-left: none;
   border-radius: 0;
   border-right: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px var(--shadow-medium);
   padding: 0.4rem 0;
   min-width: 150px;
   margin-top: 8px;
@@ -85,7 +85,7 @@
   font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.08em;
-  color: #8A8A7A;
+  color: var(--text-mid);
   padding: 0.45rem 1.1rem;
   background: transparent;
   transition: color 0.2s, background-color 0.2s;
@@ -116,7 +116,7 @@
 /* ── DROPDOWN GLOW ON OPEN ───────────────────────────────── */
 .nav-item.dropdown.show .dropdown-menu {
   border-color: color-mix(in oklch, var(--accent-cool) 30%, transparent);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in oklch, var(--accent-cool) 15%, transparent);
+  box-shadow: 0 8px 32px var(--shadow-medium), 0 0 0 1px color-mix(in oklch, var(--accent-cool) 15%, transparent);
 }
 
 html[data-theme="light"] .nav-item.dropdown > .nav-link:hover,
@@ -131,7 +131,7 @@ html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:hover,
 html[data-theme="light"] .nav-item.dropdown .dropdown-item:focus {
   color: var(--accent-warm);
-  background: #ede9de;
+  background: var(--surface);
 }
 
 html[data-theme="light"] .nav-item.dropdown .dropdown-item.active,

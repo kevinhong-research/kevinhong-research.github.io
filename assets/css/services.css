@@ -232,13 +232,13 @@ html[data-theme="light"] .svc-role-item::before {
   background: var(--accent-warm);
 }
 html[data-theme="light"] .svc-role-years {
-  color: #595549;
+  color: var(--text);
 }
 html[data-theme="light"] .svc-student-item::before {
   background: var(--accent-warm);
 }
 html[data-theme="light"] .svc-student-year {
-  color: #595549;
+  color: var(--text);
 }
 html[data-theme="light"] .svc-student-item:hover .svc-student-year {
   color: var(--accent-warm);

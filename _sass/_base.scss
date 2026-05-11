@@ -355,13 +355,13 @@ ul.task-list input[type="checkbox"] {
   }
 
   html[data-theme="light"] & .container {
-    border-bottom-color: rgba(0, 0, 0, 0.06);
+    border-bottom-color: var(--line);
   }
 
   html[data-theme="light"] & .dropdown-menu {
     background-color: var(--surface-raised);
-    border-color: #dad9d4;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: var(--line);
+    box-shadow: 0 6px 16px var(--shadow-soft);
 
     a:not(.active) {
       color: var(--text-hi);
@@ -369,18 +369,18 @@ ul.task-list input[type="checkbox"] {
 
     a:hover {
       color: var(--accent-warm);
-      background-color: #ede9de;
+      background-color: var(--surface);
     }
 
     .dropdown-divider {
-      border-top-color: #dad9d4 !important;
+      border-top-color: var(--line) !important;
     }
   }
 
   html[data-theme="light"] & .dropdown-item.active,
   html[data-theme="light"] & .dropdown-item:active {
     background-color: var(--accent-warm);
-    color: #ffffff !important;
+    color: var(--surface) !important;
   }
 
   .navbar-brand.social {
@@ -507,8 +507,7 @@ ul.task-list input[type="checkbox"] {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--overlay-scrim);
 }
 
 .wechat-modal > img {
@@ -1285,7 +1284,7 @@ ninja-keys::part(ninja-input-wrapper) {
   max-width: 350px;
   min-width: 100px;
   box-sizing: border-box;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px;
+  box-shadow: var(--shadow-soft) 0px 1px 2px;
   border-radius: 6px;
   padding: 8px 12px;
 }
@@ -1305,7 +1304,7 @@ ninja-keys::part(ninja-input-wrapper) {
   align-items: center;
   flex-direction: row;
   padding: 9px 17px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px;
+  box-shadow: var(--shadow-soft) 0px 1px 2px;
   border-radius: 6px;
   text-align: center;
   font-style: normal;
@@ -1326,7 +1325,7 @@ ninja-keys::part(ninja-input-wrapper) {
   align-items: center;
   flex-direction: row;
   padding: 9px 17px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px;
+  box-shadow: var(--shadow-soft) 0px 1px 2px;
   border-radius: 6px;
   text-align: center;
   font-style: normal;
