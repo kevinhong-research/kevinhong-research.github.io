@@ -18,12 +18,24 @@
     "48":"TX","49":"UT","50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY",
   };
 
+  /* Manual label positions. Each value is an [x, y] pair in the SVG's
+     coordinate system (viewBox 960×580, Albers USA scale 1100,
+     translate [480, 270]). Verified with SVGGeometryElement.isPointInFill
+     to land inside the state's path and >=30px from any school-logo
+     marker on the football map (so the same overrides apply cleanly to
+     both /talks/ and /football/). */
   const CENTROID_OVERRIDES = {
-    "06": [147, 257],  /* CA — central California; default centroid lands in Pacific */
-    "26": [623, 147],  /* MI — Lower Peninsula center; default lands in Lake Michigan/Huron */
-    "12": [714, 462],  /* FL — peninsula interior; default lands in the Gulf */
-    "13": [723, 349],  /* GA — central Georgia; default centroid lands south of state line */
-    "24": [760, 285],  /* MD */
+    "04": [243, 321],  /* AZ — north of Tucson marker */
+    "06": [147, 257],  /* CA — central California (default lands in Pacific) */
+    "12": [714, 462],  /* FL — peninsula interior (default lands in the Gulf) */
+    "13": [692, 380],  /* GA — central GA (auto-centroid lands south of state line) */
+    "17": [574, 253],  /* IL — south of Champaign marker */
+    "24": [760, 285],  /* MD (filtered by MIN_AREA in practice) */
+    "26": [623, 147],  /* MI — Lower Peninsula center */
+    "39": [688, 203],  /* OH — north of Columbus marker */
+    "40": [434, 334],  /* OK — west of Norman marker */
+    "51": [765, 285],  /* VA — east of VT/UVA markers */
+    "53": [179, 63],   /* WA — east of UW marker */
     "02": null,        /* AK — skip */
     "15": null,        /* HI — skip */
   };
