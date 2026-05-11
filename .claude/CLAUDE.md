@@ -9,7 +9,7 @@ Built on Jekyll / al-folio. Deployed to GitHub Pages via the `gh-pages` branch.
 
 | Layer | Tool |
 |-------|------|
-| Site generator | Jekyll (Ruby, rbenv 3.3.7) |
+| Site generator | Jekyll (Ruby, rbenv 3.3.11) |
 | Theme | al-folio (heavily customised) |
 | CSS | Bootstrap + custom SCSS in `_sass/` |
 | Fonts | Self-hosted: Geist, Cormorant Garamond, Instrument Sans, Space Grotesk |
@@ -22,14 +22,14 @@ Built on Jekyll / al-folio. Deployed to GitHub Pages via the `gh-pages` branch.
 
 ```bash
 # Start (uses rbenv Ruby, NOT system Ruby 2.6)
-/Users/hong/.rbenv/versions/3.3.7/bin/bundle exec jekyll serve --livereload
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll serve --livereload --host 127.0.0.1 --port 4000
 
 # Or via Claude Code preview (launch.json already configured):
 # .claude/launch.json → "jekyll" → port 4000
 ```
 
 **Note:** `bundle` from `/usr/bin/bundle` uses the system Ruby 2.6 and will fail.
-Always use the full rbenv path or run via `.claude/launch.json`.
+Always use Homebrew rbenv, the repo `.ruby-version`, or `.claude/launch.json`.
 
 ---
 

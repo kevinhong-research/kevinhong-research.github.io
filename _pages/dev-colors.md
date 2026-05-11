@@ -123,6 +123,135 @@ nav: false
 .cl-map-sample__cell { min-height: 2.4rem; display: flex; align-items: center; justify-content: center; background: var(--map-fill); border: 1px solid var(--line); color: var(--map-label); font: 500 var(--fs-2xs)/1 "Geist Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .cl-map-sample__cell--hover { background: var(--map-fill-hover); color: var(--text-mid); }
 
+.cl-impact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+@media (max-width: 720px) {
+  .cl-impact-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.cl-impact-card {
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  padding: var(--space-lg);
+  min-width: 0;
+  transition: border-color var(--duration-fast) var(--ease-default), box-shadow var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default);
+}
+.cl-impact-card.is-active {
+  border-color: var(--accent-warm-border-strong);
+  box-shadow: 0 0 0 2px var(--accent-warm-bg-medium);
+  transform: translateY(-1px);
+}
+.cl-impact-card__label {
+  display: block;
+  font: 500 var(--fs-2xs)/1 "Geist Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+  margin-bottom: var(--space-sm);
+}
+.cl-impact-card__title {
+  margin: 0 0 var(--space-md);
+  font: 500 var(--fs-sm)/1.3 "Geist", sans-serif;
+  color: var(--text-hi);
+}
+.cl-impact-card__sample { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-sm); min-height: 2.5rem; }
+.cl-talk-dot-row { display: inline-flex; align-items: center; gap: var(--space-sm); }
+.cl-talk-dot {
+  width: 0.78rem;
+  height: 0.78rem;
+  border-radius: 50%;
+  background: var(--accent-cool);
+  border: 1px solid var(--surface);
+  box-shadow: 0 0 0 4px var(--accent-cool-bg-soft);
+}
+.cl-talk-dot--upcoming {
+  background: var(--accent-warm);
+  box-shadow: 0 0 0 4px var(--accent-warm-bg-subtle);
+}
+.cl-talk-cluster {
+  position: relative;
+  width: 2.4rem;
+  height: 1.4rem;
+}
+.cl-talk-cluster span {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--accent-warm);
+  border: 1px solid var(--surface);
+}
+.cl-talk-cluster span:nth-child(1) { left: 0; top: 0.25rem; }
+.cl-talk-cluster span:nth-child(2) { left: 0.68rem; top: 0; }
+.cl-talk-cluster span:nth-child(3) { left: 1.36rem; top: 0.25rem; }
+.cl-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0 var(--space-sm);
+  border: 1px solid var(--accent-cool-border);
+  background: var(--accent-cool-bg-soft);
+  color: var(--accent-cool);
+  font: 500 var(--fs-2xs)/1 "Geist", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+.cl-impact-section-label {
+  color: var(--accent-cool);
+  font: 500 var(--fs-2xs)/1 "Geist", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.cl-inline-demo {
+  color: var(--text);
+  font: var(--fs-sm)/1.45 "Geist", sans-serif;
+}
+.cl-inline-demo a,
+.cl-inline-demo code {
+  color: var(--accent-warm);
+}
+.cl-inline-demo code {
+  background: transparent;
+  font-family: "Geist Mono", monospace;
+  padding: 0;
+}
+.cl-dropdown-demo {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
+.cl-dropdown-demo__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--line);
+  font: var(--fs-xs)/1.3 "Geist", sans-serif;
+}
+.cl-dropdown-demo__row:last-child { border-bottom: none; background: var(--surface-raised); }
+.cl-dropdown-demo__meta { color: var(--text-mid); }
+.cl-map-component {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-xs);
+  width: 100%;
+}
+.cl-map-component span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  border: 1px solid var(--line);
+  background: var(--map-fill);
+  color: var(--map-label);
+  font: 500 var(--fs-2xs)/1 "Geist Mono", monospace;
+  letter-spacing: 0.08em;
+}
+.cl-map-component span:nth-child(2) {
+  background: var(--map-fill-hover);
+  color: var(--text-mid);
+}
+
 .cl-row-sample { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-xl); padding: var(--space-md) 0; border-bottom: 1px solid var(--line); position: relative; transition: padding-left var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default); }
 .cl-row-sample::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent-warm); transform: scaleY(0); transform-origin: top; transition: transform var(--duration-base) var(--ease-default); }
 .cl-row-sample:hover { padding-left: var(--space-md); background: var(--surface-raised); }
@@ -217,6 +346,55 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
         <p class="cl-preview-intro" style="margin: 0;">
           Section labels and status pills (the <code>SCHOLAR</code> / <code>FORTHCOMING</code> badges on the publications page) use <strong>--accent-cool</strong>. <strong>--accent-danger</strong> is reserved for future destructive UI.
         </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cl-section">
+    <h2 class="cl-section__title">Component impact previews</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor cl-section__editor--note">
+        Editing a token briefly highlights the preview cards that consume it.
+      </div>
+      <div class="cl-section__preview">
+        <div class="cl-impact-grid">
+          <div class="cl-impact-card" data-token-impact="--accent-cool">
+            <span class="cl-impact-card__label">--accent-cool</span>
+            <p class="cl-impact-card__title">Talk dots + semantic labels</p>
+            <div class="cl-impact-card__sample" aria-label="Talk regular dot and status badge preview">
+              <span class="cl-talk-dot-row"><span class="cl-talk-dot"></span><span class="cl-impact-section-label">Talks</span></span>
+              <span class="cl-status-badge">Scholar</span>
+            </div>
+          </div>
+          <div class="cl-impact-card" data-token-impact="--accent-warm --accent-warm-soft">
+            <span class="cl-impact-card__label">--accent-warm</span>
+            <p class="cl-impact-card__title">Upcoming clusters + active text</p>
+            <div class="cl-impact-card__sample" aria-label="Upcoming talk cluster and inline link preview">
+              <span class="cl-talk-dot cl-talk-dot--upcoming"></span>
+              <span class="cl-talk-cluster" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span class="cl-inline-demo"><a href="#main">link</a> · <code>code</code></span>
+            </div>
+          </div>
+          <div class="cl-impact-card" data-token-impact="--surface --surface-raised --line">
+            <span class="cl-impact-card__label">surface tokens</span>
+            <p class="cl-impact-card__title">Dropdowns, cards, hover rows</p>
+            <div class="cl-impact-card__sample">
+              <div class="cl-dropdown-demo" aria-label="Dropdown and raised-row preview">
+                <div class="cl-dropdown-demo__row"><span>Publications</span><span class="cl-dropdown-demo__meta">39</span></div>
+                <div class="cl-dropdown-demo__row"><span>Talks</span><span class="cl-dropdown-demo__meta">51</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="cl-impact-card" data-token-impact="--surface --surface-raised --line --text-mid --text-lo">
+            <span class="cl-impact-card__label">derived map</span>
+            <p class="cl-impact-card__title">Map states and labels</p>
+            <div class="cl-impact-card__sample">
+              <div class="cl-map-component" aria-label="Map state token preview">
+                <span>CA</span><span>TX</span><span>FL</span><span>NY</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -447,6 +625,7 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
       saveOverrides();
       applyOverrides();
       if (fromColor) hexInput.value = val; else colorInput.value = val;
+      highlightImpactCards(tokenName);
       setStatus('Updated ' + tokenName + ' (' + scope + ')');
     };
 
@@ -484,6 +663,7 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
       saveOverrides();
       applyOverrides();
       renderEditor();
+      clearImpactHighlights();
       setStatus('Reset to defaults');
     }
 
@@ -558,6 +738,24 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
     var el = document.getElementById('cl-dialog-status');
     if (!el) return;
     el.textContent = msg;
+  }
+
+  function highlightImpactCards(tokenName) {
+    var cards = document.querySelectorAll('[data-token-impact]');
+    cards.forEach(function (card) {
+      var tokens = (card.getAttribute('data-token-impact') || '').split(/\s+/);
+      if (tokens.indexOf(tokenName) === -1) return;
+      card.classList.add('is-active');
+      clearTimeout(card._clImpactTimer);
+      card._clImpactTimer = setTimeout(function () { card.classList.remove('is-active'); }, 1400);
+    });
+  }
+
+  function clearImpactHighlights() {
+    document.querySelectorAll('[data-token-impact].is-active').forEach(function (card) {
+      card.classList.remove('is-active');
+      clearTimeout(card._clImpactTimer);
+    });
   }
 
   function padRight(str, len) {

@@ -502,6 +502,240 @@ no invisible tertiary labels, map states still legible, dots and badges use inte
 
 Update the Review section below with final counts, verification commands, and any intentional remaining literals.
 
+## Follow-up Hardening Pass: Preview, Audit Script, Ruby Config, Sass Warnings
+
+**Goal:** Make future color changes safer to preview, easier to audit, and easier to verify locally.
+
+**Architecture:** Keep the Color Lab as a self-contained Jekyll dev page, add a small reusable audit script under `scripts/`, align local Ruby config/docs with the installed Ruby 3.3.11 toolchain, and convert the root icon-library includes in `assets/css/main.scss` from root-level `@import` to module-system `@use`. Leave vendored icon internals intact; `_config.yml` already sets `sass.quiet_deps: true`, so dependency-level deprecations are quiet while root stylesheet deprecations are removed.
+
+**Tech Stack:** Jekyll, SCSS/Sass module system, vanilla JS, Python 3 audit utility, rbenv Ruby 3.3.11.
+
+### Follow-up Plan Audit Round 1
+
+- **Coverage check:** The four requested items are covered by Tasks 7-10: component impact previews, reusable color audit, Ruby config/docs alignment, and Sass root import cleanup.
+- **Design check:** The preview feature should remain a working tool, not a marketing explanation. Use compact component replicas on the same page; avoid iframes for this pass because iframe override injection would add fragile cross-document state.
+- **Verification check:** The plan includes browser checks for changed Color Lab behavior, script checks for audit output, and Jekyll build checks for Sass/Ruby changes.
+
+### Follow-up Plan Audit Round 2
+
+- **Sass risk:** Directly migrating Font Awesome internals would touch many vendored files and introduce risk. The lower-risk approach is to replace only root-level imports in `assets/css/main.scss` with `@use`, relying on existing `quiet_deps` for vendored internals. A scratch compile confirmed this compiles quietly with `quiet_deps: true`.
+- **Ruby risk:** Adding `.ruby-version` is useful, but updating GitHub Actions to Ruby 3.3.11 would change deployment behavior. Keep CI/deploy workflows unchanged unless a later task explicitly targets remote build parity.
+- **Audit-script risk:** The script must distinguish site-owned UI from token source, generated files, vendor assets, syntax/Jupyter CSS, and content data. It should fail only on site-owned UI literals by default.
+
+### Follow-up Plan Audit Round 3
+
+- **Accessibility/responsiveness:** New Color Lab previews need stable dimensions, no overlapping labels, and meaningful `aria-label`s for map/cluster samples.
+- **Regression guard:** `scripts/audit_colors.py` should report counts and optionally fail with `--strict`; the final verification should run `--strict` so drift is caught.
+- **Scope control:** Do not tokenize `_data/venues.yml` in this pass. It remains content metadata unless a future publications/bibliography task makes those badges part of the current public UI.
+
+## Task 7: Color Lab Component Impact Previews
+
+**Files:**
+- Modify: `_pages/dev-colors.md`
+
+- [x] **Step 1: Add preview styles**
+
+Add compact component-preview CSS for:
+
+```text
+.cl-impact-grid
+.cl-impact-card
+.cl-talk-dot / .cl-talk-dot--upcoming / .cl-talk-cluster
+.cl-status-badge
+.cl-impact-section-label
+.cl-inline-demo
+.cl-map-component
+.cl-dropdown-demo
+```
+
+These previews must use existing theme tokens only, with no new color literals.
+
+- [x] **Step 2: Add preview markup**
+
+Add a new Color Lab section titled `Component impact previews` after the semantic section and before utility tokens. The section should include:
+
+```text
+--accent-cool: talks regular dots, status badges, section labels
+--accent-warm: upcoming talk dots/clusters, hover stripes, inline links/code
+--surface / --surface-raised / --line: dropdown/card/list surfaces
+--map-fill / --map-fill-hover / --map-label: map-state samples
+```
+
+- [x] **Step 3: Highlight affected preview cards while editing**
+
+Add `data-token-impact` attributes to preview cards and extend the input handler so editing a token briefly applies `.is-active` to matching cards.
+
+- [x] **Step 4: Verify Color Lab behavior**
+
+Run browser QA on `/dev/colors/`:
+
+```text
+change --accent-cool to #123456, confirm cool preview cards highlight and rendered cool samples compute to rgb(18, 52, 86)
+change --accent-warm to #654321, confirm warm preview cards highlight and rendered warm samples compute to rgb(101, 67, 33)
+reset overrides, confirm --accent-cool returns #00a060 and --accent-warm returns #cc7d5e
+```
+
+## Task 8: Reusable Color Audit Script
+
+**Files:**
+- Create: `scripts/audit_colors.py`
+
+- [x] **Step 1: Create the script**
+
+The script should:
+
+```text
+scan site-owned UI paths
+ignore generated/vendor/search/Jupyter/icon-library assets
+ignore token-source files (`_sass/_themes.scss`, `_sass/_variables.scss`)
+ignore content-data colors such as `_data/venues.yml`
+ignore the Color Lab functional fallback `COLOR_INPUT_FALLBACK = '#000000'`
+print per-file findings and `TOTAL_SITE_OWNED_UI <n>`
+exit 1 only when `--strict` is passed and `<n> > 0`
+```
+
+- [x] **Step 2: Verify strict audit**
+
+Run:
+
+```bash
+python3 scripts/audit_colors.py --strict
+```
+
+Expected: `TOTAL_SITE_OWNED_UI 0` and exit 0.
+
+## Task 9: Ruby 3.3.11 Local Config and Agent Docs
+
+**Files:**
+- Create: `.ruby-version`
+- Modify: `.claude/CLAUDE.md`
+- Modify: `.claude/launch.json`
+
+- [x] **Step 1: Add `.ruby-version`**
+
+Create `.ruby-version` with:
+
+```text
+3.3.11
+```
+
+- [x] **Step 2: Update local agent docs and launch config**
+
+Replace local references to `/Users/hong/.rbenv/versions/3.3.7/bin/bundle` with:
+
+```text
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_
+```
+
+For `.claude/launch.json`, set `runtimeExecutable` to:
+
+```text
+/opt/homebrew/bin/rbenv
+```
+
+and set args so the command runs `exec bundle _2.5.18_ exec jekyll serve --livereload --port 4000`.
+
+- [x] **Step 3: Verify Ruby config**
+
+Run:
+
+```bash
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec ruby -v
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ -v
+```
+
+Expected: Ruby 3.3.11 and Bundler 2.5.18.
+
+## Task 10: Root Sass Import Warning Cleanup
+
+**Files:**
+- Modify: `assets/css/main.scss`
+
+- [x] **Step 1: Replace root icon imports with `@use`**
+
+Replace the root-level icon-library `@import` block with:
+
+```scss
+@use "font-awesome/fontawesome";
+@use "font-awesome/brands";
+@use "font-awesome/solid";
+@use "font-awesome/regular";
+@use "tabler-icons/tabler-icons" as tabler-icons with (
+  $ti-font-path: "../fonts",
+  $ti-font-display: swap
+);
+@use "tabler-icons/tabler-icons-filled" as tabler-icons-filled with (
+  $ti-font-path: "../fonts",
+  $ti-font-display: swap
+);
+@use "tabler-icons/tabler-icons-outline" as tabler-icons-outline with (
+  $ti-font-path: "../fonts",
+  $ti-font-display: swap
+);
+```
+
+Remove the now-unused `$ti-font-path`, `$ti-font-display`, and `$fa-font-path` global declarations.
+
+- [x] **Step 2: Verify the build has no root Sass `@import` warning**
+
+Run:
+
+```bash
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll build
+```
+
+Expected: build exit 0. The previous warnings pointing at `assets/css/main.scss` lines for Font Awesome/Tabler `@import` should be gone.
+
+## Task 11: Final Test and QA
+
+**Files:**
+- Modify: this plan file’s Review section.
+
+- [x] **Step 1: Run static verification**
+
+Run:
+
+```bash
+python3 scripts/audit_colors.py --strict
+node --check assets/js/talkmap.js
+node --check assets/js/research.js
+node --check assets/js/footballmap.js
+git diff --check
+```
+
+Expected: all exit 0.
+
+- [x] **Step 2: Run Jekyll build**
+
+Run:
+
+```bash
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll build
+```
+
+Expected: exit 0 with no root `@import` deprecation warnings from `assets/css/main.scss`.
+
+- [x] **Step 3: Browser QA**
+
+Start:
+
+```bash
+RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll serve --livereload --host 127.0.0.1 --port 4000
+```
+
+Verify:
+
+```text
+/dev/colors/ component previews update and highlight
+/talks/ map dots still use accent-cool/accent-warm
+/football/ map and marker frame still render
+/publications/ and /services/ still render tokenized badges/rows
+```
+
+- [x] **Step 4: Commit**
+
+Commit the implementation if all verification passes.
+
 ## Review
 
 Executed on branch `codex/color-token-cleanup`.
@@ -532,3 +766,21 @@ Follow-up audit including `/dev/colors/`:
 - Confirmed `--accent-cool` remains an editable live token and resolves from `_sass/_themes.scss`, where it is currently `#00a060`.
 - Final audit including `/dev/colors/`: `TOTAL_SITE_OWNED_UI_EXCLUDING_FUNCTIONAL_FALLBACK 0`.
 - Remaining `/dev/colors/` literal: one intentional `COLOR_INPUT_FALLBACK = '#000000'` for the browser color input when a computed value is missing or unparsable.
+
+Follow-up hardening pass:
+- Added Color Lab component-impact previews for `--accent-cool`, `--accent-warm`, surface/line tokens, and map-derived tokens. Editing a token briefly highlights the affected preview cards.
+- Added `scripts/audit_colors.py --strict`; final result: `TOTAL_SITE_OWNED_UI 0`.
+- Added `.ruby-version` with Ruby 3.3.11 and updated `.claude/CLAUDE.md` plus `.claude/launch.json` to use Homebrew rbenv and Bundler 2.5.18.
+- Replaced root-level icon-library imports in `assets/css/main.scss` with Sass `@use`. Build output no longer shows the previous root `@import` warnings from `assets/css/main.scss`; the existing pagination warning remains.
+
+Follow-up verification:
+- `python3 scripts/audit_colors.py --strict`
+- `python3 -m json.tool .claude/launch.json`
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec ruby -v`
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ -v`
+- `node --check assets/js/talkmap.js`
+- `node --check assets/js/research.js`
+- `node --check assets/js/footballmap.js`
+- `git diff --check`
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll build`
+- Browser QA on `/dev/colors/`, `/talks/`, `/football/`, `/publications/`, and `/services/`.

@@ -23,23 +23,22 @@
 @use "typograms";
 @use "dropdown";
 
-// Vendored icon libraries — still use @import internally (separate migration).
-// These trigger their own deprecation warnings; will be addressed when the
-// vendor packages are upgraded to module-system syntax.
-//
-// Re-declare the variables vendor partials reference at this scope so
-// legacy @import resolution finds them. Keep these in sync with
-// _variables.scss until vendor partials migrate to @use.
-$ti-font-path: "../fonts";
-$ti-font-display: swap; // Override the partial's `null !default` to avoid icon-font FOIT.
-$fa-font-path: "../webfonts";
-
-@import
-  "font-awesome/fontawesome",
-  "font-awesome/brands",
-  "font-awesome/solid",
-  "font-awesome/regular",
-  "tabler-icons/tabler-icons.scss",
-  "tabler-icons/tabler-icons-filled.scss",
-  "tabler-icons/tabler-icons-outline.scss"
-;
+// Vendored icon libraries. Font Awesome still contains internal legacy imports;
+// `_config.yml` keeps dependency warnings quiet while this root stylesheet uses
+// the Sass module system.
+@use "font-awesome/fontawesome";
+@use "font-awesome/brands";
+@use "font-awesome/solid";
+@use "font-awesome/regular";
+@use "tabler-icons/tabler-icons" as tabler-icons with (
+  $ti-font-path: "../fonts",
+  $ti-font-display: swap
+);
+@use "tabler-icons/tabler-icons-filled" as tabler-icons-filled with (
+  $ti-font-path: "../fonts",
+  $ti-font-display: swap
+);
+@use "tabler-icons/tabler-icons-outline" as tabler-icons-outline with (
+  $ti-font-path: "../fonts",
+  $ti-font-display: swap
+);

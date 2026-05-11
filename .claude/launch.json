@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "jekyll",
-      "runtimeExecutable": "/Users/hong/.rbenv/versions/3.3.7/bin/bundle",
-      "runtimeArgs": ["exec", "jekyll", "serve", "--livereload"],
+      "runtimeExecutable": "/opt/homebrew/bin/rbenv",
+      "runtimeArgs": ["exec", "bundle", "_2.5.18_", "exec", "jekyll", "serve", "--livereload", "--host", "127.0.0.1", "--port", "4000"],
       "port": 4000
     }
   ]
