@@ -4,7 +4,70 @@
 
 ---
 
-## 2026-05-11 — Session 15 (latest)
+## 2026-05-11 — Session 16 (latest)
+
+### Goal
+Complete the color-token cleanup follow-up: merge the audited color hardening branch into local `main`, document the session, and push `main` to `origin/main`.
+
+### What was done
+
+**Color-token cleanup + Color Lab hardening** (merged from `codex/color-token-cleanup`)
+- Replaced talks-map and shared UI hard-coded colors with theme tokens.
+- Added shared utility tokens in `_sass/_themes.scss` for shadows, overlays, and map surfaces.
+- Added richer `/dev/colors/` component-impact previews: editing `--accent-cool` / `--accent-warm` now recolors and highlights representative dots, badges, inline accents, surfaces, and map samples.
+- Added `scripts/audit_colors.py --strict` as a reusable site-owned color literal audit. It excludes token source, generated/vendor assets, syntax/Jupyter CSS, icon-library internals, and content data such as `_data/venues.yml`.
+
+**Local build/tooling alignment**
+- Installed and verified local Ruby 3.3.11 via Homebrew `rbenv`.
+- Added tracked `.ruby-version` with `3.3.11`.
+- Updated `.claude/CLAUDE.md` and `.claude/launch.json` to use Homebrew `rbenv` + Bundler 2.5.18 instead of the missing Ruby 3.3.7 path.
+- Replaced root-level icon-library `@import`s in `assets/css/main.scss` with Sass `@use`; the previous root stylesheet import deprecation warnings are gone. Vendored Font Awesome internals remain dependency code and are quieted by existing `sass.quiet_deps: true`.
+
+**Planning and merge**
+- Saved and updated the detailed plan at `.claude/plans/2026-05-11_color-token-audit-and-cleanup.md`, including three plan-audit rounds and final QA notes.
+- Fast-forward merged `codex/color-token-cleanup` into local `main`.
+
+### Verification
+- `python3 scripts/audit_colors.py --strict` → `TOTAL_SITE_OWNED_UI 0`.
+- `python3 -m json.tool .claude/launch.json` passed.
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec ruby -v` showed Ruby 3.3.11.
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ -v` showed Bundler 2.5.18.
+- `node --check assets/js/talkmap.js`, `node --check assets/js/research.js`, and `node --check assets/js/footballmap.js` passed.
+- `git diff --check` passed before committing.
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll build` passed. Only the existing pagination warning remains.
+- Browser QA on local preview:
+  - `/dev/colors/`: component previews update and highlight; reset returns `--accent-cool` to `#00a060` and `--accent-warm` to `#cc7d5e`.
+  - `/talks/`: map rendered 59 circles; regular dots compute from `--accent-cool`, upcoming clusters from `--accent-warm`.
+  - `/football/`: map rendered 56 states and 20 marker groups.
+  - `/publications/` and `/services/`: tokenized rows/badges rendered in dark mode.
+
+### Current status
+- **Done**: Color-token cleanup branch committed and fast-forward merged into local `main`; handover prepared.
+- **In progress**: handover commit and push to `origin/main`.
+- **Pending**: production deploy verification after GitHub Pages rebuilds.
+
+### Important context
+- `AGENTS.md` remains an untracked local file and was intentionally not staged.
+- `_data/venues.yml` still contains two literal venue colors. They are legacy/content metadata consumed by `_layouts/bib.liquid`, not current site chrome.
+- The new audit script intentionally ignores `_sass/_themes.scss`, `_sass/_variables.scss`, vendored/generated files, syntax/Jupyter CSS, icon libraries, and content-data colors.
+- `.ruby-version` was force-added because the legacy `.gitignore` still ignores `.ruby-version`; this commit intentionally tracks it for local toolchain consistency.
+
+### Decisions already made
+- Use in-page component replicas for `/dev/colors/` previews rather than iframe-loaded real pages. This keeps the preview reliable and avoids cross-document override synchronization.
+- Keep venue colors out of the token audit for now because they are data/content colors, not current theme UI.
+- Do not rewrite vendored Font Awesome Sass internals in this pass; root-level imports are migrated, dependency warnings are quieted, and full vendor modernization can be separate if needed.
+- Keep GitHub Actions Ruby versions unchanged for now; this pass aligns local development tooling only.
+
+### Next best step
+- **Primary action**: Push `main` to `origin/main`, then verify production after the GitHub Pages deploy completes:
+  1. Visit `https://kevinhong.ai/dev/colors/` and confirm component previews render and respond.
+  2. Visit `https://kevinhong.ai/talks/`, expand the US map, and confirm regular dots are green from `--accent-cool` while upcoming clusters are terracotta from `--accent-warm`.
+  3. Spot-check `/football/`, `/publications/`, and `/services/` for dark-mode contrast and tokenized surfaces.
+- **Optional follow-up**: Decide whether `_data/venues.yml` should remain content-colored or become token-controlled if the legacy bibliography badges are revived.
+
+---
+
+## 2026-05-11 — Session 15
 
 ### Goal
 Treat `origin/main` as canonical after the local branch diverged from a force-updated remote, then make talks-map marker colors consume theme tokens instead of hardcoded green/blue values.
