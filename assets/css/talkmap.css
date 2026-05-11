@@ -69,7 +69,7 @@
 .tm-state-lbl {
   font-size: 7.5px;
   font-weight: 500;
-  fill: var(--line);
+  fill: var(--map-label);
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
