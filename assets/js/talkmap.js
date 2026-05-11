@@ -29,6 +29,10 @@
 
   const MIN_AREA   = 900;  /* px² threshold for state labels */
   const CLUSTER_PX = 20;  /* px radius for dot clustering    */
+  const DOT_COLORS = {
+    regular: "var(--accent-cool)",
+    upcoming: "var(--accent-warm)",
+  };
 
   /* ── Pill strip wiring ──────────────────────────────────── */
   function initToggle(talks) {
@@ -182,7 +186,7 @@
 
         clusters.forEach(cl => {
           const hasUpcoming = cl.talks.some(t => t.upcoming);
-          const color  = hasUpcoming ? "#4db8ff" : "#00a060";
+          const color  = hasUpcoming ? DOT_COLORS.upcoming : DOT_COLORS.regular;
           const countR = BASE_R[Math.min(cl.talks.length, 4)];
           const r      = hasUpcoming ? Math.max(7.5, countR) : countR;
           const cx     = cl.cx, cy = cl.cy;
@@ -219,9 +223,7 @@
               tip.className = "tm-tip" + (hasUpcoming ? " upcoming" : "");
               tip.innerHTML = cl.talks.map((t, i) => {
                 const meta  = [t.venue, t.date].filter(Boolean).join(" · ");
-                const badge = t.upcoming
-                  ? `<span class="tm-tip-badge" style="color:#4db8ff"> · Upcoming</span>`
-                  : "";
+                const badge = t.upcoming ? `<span class="tm-tip-badge"> · Upcoming</span>` : "";
                 const div = i > 0 ? `<div class="tm-tip-divider"></div>` : "";
                 return `${div}<div class="tm-tip-entry">
                   <strong>${t.institution}</strong>
