@@ -621,7 +621,7 @@
         svg.append("path")
           .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
           .attr("fill", "none")
-          .attr("stroke", "#253040")
+          .attr("stroke", "var(--line)")
           .attr("stroke-width", "0.5")
           .attr("d", pathFn);
 
