@@ -225,7 +225,7 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
 <dialog class="cl-dialog" id="cl-scss-dialog">
   <h3>Paste this into _sass/_themes.scss</h3>
   <p class="cl-preview-intro" style="margin: 0 0 var(--space-md);">Locate the <strong>:root</strong> block (dark/base) and the <strong>html[data-theme="light"]</strong> block. Replace the matching lines.</p>
-  <pre id="cl-scss-output"></pre>
+  <pre id="cl-scss-output" class="cl-scss-output">/* SCSS will appear here when you click Copy SCSS */</pre>
   <form method="dialog" class="cl-dialog-actions">
     <span class="cl-dialog-status" id="cl-dialog-status">—</span>
     <span style="display: flex; gap: var(--space-sm);">
@@ -438,15 +438,18 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
       btn.classList.add('is-flashing');
       setTimeout(function () { btn.classList.remove('is-flashing'); }, 420);
       var scss = buildScss();
-      document.getElementById('cl-scss-output').textContent = scss;
+      var out = document.getElementById('cl-scss-output');
       var dlg = document.getElementById('cl-scss-dialog');
+      if (!dlg) { setStatus('Modal markup missing — reload the page'); return; }
+      if (out) out.textContent = scss;
       if (typeof dlg.showModal === 'function') dlg.showModal();
       else dlg.setAttribute('open', '');
       copyToClipboard(scss);
     }
 
     if (action === 'copy-again') {
-      copyToClipboard(document.getElementById('cl-scss-output').textContent);
+      var out2 = document.getElementById('cl-scss-output');
+      copyToClipboard(out2 ? out2.textContent : buildScss());
     }
   });
 
