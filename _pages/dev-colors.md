@@ -6,7 +6,7 @@ description: Live editor for the design system color tokens. Tweak values, see t
 nav: false
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url | bust_file_cache }}">
 
 <style>
 /* Color Lab — page-local styles.

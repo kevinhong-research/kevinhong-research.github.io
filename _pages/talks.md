@@ -7,9 +7,9 @@ nav: true
 nav_order: 3
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/talks.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/talkmap.css' | relative_url }}?v={{ site.time | date: '%Y%m%d%H%M' }}">
+<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url | bust_file_cache }}">
+<link rel="stylesheet" href="{{ '/assets/css/talks.css' | relative_url | bust_file_cache }}">
+<link rel="stylesheet" href="{{ '/assets/css/talkmap.css' | relative_url | bust_file_cache }}">
 
 <!-- Pill strip styles inlined to guarantee rendering regardless of asset path.
      The map-specific styles (states, tooltip, animation) stay in talkmap.css. -->

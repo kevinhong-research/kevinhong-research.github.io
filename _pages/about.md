@@ -17,8 +17,8 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: false # includes social icons at the bottom of the page
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url | bust_file_cache }}">
+<link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url | bust_file_cache }}">
 
 {% assign featured_papers = site.data.publications | where_exp: "pub", "pub.id == 'peer-awards-reddit' or pub.id == 'ridesharing-traffic-congestion'" %}
 

@@ -7,7 +7,7 @@ nav: false
 nav_order: 4
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/football.css' | relative_url }}?v={{ site.time | date: '%Y%m%d%H%M' }}">
+<link rel="stylesheet" href="{{ '/assets/css/football.css' | relative_url | bust_file_cache }}">
 
 <div class="fb-page">
   <p class="fb-intro">

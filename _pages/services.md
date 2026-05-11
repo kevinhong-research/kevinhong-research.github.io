@@ -7,8 +7,8 @@ nav: true
 nav_order: 4
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/services.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url | bust_file_cache }}">
+<link rel="stylesheet" href="{{ '/assets/css/services.css' | relative_url | bust_file_cache }}">
 
 {% include services_render.html %}
 

@@ -17,7 +17,7 @@ children:
 <!-- <div id="nhCursor"></div>
 <div id="nhCursorRing"></div> -->
 
-<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url | bust_file_cache }}">
 
 <div class="nh-research">
 

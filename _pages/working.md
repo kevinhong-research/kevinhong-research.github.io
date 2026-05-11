@@ -7,7 +7,7 @@ nav: false
 nav_order: 2
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/research.css' | relative_url | bust_file_cache }}">
 
 {% include working_render.html %}
 
