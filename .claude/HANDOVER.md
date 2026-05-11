@@ -4,7 +4,54 @@
 
 ---
 
-## 2026-05-10 — Session 14 (latest)
+## 2026-05-11 — Session 15 (latest)
+
+### Goal
+Treat `origin/main` as canonical after the local branch diverged from a force-updated remote, then make talks-map marker colors consume theme tokens instead of hardcoded green/blue values.
+
+### What was done
+
+**Remote history reconciliation**
+- Fetched `origin/main` and confirmed local `main` had diverged after a force update.
+- Compared local and remote byte-level tree differences before deciding on a strategy:
+  - 545 shared paths, 502 byte-identical, 43 differing text files.
+  - 190 remote-only paths, mostly newer committed WebP assets and documentation/dev-page additions.
+  - 9 local-only stale paths, all older archived/plugin files.
+  - `git cherry -v` showed 198 local patches already represented on `origin/main`.
+- Created backup branch `codex/backup-main-before-origin-reset-2026-05-11` at the old local tip.
+- Reset local `main` to `origin/main` (`426cba9`) and verified `git diff --quiet HEAD origin/main`.
+
+**Talks map marker tokenization** (commit `7eb32f7`, `fix(talks): theme map marker colors`)
+- Kept the user’s local theme edit: `_sass/_themes.scss` now sets `--accent-cool: #00a060`.
+- Updated `assets/js/talkmap.js` so regular map dots use `var(--accent-cool)` and clusters containing upcoming talks use `var(--accent-warm)`.
+- Removed talks-map hardcoded upcoming blue (`#4db8ff`) from the dot color and tooltip badge.
+- Updated `assets/css/talkmap.css` so upcoming tooltip border/badge colors use `var(--accent-warm)`; removed the light-mode blue override (`#61AAF2`).
+
+### Verification
+- `git rev-list --left-right --count main...origin/main` before the code commit: `0 0`.
+- `rg -n "#4db8ff|61AAF2|#00a060" assets/js/talkmap.js assets/css/talkmap.css || true` returned no matches.
+- `rg -n "var\\(--accent-cool\\)|var\\(--accent-warm\\)" assets/js/talkmap.js assets/css/talkmap.css` confirmed the map JS/CSS now references the theme tokens.
+- `node --check assets/js/talkmap.js` passed.
+- `git diff --check` passed.
+- Full Jekyll build was not run: this machine currently only exposes system Ruby 2.6 and `/usr/bin/bundle`, which fails because Bundler `2.5.18` from `Gemfile.lock` is not installed; `/Users/hong/.rbenv/versions/3.3.7/bin/bundle` is missing.
+
+### Current status
+- **Done**: Local `main` reset to `origin/main`; talks-map color tokenization committed.
+- **In progress**: handover commit and push requested by the user.
+- **Pending**: Verify live `/talks/` after GitHub Pages deploy; rebuild local Ruby/rbenv tooling if local Jekyll preview is needed.
+
+### Important context
+- `AGENTS.md` remains an untracked local file and was intentionally not staged.
+- The backup branch `codex/backup-main-before-origin-reset-2026-05-11` is local only and should not be merged back into `main`; it exists only as a safety copy of the pre-reset local branch.
+- The talks map now uses CSS variable strings in SVG presentation attributes (`fill="var(--accent-cool)"`, `fill="var(--accent-warm)"`, stroke likewise for the pulse ring).
+
+### Next best step
+- After deploy completes, open `https://kevinhong.ai/talks/`, expand the US talks map, and confirm regular dots render in `--accent-cool` green while any upcoming cluster renders in `--accent-warm` terracotta.
+- Restore local Ruby tooling (`rbenv` Ruby 3.3.7 + Bundler 2.5.18) before the next visual/browser verification session.
+
+---
+
+## 2026-05-10 — Session 14
 
 ### Goal
 Six small but cumulative refinements after session 13's Codex theme adoption:
