@@ -19,9 +19,10 @@
   };
 
   const CENTROID_OVERRIDES = {
-    "06": [90,  330],  /* CA */
-    "26": [670, 155],  /* MI lower peninsula */
-    "12": [730, 490],  /* FL */
+    "06": [147, 257],  /* CA — central California; default centroid lands in Pacific */
+    "26": [623, 147],  /* MI — Lower Peninsula center; default lands in Lake Michigan/Huron */
+    "12": [714, 462],  /* FL — peninsula interior; default lands in the Gulf */
+    "13": [723, 349],  /* GA — central Georgia; default centroid lands south of state line */
     "24": [760, 285],  /* MD */
     "02": null,        /* AK — skip */
     "15": null,        /* HI — skip */
