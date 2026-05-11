@@ -125,7 +125,7 @@
         svg.append("path")
           .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
           .attr("fill", "none")
-          .attr("stroke", "#253040")
+          .attr("stroke", "var(--line)")
           .attr("stroke-width", "0.5")
           .attr("d", pathFn);
 
@@ -208,7 +208,7 @@
           /* Main dot */
           g.append("circle").attr("r", r)
             .attr("fill", color).attr("opacity", 0.9)
-            .attr("stroke", "rgba(0,0,0,0.5)").attr("stroke-width", 1.2)
+            .attr("stroke", "var(--surface)").attr("stroke-width", 1.2)
             .style("cursor", "pointer")
             .on("mouseover", function () {
               const svgRect  = svg.node().getBoundingClientRect();

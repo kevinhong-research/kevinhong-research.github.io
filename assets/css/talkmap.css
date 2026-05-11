@@ -56,14 +56,14 @@
 }
 
 .tm-state {
-  fill: rgba(47, 47, 45, 0.72);
+  fill: var(--map-fill);
   stroke: var(--line);
   stroke-width: 0.7;
   transition: fill var(--duration-fast);
 }
 
 .tm-state:hover {
-  fill: rgba(58, 58, 54, 0.88);
+  fill: var(--map-fill-hover);
 }
 
 .tm-state-lbl {
@@ -98,7 +98,7 @@
   border-radius: 4px;
   padding: 9px 13px;
   font-size: 12px;
-  color: #8A8A7A;
+  color: var(--text-mid);
   line-height: 1.6;
   max-width: 235px;
   display: none;
@@ -118,7 +118,7 @@
 }
 
 .tm-tip-meta {
-  color: #8A8A7A;
+  color: var(--text-mid);
   font-size: 11px;
   margin-top: 1px;
   line-height: 1.4;
@@ -133,7 +133,7 @@
 
 .tm-tip-divider {
   height: 1px;
-  background: rgba(58, 58, 54, 0.5);
+  background: var(--line);
   margin: 5px 0;
 }
 
@@ -155,28 +155,28 @@ html[data-theme="light"] .tm-pills--open .tm-pill--geo .tm-pill-l {
   color: var(--accent-warm-soft);
 }
 html[data-theme="light"] .tm-state {
-  fill: #ede9de;
-  stroke: #dad9d4;
+  fill: var(--map-fill);
+  stroke: var(--line);
 }
 html[data-theme="light"] .tm-state:hover {
-  fill: #e9e6dc;
+  fill: var(--map-fill-hover);
 }
 html[data-theme="light"] .tm-state-lbl {
-  fill: #b4b2a7;
+  fill: var(--map-label);
 }
 html[data-theme="light"] .tm-tip {
   background: var(--surface-raised);
-  border-color: #dad9d4;
+  border-color: var(--line);
   border-left-color: var(--accent-warm);
-  color: #6e6d68;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  color: var(--text-mid);
+  box-shadow: 0 8px 24px var(--shadow-soft);
 }
 html[data-theme="light"] .tm-tip-entry strong {
   color: var(--text-hi);
 }
 html[data-theme="light"] .tm-tip-meta {
-  color: #b4b2a7;
+  color: var(--text-lo);
 }
 html[data-theme="light"] .tm-tip-divider {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--line);
 }

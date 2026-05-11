@@ -20,8 +20,8 @@ nav_order: 3
   flex-wrap: wrap;
   gap: 0.45rem;
   padding: 0.7rem 0 0.7rem 0;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid var(--line-hi);
+  border-bottom: 1px solid var(--line-hi);
   position: relative;
   cursor: pointer;
   transition: padding-left 0.22s ease;
@@ -32,7 +32,7 @@ nav_order: 3
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0; width: 2px;
-  background: #D97757;
+  background: var(--accent-warm);
   transform: scaleY(0); transform-origin: top;
   transition: transform 0.25s ease;
 }
@@ -46,7 +46,7 @@ nav_order: 3
   align-items: baseline;
   gap: 0.32rem;
   padding: 0.25rem 0.85rem 0.25rem 0.75rem;
-  border: 1px solid #3A3A36;
+  border: 1px solid var(--line);
   clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   transition: border-color 0.2s ease, background 0.2s ease;
   flex-shrink: 0;
@@ -57,13 +57,13 @@ nav_order: 3
 }
 .tm-pills:hover .tm-pill,
 .tm-pills--open .tm-pill {
-  border-color: rgba(217,119,87,0.18);
-  background: rgba(217,119,87,0.04);
+  border-color: var(--accent-warm-border);
+  background: var(--accent-warm-bg-subtle);
 }
 .tm-pill-n {
   font-size: var(--fs-base) !important;
   font-weight: 500 !important;
-  color: #3A3A36;
+  color: var(--text-hi);
   letter-spacing: 0;
   line-height: 1;
   transition: color 0.2s;
@@ -74,7 +74,7 @@ nav_order: 3
   font-weight: 400 !important;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #3A3A36;
+  color: var(--text-mid);
   transition: color 0.2s;
   font-style: normal;
 }
@@ -82,26 +82,26 @@ nav_order: 3
 .tm-pill--orange .tm-pill-l {
   color: var(--text-lo);
 }
-.tm-pill--green .tm-pill-n { color: #00a060; }
-.tm-pill--orange .tm-pill-n { color: #D97757; }
-.tm-pill--geo .tm-pill-l { color: var(--green-hi); letter-spacing: 0.08em; }
+.tm-pill--green .tm-pill-n { color: var(--accent-cool); }
+.tm-pill--orange .tm-pill-n { color: var(--accent-warm); }
+.tm-pill--geo .tm-pill-l { color: var(--accent-cool); letter-spacing: 0.08em; }
 .tm-pills:hover .tm-pill--green .tm-pill-n,
-.tm-pills--open .tm-pill--green .tm-pill-n { color: #00c070; }
+.tm-pills--open .tm-pill--green .tm-pill-n { color: var(--accent-cool); }
 .tm-pills:hover .tm-pill--orange .tm-pill-n,
-.tm-pills--open .tm-pill--orange .tm-pill-n  { color: #c85a42; }
+.tm-pills--open .tm-pill--orange .tm-pill-n  { color: var(--accent-warm); }
 .tm-pills:hover .tm-pill--geo .tm-pill-l,
-.tm-pills--open .tm-pill--geo .tm-pill-l { color: #D97757; }
+.tm-pills--open .tm-pill--geo .tm-pill-l { color: var(--accent-warm); }
 
 .tm-pill-sep {
   display: inline-block !important;
   width: 3px; height: 3px; border-radius: 50%;
-  background: rgba(58,58,54,0.6);
+  background: var(--line);
   flex-shrink: 0;
   transition: background 0.2s;
   align-self: center;
 }
 .tm-pills:hover .tm-pill-sep,
-.tm-pills--open .tm-pill-sep { background: rgba(255,255,255,0.13); }
+.tm-pills--open .tm-pill-sep { background: var(--line-hi); }
 
 .tm-pill-hint {
   display: inline-block !important;
@@ -110,15 +110,15 @@ nav_order: 3
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #272727;
+  color: var(--text-mid);
   white-space: nowrap;
   padding-right: 2px;
   flex-shrink: 0;
   transition: color 0.2s;
   font-style: normal;
 }
-.tm-pills:hover .tm-pill-hint { color: #3a3a3a; }
-.tm-pills--open .tm-pill-hint { color: #444; }
+.tm-pills:hover .tm-pill-hint { color: var(--text); }
+.tm-pills--open .tm-pill-hint { color: var(--text-hi); }
 </style>
 
 <!-- ALL talks count (not just US) — separate from TALKMAP_DATA which is US-only.
