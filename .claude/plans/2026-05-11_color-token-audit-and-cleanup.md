@@ -479,7 +479,7 @@ Run:
 
 Expected: exit 0. If the path is missing, record the Ruby/Bundler blocker and do not claim full build verification.
 
-- [ ] **Step 4: Browser visual pass**
+- [x] **Step 4: Browser visual pass**
 
 Verify these routes in dark and light mode:
 
@@ -519,9 +519,12 @@ Verification performed:
 - Refined Python audit for site-owned UI files returned `TOTAL_SITE_OWNED_UI 0`.
 
 Build/visual QA status:
-- Jekyll build was attempted with `/Users/hong/.rbenv/versions/3.3.7/bin/bundle exec jekyll build`, but that documented rbenv path is absent.
-- System Ruby is `2.6.10`; Bundler `2.5.18` cannot install on Ruby 2.6 because it requires Ruby `>= 3.0.0`.
-- Browser visual QA remains blocked until a Ruby 3 toolchain is available or the user approves installing/configuring one.
+- Ruby 3.3.11 was installed via Homebrew `rbenv`/`ruby-build` because Ruby 3.3.7 was not available in the current `ruby-build` definitions.
+- Bundler 2.5.18 installed successfully under Ruby 3.3.11 and `bundle install` completed.
+- `RBENV_VERSION=3.3.11 /opt/homebrew/bin/rbenv exec bundle _2.5.18_ exec jekyll build` completed successfully.
+- Build warnings only: the existing pagination warning and Dart Sass `@import` deprecation warnings for Font Awesome/Tabler imports.
+- Browser visual QA completed on `http://127.0.0.1:4000` for `/`, `/talks/`, `/football/`, `/publications/`, `/services/`, and `/dev/colors/`.
+- Dark-mode checks were repeated for `/dev/colors/`, `/talks/`, and `/football/`; the talks map dots resolved to `--accent-cool` / `--accent-warm`, and football map surfaces/markers rendered through the shared map/surface variables.
 
 Follow-up audit including `/dev/colors/`:
 - Tokenized the Color Lab dialog backdrop to `--overlay-scrim`.
