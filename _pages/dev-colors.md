@@ -108,6 +108,21 @@ nav: false
 .cl-chip--cool { color: var(--accent-cool); border: 1px solid var(--accent-cool-border); background: var(--accent-cool-bg-medium); }
 .cl-chip--danger { color: var(--accent-danger); border: 1px solid color-mix(in oklch, var(--accent-danger) 42%, transparent); }
 
+.cl-utility-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+@media (max-width: 640px) {
+  .cl-utility-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.cl-utility-tile { border: 1px solid var(--line); background: var(--surface-raised); padding: var(--space-md); min-height: 5rem; }
+.cl-utility-tile__label { display: block; font: 500 var(--fs-2xs)/1 "Geist Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-lo); margin-bottom: var(--space-sm); }
+.cl-utility-tile__sample { min-height: 2.4rem; display: flex; align-items: center; justify-content: center; color: var(--text-hi); font: var(--fs-xs)/1.3 "Geist", sans-serif; }
+.cl-utility-tile__sample--shadow-soft { background: var(--surface); box-shadow: 0 10px 24px var(--shadow-soft); }
+.cl-utility-tile__sample--shadow-medium { background: var(--surface); box-shadow: 0 12px 28px var(--shadow-medium); }
+.cl-utility-tile__sample--overlay { background: var(--surface-overlay); border: 1px solid var(--line-hi); }
+.cl-utility-tile__sample--scrim { background: var(--overlay-scrim); color: var(--ink); }
+.cl-map-sample { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xs); align-items: stretch; }
+.cl-map-sample__cell { min-height: 2.4rem; display: flex; align-items: center; justify-content: center; background: var(--map-fill); border: 1px solid var(--line); color: var(--map-label); font: 500 var(--fs-2xs)/1 "Geist Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.cl-map-sample__cell--hover { background: var(--map-fill-hover); color: var(--text-mid); }
+
 .cl-row-sample { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-xl); padding: var(--space-md) 0; border-bottom: 1px solid var(--line); position: relative; transition: padding-left var(--duration-fast) var(--ease-default), background var(--duration-fast) var(--ease-default); }
 .cl-row-sample::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent-warm); transform: scaleY(0); transform-origin: top; transition: transform var(--duration-base) var(--ease-default); }
 .cl-row-sample:hover { padding-left: var(--space-md); background: var(--surface-raised); }
@@ -121,7 +136,7 @@ nav: false
 dialog.cl-dialog { border: 1px solid var(--accent-cool-border); background: var(--surface); color: var(--text); padding: var(--space-2xl); max-width: min(720px, calc(100vw - 4rem)); max-height: 80vh; overflow: auto; }
 dialog.cl-dialog[open] { animation: cl-dialog-in var(--duration-base) var(--ease-default); }
 dialog.cl-dialog[open]::backdrop { animation: cl-backdrop-in var(--duration-base) var(--ease-default); }
-dialog.cl-dialog::backdrop { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px); }
+dialog.cl-dialog::backdrop { background: var(--overlay-scrim); backdrop-filter: blur(2px); }
 @keyframes cl-dialog-in { from { opacity: 0; transform: translateY(8px) scale(0.985); } to { opacity: 1; transform: none; } }
 @keyframes cl-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 dialog.cl-dialog h3 { font: 500 var(--fs-xs)/1 "Geist", sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-cool); margin: 0 0 var(--space-md); }
@@ -207,6 +222,43 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
   </section>
 
   <section class="cl-section">
+    <h2 class="cl-section__title">Utility tokens (derived)</h2>
+    <div class="cl-section__body">
+      <div class="cl-section__editor cl-section__editor--note">
+        These tokens are preview-only in Color Lab because they derive from the editable surface, line, and accent tokens.
+      </div>
+      <div class="cl-section__preview">
+        <div class="cl-utility-grid">
+          <div class="cl-utility-tile">
+            <span class="cl-utility-tile__label">shadow</span>
+            <div class="cl-utility-tile__sample cl-utility-tile__sample--shadow-soft">--shadow-soft</div>
+          </div>
+          <div class="cl-utility-tile">
+            <span class="cl-utility-tile__label">shadow</span>
+            <div class="cl-utility-tile__sample cl-utility-tile__sample--shadow-medium">--shadow-medium</div>
+          </div>
+          <div class="cl-utility-tile">
+            <span class="cl-utility-tile__label">overlay</span>
+            <div class="cl-utility-tile__sample cl-utility-tile__sample--overlay">--surface-overlay</div>
+          </div>
+          <div class="cl-utility-tile">
+            <span class="cl-utility-tile__label">scrim</span>
+            <div class="cl-utility-tile__sample cl-utility-tile__sample--scrim">--overlay-scrim</div>
+          </div>
+          <div class="cl-utility-tile" style="grid-column: 1 / -1;">
+            <span class="cl-utility-tile__label">map</span>
+            <div class="cl-map-sample" aria-label="Map token preview">
+              <div class="cl-map-sample__cell">AL</div>
+              <div class="cl-map-sample__cell cl-map-sample__cell--hover">GA</div>
+              <div class="cl-map-sample__cell">FL</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cl-section">
     <h2 class="cl-section__title">List row hover (uses surface-raised + accent-warm)</h2>
     <div class="cl-section__body">
       <div class="cl-section__editor cl-section__editor--note">
@@ -269,6 +321,7 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
 
   var STORAGE_KEY = 'cl-color-overrides';
   var STYLE_TAG_ID = 'cl-override-style';
+  var COLOR_INPUT_FALLBACK = '#000000';
 
   var overrides = loadOverrides();
   var defaults = {};
@@ -281,20 +334,20 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
   function getCurrentTheme() { return document.documentElement.getAttribute('data-theme') || 'dark'; }
 
   function normalizeHex(value) {
-    if (!value) return '#000000';
+    if (!value) return COLOR_INPUT_FALLBACK;
     value = value.trim();
     if (value.charAt(0) === '#') {
       if (value.length === 4) {
         return '#' + value.charAt(1) + value.charAt(1) + value.charAt(2) + value.charAt(2) + value.charAt(3) + value.charAt(3);
       }
-      return value.length === 7 ? value.toLowerCase() : '#000000';
+      return value.length === 7 ? value.toLowerCase() : COLOR_INPUT_FALLBACK;
     }
     var rgb = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
     if (rgb) {
       var toHex = function (n) { var h = Number(n).toString(16); return h.length === 1 ? '0' + h : h; };
       return '#' + toHex(rgb[1]) + toHex(rgb[2]) + toHex(rgb[3]);
     }
-    return '#000000';
+    return COLOR_INPUT_FALLBACK;
   }
 
   function captureDefaults() {
@@ -376,7 +429,7 @@ dialog.cl-dialog .cl-dialog-status { font: var(--fs-xs)/1.4 "Geist Mono", monosp
   function buildInput(tokenName, scope, label) {
     var wrap = createEl('label', { className: 'cl-input' });
     var key = scope + '.' + tokenName;
-    var current = overrides[key] || defaults[key] || '#000000';
+    var current = overrides[key] || defaults[key] || COLOR_INPUT_FALLBACK;
 
     if (label) wrap.appendChild(createEl('span', { className: 'cl-input__label', textContent: label }));
 

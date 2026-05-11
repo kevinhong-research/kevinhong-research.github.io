@@ -522,3 +522,10 @@ Build/visual QA status:
 - Jekyll build was attempted with `/Users/hong/.rbenv/versions/3.3.7/bin/bundle exec jekyll build`, but that documented rbenv path is absent.
 - System Ruby is `2.6.10`; Bundler `2.5.18` cannot install on Ruby 2.6 because it requires Ruby `>= 3.0.0`.
 - Browser visual QA remains blocked until a Ruby 3 toolchain is available or the user approves installing/configuring one.
+
+Follow-up audit including `/dev/colors/`:
+- Tokenized the Color Lab dialog backdrop to `--overlay-scrim`.
+- Added preview-only Color Lab coverage for derived utility tokens: `--shadow-soft`, `--shadow-medium`, `--surface-overlay`, `--overlay-scrim`, `--map-fill`, `--map-fill-hover`, and `--map-label`.
+- Confirmed `--accent-cool` remains an editable live token and resolves from `_sass/_themes.scss`, where it is currently `#00a060`.
+- Final audit including `/dev/colors/`: `TOTAL_SITE_OWNED_UI_EXCLUDING_FUNCTIONAL_FALLBACK 0`.
+- Remaining `/dev/colors/` literal: one intentional `COLOR_INPUT_FALLBACK = '#000000'` for the browser color input when a computed value is missing or unparsable.
