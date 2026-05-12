@@ -358,30 +358,10 @@ ul.task-list input[type="checkbox"] {
     border-bottom-color: var(--line);
   }
 
-  html[data-theme="light"] & .dropdown-menu {
-    background-color: var(--surface-raised);
-    border-color: var(--line);
-    box-shadow: 0 6px 16px var(--shadow-soft);
-
-    a:not(.active) {
-      color: var(--text-hi);
-    }
-
-    a:hover {
-      color: var(--accent-warm);
-      background-color: var(--surface);
-    }
-
-    .dropdown-divider {
-      border-top-color: var(--line) !important;
-    }
-  }
-
-  html[data-theme="light"] & .dropdown-item.active,
-  html[data-theme="light"] & .dropdown-item:active {
-    background-color: var(--accent-warm);
-    color: var(--surface) !important;
-  }
+  /* Dropdown styling is owned by _dropdown.scss (single source of truth
+     for both themes). Earlier light-mode overrides lived here and were
+     duplicating/conflicting with that file — they've been removed so
+     _dropdown.scss can drive consistent behavior across themes. */
 
   .navbar-brand.social {
     padding-bottom: 0;

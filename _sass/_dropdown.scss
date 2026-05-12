@@ -94,8 +94,8 @@
 
 .nav-item.dropdown .dropdown-item:hover,
 .nav-item.dropdown .dropdown-item:focus {
-  color: var(--global-text-color);
-  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
+  color: var(--text-hi);
+  background: var(--surface);
 }
 
 /* Active page marker — subtle colored text, no full fill.
@@ -128,18 +128,9 @@ html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
   color: var(--global-theme-color) !important;
 }
 
-html[data-theme="light"] .nav-item.dropdown .dropdown-item:hover,
-html[data-theme="light"] .nav-item.dropdown .dropdown-item:focus {
-  color: var(--accent-warm);
-  background: var(--surface);
-}
-
-html[data-theme="light"] .nav-item.dropdown .dropdown-item.active,
-html[data-theme="light"] .nav-item.dropdown .dropdown-item:active {
-  color: var(--accent-warm) !important;
-  background-color: transparent !important;
-  font-weight: 500;
-}
+/* Hover and active dropdown-item rules above apply identically to both
+   themes — base uses --text-hi for hover text + --surface for hover bg,
+   and --global-theme-color (= accent-cool) for the active marker. */
 
 /* ── REMOVE BROWSER'S FOCUS RING ─────────────────────────── */
 .nav-item.dropdown > .nav-link:focus,
