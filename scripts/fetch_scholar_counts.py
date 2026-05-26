@@ -63,6 +63,13 @@ ROOT = Path(__file__).resolve().parent.parent
 PUBS_FILE = ROOT / "_data" / "publications.yml"
 OUT_FILE = ROOT / "_data" / "scholar_counts.yml"
 
+# How many of Scholar's top hits to consider per paper before giving up.
+# Scholar occasionally surfaces a junk stub (PDF-parse artifact, no year/DOI,
+# 0 cites) ahead of the real entry, e.g. 10.25300/MISQ/2018/14105. Walking
+# past failing hits to find a real verify_match() pass costs no extra HTTP
+# requests (all within the same result page).
+MAX_SCHOLAR_HITS = 5
+
 
 def normalize_doi(doi: str) -> str:
     doi = (doi or "").strip()
@@ -209,9 +216,21 @@ def scrape(args) -> int:
         author_last = first_author_last_name(pub.get("authors", []))
         query = f"{title} {author_last}".strip()
 
+        matched = None
+        matched_sim = None
+        last_reason = "no Scholar results"
         try:
             results = scholarly.search_pubs(query)
-            first = next(results, None)
+            for _ in range(MAX_SCHOLAR_HITS):
+                candidate = next(results, None)
+                if candidate is None:
+                    break
+                ok, reason, sim = verify_match(title, year, doi, candidate)
+                if ok:
+                    matched = candidate
+                    matched_sim = sim
+                    break
+                last_reason = reason
         except MaxTriesExceededException:
             print(f"[BLOCKED] Scholar blocked the IP at paper #{i+1} ({doi}).")
             print(f"          {n_updated} updated, {n_unchanged} unchanged before block.")
@@ -223,28 +242,23 @@ def scrape(args) -> int:
             n_failed += 1
             continue
 
-        if first is None:
-            print(f"[fail] {doi:<40} (no Scholar results)")
+        if matched is None:
+            print(f"[fail] {doi:<40} ({last_reason})")
             n_failed += 1
         else:
-            ok, reason, sim = verify_match(title, year, doi, first)
-            if not ok:
-                print(f"[fail] {doi:<40} ({reason})")
+            new_count = matched.get("num_citations")
+            if new_count is None:
+                print(f"[fail] {doi:<40} (no num_citations field)")
                 n_failed += 1
             else:
-                new_count = first.get("num_citations")
-                if new_count is None:
-                    print(f"[fail] {doi:<40} (no num_citations field)")
-                    n_failed += 1
+                old = counts.get(doi, {}).get("count") if isinstance(counts.get(doi), dict) else None
+                arrow = f"{old} → {new_count}" if old is not None else f"{new_count}"
+                print(f"[ok]   {doi:<40} {arrow}   (match {matched_sim:.2f})")
+                counts[doi] = {"count": int(new_count), "title_match": round(matched_sim, 3)}
+                if old == new_count:
+                    n_unchanged += 1
                 else:
-                    old = counts.get(doi, {}).get("count") if isinstance(counts.get(doi), dict) else None
-                    arrow = f"{old} → {new_count}" if old is not None else f"{new_count}"
-                    print(f"[ok]   {doi:<40} {arrow}   (match {sim:.2f})")
-                    counts[doi] = {"count": int(new_count), "title_match": round(sim, 3)}
-                    if old == new_count:
-                        n_unchanged += 1
-                    else:
-                        n_updated += 1
+                    n_updated += 1
 
         # Persist after every paper, regardless of outcome — protects against block mid-run.
         if not args.dry_run and i < len(pubs) - 1:

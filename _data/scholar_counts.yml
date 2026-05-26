@@ -77,10 +77,15 @@ counts:
   10.1287/mnsc.2016.2715:
     count: 577
     title_match: 1.0
-  # 10.25300/misq/2018/14105 removed: Scholar returns a metadata-corrupt stub
-  # (author=['IV Regression'], year=NA, no DOI, 0 cites) as the only hit. The
-  # tightened verify_match() now rejects such entries — re-running won't
-  # re-add it. Badge falls back to OpenAlex (40) for this paper.
+  10.25300/misq/2018/14105:
+    count: 240
+    title_match: 1.0
+    # Manually verified from Scholar web UI (https://scholar.google.com/scholar?q=).
+    # scholarly's first hit on this DOI is a metadata-corrupt stub
+    # (author=['IV Regression'], year=NA, 0 cites). The next refresh, with
+    # MAX_SCHOLAR_HITS=5, should walk past the stub and find the real
+    # entry (Hong, Hu, Burtch; MIS Quarterly 2018; 240 cites) which passes
+    # verify_match via year=2018.
   10.1287/mnsc.2017.2852:
     count: 244
     title_match: 1.0
