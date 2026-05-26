@@ -4,7 +4,73 @@
 
 ---
 
-## 2026-05-11 — Session 16 (latest)
+## 2026-05-25 — Session 17 (latest)
+
+### Goal
+Ship a hybrid Google Scholar + OpenAlex citation pipeline so per-paper counts on `/publications/` reflect Scholar's number when available, with OpenAlex as the fallback. Pipeline must run locally (residential IP); Scholar blocks datacenter / CI IPs.
+
+### What was done
+
+**Plan + audit** (`.claude/plans/2026-05-25_scholar-citations-pipeline.md`)
+- Drafted plan; ran independent audit via `feature-dev:code-reviewer` subagent.
+- Audit caught a real cache-overwrite bug (sessionStorage blob from before this feature would overwrite Scholar values on next visit). Fixed by bumping cache key + deleting Scholar-covered DOIs from `doiMap` before the OpenAlex pass.
+- Audit also tightened title-similarity threshold (tiered: `< 8 words → ≥ 0.92`, `≥ 8 → ≥ 0.85`) and added DOI cross-check when Scholar returns one.
+
+**Scraper** (`scripts/fetch_scholar_counts.py`, `scripts/requirements-scholar.txt`)
+- Reads `_data/publications.yml`, queries Scholar via `scholarly`, writes `_data/scholar_counts.yml` atomically after every paper.
+- Skips `forthcoming: true` and DOI-less entries. Sleeps `random.uniform(15, 45)` s between requests.
+- CLI: `--limit N`, `--only DOI`, `--dry-run`, `--no-jitter`.
+- On `MaxTriesExceededException` (Scholar block), exits with partial progress preserved.
+- Normalizes DOIs (lowercased, strips `https?://doi.org/` prefix). Matches JS normalization.
+
+**Frontend** (`_pages/publications.md`, `assets/js/research.js`)
+- `publications.md` injects `window.SCHOLAR_COUNTS` and `window.SCHOLAR_COUNTS_FETCHED_AT` from the data file. Liquid guards correctly handle missing/empty data files.
+- `research.js fetchCitations()` now: (1) applies Scholar synchronously, (2) deletes covered DOIs from `doiMap`, (3) calls OpenAlex for residual only. Cache key bumped to `nh_openalex_citations_v2`. Anchors tagged with `data-cite-source="scholar"` or `"openalex"`.
+
+**Documentation** (`.claude/CLAUDE.md`, `.gitignore`)
+- Added "Scholar citation pipeline" section with one-time setup + weekly refresh commands.
+- Added `_data/scholar_counts.yml` row to Key Data Files table.
+- Added `.venv-scholar/` to `.gitignore`.
+
+**QA** (Jekyll preview at 127.0.0.1:4000)
+- Verified Liquid emits `window.SCHOLAR_COUNTS` correctly (empty + populated states).
+- Verified 39 anchors all fall through to OpenAlex when SCHOLAR_COUNTS is empty (regression check).
+- Verified Scholar override: seeded fixture with 3 DOIs at 999/888/777; those 3 anchors showed Scholar values + tag, remaining 36 showed OpenAlex.
+- Verified the audit-flagged cache scenario: pre-seeded old + new sessionStorage cache blobs containing Scholar DOIs; reload still showed Scholar values (the `delete doiMap[doi]` guard works).
+- No console errors throughout.
+- Note: had to temporarily set `.ruby-version` to `3.3.7` (3.3.11 not installed on this machine); restored to `3.3.11` before commit. Patch-level diff didn't affect QA.
+
+### Current status
+
+- **Done**: Pipeline shipped. Empty `_data/scholar_counts.yml` is committed — site behavior is identical to pre-change (OpenAlex everywhere) until Kevin runs the scraper.
+- **Pending**: First real scraper run from Kevin's laptop. Until then, `data-cite-source` on every anchor will be `openalex`.
+
+### Important context
+
+- **Run from a residential IP only.** GitHub Actions IPs are blocklisted by Scholar — never wire this into CI.
+- **One-time setup**: `python3 -m venv .venv-scholar && .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt`.
+- **Weekly refresh**: `.venv-scholar/bin/python scripts/fetch_scholar_counts.py` → review diff → commit `_data/scholar_counts.yml` → push.
+- **Rollback**: `git rm _data/scholar_counts.yml`. Site falls back to pure OpenAlex (current behavior).
+- **Forthcoming + editorial DOIs** are skipped by the scraper. They still show "—" because OpenAlex also typically doesn't have them.
+- **MISQ DOIs are mixed-case** (`10.25300/MISQ/...`); lowercase normalization on both sides keeps the lookup chain self-consistent.
+
+### Decisions already made
+
+- Keep the "scholar" badge label and icon. After the first scraper run, it's accurate for the covered DOIs; for the residual, it's a small honest fudge that says "this is a citation count" without lying about provider.
+- Per-entry `fetched_at` and `scholar_id` were dropped from the YAML — over-engineered for 39 papers.
+- `--rebuild` flag dropped — `rm _data/scholar_counts.yml && python scripts/fetch_scholar_counts.py` is equivalent.
+- Title similarity uses lowercased + punctuation-stripped Levenshtein; tiered threshold by word count.
+- Source field via `data-cite-source` attribute (not visible in the badge yet); leaves room for future tooltip "Source: Google Scholar".
+
+### Next best step
+
+- **Primary action**: Kevin runs `python3 -m venv .venv-scholar && .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt && .venv-scholar/bin/python scripts/fetch_scholar_counts.py`. Expect ~10-20 minutes. If Scholar blocks the IP, partial progress survives — retry from a different network or after 24 h.
+- **Secondary**: consider exposing the source via a tooltip on the badge (`title="Google Scholar (updated YYYY-MM-DD)"` vs. `"OpenAlex (live)"`). Small CSS-free addition.
+- **Tier 3 still open** from prior sessions: T3.11 jQuery/Bootstrap-bundle replacement (~100 KB cut), T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
+
+---
+
+## 2026-05-11 — Session 16
 
 ### Goal
 Complete the color-token cleanup follow-up: merge the audited color hardening branch into local `main`, document the session, and push `main` to `origin/main`.
