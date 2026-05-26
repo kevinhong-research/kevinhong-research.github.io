@@ -127,10 +127,12 @@ def verify_match(our_title: str, our_year: int, our_doi: str, scholar_pub: dict)
     """
     Returns (is_match, reason, title_similarity).
 
-    Three checks, all must pass:
-      - DOI cross-check when Scholar provides one
-      - Title similarity (tiered threshold by word count)
-      - Year within ±1
+    Title similarity is necessary. Beyond that we require at least ONE
+    positive identity confirmation — either DOI or year. Title alone is not
+    enough because Scholar occasionally returns metadata-poor stubs (e.g.
+    PDF-parse artifacts where author=['IV Regression'], year='NA', doi='')
+    that match the title perfectly but represent a junk entry with 0 cites
+    rather than the real published version.
     """
     bib = scholar_pub.get("bib", {}) or {}
     s_title = bib.get("title", "") or ""
@@ -139,25 +141,33 @@ def verify_match(our_title: str, our_year: int, our_doi: str, scholar_pub: dict)
 
     sim = title_ratio(our_title, s_title)
 
-    # DOI cross-check (hard mismatch wins)
-    if s_doi:
-        if normalize_doi(s_doi) != normalize_doi(our_doi):
-            return False, f"doi-mismatch (scholar={s_doi!r})", sim
-
     # Title similarity threshold (tiered)
     word_count = len(our_title.split())
     threshold = 0.92 if word_count < 8 else 0.85
     if sim < threshold:
         return False, f"title-similarity {sim:.2f} < {threshold:.2f} (got {s_title!r})", sim
 
-    # Year proximity
+    # DOI cross-check: hard mismatch wins; matching DOI is positive ID.
+    doi_confirmed = False
+    if s_doi:
+        if normalize_doi(s_doi) != normalize_doi(our_doi):
+            return False, f"doi-mismatch (scholar={s_doi!r})", sim
+        doi_confirmed = True
+
+    # Year proximity: hard mismatch wins; matching year is positive ID.
+    year_confirmed = False
     try:
         s_year_int = int(s_year)
         if abs(s_year_int - int(our_year)) > 1:
             return False, f"year {s_year_int} ≠ {our_year} ±1", sim
+        year_confirmed = True
     except (TypeError, ValueError):
-        # Some Scholar results have no year — accept if title+DOI checks passed
         pass
+
+    # Require at least one positive ID. Title alone is insufficient — see
+    # docstring for the false-positive case this guards against.
+    if not (doi_confirmed or year_confirmed):
+        return False, "metadata-poor entry (no year/DOI to confirm match)", sim
 
     return True, "ok", sim
 
