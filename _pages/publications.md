@@ -109,6 +109,19 @@ window.PUBLICATIONS = [
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
 ];
+
+// Google Scholar citation counts — refreshed weekly via scripts/fetch_scholar_counts.py.
+// Keys are normalized DOIs (lowercased, no doi.org/ prefix). Empty when stale or unrun.
+// research.js prefers these; OpenAlex fills the gap for DOIs not present here.
+window.SCHOLAR_COUNTS = {
+{%- if site.data.scholar_counts.counts -%}
+{%- assign entries = site.data.scholar_counts.counts -%}
+{%- for entry in entries -%}
+  {{ entry[0] | jsonify }}: {{ entry[1].count | jsonify }}{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+{%- endif -%}
+};
+window.SCHOLAR_COUNTS_FETCHED_AT = {{ site.data.scholar_counts.fetched_at | default: "" | jsonify }};
 </script>
 
 <script src="{{ '/assets/js/research.js' | relative_url }}"></script>

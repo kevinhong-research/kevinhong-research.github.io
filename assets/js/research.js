@@ -705,17 +705,21 @@
     document.querySelectorAll('.nh-reveal').forEach(r => obs.observe(r));
   }
 
-  /* ── CITATION COUNTS (OpenAlex) ────────────────────────────
-     Batches all DOIs into a single OpenAlex request.
-     Pipes in the filter string MUST be literal (not %7C).
+  /* ── CITATION COUNTS (Scholar + OpenAlex hybrid) ───────────
+     Apply Google Scholar counts synchronously from window.SCHOLAR_COUNTS
+     (build-time data from _data/scholar_counts.yml, refreshed weekly by
+     scripts/fetch_scholar_counts.py). For DOIs Scholar doesn't cover,
+     fall back to a live OpenAlex API call, batched as one request.
+     DOIs are lowercased on both sides; see scrape script for rationale.
      Falls back gracefully on any error — dash stays in place.
   ──────────────────────────────────────────────────────────── */
-  function applyCountsToDOM(counts, doiMap) {
+  function applyCountsToDOM(counts, doiMap, source) {
     Object.entries(counts).forEach(([doi, count]) => {
       const anchor = doiMap[doi];
       if (!anchor || count == null) return;
       const span = anchor.querySelector('.pub-cite-count');
       if (span) { span.textContent = Number(count).toLocaleString(); }
+      if (source) anchor.dataset.citeSource = source;
     });
   }
 
@@ -726,7 +730,11 @@
     if (citationsApplied) return;
     citationsApplied = true;
 
-    const CACHE_KEY = 'nh_openalex_citations';
+    /* Cache key bumped from 'nh_openalex_citations' to invalidate any blob
+       returning visitors had cached before Scholar data shipped — the old
+       blob contained OpenAlex counts for all DOIs and would otherwise
+       overwrite freshly-applied Scholar values on next page load. */
+    const CACHE_KEY = 'nh_openalex_citations_v2';
     const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
     const anchors = Array.from(document.querySelectorAll('.pub-cite[data-doi]'))
@@ -735,14 +743,30 @@
 
     const doiMap = {};
     anchors.forEach(a => { doiMap[a.dataset.doi.toLowerCase()] = a; });
+
+    /* 1. Scholar pass — synchronous, no network. */
+    const scholar = window.SCHOLAR_COUNTS || {};
+    Object.entries(scholar).forEach(([doi, count]) => {
+      if (doiMap[doi] != null && count != null) {
+        const span = doiMap[doi].querySelector('.pub-cite-count');
+        if (span) span.textContent = Number(count).toLocaleString();
+        doiMap[doi].dataset.citeSource = 'scholar';
+        /* Remove so OpenAlex pass (and its sessionStorage cache) cannot
+           overwrite a Scholar value with stale OpenAlex data. */
+        delete doiMap[doi];
+      }
+    });
+
+    /* 2. OpenAlex pass — live fetch for the residual DOIs only. */
     const dois = Object.keys(doiMap);
+    if (!dois.length) return;
 
     try {
       const raw = sessionStorage.getItem(CACHE_KEY);
       if (raw) {
         const cached = JSON.parse(raw);
         if (cached && (Date.now() - cached.ts < CACHE_TTL)) {
-          applyCountsToDOM(cached.counts, doiMap);
+          applyCountsToDOM(cached.counts, doiMap, 'openalex');
           return;
         }
       }
@@ -767,7 +791,7 @@
         counts[bare] = work.cited_by_count;
       });
 
-      applyCountsToDOM(counts, doiMap);
+      applyCountsToDOM(counts, doiMap, 'openalex');
 
       try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), counts })); }
       catch (_) {}
