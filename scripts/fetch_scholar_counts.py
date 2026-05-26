@@ -70,6 +70,20 @@ OUT_FILE = ROOT / "_data" / "scholar_counts.yml"
 # requests (all within the same result page).
 MAX_SCHOLAR_HITS = 5
 
+# Jitter range (seconds) between papers. Conservative enough that 39-paper
+# runs don't reliably hit Scholar's rate limit. Bumped from 15-45s after
+# observing a block at paper #39/39 — the cumulative request rate matters
+# more than the per-request spacing, so longer mean delay reduces block
+# probability on full refreshes.
+JITTER_MIN_SEC = 30
+JITTER_MAX_SEC = 90
+
+# Default freshness threshold: a paper whose count was successfully fetched
+# within the last N days is skipped on the next run. Combined with the
+# always-retry-flagged behaviour, this makes restart-after-block essentially
+# free — only the unfetched + flagged subset is re-queried.
+DEFAULT_MAX_AGE_DAYS = 7
+
 
 def normalize_doi(doi: str) -> str:
     doi = (doi or "").strip()
@@ -180,13 +194,15 @@ def verify_match(our_title: str, our_year: int, our_doi: str, scholar_pub: dict)
 
 
 def build_payload(counts: dict, flagged: dict) -> dict:
+    # Sort by DOI for deterministic diffs regardless of iteration order
+    # (we shuffle the iteration order to spread block risk across runs).
+    sorted_counts = {k: counts[k] for k in sorted(counts)}
     payload = {
         "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "source": "google_scholar (via scholarly)",
-        "counts": counts,
+        "counts": sorted_counts,
     }
     if flagged:
-        # Stable order so the file diffs cleanly week to week.
         payload["flagged_for_review"] = {k: flagged[k] for k in sorted(flagged)}
     return payload
 
@@ -202,6 +218,13 @@ def scrape(args) -> int:
     flagged_raw = existing.get("flagged_for_review") or {}
     flagged = dict(flagged_raw) if isinstance(flagged_raw, dict) else {}
 
+    # Backfill per-entry fetched_at from the top-level value if missing
+    # (migrates older scholar_counts.yml files that pre-date per-entry timestamps).
+    top_fetched_at = existing.get("fetched_at") or ""
+    for entry in counts.values():
+        if isinstance(entry, dict) and "fetched_at" not in entry and top_fetched_at:
+            entry["fetched_at"] = top_fetched_at
+
     if args.only:
         target_doi = normalize_doi(args.only)
         pubs = [p for p in pubs if normalize_doi(p.get("doi", "")) == target_doi]
@@ -210,8 +233,15 @@ def scrape(args) -> int:
 
     if args.limit:
         pubs = pubs[: args.limit]
+    elif not args.only:
+        # Shuffle on full-refresh so a block doesn't always strike the same
+        # paper. --only and --limit stay deterministic for repeatability.
+        random.shuffle(pubs)
 
-    n_updated = n_unchanged = n_skipped = n_failed = n_zero = 0
+    now = dt.datetime.now(dt.timezone.utc)
+    max_age = dt.timedelta(days=args.max_age_days) if args.max_age_days > 0 else None
+
+    n_updated = n_unchanged = n_skipped = n_failed = n_zero = n_fresh = 0
     blocked = False
 
     for i, pub in enumerate(pubs):
@@ -228,6 +258,23 @@ def scrape(args) -> int:
         # Forthcoming papers ARE attempted: working-paper cites are exactly
         # where Scholar > OpenAlex. The verify_match() guard (title sim + year
         # ±1 + DOI cross-check) is strict enough to reject wrong matches.
+
+        # Freshness skip: if we have a recent good fetch for this DOI and
+        # it isn't flagged, don't re-query Scholar. Saves the request budget
+        # for stale + flagged papers. Disable with --max-age-days 0.
+        if max_age is not None and doi not in flagged:
+            existing_entry = counts.get(doi) or {}
+            ts = existing_entry.get("fetched_at") if isinstance(existing_entry, dict) else None
+            if ts:
+                try:
+                    fetched = dt.datetime.fromisoformat(ts)
+                    age = now - fetched
+                    if age < max_age:
+                        print(f"[fresh] {doi:<40} (fetched {age.days}d ago, < {args.max_age_days}d)")
+                        n_fresh += 1
+                        continue  # no Scholar call, no jitter, no write needed
+                except (ValueError, TypeError):
+                    pass
 
         author_last = first_author_last_name(pub.get("authors", []))
         query = f"{title} {author_last}".strip()
@@ -282,7 +329,11 @@ def scrape(args) -> int:
                 old = counts.get(doi, {}).get("count") if isinstance(counts.get(doi), dict) else None
                 arrow = f"{old} → {new_count}" if old is not None else f"{new_count}"
                 print(f"[ok]   {doi:<40} {arrow}   (match {matched_sim:.2f})")
-                counts[doi] = {"count": int(new_count), "title_match": round(matched_sim, 3)}
+                counts[doi] = {
+                    "count": int(new_count),
+                    "title_match": round(matched_sim, 3),
+                    "fetched_at": now.isoformat(timespec="seconds"),
+                }
                 # Confident match → clear any stale flag.
                 flagged.pop(doi, None)
                 if old == new_count:
@@ -296,7 +347,7 @@ def scrape(args) -> int:
 
         # Jitter (skip on the last paper)
         if not args.no_jitter and i < len(pubs) - 1:
-            delay = random.uniform(15, 45)
+            delay = random.uniform(JITTER_MIN_SEC, JITTER_MAX_SEC)
             time.sleep(delay)
 
     # Final write
@@ -306,6 +357,7 @@ def scrape(args) -> int:
 
     print(
         f"\nSummary: {n_updated} updated, {n_unchanged} unchanged, "
+        f"{n_fresh} fresh-skipped, "
         f"{n_zero} Scholar=0 (flagged), {n_skipped} skipped, {n_failed} failed (flagged)."
     )
     if flagged:
@@ -319,10 +371,15 @@ def scrape(args) -> int:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--limit", type=int, help="Only attempt first N publications.")
+    ap.add_argument("--limit", type=int, help="Only attempt first N publications (deterministic order).")
     ap.add_argument("--only", type=str, help="Only attempt a single DOI.")
     ap.add_argument("--dry-run", action="store_true", help="Fetch but don't write.")
-    ap.add_argument("--no-jitter", action="store_true", help="Disable 15-45 s sleep (debugging only).")
+    ap.add_argument("--no-jitter", action="store_true",
+                    help=f"Disable {JITTER_MIN_SEC}-{JITTER_MAX_SEC} s sleep between papers (debugging only).")
+    ap.add_argument("--max-age-days", type=int, default=DEFAULT_MAX_AGE_DAYS,
+                    help=f"Skip papers whose count was fetched within the last N days "
+                         f"(default {DEFAULT_MAX_AGE_DAYS}; 0 disables — refetch everything). "
+                         f"Flagged papers are always re-queried regardless.")
     args = ap.parse_args()
 
     if not PUBS_FILE.exists():

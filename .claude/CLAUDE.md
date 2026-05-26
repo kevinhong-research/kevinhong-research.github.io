@@ -203,10 +203,20 @@ What it does, in order:
 Smoke tests and partial refreshes pass flags straight to the Python scraper:
 
 ```bash
-./scripts/refresh_scholar.sh --limit 3       # first 3 papers (~90 s)
+./scripts/refresh_scholar.sh --limit 3       # first 3 papers (~3 min)
 ./scripts/refresh_scholar.sh --only 10.1287/isre.2022.1160
-./scripts/refresh_scholar.sh --dry-run       # fetch only, no write/commit
+./scripts/refresh_scholar.sh --dry-run       # validate freshness/skip paths, no write
+./scripts/refresh_scholar.sh --max-age-days 0  # force re-fetch of every paper
 ```
+
+**Freshness skip + restart-after-block:** the scraper records when each
+DOI's count was last verified. On the next run, any paper whose count is
+under `--max-age-days N` (default 7) is auto-skipped — no Scholar call,
+no jitter. After a Scholar block mid-run, you can re-run *immediately*
+once the block clears: the 33 successful papers from last time will be
+skipped as fresh, leaving only the ~6 failed/blocked ones to retry. This
+also distributes block risk across runs — a full refresh shuffles paper
+order so the same paper isn't always at position #39.
 
 #### Manual three-step equivalent
 
