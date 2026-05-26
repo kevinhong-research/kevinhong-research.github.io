@@ -218,6 +218,30 @@ git diff _data/scholar_counts.yml
 git add _data/scholar_counts.yml && git commit -m "data: refresh scholar citation counts" && git push
 ```
 
+#### Manual-review queue
+
+The scraper auto-skips two suspicious result patterns to avoid wrong
+attributions on the live site:
+
+1. **Scholar returns 0 cites** for an indexed paper — almost always a
+   metadata-corrupt stub that happened to pass the title match.
+2. **No valid candidate** in the top 5 Scholar hits.
+
+In both cases the scraper:
+- Does **not** write a count (frontend auto-falls back to OpenAlex).
+- Preserves any existing count untouched (so manually-pinned values stick).
+- Adds the DOI to a `flagged_for_review:` block at the bottom of
+  `_data/scholar_counts.yml` with a one-line reason.
+
+After each refresh, scan the `flagged_for_review:` block in the file
+(or in `git diff _data/scholar_counts.yml`). If you confirm the real
+Scholar count via the web UI, edit the `counts:` section directly to
+pin the verified value — the next refresh will leave it alone unless
+Scholar starts returning a confident match.
+
+Flags auto-clear on the next refresh that produces a confident nonzero
+count for the same DOI.
+
 #### Rollback
 
 ```bash

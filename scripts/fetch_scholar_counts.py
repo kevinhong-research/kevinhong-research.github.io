@@ -179,12 +179,28 @@ def verify_match(our_title: str, our_year: int, our_doi: str, scholar_pub: dict)
     return True, "ok", sim
 
 
+def build_payload(counts: dict, flagged: dict) -> dict:
+    payload = {
+        "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        "source": "google_scholar (via scholarly)",
+        "counts": counts,
+    }
+    if flagged:
+        # Stable order so the file diffs cleanly week to week.
+        payload["flagged_for_review"] = {k: flagged[k] for k in sorted(flagged)}
+    return payload
+
+
 def scrape(args) -> int:
     with PUBS_FILE.open() as f:
         pubs = yaml.safe_load(f) or []
 
     existing = load_existing()
     counts = dict(existing.get("counts") or {})
+    # flagged_for_review: { doi: "reason string" } — preserved across runs,
+    # cleared when a DOI later succeeds with a non-zero count.
+    flagged_raw = existing.get("flagged_for_review") or {}
+    flagged = dict(flagged_raw) if isinstance(flagged_raw, dict) else {}
 
     if args.only:
         target_doi = normalize_doi(args.only)
@@ -195,7 +211,7 @@ def scrape(args) -> int:
     if args.limit:
         pubs = pubs[: args.limit]
 
-    n_updated = n_unchanged = n_skipped = n_failed = 0
+    n_updated = n_unchanged = n_skipped = n_failed = n_zero = 0
     blocked = False
 
     for i, pub in enumerate(pubs):
@@ -243,18 +259,32 @@ def scrape(args) -> int:
             continue
 
         if matched is None:
-            print(f"[fail] {doi:<40} ({last_reason})")
+            # No valid match in MAX_SCHOLAR_HITS. Existing count (if any)
+            # is preserved; we just flag for manual review and skip the write.
+            print(f"[fail] {doi:<40} ({last_reason}) — flagged for review")
+            flagged[doi] = f"no match in {MAX_SCHOLAR_HITS} hits: {last_reason}"
             n_failed += 1
         else:
             new_count = matched.get("num_citations")
             if new_count is None:
-                print(f"[fail] {doi:<40} (no num_citations field)")
+                print(f"[fail] {doi:<40} (no num_citations field) — flagged for review")
+                flagged[doi] = "Scholar result had no num_citations field"
                 n_failed += 1
+            elif int(new_count) == 0:
+                # Scholar = 0 is almost always a junk-stub false positive
+                # (metadata-corrupt entry that happened to pass verify_match).
+                # Don't write; flag for review; let frontend fall back to OpenAlex.
+                # Any prior count is preserved untouched.
+                print(f"[zero] {doi:<40} Scholar=0 — flagged for review, OpenAlex will fill in")
+                flagged[doi] = "Scholar returned 0 cites — likely metadata-poor match; verify manually"
+                n_zero += 1
             else:
                 old = counts.get(doi, {}).get("count") if isinstance(counts.get(doi), dict) else None
                 arrow = f"{old} → {new_count}" if old is not None else f"{new_count}"
                 print(f"[ok]   {doi:<40} {arrow}   (match {matched_sim:.2f})")
                 counts[doi] = {"count": int(new_count), "title_match": round(matched_sim, 3)}
+                # Confident match → clear any stale flag.
+                flagged.pop(doi, None)
                 if old == new_count:
                     n_unchanged += 1
                 else:
@@ -262,12 +292,7 @@ def scrape(args) -> int:
 
         # Persist after every paper, regardless of outcome — protects against block mid-run.
         if not args.dry_run and i < len(pubs) - 1:
-            payload = {
-                "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-                "source": "google_scholar (via scholarly)",
-                "counts": counts,
-            }
-            atomic_write_yaml(payload)
+            atomic_write_yaml(build_payload(counts, flagged))
 
         # Jitter (skip on the last paper)
         if not args.no_jitter and i < len(pubs) - 1:
@@ -276,18 +301,16 @@ def scrape(args) -> int:
 
     # Final write
     if not args.dry_run:
-        payload = {
-            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-            "source": "google_scholar (via scholarly)",
-            "counts": counts,
-        }
-        atomic_write_yaml(payload)
+        atomic_write_yaml(build_payload(counts, flagged))
         print(f"\nWrote {OUT_FILE.relative_to(ROOT)}")
 
     print(
         f"\nSummary: {n_updated} updated, {n_unchanged} unchanged, "
-        f"{n_skipped} skipped, {n_failed} failed."
+        f"{n_zero} Scholar=0 (flagged), {n_skipped} skipped, {n_failed} failed (flagged)."
     )
+    if flagged:
+        print(f"\n{len(flagged)} paper(s) flagged for manual review — see "
+              f"`flagged_for_review:` section of {OUT_FILE.relative_to(ROOT)}.")
     if blocked:
         print("Run was interrupted by a Scholar block; partial progress preserved.")
         return 2
