@@ -186,17 +186,15 @@ def scrape(args) -> int:
         doi = normalize_doi(doi_raw)
         title = pub.get("title", "")
         year = pub.get("year")
-        forthcoming = pub.get("forthcoming", False)
 
         if not doi:
             print(f"[skip] (no DOI)                              {title[:60]}")
             n_skipped += 1
             continue
 
-        if forthcoming:
-            print(f"[skip] {doi:<40} (forthcoming)")
-            n_skipped += 1
-            continue
+        # Forthcoming papers ARE attempted: working-paper cites are exactly
+        # where Scholar > OpenAlex. The verify_match() guard (title sim + year
+        # ±1 + DOI cross-check) is strict enough to reject wrong matches.
 
         author_last = first_author_last_name(pub.get("authors", []))
         query = f"{title} {author_last}".strip()
