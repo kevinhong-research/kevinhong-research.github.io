@@ -94,8 +94,8 @@ Top-level `fetched_at` reflects the run that produced this file. Per-entry times
 - Existing `_data/scholar_counts.yml` if present (used as a starting point — we update rather than rebuild from scratch, so a transient block on one paper doesn't lose 38 good entries).
 
 ### Per-paper algorithm
-1. Skip if `forthcoming: true` (often no citations yet, and Scholar's online-first matching is noisy).
-2. Skip if paper has no DOI.
+1. Skip if paper has no DOI.
+2. *(Previously skipped forthcoming papers. Removed — working-paper cites are exactly where Scholar beats OpenAlex, and the match-verification step below is strict enough to reject wrong matches via the DOI cross-check.)*
 3. Build query: `title + " " + first_author_last` (free-text, no field operators — Scholar doesn't support them).
 4. Take first hit from `scholarly.search_pubs(query)`.
 5. **Verify match (all three must hold):**
@@ -253,7 +253,7 @@ git push
 | Scholar blocks the laptop IP | Run weekly (low frequency), large jitter (15-45 s). If blocked, wait 24 h or use a different network. |
 | `scholarly` package breaks | Pin version in requirements file. Bump deliberately. |
 | Title-mismatch false positive (wrong paper's count attributed) | Title similarity threshold of 0.85 + year ±1 check. Errs on the side of skip. |
-| Editorial / forthcoming papers have no Scholar entry | Skipped explicitly in script; fall back to OpenAlex (which also won't have them) → badge stays "—". Pre-existing behaviour, not regressed. |
+| Editorial / forthcoming papers have no Scholar entry | If Scholar returns nothing, `search_pubs` yields no first hit → `[fail]` log + skip. If Scholar returns a wrong paper, `verify_match()` rejects it via title + year + DOI cross-check → `[fail]` log + skip. Either way the badge falls back to OpenAlex → typically "—". |
 | Data file goes stale | Top-level `fetched_at` is displayed in tooltip; operator notices visually. |
 | Build fails because data file is missing | Liquid guards (`{% if site.data.scholar_counts %}`) — empty `SCHOLAR_COUNTS = {}` is valid JS. |
 
