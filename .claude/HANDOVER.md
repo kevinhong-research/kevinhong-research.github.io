@@ -64,7 +64,7 @@ Ship a hybrid Google Scholar + OpenAlex citation pipeline so per-paper counts on
 
 ### Next best step
 
-- **Primary action**: Kevin runs `python3 -m venv .venv-scholar && .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt && .venv-scholar/bin/python scripts/fetch_scholar_counts.py`. Expect ~10-20 minutes. If Scholar blocks the IP, partial progress survives — retry from a different network or after 24 h.
+- **Primary action**: one-time setup (`python3 -m venv .venv-scholar && .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt`), then run the weekly one-liner `./scripts/refresh_scholar.sh`. Expect ~10-20 minutes. The script auto-commits and pushes only when counts changed; on Scholar block, it commits partial progress and exits. Tags `(partial — IP blocked mid-run)` if interrupted. Re-run safely any time — it's a no-op when nothing moved.
 - **Secondary**: consider exposing the source via a tooltip on the badge (`title="Google Scholar (updated YYYY-MM-DD)"` vs. `"OpenAlex (live)"`). Small CSS-free addition.
 - **Tier 3 still open** from prior sessions: T3.11 jQuery/Bootstrap-bundle replacement (~100 KB cut), T3.13 earn the green Currently dot, T3.14 football×talks crosslink.
 
