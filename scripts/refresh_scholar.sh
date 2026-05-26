@@ -21,10 +21,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT" || exit 1
 
 if [ ! -x ".venv-scholar/bin/python" ]; then
-  echo "Missing .venv-scholar/ — one-time setup first:"
+  echo "Missing .venv-scholar/ — run one-time setup first:"
   echo
-  echo "  python3 -m venv .venv-scholar"
-  echo "  .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt"
+  echo "  ./scripts/setup_scholar.sh"
   echo
   exit 1
 fi
