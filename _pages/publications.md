@@ -135,4 +135,4 @@ window.SCHOLAR_COUNTS = {
 window.SCHOLAR_COUNTS_FETCHED_AT = {{ site.data.scholar_counts.fetched_at | default: "" | jsonify }};
 </script>
 
-<script src="{{ '/assets/js/research.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/research.js' | relative_url | bust_file_cache }}"></script>
