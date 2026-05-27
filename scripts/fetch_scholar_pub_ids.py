@@ -148,7 +148,15 @@ def main():
                 best_title = sp_title
 
         if best_pub is not None and best_sim >= TITLE_MATCH_THRESHOLD:
-            pub_id = best_pub.get("author_pub_id")
+            pub_id = best_pub.get("author_pub_id") or ""
+            # scholarly returns author_pub_id as "<user_id>:<article_id>".
+            # Strip the user_id prefix so we store only the article-specific
+            # part — the URL template re-adds the user_id when building the
+            # citation_for_view query param. Without this strip we'd produce
+            # a double-prefixed URL like "...=USER:USER:ARTICLE" → 404.
+            prefix = f"{user_id}:"
+            if pub_id.startswith(prefix):
+                pub_id = pub_id[len(prefix):]
             if pub_id:
                 pub_ids[doi] = pub_id
                 print(f"[ok]   {doi:<40} ↔ {pub_id}  (sim {best_sim:.2f})")

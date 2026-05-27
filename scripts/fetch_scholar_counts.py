@@ -265,7 +265,13 @@ def build_payload(counts: dict, flagged: dict) -> dict:
 def load_pub_id_map() -> tuple[str, dict]:
     """Returns (scholar_user_id, {doi: pub_id}) from _data/scholar_pub_ids.yml,
     or ("", {}) if the file doesn't exist. Generated once by
-    scripts/fetch_scholar_pub_ids.py."""
+    scripts/fetch_scholar_pub_ids.py.
+
+    Defensively strips a leading "<user_id>:" from each pub_id — older
+    versions of the bootstrap script stored the full scholarly author_pub_id
+    (which includes the user prefix), and the URL template re-adds it.
+    Without this strip, the URL becomes "...=USER:USER:ARTICLE" → 404.
+    """
     if not PUB_IDS_FILE.exists():
         return "", {}
     try:
@@ -275,9 +281,17 @@ def load_pub_id_map() -> tuple[str, dict]:
         pub_ids = data.get("pub_ids") or {}
         if not isinstance(pub_ids, dict):
             pub_ids = {}
-        # Lowercase DOI keys (we normalize on the way in but be defensive).
-        pub_ids = {normalize_doi(k): v for k, v in pub_ids.items() if v}
-        return user_id, pub_ids
+        prefix = f"{user_id}:" if user_id else ""
+        cleaned = {}
+        for k, v in pub_ids.items():
+            if not v:
+                continue
+            doi_norm = normalize_doi(k)
+            pid = v
+            if prefix and pid.startswith(prefix):
+                pid = pid[len(prefix):]
+            cleaned[doi_norm] = pid
+        return user_id, cleaned
     except Exception as e:
         print(f"Warning: could not read {PUB_IDS_FILE.name}: {e}", file=sys.stderr)
         return "", {}
