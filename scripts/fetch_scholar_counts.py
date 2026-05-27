@@ -58,10 +58,31 @@ try:
 except ImportError:
     sys.exit("scholarly missing. Run: .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt")
 
+try:
+    import requests
+except ImportError:
+    sys.exit("requests missing. Run: .venv-scholar/bin/pip install -r scripts/requirements-scholar.txt")
+
 
 ROOT = Path(__file__).resolve().parent.parent
 PUBS_FILE = ROOT / "_data" / "publications.yml"
 OUT_FILE = ROOT / "_data" / "scholar_counts.yml"
+PUB_IDS_FILE = ROOT / "_data" / "scholar_pub_ids.yml"
+
+# Direct-URL fetch: per-paper Scholar citation page. Built once via
+# scripts/fetch_scholar_pub_ids.py (one profile walk) and looked up here.
+# Much lighter rate-limit category than search_pubs() — Scholar treats
+# page-view as ordinary browsing, search as potential scraping.
+CITATION_URL_TEMPLATE = (
+    "https://scholar.google.com/citations"
+    "?view_op=view_citation&hl=en&user={user_id}&citation_for_view={user_id}:{pub_id}"
+)
+# Default Python UA is 403'd by Scholar; mimic a real browser.
+DIRECT_USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+    "Version/17.0 Safari/605.1.15"
+)
 
 # How many of Scholar's top hits to consider per paper before giving up.
 # Scholar occasionally surfaces a junk stub (PDF-parse artifact, no year/DOI,
@@ -71,12 +92,13 @@ OUT_FILE = ROOT / "_data" / "scholar_counts.yml"
 MAX_SCHOLAR_HITS = 5
 
 # Jitter range (seconds) between papers. Conservative enough that 39-paper
-# runs don't reliably hit Scholar's rate limit. Bumped from 15-45s after
-# observing a block at paper #39/39 — the cumulative request rate matters
-# more than the per-request spacing, so longer mean delay reduces block
-# probability on full refreshes.
-JITTER_MIN_SEC = 30
-JITTER_MAX_SEC = 90
+# runs don't reliably hit Scholar's rate limit. The search path uses the
+# wider range; the direct-URL path uses a tighter range because page-view
+# requests are in a less-throttled bucket.
+JITTER_SEARCH_MIN_SEC = 30
+JITTER_SEARCH_MAX_SEC = 90
+JITTER_DIRECT_MIN_SEC = 5
+JITTER_DIRECT_MAX_SEC = 15
 
 # Default freshness threshold: a paper whose count was successfully fetched
 # within the last N days is skipped on the next run. Combined with the
@@ -144,6 +166,39 @@ def atomic_write_yaml(payload: dict) -> None:
     os.replace(tmp_path, OUT_FILE)
 
 
+def fetch_count_via_citation_page(user_id: str, pub_id: str) -> tuple[int | None, str]:
+    """Fetch citation count from the per-paper Scholar citation page.
+
+    Returns (count, reason). count is None on failure; reason is a short
+    string for logging.
+    """
+    url = CITATION_URL_TEMPLATE.format(user_id=user_id, pub_id=pub_id)
+    try:
+        r = requests.get(url, headers={"User-Agent": DIRECT_USER_AGENT}, timeout=30)
+    except requests.RequestException as e:
+        return None, f"network: {type(e).__name__}"
+
+    if r.status_code == 429:
+        return None, "http 429 (rate-limited)"
+    if r.status_code != 200:
+        return None, f"http {r.status_code}"
+
+    # Detect Scholar CAPTCHA / "unusual traffic" interstitial.
+    if "/sorry/" in r.url or "unusual traffic" in r.text.lower():
+        return None, "captcha challenge"
+
+    # "Cited by N" appears in meta description and page body. First match
+    # is the most reliable signal (in <head> or page header).
+    m = re.search(r'Cited by (\d{1,3}(?:,\d{3})*)', r.text)
+    if m:
+        return int(m.group(1).replace(",", "")), "ok"
+
+    # Page loaded fine but no "Cited by" → almost certainly 0 cites
+    # (Scholar omits the label when count is 0). We return 0 explicitly
+    # so the caller's Scholar=0 handler runs (flag + fallback to OpenAlex).
+    return 0, "no cited-by label (assumed 0)"
+
+
 def verify_match(our_title: str, our_year: int, our_doi: str, scholar_pub: dict) -> tuple[bool, str, float]:
     """
     Returns (is_match, reason, title_similarity).
@@ -207,6 +262,27 @@ def build_payload(counts: dict, flagged: dict) -> dict:
     return payload
 
 
+def load_pub_id_map() -> tuple[str, dict]:
+    """Returns (scholar_user_id, {doi: pub_id}) from _data/scholar_pub_ids.yml,
+    or ("", {}) if the file doesn't exist. Generated once by
+    scripts/fetch_scholar_pub_ids.py."""
+    if not PUB_IDS_FILE.exists():
+        return "", {}
+    try:
+        with PUB_IDS_FILE.open() as f:
+            data = yaml.safe_load(f) or {}
+        user_id = (data.get("scholar_user_id") or "").strip()
+        pub_ids = data.get("pub_ids") or {}
+        if not isinstance(pub_ids, dict):
+            pub_ids = {}
+        # Lowercase DOI keys (we normalize on the way in but be defensive).
+        pub_ids = {normalize_doi(k): v for k, v in pub_ids.items() if v}
+        return user_id, pub_ids
+    except Exception as e:
+        print(f"Warning: could not read {PUB_IDS_FILE.name}: {e}", file=sys.stderr)
+        return "", {}
+
+
 def scrape(args) -> int:
     with PUBS_FILE.open() as f:
         pubs = yaml.safe_load(f) or []
@@ -217,6 +293,14 @@ def scrape(args) -> int:
     # cleared when a DOI later succeeds with a non-zero count.
     flagged_raw = existing.get("flagged_for_review") or {}
     flagged = dict(flagged_raw) if isinstance(flagged_raw, dict) else {}
+
+    # Direct-URL fast path: { doi: scholar_pub_id }. Empty if not bootstrapped.
+    scholar_user_id, pub_id_map = load_pub_id_map()
+    if pub_id_map:
+        print(f"Loaded {len(pub_id_map)} DOI→pub_id mappings (direct-URL fetch enabled).")
+    else:
+        print("No pub_id mapping found — using search-based fetch only. "
+              "Run scripts/fetch_scholar_pub_ids.py to enable the direct-URL fast path.")
 
     # Backfill per-entry fetched_at from the top-level value if missing
     # (migrates older scholar_counts.yml files that pre-date per-entry timestamps).
@@ -242,6 +326,7 @@ def scrape(args) -> int:
     max_age = dt.timedelta(days=args.max_age_days) if args.max_age_days > 0 else None
 
     n_updated = n_unchanged = n_skipped = n_failed = n_zero = n_fresh = 0
+    n_direct = n_search = 0
     blocked = False
 
     for i, pub in enumerate(pubs):
@@ -276,78 +361,112 @@ def scrape(args) -> int:
                 except (ValueError, TypeError):
                     pass
 
-        author_last = first_author_last_name(pub.get("authors", []))
-        query = f"{title} {author_last}".strip()
-
-        matched = None
+        # ───────────────── Direct-URL fast path ─────────────────
+        # When we have a Scholar pub_id, fetch the per-paper citation page
+        # directly (no search, no metadata-stub risk, lighter rate-limit).
+        new_count = None
         matched_sim = None
+        fetch_source = None  # 'direct' or 'search'
         last_reason = "no Scholar results"
-        try:
-            results = scholarly.search_pubs(query)
-            for _ in range(MAX_SCHOLAR_HITS):
-                candidate = next(results, None)
-                if candidate is None:
-                    break
-                ok, reason, sim = verify_match(title, year, doi, candidate)
-                if ok:
-                    matched = candidate
-                    matched_sim = sim
-                    break
-                last_reason = reason
-        except MaxTriesExceededException:
-            print(f"[BLOCKED] Scholar blocked the IP at paper #{i+1} ({doi}).")
-            print(f"          {n_updated} updated, {n_unchanged} unchanged before block.")
-            print(f"          Wait 24h or switch networks and re-run.")
-            blocked = True
-            break
-        except Exception as e:
-            print(f"[fail] {doi:<40} ({type(e).__name__}: {e})")
-            n_failed += 1
-            continue
+        pub_id = pub_id_map.get(doi) if scholar_user_id else None
 
-        if matched is None:
-            # No valid match in MAX_SCHOLAR_HITS. Existing count (if any)
-            # is preserved; we just flag for manual review and skip the write.
+        if pub_id:
+            direct_count, direct_reason = fetch_count_via_citation_page(
+                scholar_user_id, pub_id
+            )
+            if direct_count is not None:
+                new_count = direct_count
+                # pub_id was verified at bootstrap time → match is canonical.
+                matched_sim = 1.0
+                fetch_source = "direct"
+                n_direct += 1
+            else:
+                # Direct fetch failed — fall through to search as safety net.
+                print(f"[direct-fail] {doi:<40} ({direct_reason}) — falling back to search")
+
+        # ───────────────── Search-based fallback ─────────────────
+        if new_count is None:
+            author_last = first_author_last_name(pub.get("authors", []))
+            query = f"{title} {author_last}".strip()
+            matched = None
+            try:
+                results = scholarly.search_pubs(query)
+                for _ in range(MAX_SCHOLAR_HITS):
+                    candidate = next(results, None)
+                    if candidate is None:
+                        break
+                    ok, reason, sim = verify_match(title, year, doi, candidate)
+                    if ok:
+                        matched = candidate
+                        matched_sim = sim
+                        break
+                    last_reason = reason
+            except MaxTriesExceededException:
+                print(f"[BLOCKED] Scholar blocked the IP at paper #{i+1} ({doi}).")
+                print(f"          {n_updated} updated, {n_unchanged} unchanged before block.")
+                print(f"          Wait 24h or switch networks and re-run.")
+                blocked = True
+                break
+            except Exception as e:
+                print(f"[fail] {doi:<40} ({type(e).__name__}: {e})")
+                n_failed += 1
+                continue
+
+            if matched is not None:
+                new_count = matched.get("num_citations")
+                fetch_source = "search"
+                n_search += 1
+
+        # ───────────────── Record / flag ─────────────────
+        if new_count is None and fetch_source != "search":
+            # Direct path failed AND search wasn't tried (shouldn't really
+            # happen since we fall through), or matched was None from search.
             print(f"[fail] {doi:<40} ({last_reason}) — flagged for review")
             flagged[doi] = f"no match in {MAX_SCHOLAR_HITS} hits: {last_reason}"
             n_failed += 1
+        elif new_count is None:
+            print(f"[fail] {doi:<40} ({last_reason}) — flagged for review")
+            flagged[doi] = f"no match in {MAX_SCHOLAR_HITS} hits: {last_reason}"
+            n_failed += 1
+        elif int(new_count) == 0:
+            # Scholar = 0. Via direct path: paper exists on profile but has 0
+            # cites (or count was unparseable; same end-state). Via search:
+            # likely a junk-stub. Either way, skip write, flag, fall back to
+            # OpenAlex on the frontend. Any prior count is preserved.
+            origin = fetch_source or "?"
+            print(f"[zero] {doi:<40} Scholar=0 via {origin} — flagged, OpenAlex will fill in")
+            flagged[doi] = (
+                f"Scholar returned 0 cites via {origin}; "
+                f"verify at https://scholar.google.com/scholar?q={doi}"
+            )
+            n_zero += 1
         else:
-            new_count = matched.get("num_citations")
-            if new_count is None:
-                print(f"[fail] {doi:<40} (no num_citations field) — flagged for review")
-                flagged[doi] = "Scholar result had no num_citations field"
-                n_failed += 1
-            elif int(new_count) == 0:
-                # Scholar = 0 is almost always a junk-stub false positive
-                # (metadata-corrupt entry that happened to pass verify_match).
-                # Don't write; flag for review; let frontend fall back to OpenAlex.
-                # Any prior count is preserved untouched.
-                print(f"[zero] {doi:<40} Scholar=0 — flagged for review, OpenAlex will fill in")
-                flagged[doi] = "Scholar returned 0 cites — likely metadata-poor match; verify manually"
-                n_zero += 1
+            old = counts.get(doi, {}).get("count") if isinstance(counts.get(doi), dict) else None
+            arrow = f"{old} → {new_count}" if old is not None else f"{new_count}"
+            tag = "direct" if fetch_source == "direct" else f"search {matched_sim:.2f}"
+            print(f"[ok]   {doi:<40} {arrow}   ({tag})")
+            counts[doi] = {
+                "count": int(new_count),
+                "title_match": round(matched_sim, 3) if matched_sim else 1.0,
+                "fetched_at": now.isoformat(timespec="seconds"),
+                "source": fetch_source,
+            }
+            flagged.pop(doi, None)
+            if old == new_count:
+                n_unchanged += 1
             else:
-                old = counts.get(doi, {}).get("count") if isinstance(counts.get(doi), dict) else None
-                arrow = f"{old} → {new_count}" if old is not None else f"{new_count}"
-                print(f"[ok]   {doi:<40} {arrow}   (match {matched_sim:.2f})")
-                counts[doi] = {
-                    "count": int(new_count),
-                    "title_match": round(matched_sim, 3),
-                    "fetched_at": now.isoformat(timespec="seconds"),
-                }
-                # Confident match → clear any stale flag.
-                flagged.pop(doi, None)
-                if old == new_count:
-                    n_unchanged += 1
-                else:
-                    n_updated += 1
+                n_updated += 1
 
-        # Persist after every paper, regardless of outcome — protects against block mid-run.
+        # Persist after every paper, regardless of outcome.
         if not args.dry_run and i < len(pubs) - 1:
             atomic_write_yaml(build_payload(counts, flagged))
 
-        # Jitter (skip on the last paper)
+        # Jitter — shorter for direct fetches (lighter rate-limit bucket).
         if not args.no_jitter and i < len(pubs) - 1:
-            delay = random.uniform(JITTER_MIN_SEC, JITTER_MAX_SEC)
+            if fetch_source == "direct":
+                delay = random.uniform(JITTER_DIRECT_MIN_SEC, JITTER_DIRECT_MAX_SEC)
+            else:
+                delay = random.uniform(JITTER_SEARCH_MIN_SEC, JITTER_SEARCH_MAX_SEC)
             time.sleep(delay)
 
     # Final write
@@ -360,6 +479,8 @@ def scrape(args) -> int:
         f"{n_fresh} fresh-skipped, "
         f"{n_zero} Scholar=0 (flagged), {n_skipped} skipped, {n_failed} failed (flagged)."
     )
+    if n_direct or n_search:
+        print(f"Fetch sources: {n_direct} via direct URL, {n_search} via search.")
     if flagged:
         print(f"\n{len(flagged)} paper(s) flagged for manual review — see "
               f"`flagged_for_review:` section of {OUT_FILE.relative_to(ROOT)}.")
@@ -375,7 +496,9 @@ def main():
     ap.add_argument("--only", type=str, help="Only attempt a single DOI.")
     ap.add_argument("--dry-run", action="store_true", help="Fetch but don't write.")
     ap.add_argument("--no-jitter", action="store_true",
-                    help=f"Disable {JITTER_MIN_SEC}-{JITTER_MAX_SEC} s sleep between papers (debugging only).")
+                    help=f"Disable inter-paper sleep "
+                         f"({JITTER_DIRECT_MIN_SEC}-{JITTER_DIRECT_MAX_SEC}s direct / "
+                         f"{JITTER_SEARCH_MIN_SEC}-{JITTER_SEARCH_MAX_SEC}s search) — debugging only.")
     ap.add_argument("--max-age-days", type=int, default=DEFAULT_MAX_AGE_DAYS,
                     help=f"Skip papers whose count was fetched within the last N days "
                          f"(default {DEFAULT_MAX_AGE_DAYS}; 0 disables — refetch everything). "

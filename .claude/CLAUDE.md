@@ -184,6 +184,22 @@ Idempotent — re-running re-uses the venv and just refreshes dependencies, so
 it's also the right command to run after `scripts/requirements-scholar.txt`
 changes. Otherwise only redo on a new machine.
 
+#### One-time profile bootstrap (per author, one-liner)
+
+```bash
+.venv-scholar/bin/python scripts/fetch_scholar_pub_ids.py
+```
+
+Walks the Scholar author profile **once** to build a DOI → `pub_id` mapping
+in `_data/scholar_pub_ids.yml`. With this in place, the refresh script
+fetches counts via direct per-paper citation URLs (lighter rate-limit
+category than `search_pubs`, much less block-prone). The bootstrap itself
+costs ~1-3 Scholar requests total.
+
+Re-run only when new papers are added to publications.yml. Otherwise the
+mapping is stable. If the bootstrap is skipped, the refresh script falls
+back to search-based fetching for every paper (more block-prone).
+
 #### Weekly / on-demand refresh (one-liner)
 
 ```bash
@@ -217,6 +233,15 @@ once the block clears: the 33 successful papers from last time will be
 skipped as fresh, leaving only the ~6 failed/blocked ones to retry. This
 also distributes block risk across runs — a full refresh shuffles paper
 order so the same paper isn't always at position #39.
+
+**Direct-URL vs search fetch:** when `_data/scholar_pub_ids.yml` exists
+(see one-time profile bootstrap above), each paper's count is fetched
+via the canonical per-paper citation page — one lightweight HTTP request,
+no metadata-stub risk, no `verify_match` needed because the pub_id is
+deterministic. Jitter shortens to 5-15s for these. Papers without a
+pub_id mapping fall back to `scholarly.search_pubs` with 30-90s jitter.
+A full refresh post-bootstrap is ~5-8 min (was ~40 min) at far lower
+block risk.
 
 #### Manual three-step equivalent
 
