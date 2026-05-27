@@ -201,7 +201,7 @@ must run from a residential network — never in CI/GitHub Actions.
 │  │   ├── shuffles paper order (spreads block risk)              │
 │  │   └── per paper:                                             │
 │  │       1. SKIP if last fetch < --max-age-days AND not flagged │
-│  │       2. If pub_id mapped → DIRECT URL fetch (5-15s jitter)  │
+│  │       2. If pub_id mapped → DIRECT URL fetch (10-20s jitter) │
 │  │          GET citations?citation_for_view=…&user=…            │
 │  │          parse "Cited by N" → record                         │
 │  │       3. If no mapping OR direct fails → SEARCH fallback     │
@@ -302,9 +302,9 @@ order so the same paper isn't always at position #39.
 (see one-time profile bootstrap above), each paper's count is fetched
 via the canonical per-paper citation page — one lightweight HTTP request,
 no metadata-stub risk, no `verify_match` needed because the pub_id is
-deterministic. Jitter shortens to 5-15s for these. Papers without a
+deterministic. Jitter shortens to 10-20s for these. Papers without a
 pub_id mapping fall back to `scholarly.search_pubs` with 30-90s jitter.
-A full refresh post-bootstrap is ~5-8 min (was ~40 min) at far lower
+A full refresh post-bootstrap is ~10-12 min (was ~40 min) at far lower
 block risk.
 
 #### Manual three-step equivalent
