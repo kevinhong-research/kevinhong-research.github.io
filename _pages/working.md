@@ -11,4 +11,4 @@ nav_order: 2
 
 {% include working_render.html %}
 
-<script src="{{ '/assets/js/research.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/research.js' | relative_url | bust_file_cache }}"></script>
