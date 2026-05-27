@@ -570,6 +570,23 @@
           p.forthcoming ? `<span class="tl-forthcoming">Forthcoming</span>`        : '',
         ].filter(Boolean).join('<span class="tl-meta-sep">·</span>');
 
+        /* Citation badge — same shape and behaviour as list view's .pub-cite.
+           fetchCitations() queries .pub-cite[data-doi] from the DOM, so when
+           the timeline is shown it gets picked up the same way. For switches
+           after the first fetch, applyCachedCitesToDOM() backfills from the
+           in-memory citesByDoi cache. */
+        const tlDoi = extractDoi(p);
+        const tlCiteBadge = tlDoi ? `
+          <a class="pub-cite"
+             data-doi="${tlDoi}"
+             href="https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}"
+             target="_blank" rel="noopener"
+             title="View on Google Scholar">
+            <span class="pub-cite-label">${SCHOLAR_ICON}scholar</span>
+            <span class="pub-cite-sep">·</span>
+            <span class="pub-cite-count">—</span>
+          </a>` : '';
+
         /* Abstract toggle — reuses same CSS as list view */
         const hasAbstract = p.abstract && p.abstract.trim();
         const abstractBtn = hasAbstract ? `
@@ -598,7 +615,7 @@
           <div class="tl-paper" data-topics="${(p.topics || []).join('|')}">
             <a class="tl-title" href="${p.url || '#'}" target="_blank">${p.title}</a>
             <div class="tl-authors">${authors}</div>
-            <div class="tl-meta">${meta}${citationBtn}${abstractBtn}</div>
+            <div class="tl-meta">${meta}${tlCiteBadge}${citationBtn}${abstractBtn}</div>
             ${citationBody}
             ${abstractBody}
           </div>`;
@@ -628,6 +645,13 @@
       });
     });
     initCitationButtons(container);
+
+    /* Paint citation counts onto the freshly-rendered .pub-cite anchors
+       from the in-memory cache (populated earlier by fetchCitations).
+       Without this, every view switch to timeline would show "—" until
+       a hypothetical fetch, but fetchCitations is idempotent-guarded and
+       won't refetch within the same page life. */
+    applyCachedCitesToDOM();
 
     /* Stagger entrance animation */
     const papers = container.querySelectorAll('.tl-paper');
@@ -801,6 +825,21 @@
       const span = anchor.querySelector('.pub-cite-count');
       if (span) { span.textContent = Number(count).toLocaleString(); }
       if (source) anchor.dataset.citeSource = source;
+    });
+  }
+
+  /* Apply citesByDoi to every .pub-cite anchor currently in the DOM.
+     Used after renderTimeline rebuilds the timeline view — the new anchors
+     start with "—" and need the cached values painted on. */
+  function applyCachedCitesToDOM() {
+    const scholar = window.SCHOLAR_COUNTS || {};
+    document.querySelectorAll('.pub-cite[data-doi]').forEach(a => {
+      const doi = (a.dataset.doi || '').toLowerCase();
+      const count = citesByDoi[doi];
+      if (count == null) return;
+      const span = a.querySelector('.pub-cite-count');
+      if (span) span.textContent = Number(count).toLocaleString();
+      a.dataset.citeSource = (doi in scholar) ? 'scholar' : 'openalex';
     });
   }
 
