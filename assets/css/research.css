@@ -733,12 +733,59 @@
    Resting state matches the quiet grey of inactive filter btns;
    hover warms toward green to signal it's an action, not a stat.
 ──────────────────────────────────────────────────────────── */
-.view-toggle-btn {
+/* ── SORT TOGGLE BUTTON ─────────────────────────────────────
+   Sits in the filter bar, immediately before the view-toggle
+   button. margin-left:auto on this button pushes both to the
+   right. Visual style mirrors view-toggle-btn so they read as
+   a sibling pair of right-side controls.
+──────────────────────────────────────────────────────────── */
+.sort-toggle-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2xs);
   margin-left: auto;
+  flex-shrink: 0;
+  font-size: var(--fs-2xs);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--line);
+  color: var(--text-mid);
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  transition: color var(--duration-fast) var(--ease-default),
+              border-color var(--duration-fast) var(--ease-default),
+              background var(--duration-fast) var(--ease-default);
+  line-height: 1;
+}
+.sort-toggle-btn:hover {
+  color: var(--green-hi);
+  border-color: color-mix(in oklch, var(--accent-cool) 44%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
+}
+.sort-toggle-btn .stb-icon { width: 11px; height: 11px; flex-shrink: 0; }
+/* Active state — tinted to match view-toggle's active state */
+.sort-toggle-btn[data-active="true"] {
+  color: var(--green-hi);
+  border-color: color-mix(in oklch, var(--accent-cool) 44%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 8%, transparent);
+}
+.sort-toggle-btn[data-active="true"]:hover {
+  color: var(--accent-cool);
+  border-color: color-mix(in oklch, var(--accent-cool) 58%, transparent);
+  background: color-mix(in oklch, var(--accent-cool) 12%, transparent);
+}
+
+.view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  margin-left: var(--space-2xs);  /* tighten gap to sort-toggle-btn; sort owns margin-left:auto */
   flex-shrink: 0;
   font-size: var(--fs-2xs);
   font-weight: 400;
@@ -1016,7 +1063,8 @@
   .tl-year-node  { left: -33px; }
   .tl-paper::after { left: -28px; width: 27px; }
   .tl-year-group::before { left: 15px; }
-  .view-toggle-btn { padding: 0.4rem 0.6rem; font-size: var(--fs-2xs); }
+  .view-toggle-btn,
+  .sort-toggle-btn { padding: 0.4rem 0.6rem; font-size: var(--fs-2xs); }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1154,17 +1202,20 @@ html[data-theme="light"] .pub-empty-state {
   background: color-mix(in oklch, var(--accent-warm) 4%, transparent);
 }
 
-html[data-theme="light"] .view-toggle-btn:hover {
+html[data-theme="light"] .view-toggle-btn:hover,
+html[data-theme="light"] .sort-toggle-btn:hover {
   color: var(--accent-warm);
   border-color: color-mix(in oklch, var(--accent-warm) 42%, transparent);
   background: color-mix(in oklch, var(--accent-warm) 10%, transparent);
 }
-html[data-theme="light"] .view-toggle-btn[data-current="timeline"] {
+html[data-theme="light"] .view-toggle-btn[data-current="timeline"],
+html[data-theme="light"] .sort-toggle-btn[data-active="true"] {
   color: var(--accent-warm);
   border-color: color-mix(in oklch, var(--accent-warm) 42%, transparent);
   background: color-mix(in oklch, var(--accent-warm) 10%, transparent);
 }
-html[data-theme="light"] .view-toggle-btn[data-current="timeline"]:hover {
+html[data-theme="light"] .view-toggle-btn[data-current="timeline"]:hover,
+html[data-theme="light"] .sort-toggle-btn[data-active="true"]:hover {
   color: var(--accent-warm);
   border-color: color-mix(in oklch, var(--accent-warm) 58%, transparent);
   background: color-mix(in oklch, var(--accent-warm) 14%, transparent);

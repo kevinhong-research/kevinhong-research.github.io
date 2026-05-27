@@ -13,9 +13,14 @@
   let allPubs       = [];   /* full unfiltered set, kept for view switching */
   let currentFilter = 'all';
   let currentQuery  = '';
+  let currentSort   = 'default';  /* 'default' (year desc, file order) or 'cites-desc' */
   let pendingPaperId = null;
   let searchDebounceTimer = null;
   let citationsApplied = false;  /* idempotence guard for fetchCitations */
+  /* doi (lowercase) → citation count. Populated by fetchCitations from both
+     Scholar (synchronous) and OpenAlex (async). Used by sort comparator so
+     timeline-view sorting works without depending on rendered DOM. */
+  const citesByDoi = {};
 
   /* ── JOURNAL METADATA ──────────────────────────────────────*/
   const JOURNAL_META = {
@@ -243,6 +248,7 @@
     initAbstracts();
     initCitationButtons();
     initViewToggle();
+    initSortToggle();
     initResetControls();
     applyCurrentState({ animateList: false });
     initPaperTarget();
@@ -418,8 +424,9 @@
 
     if (currentView === 'timeline') {
       renderTimeline(visiblePubs);
-    } else if (animateList) {
-      animateVisibleListItems();
+    } else {
+      applySortToList();   /* reorders #pubList children if currentSort is active */
+      if (animateList) animateVisibleListItems();
     }
 
     initPaperTarget();
@@ -542,6 +549,13 @@
       byYear[p.year].push(p);
     });
     const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+
+    /* When the cite-sort toggle is on, reorder within each year bucket
+       by citation count desc. Year grouping is preserved — timeline is
+       fundamentally chronological. */
+    if (currentSort === 'cites-desc') {
+      Object.values(byYear).forEach(group => group.sort(compareByCitesDesc));
+    }
 
     container.innerHTML = years.map(yr => {
       const papers = byYear[yr];
@@ -696,6 +710,73 @@
     });
   }
 
+  /* ── SORT TOGGLE ────────────────────────────────────────────
+     Toggle button next to the view-toggle. Off → default order
+     (publications.yml order, which is year desc). On → sort
+     visible items by citation count desc.
+
+     List view: reorders .pub-item children in #pubList.
+     Timeline view: re-renders so within-year ordering reflects
+     the active sort.
+
+     The sort comparator pulls counts from citesByDoi, which is
+     populated by fetchCitations from both Scholar (synchronous)
+     and OpenAlex (async). When OpenAlex resolves, fetchCitations
+     calls applyCurrentState() which re-applies the sort — so the
+     list converges to fully-sorted state as data arrives.
+  ──────────────────────────────────────────────────────────── */
+  function pubCiteCount(pub) {
+    if (!pub) return -1;
+    const doi = (pub.doi || '').toLowerCase();
+    if (!doi) return -1;                   /* no DOI → sink to bottom */
+    const v = citesByDoi[doi];
+    return (v == null) ? 0 : Number(v);    /* not-yet-loaded → 0 */
+  }
+
+  function compareByCitesDesc(pubA, pubB) {
+    const diff = pubCiteCount(pubB) - pubCiteCount(pubA);
+    if (diff !== 0) return diff;
+    /* Tie-break: newer paper first, then original file order */
+    if ((pubB.year || 0) !== (pubA.year || 0)) {
+      return (pubB.year || 0) - (pubA.year || 0);
+    }
+    return allPubs.indexOf(pubA) - allPubs.indexOf(pubB);
+  }
+
+  function applySortToList() {
+    const list = document.getElementById('pubList');
+    if (!list) return;
+    const items = Array.from(list.querySelectorAll('.pub-item'));
+    if (!items.length) return;
+
+    if (currentSort === 'cites-desc') {
+      items.sort((a, b) => {
+        const pa = allPubs[Number(a.dataset.pubIndex)];
+        const pb = allPubs[Number(b.dataset.pubIndex)];
+        return compareByCitesDesc(pa, pb);
+      });
+    } else {
+      /* Restore file order. */
+      items.sort((a, b) =>
+        Number(a.dataset.pubIndex) - Number(b.dataset.pubIndex));
+    }
+    items.forEach(item => list.appendChild(item));
+  }
+
+  function initSortToggle() {
+    const btn = document.getElementById('sortToggleBtn');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      currentSort = (currentSort === 'cites-desc') ? 'default' : 'cites-desc';
+      btn.dataset.active = (currentSort === 'cites-desc') ? 'true' : 'false';
+      btn.title = (currentSort === 'cites-desc')
+        ? 'Sorting by citation count — click to restore default order'
+        : 'Sort by citation count (highest first)';
+      applyCurrentState({ animateList: false });
+    });
+  }
+
   function initSectionReveal() {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(x => {
@@ -751,11 +832,17 @@
         const span = doiMap[doi].querySelector('.pub-cite-count');
         if (span) span.textContent = Number(count).toLocaleString();
         doiMap[doi].dataset.citeSource = 'scholar';
+        citesByDoi[doi] = Number(count);
         /* Remove so OpenAlex pass (and its sessionStorage cache) cannot
            overwrite a Scholar value with stale OpenAlex data. */
         delete doiMap[doi];
       }
     });
+
+    /* If sort-by-cites is active, re-sort with Scholar data applied. */
+    if (currentSort === 'cites-desc' && currentView === 'list') {
+      applySortToList();
+    }
 
     /* 2. OpenAlex pass — live fetch for the residual DOIs only. */
     const dois = Object.keys(doiMap);
@@ -767,6 +854,11 @@
         const cached = JSON.parse(raw);
         if (cached && (Date.now() - cached.ts < CACHE_TTL)) {
           applyCountsToDOM(cached.counts, doiMap, 'openalex');
+          applyOpenAlexCacheToCites(cached.counts);
+          if (currentSort === 'cites-desc') {
+            if (currentView === 'list') applySortToList();
+            else renderTimeline(getFiltered());
+          }
           return;
         }
       }
@@ -792,13 +884,32 @@
       });
 
       applyCountsToDOM(counts, doiMap, 'openalex');
+      Object.entries(counts).forEach(([doi, count]) => {
+        if (count != null) citesByDoi[doi] = Number(count);
+      });
 
       try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), counts })); }
       catch (_) {}
 
+      /* OpenAlex resolved — re-apply sort so newly-loaded counts are placed. */
+      if (currentSort === 'cites-desc') {
+        if (currentView === 'list') {
+          applySortToList();
+        } else {
+          renderTimeline(getFiltered());
+        }
+      }
+
     } catch (err) {
       console.error('[citations] Fetch failed:', err.message);
     }
+  }
+
+  /* Also populate cache from cached OpenAlex blob (no fetch path). */
+  function applyOpenAlexCacheToCites(counts) {
+    Object.entries(counts).forEach(([doi, count]) => {
+      if (count != null) citesByDoi[doi] = Number(count);
+    });
   }
 
   /* ── CUSTOM CURSOR ─────────────────────────────────────────*/

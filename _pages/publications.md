@@ -48,8 +48,19 @@ children:
   <button class="filter-btn" data-filter="Digital Platforms">Digital Platforms</button>
   <button class="filter-btn" data-filter="Digital Media">Digital Media</button>
   <button class="filter-btn" data-filter="Human-AI Interaction">Human-AI Interaction</button>
-  <!-- Single view-toggle button: shows what you'll switch TO.
-       Sits at far-right via margin-left:auto in CSS. -->
+  <!-- Sort-by-citations toggle. Sits at the right, just before the
+       view-toggle button. Active state visually mirrors the timeline
+       toggle's active state. margin-left:auto on sort-toggle-btn pushes
+       both buttons to the right edge. -->
+  <button class="sort-toggle-btn" id="sortToggleBtn" data-active="false" title="Sort by citation count (highest first)">
+    <svg class="stb-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+      <rect x="2"   y="3"  width="2.4" height="8" rx="0.4" fill="currentColor"/>
+      <rect x="5.3" y="5.5" width="2.4" height="5.5" rx="0.4" fill="currentColor"/>
+      <rect x="8.6" y="8"  width="2.4" height="3" rx="0.4" fill="currentColor"/>
+    </svg>
+    <span class="stb-label">Cites</span>
+  </button>
+  <!-- Single view-toggle button: shows what you'll switch TO. -->
   <button class="view-toggle-btn" id="viewToggleBtn" data-current="list" title="Switch to timeline view">
     <svg class="vtb-icon vtb-icon--timeline" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
       <line x1="6.5" y1="1" x2="6.5" y2="12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
