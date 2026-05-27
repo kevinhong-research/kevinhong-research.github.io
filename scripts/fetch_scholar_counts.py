@@ -19,8 +19,9 @@ Usage (from project root):
     --limit N         Only attempt first N publications (smoke test)
     --only DOI        Only attempt a single DOI
     --dry-run         Fetch but don't write the YAML
-    --no-jitter       Disable the 15-45 s sleep (DO NOT use weekly — Scholar
-                      will block your IP)
+    --no-jitter       Disable inter-paper sleep — 10-20 s for direct-URL
+                      fetches, 30-90 s for search fallbacks. DO NOT use
+                      for real refreshes; Scholar will block your IP.
 
 Run locally on a residential IP. GitHub Actions IPs are blocklisted by Scholar.
 
@@ -97,8 +98,8 @@ MAX_SCHOLAR_HITS = 5
 # requests are in a less-throttled bucket.
 JITTER_SEARCH_MIN_SEC = 30
 JITTER_SEARCH_MAX_SEC = 90
-JITTER_DIRECT_MIN_SEC = 5
-JITTER_DIRECT_MAX_SEC = 15
+JITTER_DIRECT_MIN_SEC = 10
+JITTER_DIRECT_MAX_SEC = 20
 
 # Default freshness threshold: a paper whose count was successfully fetched
 # within the last N days is skipped on the next run. Combined with the
