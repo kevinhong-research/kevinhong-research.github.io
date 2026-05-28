@@ -181,6 +181,11 @@
 .pub-item:hover::before { transform: scaleY(1); }
 .pub-item.nh-visible { opacity: 1; transform: translateY(0); }
 .pub-item.hidden { display: none; }
+/* Temporarily applied by initPubAnimations() to above-the-fold items so
+   their first-paint reveal is instant (no shift/fade). Class is removed
+   on the next frame, so subsequent transitions (hover, filter, sort)
+   still animate normally. */
+.pub-item.pub-item-instant { transition: none; }
 .pub-item.pub-target-flash {
   background: linear-gradient(90deg, color-mix(in oklch, var(--accent-warm) 12%, transparent), color-mix(in oklch, var(--accent-warm) 2%, transparent) 18%, transparent 72%);
   animation: pubTargetFlash 2.4s ease;

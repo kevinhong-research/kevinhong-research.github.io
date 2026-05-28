@@ -513,19 +513,44 @@
     countEl.textContent = `${n} result${n === 1 ? '' : 's'}`;
   }
 
-  /* ── SCROLL-REVEAL ─────────────────────────────────────────*/
+  /* ── SCROLL-REVEAL ─────────────────────────────────────────
+     Initial-load animation strategy:
+       - Items already in viewport at first paint → snap to final state
+         with transition disabled (no shift, no fade). Animating
+         above-the-fold content on landing is jarring.
+       - Items below the fold → observed individually; each fades up
+         when scrolled into view (one-off, no upfront cascade).
+     Filter/sort interactions still re-cascade via
+     animateVisibleListItems() — that's intentional feedback when the
+     list contents change. This function only governs the first paint.
+  ──────────────────────────────────────────────────────────── */
   function initPubAnimations() {
     const items = document.querySelectorAll('.pub-item');
-    const list  = document.getElementById('pubList');
-    if (!list) return;
-    const po = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        Array.from(items).filter(i => !i.classList.contains('hidden'))
-          .forEach((item, i) => setTimeout(() => item.classList.add('nh-visible'), i * 45));
-        po.disconnect();
+    if (!items.length) return;
+
+    const perItemObs = new IntersectionObserver(entries => {
+      entries.forEach(x => {
+        if (x.isIntersecting) {
+          x.target.classList.add('nh-visible');
+          perItemObs.unobserve(x.target);
+        }
+      });
+    }, { threshold: 0.05 });
+
+    items.forEach(item => {
+      if (item.classList.contains('hidden')) return;
+      const rect = item.getBoundingClientRect();
+      const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inViewport) {
+        /* Instant reveal: temp-disable transition, set final state, flush
+           layout, restore. Keeps hover/sort transitions working afterward. */
+        item.classList.add('pub-item-instant', 'nh-visible');
+        void item.offsetWidth;
+        requestAnimationFrame(() => item.classList.remove('pub-item-instant'));
+      } else {
+        perItemObs.observe(item);
       }
-    }, { threshold: 0.02 });
-    po.observe(list);
+    });
   }
 
   /* ── TIMELINE RENDERER ─────────────────────────────────────
