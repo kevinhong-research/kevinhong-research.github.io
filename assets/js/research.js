@@ -802,12 +802,23 @@
   }
 
   function initSectionReveal() {
+    /* Scroll-reveal: animate sections in as user scrolls. Sections already
+       in viewport at first paint skip the animation (see .nh-reveal-instant
+       in research.css) — animating above-the-fold content on load is jarring. */
     const obs = new IntersectionObserver(entries => {
       entries.forEach(x => {
         if (x.isIntersecting) { x.target.classList.add('nh-visible'); obs.unobserve(x.target); }
       });
     }, { threshold: 0.05 });
-    document.querySelectorAll('.nh-reveal').forEach(r => obs.observe(r));
+    document.querySelectorAll('.nh-reveal').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inViewport) {
+        el.classList.add('nh-reveal-instant', 'nh-visible');
+      } else {
+        obs.observe(el);
+      }
+    });
   }
 
   /* ── CITATION COUNTS (Scholar + OpenAlex hybrid) ───────────

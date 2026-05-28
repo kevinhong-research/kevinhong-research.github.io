@@ -556,6 +556,12 @@
   opacity: 1;
   transform: none;
 }
+/* Applied by JS to sections already in viewport at first paint, so they
+   appear instantly instead of animating up — the reveal animation is
+   only meaningful when triggered by scroll. */
+.nh-reveal.nh-reveal-instant {
+  transition: none;
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 760px) {

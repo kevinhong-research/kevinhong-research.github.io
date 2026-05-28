@@ -14,6 +14,11 @@ nav_order: 4
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  /* Scroll-reveal: fade + lift sections into view as the user scrolls.
+     EXCEPTION: sections already visible at first paint should appear
+     instantly — animating above-the-fold content on page load is jarring.
+     The .nh-reveal-instant class disables the transition so adding
+     .nh-visible alongside it snaps to the final state without animation. */
   const obs = new IntersectionObserver(entries => {
     entries.forEach(x => {
       if (x.isIntersecting) {
@@ -22,6 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, { threshold: 0.05 });
-  document.querySelectorAll('.nh-reveal').forEach(r => obs.observe(r));
+
+  document.querySelectorAll('.nh-reveal').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inViewport) {
+      el.classList.add('nh-reveal-instant', 'nh-visible');
+    } else {
+      obs.observe(el);
+    }
+  });
 });
 </script>
