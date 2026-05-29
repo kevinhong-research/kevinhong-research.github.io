@@ -573,10 +573,28 @@
   .nh-section { grid-template-columns: 1fr; gap: 1.25rem; }
   .nh-section-label { position: static; }
   .pub-item { grid-template-columns: 32px 1fr; }
-  .pub-meta { height: auto; min-height: var(--pub-meta-control-height); }
+  /* Drop the .pub-body flex `gap` on mobile: it also applied above the
+     collapsed citation/abstract panels, leaving ~8px of dead space under
+     every entry. Re-add the title→authors→meta rhythm as explicit margins;
+     the panels keep their own margin-top (0 closed, space-base open), so
+     closed entries sit tight without changing the open-expand animation. */
+  .pub-body { gap: 0; }
+  .pub-authors { margin-top: var(--space-2xs); }
+  .pub-meta {
+    height: auto;
+    min-height: var(--pub-meta-control-height);
+    margin-top: var(--space-2xs);
+  }
   .pub-journal,
   .pub-year { height: auto; min-height: var(--pub-meta-control-height); }
   .pub-badge { display: none; }
+  /* Sort + view toggles: own full-width row below the filter pills,
+     each half-width, instead of floating at the right edge. */
+  .sort-toggle-btn {
+    margin-left: 0;
+    flex: 1 1 calc(50% - var(--space-sm));
+  }
+  .view-toggle-btn { flex: 1 1 calc(50% - var(--space-sm)); }
   .pub-cite  { font-size: var(--fs-2xs); }
   .pub-abstract-btn { font-size: var(--fs-2xs); }
   /* Tight padding ONLY when expanded. The collapsed inner must keep zero
@@ -1029,9 +1047,6 @@
   padding: 0.1rem 0.45rem;
   clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
 }
-
-/* Abstract btn inside timeline inherits all .pub-abstract-btn styles */
-.tl-abstract-btn { margin-left: 0.1rem; }
 
 /* Empty state */
 .tl-empty {

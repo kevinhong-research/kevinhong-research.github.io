@@ -612,37 +612,15 @@
             <span class="pub-cite-count">—</span>
           </a>` : '';
 
-        /* Abstract toggle — reuses same CSS as list view */
-        const hasAbstract = p.abstract && p.abstract.trim();
-        const abstractBtn = hasAbstract ? `
-          <button class="pub-abstract-btn tl-abstract-btn" aria-expanded="false" aria-label="Toggle abstract">
-            ${CHEVRON_ICON}
-            <span class="pub-abstract-btn-label">Abstract</span>
-          </button>` : '';
-        const abstractBody = hasAbstract ? `
-          <div class="pub-abstract-body" aria-hidden="true">
-            <div class="pub-abstract-inner">${p.abstract.trim()}</div>
-          </div>` : '';
-        const apaCitation = formatApaCitation(p);
-        const apaCitationHtml = formatApaCitation(p, { html: true });
-        const citationBtn = apaCitation ? `
-          <button class="pub-citation-btn tl-citation-btn" aria-expanded="false" aria-label="Show APA citation and copy it" data-citation="${escapeHtml(apaCitation)}">
-            <span class="pub-citation-btn-label">Cite</span>
-          </button>` : '';
-        const citationBody = apaCitationHtml ? `
-          <div class="pub-citation-body" aria-hidden="true">
-            <div class="pub-citation-inner">
-              <div class="pub-citation-text">${apaCitationHtml}</div>
-            </div>
-          </div>` : '';
-
+        /* Timeline cards intentionally omit the Cite + Abstract controls
+           that the list view carries — the spine + tighter card layout made
+           that meta row too congested. The Scholar citation badge stays.
+           List view (renderList) keeps both controls. */
         return `
           <div class="tl-paper" data-topics="${(p.topics || []).join('|')}">
             <a class="tl-title" href="${p.url || '#'}" target="_blank">${p.title}</a>
             <div class="tl-authors">${authors}</div>
-            <div class="tl-meta">${meta}${tlCiteBadge}${citationBtn}${abstractBtn}</div>
-            ${citationBody}
-            ${abstractBody}
+            <div class="tl-meta">${meta}${tlCiteBadge}</div>
           </div>`;
       }).join('');
 
@@ -657,19 +635,8 @@
         </div>`;
     }).join('');
 
-    /* Wire abstract toggles in timeline */
-    container.querySelectorAll('.pub-abstract-btn').forEach(btn => {
-      const body = btn.closest('.tl-paper').querySelector('.pub-abstract-body');
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!isOpen));
-        body.setAttribute('aria-hidden', String(isOpen));
-        body.classList.toggle('pub-abstract-open', !isOpen);
-        btn.classList.toggle('pub-abstract-btn--open', !isOpen);
-      });
-    });
-    initCitationButtons(container);
+    /* No abstract/citation toggles to wire in the timeline view — those
+       controls are list-view only (see card template above). */
 
     /* Paint citation counts onto the freshly-rendered .pub-cite anchors
        from the in-memory cache (populated earlier by fetchCitations).
