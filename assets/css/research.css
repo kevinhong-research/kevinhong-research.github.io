@@ -579,8 +579,12 @@
   .pub-badge { display: none; }
   .pub-cite  { font-size: var(--fs-2xs); }
   .pub-abstract-btn { font-size: var(--fs-2xs); }
-  .pub-abstract-inner {
-    font-size: var(--fs-sm);
+  /* Tight padding ONLY when expanded. The collapsed inner must keep zero
+     vertical padding so the grid `0fr` collapse closes completely — an
+     unconditional padding here left a ~24px phantom abstract panel under
+     every entry on mobile, which read as excessive inter-entry spacing.
+     (font-size is inherited from the base .pub-abstract-inner rule.) */
+  .pub-abstract-body.pub-abstract-open .pub-abstract-inner {
     padding: 0.75rem 0.9rem;
   }
 }
