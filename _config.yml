@@ -138,7 +138,7 @@ lsi: false # produce an index for related posts
 
 # Pagination
 pagination:
-  enabled: true
+  enabled: false # no paginated pages (0 posts); avoids the build-time pagination warning
 
 related_blog_posts:
   enabled: false
