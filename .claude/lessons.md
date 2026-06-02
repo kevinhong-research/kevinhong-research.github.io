@@ -4,6 +4,25 @@ Patterns and pitfalls learned during work on this site. Append new entries at th
 
 ---
 
+## Per-paper Google Scholar links are deterministic — keep `scholar_pub_ids.yml` current
+
+**Rule.** `/publications/` builds each paper's Scholar link from the author profile ID +
+per-paper pub_id in `_data/scholar_pub_ids.yml` (injected as `window.SCHOLAR_USER_ID` /
+`window.SCHOLAR_PUB_IDS` in `_pages/publications.md`; consumed by `scholarUrl(doi, title)` in
+`assets/js/research.js`). Form:
+`https://scholar.google.com/citations?view_op=view_citation&user=<USER>&citation_for_view=<USER>:<PUBID>`
+(concise — no `hl`/`cstart`/`pagesize`).
+
+**Gotchas.**
+- The DOI lookup **lowercases** the DOI (`scholarUrl` does `doi.toLowerCase()`), because MISQ DOIs
+  are uppercase in `publications.yml` (`10.25300/MISQ/…`) but the mapping keys are lowercase.
+- **Adding a new paper?** It falls back to a **title search** until you re-run
+  `scripts/fetch_scholar_pub_ids.py` (per CLAUDE.md) to add its pub_id to `scholar_pub_ids.yml`.
+- Don't auto-verify the link by fetching it — Scholar serves a bot-captcha to non-browser
+  requests. Click-test in a real browser.
+
+---
+
 ## deploy.yml: the Python steps and the giscus yaml-update step are dead weight
 
 **Rule.** Two CI steps in `.github/workflows/deploy.yml` did nothing useful and were removed

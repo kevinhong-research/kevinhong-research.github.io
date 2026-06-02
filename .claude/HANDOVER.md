@@ -4,7 +4,37 @@
 
 ---
 
-## 2026-06-02 — Session 19 (latest)
+## 2026-06-02 — Session 20 (latest)
+
+### Goal
+Switch the per-paper Google Scholar links on `/publications/` from a title *search* to deterministic citation deep links built from the author profile ID + per-paper pub_id we already store.
+
+### What was done
+
+**Plan + QA** (`.claude/plans/2026-06-02_deterministic-scholar-links.md`)
+
+**`_pages/publications.md`** — inject `window.SCHOLAR_USER_ID` + `window.SCHOLAR_PUB_IDS` from `_data/scholar_pub_ids.yml` (mirrors the `SCHOLAR_COUNTS` block; keys are lowercased DOIs).
+
+**`assets/js/research.js`** — new `scholarUrl(doi, title)` helper: lowercases the DOI (handles uppercase MISQ), builds `…/citations?view_op=view_citation&user=<USER>&citation_for_view=<USER>:<PUBID>`, falls back to title search if no pub_id. Used in both the list and timeline render paths.
+
+**QA (served prod build)** — list view 39/39 deterministic, 0 mismatches vs the mapping; timeline path also deterministic; example paper + all uppercase MISQ DOIs verified; 0 title-search remnants. Concise URL drops `hl`/`cstart`/`pagesize`; not auto-loadable (Scholar bot-captcha) → human click-test recommended once.
+
+### Current status
+- **Done & pushed**: scholar-links change (`feat(publications): deterministic Google Scholar links…`) + this handover, pushed to `origin/main` → deploy triggered.
+- **Held back, committed locally, NOT pushed (push later)**: `data: refresh scholar citation counts` + `content(services): add ISS Doctoral Consortium Mentor (2026)`. These were reordered to sit *after* this handover commit so they stayed behind this push (`git push origin <handover-sha>:main`).
+
+### Important context
+- Per-paper Scholar links now depend on `_data/scholar_pub_ids.yml` (DOI→pub_id, tracked/committed). 39/39 published DOIs mapped.
+- DOI lookup is lowercased in `scholarUrl` (MISQ DOIs are uppercase in publications.yml, lowercase in the mapping).
+- A new paper added to `publications.yml` will fall back to a **title search** until `scripts/fetch_scholar_pub_ids.py` is re-run to add its pub_id.
+
+### Next best step
+- **Primary**: watch the deploy from this push; click-test one Scholar link on the live site.
+- **Then**: push the two held-back `_data` commits when ready (`git push origin main`).
+
+---
+
+## 2026-06-02 — Session 19
 
 ### Goal
 Clear the four deferred warnings/inefficiencies from the deploy-log analysis without changing the deployed site or breaking the deploy pipeline.
