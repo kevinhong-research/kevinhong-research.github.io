@@ -287,7 +287,12 @@ sass:
 # -----------------------------------------------------------------------------
 
 jekyll-minifier:
-  exclude: ["robots.txt", "assets/js/search/*.js", "assets/libs/**/*"]
+  # main.css is excluded because Sass already emits it minified (style: compressed),
+  # and CSSminify2 spent ~133s re-minifying its 610KB (tabler-icon data: URIs trigger a
+  # pathological extractDataUrls scan) to save 0.06% — ~95% of the entire build. purgecss
+  # still strips it to ~30KB and GitHub Pages gzips it, so output is unchanged. See
+  # .claude/plans/2026-06-01_exclude-main-css-from-minifier.md.
+  exclude: ["robots.txt", "assets/js/search/*.js", "assets/libs/**/*", "assets/css/main.css"]
   uglifier_args:
     harmony: true
 
