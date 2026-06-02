@@ -56,6 +56,10 @@ special_issues:
 
 # ── PROFESSIONAL SERVICES ────────────────────────────────────────────────────
 professional_services:
+  - role: "ISS Doctoral Consortium Mentor"
+    venue: "INFORMS Information Systems Society"
+    year: "2026"
+
   - role: "Track Co-Chair"
     venue: "International Conference on Information Systems"
     topic: "Sharing Economy, Platforms, and Crowds"
