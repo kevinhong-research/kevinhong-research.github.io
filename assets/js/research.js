@@ -60,6 +60,21 @@
     return '';
   }
 
+  /* Build a deterministic Google Scholar link for a paper, from the author
+     profile ID + per-paper pub_id in _data/scholar_pub_ids.yml (injected as
+     window.SCHOLAR_USER_ID / window.SCHOLAR_PUB_IDS, keyed by lowercased DOI).
+     Falls back to a title search when the pub_id is unknown (or data missing). */
+  function scholarUrl(doi, title) {
+    const d    = (doi || '').toLowerCase();
+    const user = window.SCHOLAR_USER_ID;
+    const pid  = (window.SCHOLAR_PUB_IDS || {})[d];
+    if (user && pid) {
+      return 'https://scholar.google.com/citations?view_op=view_citation&user='
+             + user + '&citation_for_view=' + user + ':' + pid;
+    }
+    return 'https://scholar.google.com/scholar?q=' + encodeURIComponent(title);
+  }
+
   function escapeHtml(str) {
     return String(str || '')
       .replace(/&/g, '&amp;')
@@ -187,7 +202,7 @@
       const citeBadge = doi ? `
         <a class="pub-cite"
            data-doi="${doi}"
-           href="https://scholar.google.com/scholar?q=${encodeURIComponent(pub.title)}"
+           href="${scholarUrl(doi, pub.title)}"
            target="_blank" rel="noopener"
            title="View on Google Scholar">
           <span class="pub-cite-label">${SCHOLAR_ICON}scholar</span>
@@ -604,7 +619,7 @@
         const tlCiteBadge = tlDoi ? `
           <a class="pub-cite"
              data-doi="${tlDoi}"
-             href="https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}"
+             href="${scholarUrl(tlDoi, p.title)}"
              target="_blank" rel="noopener"
              title="View on Google Scholar">
             <span class="pub-cite-label">${SCHOLAR_ICON}scholar</span>

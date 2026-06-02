@@ -133,6 +133,18 @@ window.SCHOLAR_COUNTS = {
 {%- endif -%}
 };
 window.SCHOLAR_COUNTS_FETCHED_AT = {{ site.data.scholar_counts.fetched_at | default: "" | jsonify }};
+
+// Per-paper Google Scholar IDs — deterministic citation deep links (profile + pub_id).
+// Built by scripts/fetch_scholar_pub_ids.py; keys are normalized (lowercased) DOIs.
+// research.js prefers these; falls back to a title search for any DOI not present.
+window.SCHOLAR_USER_ID = {{ site.data.scholar_pub_ids.scholar_user_id | default: "" | jsonify }};
+window.SCHOLAR_PUB_IDS = {
+{%- if site.data.scholar_pub_ids.pub_ids -%}
+{%- for e in site.data.scholar_pub_ids.pub_ids -%}
+  {{ e[0] | jsonify }}: {{ e[1] | jsonify }}{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+{%- endif -%}
+};
 </script>
 
 <script src="{{ '/assets/js/research.js' | relative_url | bust_file_cache }}"></script>
