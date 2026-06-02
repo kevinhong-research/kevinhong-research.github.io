@@ -4,6 +4,36 @@ Patterns and pitfalls learned during work on this site. Append new entries at th
 
 ---
 
+## `jekyll-minifier` re-minifies the already-compressed `main.css` (≈95% of the build)
+
+**Rule.** `_config.yml` sets `sass: style: compressed`, so `_site/assets/css/main.css`
+is *already* minified by Sass. `jekyll-minifier` then runs `CSSminify2` over it again, and
+`CSSminify2.extractDataUrls` does a `while css.match(/url(...data:/)` scan that goes
+pathological on the tabler-icon `data:` URIs baked into the ~610 KB `main.css`. Result:
+**~133 s to shave 0.06 %** — essentially the entire production build. (`jekyll build --profile`
+shows RENDER < 1 s; the WRITE phase is ~all minifier.)
+
+**Fix (shipped 2026-06-02).** Add `assets/css/main.css` to `jekyll-minifier.exclude` in
+`_config.yml`. Build drops ~194 s → ~20 s in CI (143 s → 8 s local). Safe: main.css is
+already Sass-compressed, `purgecss` still strips it to ~30 KB, GitHub Pages gzips it. Deployed
+output verified unchanged (only main.css whitespace differs; all pages render pixel-identical).
+Full record: `.claude/plans/2026-06-01_exclude-main-css-from-minifier.md`.
+
+**How to apply / diagnose.**
+
+1. **Profiling a slow build:** `JEKYLL_ENV=production … jekyll build --profile` → read the
+   phase table. WRITE ≫ RENDER means the minifier. Isolate which sub-pass with a throwaway
+   override: `--config _config.yml,/tmp/o.yml` where `o.yml` sets `jekyll-minifier: {compress_css: false}`
+   (or `compress_javascript: false`). Here CSS minify was ~132 s, JS ~5 s.
+2. **Local prod builds need a UTF-8 locale** (`LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8`) or
+   `CSSminify2` dies with `invalid byte sequence in US-ASCII` on the `data:` URIs. CI is UTF-8, unaffected.
+3. **`_site` tree-diff QA gotcha:** `_pages/football.md` and `_pages/talks.md` cache-bust their
+   map scripts with `?v={{ site.time | date: '%Y%m%d%H%M' }}`, so those two pages differ
+   build-to-build at minute granularity, and `feed.xml` carries a build `<updated>`. Normalize
+   `?v=\d{12}` and the feed timestamp before diffing, or you'll chase phantom changes.
+
+---
+
 ## `bust_file_cache` filter is broken for compiled assets
 
 **Rule.** The `bust_file_cache` filter in `_plugins/cache-bust.rb` reads from the *source* path that matches the asset URL — but for compiled assets (e.g. `main.css` is generated from `main.scss`), there's no source file at `assets/css/main.css`. `File.read` fails silently → `Digest::MD5.hexdigest('')` → constant `?d41d8cd98f00b204e9800998ecf8427e` query param on every page load.

@@ -4,7 +4,53 @@
 
 ---
 
-## 2026-05-25 — Session 17 (latest)
+## 2026-06-02 — Session 18 (latest)
+
+### Goal
+Diagnose why the last GitHub Pages deploy took ~4 min and ship a safe build-speed fix, proving the deployed site is byte/visually unchanged.
+
+### What was done
+
+**Deploy-log analysis** (from `logs_71479252113.zip`)
+- No errors; deploy succeeded. Build step = 194.6 s of the ~219 s pipeline (89%); everything else cached/fast.
+- Warnings surfaced (not all acted on): Node-20 deprecation on `actions/checkout@v4` + `actions/setup-python@v5` (forced to Node 24 ~June 16 2026); unused Python/`nbconvert` toolchain (jekyll-jupyter-notebook is commented out, 0 notebooks); pagination warning; unpinned `yaml-update-action@main` (giscus unconfigured).
+
+**Root cause** (profiled `JEKYLL_ENV=production jekyll build --profile`)
+- RENDER 0.89 s; **WRITE 138.6 s**. `CSSminify2` re-minifying the already-`style: compressed` `main.css` (610 KB) = **133 s** — pathological `extractDataUrls` scan over tabler-icon `data:` URIs — to save 0.06 %. ~95 % of the build.
+
+**Fix** (`_config.yml`, commit `cfa7305`)
+- Added `assets/css/main.css` to `jekyll-minifier.exclude`. One line. Build 143 s → 8 s local (~194 s → ~20 s expected in CI).
+
+**Plan + 3 audit rounds** (`.claude/plans/2026-06-01_exclude-main-css-from-minifier.md`)
+- Mechanism verified (`Page#write` honors exclude); QA hardened across audits.
+
+**QA — proved deployed output unchanged**
+- Built baseline + option-A through the full CI pipeline (jekyll + purgecss) to `/tmp`.
+- Tree-diff: only `main.css` changes (after normalizing build timestamps). `CSSminify2(optionA main.css) == baseline main.css` **byte-for-byte**. `csso`/`css_parser`: only spec-equivalent value-syntax diffs.
+- Visual: `about` computed styles **byte-identical** (light+dark); `publications`/`football`/`talks`/`services` screenshots **pixel-identical** (ImageMagick AE=0). Three scary-looking diffs all proven to be measurement artifacts (cascade-order in a swap test, `color-mix()` `oklch`↔`oklab` serialization jitter, screenshot image-load timing).
+
+**Memory** — global `~/.claude/memory/css-render-equivalence-qa.md` (browser-QA patterns); project lesson appended to `.claude/lessons.md`.
+
+### Current status
+- **Done**: fix + plan + this wrap committed; pushed to `origin/main` → triggers the deploy.
+- **Pending**: confirm the live deploy log shows the "Build site" step drop (~194 s → ~20 s).
+
+### Important context
+- Only `main.css` was excluded — every other CSS file minifies in <0.05 s, so they still go through `CSSminify2`. `purgecss` still strips `main.css` (~610 KB → ~30 KB) and GitHub Pages gzips it, so transfer size is unchanged.
+- Local prod builds need `LANG/LC_ALL=en_US.UTF-8` or `CSSminify2` crashes on the `data:` URIs ("invalid byte sequence in US-ASCII"); CI is UTF-8.
+- `_pages/football.md` + `_pages/talks.md` cache-bust map scripts with `?v={{ site.time | date:'%Y%m%d%H%M' }}` → those pages differ build-to-build (minute granularity). Normalize before tree-diffing.
+
+### Decisions already made
+- Option A (surgical exclude) over `compress_css:false` — zero byte regression since `main.css` is already Sass-minified.
+- Committed to `main` (project's main-based flow), not a branch.
+
+### Next best step
+- **Primary**: watch the next GitHub Actions deploy; confirm the "Build site 🔧" step is ~20 s (was 194.6 s) and the site is unchanged.
+- **Follow-ups** (optional, separate small changes; all from the deploy-log analysis): bump `actions/checkout@v4 → v5` (time-sensitive — Node-20 cutover ~June 16); delete the `Setup Python` + `Install Python dependencies` steps (dead weight, also removes a Node-20-deprecated action); remove/pin `yaml-update-action@main`; silence the pagination warning.
+
+---
+
+## 2026-05-25 — Session 17
 
 ### Goal
 Ship a hybrid Google Scholar + OpenAlex citation pipeline so per-paper counts on `/publications/` reflect Scholar's number when available, with OpenAlex as the fallback. Pipeline must run locally (residential IP); Scholar blocks datacenter / CI IPs.
