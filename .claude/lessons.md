@@ -4,6 +4,38 @@ Patterns and pitfalls learned during work on this site. Append new entries at th
 
 ---
 
+## deploy.yml: the Python steps and the giscus yaml-update step are dead weight
+
+**Rule.** Two CI steps in `.github/workflows/deploy.yml` did nothing useful and were removed
+(2026-06-02, commit `9a6f410`):
+
+1. **`Setup Python` + `Install Python dependencies`.** `requirements.txt` is only `nbconvert`,
+   which exists for `jekyll-jupyter-notebook`. That gem **auto-loads via the Gemfile
+   `:jekyll_plugins` group even though it's commented out in `_config.yml plugins:`** — but it
+   only shells out to `nbconvert` when converting a `.ipynb`, and there are none. So the
+   production build runs fine with **no Python on PATH** (verified: local prod builds succeed
+   without `nbconvert`/`jupyter`). Bonus: `setup-python@v5` was one of the two Node-20-deprecated
+   actions. **Caveat:** `requirements.txt` is still referenced by `axe.yml` + `Dockerfile`, so it
+   was left in place. If a `.ipynb` is ever added, restore the Python steps or CI build fails.
+
+2. **`Update _config.yml` (`fjogeleit/yaml-update-action@main`).** It set `site.giscus.repo`, but
+   **giscus is never rendered**: `_includes/giscus.liquid` is gated behind
+   `{% if site.giscus and page.giscus_comments %}` (post/page layouts) and **no page or
+   `_config.yml` default sets `giscus_comments`**. So the step was a no-op. Removing it also
+   dropped an unpinned `@main` action and the `punycode` deprecation warning.
+
+**How to verify a deploy.yml change is site-safe.** Build twice through the full CI pipeline
+(jekyll + the exact purgecss command) to throwaway dirs — once with the *new* config, once with a
+temp `--config _config.yml,override.yml` that re-creates the *current* prod (here:
+`giscus.repo: <repo>` + `pagination.enabled: true`) — then `diff -r` after normalizing build
+timestamps (`?v=\d{12}` on football/talks map scripts, `feed.xml <updated>`). Identical → safe.
+
+**Hook note.** The `security_reminder_hook` intercepts the **first** Edit to a
+`.github/workflows/*.yml` file each turn with an injection-safety reminder (it does not block a
+clean version bump); just re-issue the edit.
+
+---
+
 ## `jekyll-minifier` re-minifies the already-compressed `main.css` (≈95% of the build)
 
 **Rule.** `_config.yml` sets `sass: style: compressed`, so `_site/assets/css/main.css`

@@ -4,7 +4,54 @@
 
 ---
 
-## 2026-06-02 — Session 18 (latest)
+## 2026-06-02 — Session 19 (latest)
+
+### Goal
+Clear the four deferred warnings/inefficiencies from the deploy-log analysis without changing the deployed site or breaking the deploy pipeline.
+
+### What was done
+
+**Plan + 3 audit rounds** (`.claude/plans/2026-06-02_deploy-log-cleanups.md`)
+- Per-item risk analysis; QA strategy split into site-output proof (items 3–4) vs CI-only validation (items 1–2).
+
+**`.github/workflows/deploy.yml`** (commit `9a6f410`)
+- `actions/checkout@v4 → v5` (off deprecated Node 20).
+- Removed `Setup Python 🐍` + `Install Python dependencies 🐍` (dead weight — `nbconvert` only served the commented-out `jekyll-jupyter-notebook`, 0 `.ipynb`; also retires the 2nd Node-20 action `setup-python@v5`).
+- Removed `Update _config.yml ⚙️` (`yaml-update-action@main`) — set `giscus.repo`, but giscus is never rendered → no-op; also drops an unpinned `@main` action + the `punycode` warning.
+- Steps now: Checkout(v5) → Ruby → Build → Purge → Deploy.
+
+**`_config.yml`** (commit `9a6f410`)
+- `pagination.enabled: true → false` (no paginated pages; silences the warning).
+
+**QA — all green**
+- Site: new config vs baseline override (`giscus.repo` set + `pagination:true`, mimicking current prod) → `_site` **byte-identical** after normalizing `feed.xml` `<updated>`. Items 3+4 change nothing deployed.
+- Build sans Python: new prod build exit 0, 12 pages, no nbconvert/jupyter on PATH.
+- Workflow YAML valid; exactly the 4 intended diffs; no Python/yaml-update remnants.
+- Positive control: pagination warning present in baseline build, absent in new → item 4 works + override applied.
+
+### Current status
+- **Done**: 4 cleanups committed (`9a6f410`) and pushed to `origin/main` → triggers a deploy that runs the NEW workflow (real test of checkout v5).
+- **Pending**: confirm the live Actions run — "Build site 🔧" succeeds, ~20s, no Node-20 / punycode / pagination warnings.
+- **Set aside (committed locally, NOT pushed)**: unrelated `_data/scholar_counts.yml` (Scholar refresh cron ran mid-session) + `_data/services.yml` (new "ISS Doctoral Consortium Mentor 2026" entry) — in their own commit to push later.
+
+### Important context
+- Removing the Python steps is safe because `jekyll-jupyter-notebook` (auto-loaded via Gemfile `:jekyll_plugins` even though commented out in `_config.yml plugins:`) only invokes `nbconvert` when converting a `.ipynb`; none exist. `requirements.txt` was LEFT in place (still referenced by `axe.yml` + `Dockerfile`).
+- checkout v5: no `with:` inputs → v4 defaults preserved; runner 2.334.0 ≥ v5 floor; JamesIves deploy action self-fetches gh-pages with default-true `persist-credentials` → push still works.
+- `axe.yml` still uses `setup-python` (its own Node-20 action) — out of scope; a future pass.
+
+### Decisions already made
+- Bump to v5 (conservative Node-24 step), not latest v6.0.3.
+- Remove (not pin) yaml-update — proven no-op since `giscus_comments` is set nowhere.
+- Left `requirements.txt` and the `jekyll-jupyter-notebook` gem untouched (minimal blast radius).
+
+### Next best step
+- **Primary**: watch the GitHub Actions deploy from the push; confirm green + no Node-20/punycode/pagination warnings + build ~20s.
+- **Then**: push the set-aside `_data` commit when ready (`git push origin main`).
+- **Future**: `axe.yml` setup-python bump; the larger Tier-3 items from earlier sessions.
+
+---
+
+## 2026-06-02 — Session 18
 
 ### Goal
 Diagnose why the last GitHub Pages deploy took ~4 min and ship a safe build-speed fix, proving the deployed site is byte/visually unchanged.
