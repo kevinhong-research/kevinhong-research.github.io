@@ -102,7 +102,13 @@ EXTRACT_JS = r"""() => {
   const fields = [...document.querySelectorAll('.gsc_oci_field')];
   const f = fields.find(e => /total citations/i.test(e.textContent || ''));
   if (f && f.nextElementSibling) {
-    const m = (f.nextElementSibling.textContent || '').match(/Cited by\s+([\d,]+)/);
+    // Read ONLY the "Cited by N" anchor (its href has cites=), NOT the whole value
+    // div — that div also holds the per-year citation histogram, whose digits would
+    // concatenate onto the count via textContent (e.g. 313 -> 3.13...e61). Bug found
+    // 2026-06-03: the histogram is a sibling of the link inside .gsc_oci_value.
+    const a = f.nextElementSibling.querySelector('a[href*="cites="]')
+           || f.nextElementSibling.querySelector('a');
+    const m = a && (a.textContent || '').match(/Cited by\s+([\d,]+)/);
     if (m) return parseInt(m[1].replace(/,/g, ''), 10);
   }
   if (document.querySelector('#gsc_oci_table, .gsc_oci_field')) return 0;  // real page, 0 cites
@@ -204,6 +210,13 @@ def main() -> int:
                 if cnt is None:
                     print(f"[fail] {doi:<40} (no Total-citations row) — flagged")
                     flagged[doi] = "browser fetch: parse miss"
+                    n_fail += 1
+                elif int(cnt) > 1_000_000:
+                    # Sanity bound — no paper has >1M cites. A value this large means
+                    # the parse slurped extra digits (e.g. the histogram). Never record
+                    # it; flag for retry and keep the prior count.
+                    print(f"[fail] {doi:<40} (implausible count {cnt} — parse error) — flagged; prior preserved")
+                    flagged[doi] = f"browser fetch: implausible count {cnt}"
                     n_fail += 1
                 elif int(cnt) == 0:
                     print(f"[zero] {doi:<40} Scholar=0 — flagged, OpenAlex will fill in")
