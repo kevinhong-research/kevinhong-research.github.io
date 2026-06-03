@@ -318,6 +318,32 @@ Search is the count source only for papers *without* a pub_id. To repopulate
 stale pre-direct entries with merged totals, run a forced refresh:
 `./scripts/refresh_scholar.sh --max-age-days 0`.
 
+#### Real-browser fallback (when `requests` is captcha-blocked)
+
+Scholar has tightened bot detection: the plain-`requests` fetch of the
+`citation_for_view` page is now captcha-challenged **regardless of IP or
+headers** (verified — even a fresh phone-hotspot IP with full browser headers
+gets a reCAPTCHA on the `/citations` endpoints; the homepage still loads). When
+`refresh_scholar.sh` reports `blocked (captcha / robot check)` for every paper,
+the request path can't get through.
+
+Fallback: `scripts/fetch_scholar_counts_browser.py` drives your **real,
+signed-in Chrome** (Playwright, `channel="chrome"`), which Scholar trusts:
+
+```bash
+.venv-scholar/bin/pip install playwright          # one-time (package only)
+.venv-scholar/bin/python scripts/fetch_scholar_counts_browser.py --only 10.25300/MISQ/2017/41.4.02   # smoke test
+.venv-scholar/bin/python scripts/fetch_scholar_counts_browser.py            # all papers
+```
+
+A Chrome window opens on your Scholar profile; sign in + solve one captcha, press
+Enter, and it fetches each paper's merged **Total citations** (`source: browser`)
+into `_data/scholar_counts.yml` — same format as the requests path, so the site
+is unchanged. The signed-in session persists in `.scholar-browser-profile/`
+(gitignored), so later runs usually need no interaction. It does **not** auto-push
+(unlike `refresh_scholar.sh`) — review `git diff _data/scholar_counts.yml` and
+commit/push yourself.
+
 #### Manual three-step equivalent
 
 Use this if you want to review the diff before pushing:
