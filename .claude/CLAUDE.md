@@ -331,12 +331,12 @@ Fallback: `scripts/fetch_scholar_counts_browser.py` drives your **real,
 signed-in Chrome** (Playwright, `channel="chrome"`), which Scholar trusts:
 
 ```bash
-.venv-scholar/bin/pip install playwright          # one-time (package only)
-.venv-scholar/bin/python scripts/fetch_scholar_counts_browser.py --only 10.25300/MISQ/2017/41.4.02   # smoke test
-.venv-scholar/bin/python scripts/fetch_scholar_counts_browser.py            # all papers
+./scripts/fetch_scholar_browser.sh --only 10.25300/MISQ/2017/41.4.02   # smoke test
+./scripts/fetch_scholar_browser.sh                                     # all papers
 ```
 
-A Chrome window opens on your Scholar profile; sign in + solve one captcha, press
+(The wrapper auto-installs the `playwright` package on first run.) A Chrome
+window opens on your Scholar profile; sign in + solve one captcha, press
 Enter, and it fetches each paper's merged **Total citations** (`source: browser`)
 into `_data/scholar_counts.yml` — same format as the requests path, so the site
 is unchanged. The signed-in session persists in `.scholar-browser-profile/`
