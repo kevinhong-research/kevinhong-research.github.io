@@ -184,20 +184,36 @@ def fetch_count_via_citation_page(user_id: str, pub_id: str) -> tuple[int | None
     if r.status_code != 200:
         return None, f"http {r.status_code}"
 
-    # Detect Scholar CAPTCHA / "unusual traffic" interstitial.
-    if "/sorry/" in r.url or "unusual traffic" in r.text.lower():
-        return None, "captcha challenge"
+    # Detect a Scholar block / captcha / robot-check interstitial. Several
+    # variants exist: the /sorry/ redirect, an "unusual traffic" notice, and a
+    # reCAPTCHA shell (id="gs_captcha" + "not a robot"; the page title stays
+    # "Google Scholar" and carries no citation table). All mean the IP is
+    # blocked — caller should stop the run, not keep firing requests.
+    low = r.text.lower()
+    if ("/sorry/" in r.url or "unusual traffic" in low or "gs_captcha" in low
+            or "not a robot" in low or "please show you" in low):
+        return None, "blocked (captcha / robot check)"
 
-    # "Cited by N" appears in meta description and page body. First match
-    # is the most reliable signal (in <head> or page header).
-    m = re.search(r'Cited by (\d{1,3}(?:,\d{3})*)', r.text)
+    text = r.text
+    # The "Total citations" row holds Scholar's MERGED total for this entry —
+    # it aggregates the versions Scholar grouped under one citation_for_view id
+    # (e.g. a published paper + its long-circulating working paper). Anchor on
+    # that row specifically; the FIRST "Cited by N" on the page is NOT reliable,
+    # because the per-year citation histogram and the "Scholar articles"
+    # (related-paper) list below it also carry "Cited by N" links.
+    #   DOM: <div class="gsc_oci_field">Total citations</div>
+    #        <div class="gsc_oci_value">…<a href="…cites=…">Cited by N</a>
+    m = re.search(r'Total citations.*?Cited by\s+(\d{1,3}(?:,\d{3})*)', text, re.DOTALL)
     if m:
-        return int(m.group(1).replace(",", "")), "ok"
+        return int(m.group(1).replace(",", "")), "ok (total citations)"
 
-    # Page loaded fine but no "Cited by" → almost certainly 0 cites
-    # (Scholar omits the label when count is 0). We return 0 explicitly
-    # so the caller's Scholar=0 handler runs (flag + fallback to OpenAlex).
-    return 0, "no cited-by label (assumed 0)"
+    # No "Total citations" row. On a real citation page that means 0 cites
+    # (Scholar omits the row when the total is 0). But if the citation table
+    # itself is absent, the page is malformed/unexpected — return None so the
+    # caller flags it for retry rather than recording a wrong 0.
+    if "gsc_oci_field" in text or "gsc_oci_table" in text:
+        return 0, "no total-citations row (0 cites)"
+    return None, "unrecognized page (no citation table)"
 
 
 def verify_match(our_title: str, our_year: int, our_doi: str, scholar_pub: dict) -> tuple[bool, str, float]:
@@ -343,6 +359,7 @@ def scrape(args) -> int:
     n_updated = n_unchanged = n_skipped = n_failed = n_zero = n_fresh = 0
     n_direct = n_search = 0
     blocked = False
+    consecutive_blocks = 0  # direct-path captcha/block streak → stop the run early
 
     for i, pub in enumerate(pubs):
         doi_raw = pub.get("doi", "")
@@ -395,12 +412,38 @@ def scrape(args) -> int:
                 matched_sim = 1.0
                 fetch_source = "direct"
                 n_direct += 1
+                consecutive_blocks = 0
             else:
-                # Direct fetch failed — fall through to search as safety net.
-                print(f"[direct-fail] {doi:<40} ({direct_reason}) — falling back to search")
+                # Direct fetch failed. Do NOT fall back to search for a pub_id
+                # paper: scholarly.search_pubs returns the primary version's
+                # num_citations, which UNDERCOUNTS Scholar-merged entries — a
+                # published paper merged with its long-circulating working/preprint
+                # version has a higher citation_for_view "Total citations" (the
+                # merged number we want). Flag for retry next run and preserve any
+                # prior (merged) count rather than overwriting it with a lower
+                # per-version number.
+                last_reason = f"direct citation-page fetch failed ({direct_reason}); retry next run"
+                print(f"[direct-fail] {doi:<40} ({direct_reason}) — flagged for retry; prior count preserved")
+                # If Scholar is serving block/captcha pages, stop the whole run
+                # rather than firing the remaining requests into the block (which
+                # only deepens it). A one-off transient failure won't trip this.
+                if "blocked" in direct_reason or "429" in direct_reason:
+                    consecutive_blocks += 1
+                    if consecutive_blocks >= 3:
+                        print(f"[BLOCKED] Scholar served {consecutive_blocks} captcha/blocks in a row — stopping the run.")
+                        print(f"          Wait several hours or switch networks (phone hotspot / toggle VPN), then re-run.")
+                        flagged[doi] = last_reason
+                        blocked = True
+                        break
 
-        # ───────────────── Search-based fallback ─────────────────
-        if new_count is None:
+        # ──────────── Search-based fallback (papers WITHOUT a pub_id only) ────────────
+        # Search is the count source ONLY when there is no deterministic pub_id.
+        # scholarly.search_pubs returns the primary version's num_citations, which
+        # undercounts Scholar-merged entries, so it is never used for a pub_id
+        # paper — the direct citation_for_view page above (the MERGED "Total
+        # citations") is authoritative there. With pub_ids for every paper, this
+        # path is effectively a no-pub_id safety net.
+        if new_count is None and not pub_id:
             author_last = first_author_last_name(pub.get("authors", []))
             query = f"{title} {author_last}".strip()
             matched = None
@@ -434,10 +477,11 @@ def scrape(args) -> int:
 
         # ───────────────── Record / flag ─────────────────
         if new_count is None and fetch_source != "search":
-            # Direct path failed AND search wasn't tried (shouldn't really
-            # happen since we fall through), or matched was None from search.
+            # pub_id paper whose direct fetch failed (search intentionally skipped
+            # to avoid an undercount), or a no-pub_id paper with no usable search
+            # result. Flag for retry; any prior (merged) count is preserved.
             print(f"[fail] {doi:<40} ({last_reason}) — flagged for review")
-            flagged[doi] = f"no match in {MAX_SCHOLAR_HITS} hits: {last_reason}"
+            flagged[doi] = last_reason if pub_id else f"no match in {MAX_SCHOLAR_HITS} hits: {last_reason}"
             n_failed += 1
         elif new_count is None:
             print(f"[fail] {doi:<40} ({last_reason}) — flagged for review")
