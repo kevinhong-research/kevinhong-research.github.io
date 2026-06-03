@@ -302,10 +302,21 @@ order so the same paper isn't always at position #39.
 (see one-time profile bootstrap above), each paper's count is fetched
 via the canonical per-paper citation page — one lightweight HTTP request,
 no metadata-stub risk, no `verify_match` needed because the pub_id is
-deterministic. Jitter shortens to 10-20s for these. Papers without a
-pub_id mapping fall back to `scholarly.search_pubs` with 30-90s jitter.
-A full refresh post-bootstrap is ~10-12 min (was ~40 min) at far lower
-block risk.
+deterministic. The "Cited by N" on that page is Scholar's **merged "Total
+citations"** — it includes citations to versions Scholar grouped under the
+same entry (e.g. a published paper merged with its long-circulating working
+paper), which is the number we want to display. Jitter shortens to 10-20s
+for these. A full refresh post-bootstrap is ~10-12 min (was ~40 min) at far
+lower block risk.
+
+**Why a pub_id paper never falls back to search:** `scholarly.search_pubs`
+returns the *primary version's* `num_citations`, which **undercounts** a
+Scholar-merged entry (e.g. MISQ 2017/41.4.02: search 305 vs merged 313). So
+for a paper with a pub_id, a failed direct fetch is **flagged for retry**
+(prior merged count preserved), never replaced with the lower search number.
+Search is the count source only for papers *without* a pub_id. To repopulate
+stale pre-direct entries with merged totals, run a forced refresh:
+`./scripts/refresh_scholar.sh --max-age-days 0`.
 
 #### Manual three-step equivalent
 
