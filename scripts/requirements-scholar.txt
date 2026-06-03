@@ -1,2 +1,6 @@
 scholarly==1.7.11
 PyYAML>=6.0
+# Real-browser fallback fetcher (scripts/fetch_scholar_counts_browser.py) for when
+# Scholar captcha-blocks the plain-requests path. Uses channel="chrome" (installed
+# Chrome) so no `playwright install` browser download is required.
+playwright>=1.40
