@@ -4,6 +4,31 @@ Patterns and pitfalls learned during work on this site. Append new entries at th
 
 ---
 
+## Scholar now captcha-blocks the `requests` scraper — use the signed-in-Chrome fallback
+
+**Rule.** The plain-`requests` fetch of Scholar's `/citations` endpoints
+(`fetch_scholar_counts.py` / `refresh_scholar.sh`) is now reCAPTCHA-challenged
+**regardless of IP or headers** (verified 2026-06-03: a fresh phone-hotspot IP with
+a full browser-header set + warm-up cookies still gets `gs_captcha` on both the
+citation page and the profile page; only the bare homepage loads). When
+`refresh_scholar.sh` prints `blocked (captcha / robot check)` for every paper, the
+request path can't get through.
+
+**Fallback:** `./scripts/fetch_scholar_browser.sh` — Playwright + your signed-in
+Chrome (`channel="chrome"`, persistent `.scholar-browser-profile/`). Sign in + solve
+one captcha once; it reads the merged "Total citations" and auto-commits + pushes.
+
+**Don't** keep re-running the requests path on a block — each request resets the
+cooldown. Both paths write identical `_data/scholar_counts.yml` (only `source:`
+differs: `direct` vs `browser`).
+
+**Merged total:** the count we display is the `citation_for_view` page's "Total
+citations" row — it aggregates the versions Scholar grouped under one entry (a
+published paper + its working-paper). The old search path recorded the *primary
+version's* count, which undercounts (MISQ 2017/41.4.02: 305 vs merged 313).
+
+---
+
 ## Per-paper Google Scholar links are deterministic — keep `scholar_pub_ids.yml` current
 
 **Rule.** `/publications/` builds each paper's Scholar link from the author profile ID +

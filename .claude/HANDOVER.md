@@ -4,7 +4,43 @@
 
 ---
 
-## 2026-06-02 — Session 20 (latest)
+## 2026-06-03 — Session 21 (latest)
+
+### Goal
+Fix per-paper Google Scholar citation counts showing **less** than Scholar's "Total citations" (e.g. MISQ 2017/41.4.02: site 305 vs Scholar's merged 313), so every entry shows the MERGED total that aggregates preprint/working-paper versions grouped under one Scholar entry.
+
+### What was done
+
+**Root cause** — most counts in `_data/scholar_counts.yml` (33/39) were stale *search-based* values (from before the direct-URL path existed): `scholarly.search_pubs` returns the **primary version's** count, which undercounts Scholar-merged entries. Only the `citation_for_view` page's "Total citations" row is the merged total.
+
+**Scraper fixes** (`scripts/fetch_scholar_counts.py`, commits `2f5381a`, `3812226`)
+- Count for a pub_id paper now comes ONLY from the direct merged total; a failed direct fetch is flagged for retry (prior count preserved), never replaced by the lower search number.
+- Parse anchors on the `Total citations` row (not the first "Cited by N" — histogram + related-articles also carry one). Validated in real Chrome.
+- Broadened captcha detection (`gs_captcha` / "not a robot"); stops the run after 3 consecutive blocks instead of firing all 39 into the wall.
+
+**Discovery** — Scholar now captcha-blocks the plain-`requests` fetch of `/citations` **regardless of IP/headers** (verified: fresh phone-hotspot + full browser headers still gets a reCAPTCHA; homepage loads). The request path can no longer reach the counts.
+
+**Browser fallback** (NEW, commits `f3961ba`, `6c4effa`, `58f2ae1`)
+- `scripts/fetch_scholar_counts_browser.py` + wrapper `scripts/fetch_scholar_browser.sh`: drives the user's **signed-in Chrome** via Playwright (`channel="chrome"`, persistent profile `.scholar-browser-profile/`, gitignored). Reads merged Total citations into `scholar_counts.yml` (`source: browser`, same format). The wrapper **auto-commits + pushes** (skips a fully-blocked run); `playwright>=1.40` added to requirements.
+
+**Also this session** (earlier, already on origin): deterministic Scholar *links* (Session 20), and the deploy-log cleanups (Sessions 19).
+
+### Current status
+- **Done & pushed**: all scraper fixes + the browser fetcher tooling.
+- **NOT done**: the actual count refresh. The requests path is captcha-blocked, and today's blocked `refresh_scholar.sh` runs left 4 redundant `data: refresh…` commits on origin (flag metadata only — counts unchanged, so the site still shows the old numbers like 305).
+
+### Important context — current workflow (two one-command paths)
+- Normal: `./scripts/refresh_scholar.sh` (fetch→commit→push). **Blocked right now.**
+- Blocked (now): `./scripts/fetch_scholar_browser.sh` — signed-in Chrome, fetch→commit→push. Sign in + solve one captcha on first run; login persists.
+- Both write identical `scholar_counts.yml`; only `source:` differs (`direct` vs `browser`).
+
+### Next best step
+- **Primary**: run `./scripts/fetch_scholar_browser.sh --only 10.25300/MISQ/2017/41.4.02` as a smoke test (expect `305 -> 313`), then `./scripts/fetch_scholar_browser.sh` for all papers → merged totals deploy automatically.
+- The `.scholar-browser-profile/` keeps you logged in for subsequent runs.
+
+---
+
+## 2026-06-02 — Session 20
 
 ### Goal
 Switch the per-paper Google Scholar links on `/publications/` from a title *search* to deterministic citation deep links built from the author profile ID + per-paper pub_id we already store.
