@@ -340,9 +340,9 @@ window opens on your Scholar profile; sign in + solve one captcha, press
 Enter, and it fetches each paper's merged **Total citations** (`source: browser`)
 into `_data/scholar_counts.yml` — same format as the requests path, so the site
 is unchanged. The signed-in session persists in `.scholar-browser-profile/`
-(gitignored), so later runs usually need no interaction. It does **not** auto-push
-(unlike `refresh_scholar.sh`) — review `git diff _data/scholar_counts.yml` and
-commit/push yourself.
+(gitignored), so later runs usually need no interaction. Like `refresh_scholar.sh`,
+the wrapper **auto-commits + pushes** when the run fetched ≥1 count; a fully-blocked
+run (no counts) is not committed. Use `--dry-run` to fetch without writing/committing.
 
 #### Manual three-step equivalent
 

@@ -15,8 +15,9 @@
 # Login persists in .scholar-browser-profile/ (gitignored), so later runs usually
 # need no interaction.
 #
-# Unlike refresh_scholar.sh, this does NOT auto-commit/push — review
-# `git diff _data/scholar_counts.yml`, then commit + push yourself.
+# Like refresh_scholar.sh, this auto-commits + pushes _data/scholar_counts.yml
+# when the run fetched at least one count. A fully-blocked run (no counts) is NOT
+# committed. Use --dry-run to fetch without writing/committing.
 #
 # One-time setup: ./scripts/setup_scholar.sh  (the playwright package is
 # auto-installed below if missing; uses your installed Chrome, no browser download).
@@ -37,4 +38,26 @@ if ! .venv-scholar/bin/python -c "import playwright" 2>/dev/null; then
   .venv-scholar/bin/pip install "playwright>=1.40" || exit 1
 fi
 
-exec .venv-scholar/bin/python scripts/fetch_scholar_counts_browser.py "$@"
+.venv-scholar/bin/python scripts/fetch_scholar_counts_browser.py "$@"
+rc=$?
+
+# rc=2 → nothing fetched (e.g. captcha-blocked); skip committing flag-only churn.
+if [ "$rc" -eq 2 ]; then
+  echo "No counts fetched (Scholar blocked?) — not committing."
+  exit 0
+fi
+# Any other non-zero (hard error, or a Ctrl-C abort) → don't auto-commit.
+if [ "$rc" -ne 0 ]; then
+  echo "Fetcher exited with code $rc — not committing." >&2
+  exit "$rc"
+fi
+
+# --dry-run leaves the file untouched → nothing to commit.
+if git diff --quiet _data/scholar_counts.yml; then
+  echo "No changes to _data/scholar_counts.yml — nothing to commit."
+  exit 0
+fi
+
+git add _data/scholar_counts.yml
+git commit -m "data: refresh scholar citation counts (browser)"
+git push

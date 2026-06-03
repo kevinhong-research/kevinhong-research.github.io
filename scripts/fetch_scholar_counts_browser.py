@@ -234,6 +234,11 @@ def main() -> int:
         atomic_write_yaml(build_payload(counts, flagged))
         print(f"\nWrote {OUT_FILE.relative_to(ROOT)}")
     print(f"Summary: {n_ok} ok, {n_zero} zero (flagged), {n_fail} failed (flagged).")
+    # Exit code for the wrapper: rc=2 = nothing fetched (e.g. fully captcha-blocked)
+    # → wrapper skips committing flag-only churn. rc=0 = at least one count fetched
+    # (or --dry-run) → wrapper commits + pushes.
+    if n_ok == 0 and not args.dry_run:
+        return 2
     return 0
 
 
