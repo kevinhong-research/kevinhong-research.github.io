@@ -184,9 +184,15 @@ def fetch_count_via_citation_page(user_id: str, pub_id: str) -> tuple[int | None
     if r.status_code != 200:
         return None, f"http {r.status_code}"
 
-    # Detect Scholar CAPTCHA / "unusual traffic" interstitial.
-    if "/sorry/" in r.url or "unusual traffic" in r.text.lower():
-        return None, "captcha challenge"
+    # Detect a Scholar block / captcha / robot-check interstitial. Several
+    # variants exist: the /sorry/ redirect, an "unusual traffic" notice, and a
+    # reCAPTCHA shell (id="gs_captcha" + "not a robot"; the page title stays
+    # "Google Scholar" and carries no citation table). All mean the IP is
+    # blocked — caller should stop the run, not keep firing requests.
+    low = r.text.lower()
+    if ("/sorry/" in r.url or "unusual traffic" in low or "gs_captcha" in low
+            or "not a robot" in low or "please show you" in low):
+        return None, "blocked (captcha / robot check)"
 
     text = r.text
     # The "Total citations" row holds Scholar's MERGED total for this entry —
@@ -353,6 +359,7 @@ def scrape(args) -> int:
     n_updated = n_unchanged = n_skipped = n_failed = n_zero = n_fresh = 0
     n_direct = n_search = 0
     blocked = False
+    consecutive_blocks = 0  # direct-path captcha/block streak → stop the run early
 
     for i, pub in enumerate(pubs):
         doi_raw = pub.get("doi", "")
@@ -405,17 +412,29 @@ def scrape(args) -> int:
                 matched_sim = 1.0
                 fetch_source = "direct"
                 n_direct += 1
+                consecutive_blocks = 0
             else:
-                # Direct fetch failed (429 / captcha / network). Do NOT fall back
-                # to search for a pub_id paper: scholarly.search_pubs returns the
-                # primary version's num_citations, which UNDERCOUNTS Scholar-merged
-                # entries — a published paper merged with its long-circulating
-                # working/preprint version has a higher citation_for_view "Total
-                # citations" (the merged number we want). Flag for retry next run
-                # and preserve any prior (merged) count rather than overwriting it
-                # with a lower per-version number.
+                # Direct fetch failed. Do NOT fall back to search for a pub_id
+                # paper: scholarly.search_pubs returns the primary version's
+                # num_citations, which UNDERCOUNTS Scholar-merged entries — a
+                # published paper merged with its long-circulating working/preprint
+                # version has a higher citation_for_view "Total citations" (the
+                # merged number we want). Flag for retry next run and preserve any
+                # prior (merged) count rather than overwriting it with a lower
+                # per-version number.
                 last_reason = f"direct citation-page fetch failed ({direct_reason}); retry next run"
                 print(f"[direct-fail] {doi:<40} ({direct_reason}) — flagged for retry; prior count preserved")
+                # If Scholar is serving block/captcha pages, stop the whole run
+                # rather than firing the remaining requests into the block (which
+                # only deepens it). A one-off transient failure won't trip this.
+                if "blocked" in direct_reason or "429" in direct_reason:
+                    consecutive_blocks += 1
+                    if consecutive_blocks >= 3:
+                        print(f"[BLOCKED] Scholar served {consecutive_blocks} captcha/blocks in a row — stopping the run.")
+                        print(f"          Wait several hours or switch networks (phone hotspot / toggle VPN), then re-run.")
+                        flagged[doi] = last_reason
+                        blocked = True
+                        break
 
         # ──────────── Search-based fallback (papers WITHOUT a pub_id only) ────────────
         # Search is the count source ONLY when there is no deterministic pub_id.
