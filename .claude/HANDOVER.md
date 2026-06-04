@@ -4,7 +4,40 @@
 
 ---
 
-## 2026-06-03 — Session 21 (latest)
+## 2026-06-03 — Session 22 (latest)
+
+### Goal
+Condense the `/talks/` page by rendering each talk's **university and college/school on one line**, separated by a faint middot, without changing either name's font size or color.
+
+### What was done
+
+**Talks layout condense** (`assets/css/talks.css`, pure CSS — no template change)
+- `.talk-heading` switched from `flex-direction: column` to `flex-flow: row wrap` + `align-items: baseline`, so `.talk-institution` (university) and `.talk-venue` (college/school) share one baseline.
+- New `.talk-venue::before` middot (`content: "\00B7"`) in `--text-lo` — the var literally documented as the separator color (`#737371` dark / `#9c9c8f` light). Institution/venue font size/weight/color left untouched, honoring the "no font change" constraint.
+- `@media (max-width: 700px)` reverts to the original stacked two-line layout and hides the dot, so long names never break mid-word on phones.
+
+### Current status
+- **Done & pushed**: the condense change + this handover.
+- Verified in preview across desktop (1280), tablet (768), mobile (375), light + dark themes; 0 console errors. Longest entry (*University of North Carolina at Charlotte · Belk College of Business*) fits on one line down to 768px; below 700px it stacks cleanly. No-venue entries (Uber, CKGSB) correctly show no dot.
+
+### Important context
+- Each talk's `institution` (university) and optional `venue` (college/school) live in `_data/talks.yml`; rendered by `_includes/talks_render.html` (unchanged this session).
+- Inline-vs-stacked is purely a CSS responsive decision; the 700px breakpoint reuses the page's existing mobile breakpoint.
+
+### Decisions already made
+- Middot (`·`) over pipe (`|`) — softer/editorial, matches the site's serif tone.
+- Mobile stacks rather than wraps inline — avoids butchered mid-name breaks; the density win is on desktop where page length matters for scanning.
+
+### Next best step
+- **Primary**: watch the GitHub Actions deploy from this push; glance at the live `/talks/` page once built.
+- Optional tuning: dot side-margin is `0.5rem`; could nudge the dot a step brighter (`--text-mid`) if it reads too faint.
+
+### Lessons learned
+- None new — clean session, no corrections or tool surprises. (`--text-lo` as the canonical faint-separator color is already documented in `_sass/_themes.scss`.)
+
+---
+
+## 2026-06-03 — Session 21
 
 ### Goal
 Fix per-paper Google Scholar citation counts showing **less** than Scholar's "Total citations" (e.g. MISQ 2017/41.4.02: site 305 vs Scholar's merged 313), so every entry shows the MERGED total that aggregates preprint/working-paper versions grouped under one Scholar entry.
