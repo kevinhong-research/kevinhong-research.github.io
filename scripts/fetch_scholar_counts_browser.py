@@ -64,9 +64,9 @@ CITATION_URL = ("https://scholar.google.com/citations?view_op=view_citation&hl=e
                 "&user={user}&citation_for_view={user}:{pubid}")
 PROFILE_URL = "https://scholar.google.com/citations?hl=en&user={user}"
 
-# Polite spacing between papers. A trusted signed-in session tolerates a tighter
-# range than the request-based scraper, but we still jitter to look human.
-JITTER_MIN_SEC, JITTER_MAX_SEC = 4, 9
+# Polite random spacing between papers (seconds) — ~15s average. Matches the
+# direct requests path's 10-20s range; conservative even for a signed-in session.
+JITTER_MIN_SEC, JITTER_MAX_SEC = 10, 20
 
 
 def load_pubs() -> list:
