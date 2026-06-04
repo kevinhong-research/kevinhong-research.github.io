@@ -122,8 +122,10 @@
 
 .talk-heading {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
+  flex-flow: row wrap;
+  align-items: baseline;
+  column-gap: 0;
+  row-gap: var(--space-2xs);
   min-width: 0;
 }
 
@@ -172,6 +174,16 @@
   font-weight: 300;
   color: var(--text-mid);
   line-height: 1.4;
+}
+
+/* Inline dot joining institution · venue on one line (desktop).
+   New separator element only — does not touch the font size/weight/color
+   of either name. Hidden on mobile, where the heading falls back to two
+   stacked lines (see the max-width: 700px block below). */
+.talk-venue::before {
+  content: "\00B7";
+  margin: 0 0.5rem;
+  color: var(--text-lo);
 }
 
 .talk-meta {
@@ -247,6 +259,17 @@
 
   .talk-meta {
     justify-content: flex-start;
+  }
+
+  /* On narrow screens, fall back to the original stacked two-line layout so
+     long names never get butchered mid-word. The inline dot is for desktop. */
+  .talk-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .talk-venue::before {
+    display: none;
   }
 }
 
