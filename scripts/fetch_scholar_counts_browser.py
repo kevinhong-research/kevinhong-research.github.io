@@ -64,9 +64,9 @@ CITATION_URL = ("https://scholar.google.com/citations?view_op=view_citation&hl=e
                 "&user={user}&citation_for_view={user}:{pubid}")
 PROFILE_URL = "https://scholar.google.com/citations?hl=en&user={user}"
 
-# Polite random spacing between papers (seconds) — ~15s average. Matches the
-# direct requests path's 10-20s range; conservative even for a signed-in session.
-JITTER_MIN_SEC, JITTER_MAX_SEC = 10, 20
+# Polite random spacing between papers (seconds) — ~20s average. Conservative
+# enough to keep a signed-in session from tripping a captcha on a ~39-paper run.
+JITTER_MIN_SEC, JITTER_MAX_SEC = 15, 25
 
 
 def load_pubs() -> list:
