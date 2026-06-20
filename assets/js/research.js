@@ -13,7 +13,7 @@
   let allPubs       = [];   /* full unfiltered set, kept for view switching */
   let currentFilter = 'all';
   let currentQuery  = '';
-  let currentSort   = 'default';  /* 'default' (year desc, file order) or 'cites-desc' */
+  let currentSort   = 'default';  /* 'default' (forthcoming first, then year+month desc — see sortByPublicationOrder) or 'cites-desc' */
   let pendingPaperId = null;
   let searchDebounceTimer = null;
   let citationsApplied = false;  /* idempotence guard for fetchCitations */
@@ -58,6 +58,62 @@
       if (m) return m[1].trim();
     }
     return '';
+  }
+
+  /* ── PUBLICATION DATE ORDERING ─────────────────────────────
+     Derive each paper's issue month from its journal's issue
+     cadence so the list/timeline sort by true publication date.
+     The volume field is "VOL(ISSUE):pages"; ISSUE drives the
+     month. Cadences below were verified against Crossref's
+     issue-print date for EVERY paper currently in
+     publications.yml (38/38 match):
+       ISR, MISQ — quarterly  → issue×3    (Mar, Jun, Sep, Dec)
+       MS,  POM  — monthly    → issue       (Jan…Dec)
+       IJOC      — bimonthly  → issue×2−1   (Jan, Mar, May, Jul, Sep, Nov)
+     Unknown journals fall back to mid-year so they still sort by
+     year without skewing same-year neighbours.
+  ──────────────────────────────────────────────────────────── */
+  const ISSUE_TO_MONTH = {
+    ISR:  function (i) { return i * 3; },
+    MISQ: function (i) { return i * 3; },
+    MS:   function (i) { return i; },
+    POM:  function (i) { return i; },
+    IJOC: function (i) { return i * 2 - 1; },
+  };
+
+  function pubIssue(pub) {
+    const m = (pub.volume || '').match(/^\s*\d+\s*\((\d+)\)/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+
+  function pubMonth(pub) {
+    const iss = pubIssue(pub);
+    const fn  = ISSUE_TO_MONTH[pub.journal];
+    if (iss != null && fn) return Math.min(12, Math.max(1, fn(iss)));
+    return 6; /* unknown cadence → mid-year, so year still dominates */
+  }
+
+  /* Canonical display order for the publications list + timeline:
+       1. Forthcoming papers first (then newest year among them).
+       2. Published papers by (year, month) descending — newest first.
+       3. Stable: papers in the same year+month keep their file order.
+     Returns a NEW array; the source (window.PUBLICATIONS) is untouched. */
+  function sortByPublicationOrder(pubs) {
+    return pubs
+      .map(function (p, i) { return { p: p, i: i }; })
+      .sort(function (a, b) {
+        const fa = a.p.forthcoming ? 1 : 0;
+        const fb = b.p.forthcoming ? 1 : 0;
+        if (fa !== fb) return fb - fa;            /* forthcoming first */
+        const ya = a.p.year || 0, yb = b.p.year || 0;
+        if (ya !== yb) return yb - ya;            /* newer year first */
+        if (!fa) {                                /* published → by month */
+          const ma = pubMonth(a.p), mb = pubMonth(b.p);
+          if (ma !== mb) return mb - ma;          /* later month first */
+        }
+        return a.i - b.i;                         /* stable: file order */
+      })
+      .map(function (x) { return x.p; });
   }
 
   /* Build a deterministic Google Scholar link for a paper, from the author
@@ -1014,7 +1070,7 @@
 
   /* ── INIT ──────────────────────────────────────────────────*/
   document.addEventListener('DOMContentLoaded', () => {
-    renderPubs(window.PUBLICATIONS || []);
+    renderPubs(sortByPublicationOrder(window.PUBLICATIONS || []));
     initSectionReveal();
     fetchCitations();
     applyHashFilter();
