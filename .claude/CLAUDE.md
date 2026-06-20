@@ -387,6 +387,33 @@ git rm _data/scholar_counts.yml && git commit -m "revert: remove scholar pipelin
 The site falls back to OpenAlex for every paper, exactly as before this
 pipeline shipped.
 
+### Forthcoming → in-print promotion
+
+Publications carry `forthcoming: true` until they're assigned to a journal
+issue, at which point that line becomes `volume: "VOL(ISSUE):START–END"`.
+`scripts/refresh_forthcoming.sh` automates the transition: for every
+`forthcoming: true` entry **with a DOI**, it asks Crossref whether the paper
+is now in an issue and, if so, rewrites the line in place (and updates
+`year:` if the finalised print year differs). Page ranges are normalised to
+an en-dash (the dominant style in the file).
+
+```bash
+./scripts/refresh_forthcoming.sh             # check all; commit + push if any promoted
+./scripts/refresh_forthcoming.sh --dry-run   # report only, no write/commit
+./scripts/refresh_forthcoming.sh --only DOI  # check a single DOI
+```
+
+Pure standard library — **no venv** (unlike the scholar pipeline). The Python
+script (`scripts/refresh_forthcoming.py`) edits `_data/publications.yml`
+line-by-line so comments/formatting are preserved, exactly like
+`fix_pub_titles.py`. A paper Crossref hasn't placed in an issue yet (the
+normal forthcoming case) is left untouched; one that's in an issue but
+missing a page range is reported for manual review rather than written with a
+malformed volume. The wrapper auto-commits + pushes only when something was
+promoted; a no-op run exits clean. Month/issue-cadence ordering then sorts
+the newly-printed paper into place automatically (see `sortByPublicationOrder`
+in `assets/js/research.js`).
+
 ### Football page dark mode
 `assets/css/football.css` has three theme sections:
 1. Base (dark palette, no selector) — default and dark mode cards
