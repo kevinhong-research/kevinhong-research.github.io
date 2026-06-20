@@ -270,15 +270,29 @@ back to search-based fetching for every paper (more block-prone).
 ./scripts/refresh_scholar.sh
 ```
 
-What it does, in order:
+Two phases, each making its own commit, with a **single push** at the end:
+
+**Phase 1 — promote forthcoming papers** (`scripts/refresh_forthcoming.py`,
+pure stdlib, fast). Checks Crossref for every `forthcoming: true` paper with a
+DOI and flips it to `volume: "VOL(ISSUE):START–END"` once it's in an issue.
+Runs *first* so a promotion lands even if the scholar scrape is later blocked.
+Commit: `data(publications): promote forthcoming papers now in print`. (Also
+available standalone as `./scripts/refresh_forthcoming.sh` — see the
+"Forthcoming → in-print promotion" section.)
+
+**Phase 2 — scholar citation refresh** (the scraper below):
 1. Runs the scraper (~10–20 min for 39 papers with jittered sleeps).
 2. If `_data/scholar_counts.yml` changed, commits with message
-   `data: refresh scholar citation counts` and pushes to `origin/main`.
-3. If nothing changed (counts identical to last run), exits cleanly with **no
-   commit** — safe to re-run any time.
+   `data: refresh scholar citation counts`.
+3. If nothing changed (counts identical to last run), no commit.
 4. If Scholar blocks the IP mid-run, commits the partial progress with a
-   `(partial — IP blocked mid-run)` tag, then exits. Retry from a different
-   network or after 24 h.
+   `(partial — IP blocked mid-run)` tag. Retry from a different network or
+   after 24 h.
+
+If neither phase changed anything, the run exits cleanly with no commit and no
+push — safe to re-run any time. `--dry-run` applies to both phases; the
+scholar-only flags (`--limit`, `--only`, `--max-age-days`) pass through to the
+scraper, and the forthcoming check still runs (it's cheap and idempotent).
 
 Smoke tests and partial refreshes pass flags straight to the Python scraper:
 
