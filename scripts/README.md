@@ -183,10 +183,14 @@ first, then **auto-falls back to the browser fetcher** the moment Scholar blocks
 1. Runs the `requests` scraper. Fresh papers (under `--max-age-days`) are skipped;
    the rest are fetched with jittered sleeps.
 2. **On a confirmed captcha/block** the scraper stops fast (after the first block —
-   see `MAX_CONSECUTIVE_BLOCKS` in `fetch_scholar_counts.py`), commits any partial
-   progress as `…(partial — requests blocked, browser fallback follows)`, and the
-   wrapper then runs `./scripts/fetch_scholar_browser.sh` for the remaining papers
-   (a Chrome window opens; commit `data: refresh scholar citation counts (browser)`).
+   see `MAX_CONSECUTIVE_BLOCKS` in `fetch_scholar_counts.py`) and the wrapper runs
+   `./scripts/fetch_scholar_browser.sh` for the remaining papers (a Chrome window
+   opens). The commit happens **once, after** the browser run —
+   `data: refresh scholar citation counts (browser)` — so a block doesn't produce
+   a churn "partial" commit on top of the real one (the blocked probe changes no
+   counts, only a timestamp + a transient retry flag the browser run clears). A
+   `(partial — …; browser fetched nothing)` commit is made only if the browser
+   run also fetched nothing, to preserve real partial progress.
    `--limit`/`--only` forward to the fallback; `--max-age-days` does not (requests-only).
 3. **If it isn't blocked**, the scraper finishes and, if `_data/scholar_counts.yml`
    changed, commits `data: refresh scholar citation counts`. No fallback.
