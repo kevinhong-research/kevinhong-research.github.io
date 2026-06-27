@@ -4,7 +4,45 @@
 
 ---
 
-## 2026-06-03 — Session 22 (latest)
+## 2026-06-27 — Session 23 (latest)
+
+### Goal
+Commit and push a user-authored addition to `_data/working_papers.yml` — a new 2026 SSRN working paper — to `origin/main`.
+
+### What was done
+
+**New working paper added** (`_data/working_papers.yml`, commit `fbe734e`)
+- "Verified Ownership, Unverified Trust: The Effect of Digital Asset Disclosure on Followership Expansion" — Zhao K, Chen C, Basak E, **Hong Y** — 2026, SSRN `abstract_id=7009718`.
+- Placed among the existing 2026 entries (after DeepAudio, before the Zelle 2025 paper).
+
+**Fixed two issues in the user's edit before committing**
+1. **YAML indentation bug (would have broken the build):** the new entry's `- title:` was indented 2 spaces, making it a malformed nested list item instead of a top-level sequence entry. Corrected to column 0, matching every other entry. Validated with `yaml.safe_load` → 12 entries parse cleanly (was 11 before the addition).
+2. **Author format normalization:** `"Basak Ecem"` → `"Basak E"` to match the file's universal `Surname Initial` convention (the user had already placed the surname first; only the given name needed abbreviating — the researcher is Ecem Basak).
+
+**Git identity** — repo had no `user.name`/`user.email` configured (prior commits used env vars). Set **local-only** config to `kevinhong-research <kevinhong.research@gmail.com>` to match existing history; global config left untouched.
+
+### Current status
+- **Done & pushed**: the working-paper addition (`fbe734e`) + this handover.
+- No browser verification performed — pure data addition; the live `/working/` page will reflect it after the GitHub Actions deploy (~1–2 min).
+
+### Important context
+- Working papers source of truth is `_data/working_papers.yml` (rendered on `/working/`). New entries go at the top; ordering is by `sort_key: YYYY`.
+- The pre-commit title-case hook (`.githooks/pre-commit`) only fires on staged `_data/publications.yml`, not `working_papers.yml`, so it no-opped here.
+
+### Decisions already made
+- Fixed the indentation + author-format issues rather than committing the user's edit verbatim — the indentation was a parse-breaking bug, and the author format was an unambiguous deviation from the file's convention. Both flagged to the user in the session response so they can object if `"Basak Ecem"` was intentional.
+- Set git identity locally (not globally) to keep impact minimal and match the existing commit author exactly.
+
+### Next best step
+- **Primary**: watch the GitHub Actions deploy from this push; glance at the live `/working/` page to confirm the new paper renders with the correct author list.
+- If the user intended a different name form than "Basak E", correct `_data/working_papers.yml` and re-push.
+
+### Lessons learned
+- None from a user correction this session. Worth noting operationally: always `yaml.safe_load` a hand-edited `_data/*.yml` before committing — the indentation slip here would have produced malformed YAML that Jekyll could silently mis-render.
+
+---
+
+## 2026-06-03 — Session 22
 
 ### Goal
 Condense the `/talks/` page by rendering each talk's **university and college/school on one line**, separated by a faint middot, without changing either name's font size or color.
