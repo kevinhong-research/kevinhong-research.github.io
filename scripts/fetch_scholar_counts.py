@@ -107,6 +107,13 @@ JITTER_DIRECT_MAX_SEC = 20
 # free — only the unfetched + flagged subset is re-queried.
 DEFAULT_MAX_AGE_DAYS = 7
 
+# Stop the run after this many consecutive direct-path captcha/blocks. Set to 1
+# (fail fast) so refresh_scholar.sh can hand off to the browser fetcher quickly:
+# Scholar now captcha-blocks the requests path almost immediately regardless of
+# IP, so probing further only deepens the block. A confirmed captcha page (not a
+# one-off transient error) is what increments the streak — see the loop below.
+MAX_CONSECUTIVE_BLOCKS = 1
+
 
 def normalize_doi(doi: str) -> str:
     doi = (doi or "").strip()
@@ -429,9 +436,9 @@ def scrape(args) -> int:
                 # only deepens it). A one-off transient failure won't trip this.
                 if "blocked" in direct_reason or "429" in direct_reason:
                     consecutive_blocks += 1
-                    if consecutive_blocks >= 3:
-                        print(f"[BLOCKED] Scholar served {consecutive_blocks} captcha/blocks in a row — stopping the run.")
-                        print(f"          Wait several hours or switch networks (phone hotspot / toggle VPN), then re-run.")
+                    if consecutive_blocks >= MAX_CONSECUTIVE_BLOCKS:
+                        print(f"[BLOCKED] Scholar served a captcha/block ({consecutive_blocks} in a row) — stopping the requests run.")
+                        print(f"          refresh_scholar.sh will fall back to the browser fetcher; or wait / switch networks and re-run.")
                         flagged[doi] = last_reason
                         blocked = True
                         break
