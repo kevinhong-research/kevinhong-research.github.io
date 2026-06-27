@@ -81,21 +81,13 @@ if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then
   exit "$rc"
 fi
 
-# Commit whatever the requests probe wrote (a full rc=0 run, or partial progress
-# from before a block on rc=2).
-if ! git diff --quiet _data/scholar_counts.yml; then
-  git add _data/scholar_counts.yml
-  if [ "$rc" -eq 2 ]; then
-    git commit -m "data: refresh scholar citation counts (partial — requests blocked, browser fallback follows)"
-  else
-    git commit -m "data: refresh scholar citation counts"
-  fi
-  push_needed=1
-fi
-
-# ── Fast fallback: requests path blocked → drive signed-in Chrome ─────────
-# Skipped on --dry-run (a dry run must not open a browser window).
+# ── Commit / fallback ────────────────────────────────────────────────────
 if [ "$rc" -eq 2 ] && [ -z "$DRY" ]; then
+  # requests path blocked → fall back to the browser fetcher FIRST, then commit
+  # at most ONCE. Committing the requests output here (before the fallback) would
+  # be pure churn: a blocked probe fetches no counts, it just rewrites the
+  # top-level timestamp and adds a "retry next run" flag that the browser run
+  # clears moments later — i.e. two commits for zero count change.
   echo "→ requests path blocked by Scholar — falling back to the browser fetcher (Chrome)…"
   # The browser fetcher only understands --only / --limit (NOT --max-age-days,
   # which is requests-only). Forward just the flags it accepts; single-shift
@@ -115,10 +107,24 @@ if [ "$rc" -eq 2 ] && [ -z "$DRY" ]; then
     esac
   done
   # Self-contained: guards venv/playwright, fetches the papers the requests probe
-  # didn't get (prior counts preserved), and commits + pushes scholar_counts.yml
-  # itself when it fetched ≥1 count — that push also carries any earlier commit.
+  # didn't reach (prior counts preserved on disk), and commits + pushes
+  # scholar_counts.yml itself when it fetched ≥1 count.
   ./scripts/fetch_scholar_browser.sh "${browser_args[@]}"
-  push_needed=1   # ensure the trailing push runs (no-op if the wrapper already pushed)
+  # Safety net: only if the browser run committed nothing (it also fetched 0)
+  # AND the requests probe left changes on disk — commit them so real partial
+  # progress / the retry flag isn't lost.
+  if ! git diff --quiet _data/scholar_counts.yml; then
+    git add _data/scholar_counts.yml
+    git commit -m "data: refresh scholar citation counts (partial — requests blocked; browser fetched nothing)"
+  fi
+  push_needed=1   # ensure the trailing push runs (also retries a failed wrapper push)
+else
+  # rc=0 clean run (or --dry-run, which wrote nothing): commit if the file changed.
+  if ! git diff --quiet _data/scholar_counts.yml; then
+    git add _data/scholar_counts.yml
+    git commit -m "data: refresh scholar citation counts"
+    push_needed=1
+  fi
 fi
 
 # ── Single push for whatever is still unpushed (no-op if already in sync) ──
