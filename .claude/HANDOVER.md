@@ -21,12 +21,16 @@ Three pieces of work: (1) commit a new working paper the user added; (2) on requ
 
 **3. Scholar requests→browser auto-fallback** (commit `7318caa`)
 - `fetch_scholar_counts.py`: new `MAX_CONSECUTIVE_BLOCKS = 1` constant; the direct-path block check trips on the **first** confirmed captcha (was 3), exits 2 with partial progress preserved.
-- `refresh_scholar.sh`: on exit 2 it commits any partial progress, then invokes `./scripts/fetch_scholar_browser.sh` for the rest (signed-in Chrome). Forwards `--only`/`--limit`, **strips `--max-age-days`** (browser `.py` doesn't accept it), and **skips the fallback on `--dry-run`** (no Chrome window). Single push at the end.
-- Verified statically: `bash -n` both scripts, `py_compile` the scraper, and a 7-case unit test of the flag-filter loop. **Not** run end-to-end live (would open Chrome + hit Scholar while a background browser refresh was mid-run).
+- `refresh_scholar.sh`: on exit 2 it falls back to `./scripts/fetch_scholar_browser.sh` (signed-in Chrome) and commits **once, after** the browser run. Forwards `--only`/`--limit`, **strips `--max-age-days`** (browser `.py` doesn't accept it), and **skips the fallback on `--dry-run`** (no Chrome window). Single push at the end.
+
+**4. Live smoke test + churn fix** (commit `28e2559`)
+- Smoke-tested live (`refresh_scholar.sh --only 10.25300/MISQ/2017/41.4.02 --max-age-days 0`): the fallback fired and fetched MISQ = 315 via Chrome. ✓
+- The test surfaced a churn bug: the fallback committed the requests "partial" **before** falling back, but a blocked probe writes only a timestamp + a transient retry flag (no count) — so it made a redundant commit that the browser commit immediately superseded (two commits for a 315→315 no-op).
+- Fix: fall back first, commit **at most once** (the browser wrapper's commit, or a safety-net `(partial — browser fetched nothing)` only if the browser also fetched 0). Proven with a 5-scenario sandbox; all yield the expected commit count.
 
 ### Current status
-- **Done & pushed** (this push carried 4 commits): `7b4a6d9` (orphaned browser scholar-count refresh that the wrapper committed but never pushed), `7318caa` (fallback), `8d3f890` (docs), plus this handover.
-- The auto-fallback is **statically verified only** — the live path still needs one real run to confirm.
+- **Done & pushed**: working paper (`fbe734e`), auto-fallback (`7318caa`), docs (`8d3f890`), churn fix (`28e2559`), the orphaned browser refresh (`7b4a6d9`), plus the two live-test count commits (`72a29ef`/`84ff1cb`) and this handover.
+- The auto-fallback is now **verified live** (MISQ fetched via Chrome), and the double-commit churn is fixed + sandbox-proven.
 
 ### Important context
 - **Going forward, `./scripts/refresh_scholar.sh` is the single command** for both forthcoming-status promotion (Phase 1) and Scholar counts (Phase 2, now with auto-browser-fallback). Exceptions: a brand-new paper in `publications.yml` still needs a one-time `fetch_scholar_pub_ids.py` bootstrap; the first browser run may need a manual sign-in/captcha (persists in `.scholar-browser-profile/`).
@@ -37,10 +41,12 @@ Three pieces of work: (1) commit a new working paper the user added; (2) on requ
 - Slimmed CLAUDE.md by *moving* (not duplicating) the pipeline docs to the README — avoids a second source of truth that would drift.
 - In `refresh_scholar.sh`, delegated to the `.sh` wrapper (not the `.py`) so its venv/playwright guard and `(browser)` commit message aren't duplicated; single-shift flag parsing avoids a `shift 2` hang on a trailing valueless flag.
 - `MAX_CONSECUTIVE_BLOCKS = 1` (fail fast) is right because Scholar now captcha-blocks the requests path almost always — probing further only deepens the block.
+- Commit-once-after-fallback: a blocked requests probe writes no real count, so committing it before the browser fallback is pure churn; the browser run's commit (or the safety-net commit) is the single source of truth for a refresh.
 
 ### Next best step
-- **Primary**: run one live smoke test — `./scripts/refresh_scholar.sh --only 10.25300/MISQ/2017/41.4.02 --max-age-days 0` — and confirm it prints "→ requests path blocked … falling back to the browser fetcher (Chrome)…" and lands a count via the browser path.
-- Glance at the live `/working/` page to confirm the new working paper renders with the right author list.
+- Pipeline is verified end-to-end; routine going forward is just `./scripts/refresh_scholar.sh` (weekly / on demand).
+- Optional: glance at the live `/working/` page to confirm the new working paper renders with the right author list.
+- Declined for now: suppressing commits when no count *value* changed (timestamp-only). Recommended against — the freshness timestamp drives `--max-age-days` skipping, so it's worth persisting.
 
 ### Lessons learned
 - No user correction this session, but a recurring operational note: `yaml.safe_load` a hand-edited `_data/*.yml` before committing; and when slimming an always-loaded context file, *move* docs to a linked file rather than copying, to preserve single-source-of-truth.
