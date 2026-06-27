@@ -7,38 +7,43 @@
 ## 2026-06-27 — Session 23 (latest)
 
 ### Goal
-Commit and push a user-authored addition to `_data/working_papers.yml` — a new 2026 SSRN working paper — to `origin/main`.
+Three pieces of work: (1) commit a new working paper the user added; (2) on request, add a `scripts/README.md` index and slim `CLAUDE.md`; (3) make `refresh_scholar.sh` auto-fall-back to the browser fetcher when Scholar captcha-blocks the requests path.
 
 ### What was done
 
-**New working paper added** (`_data/working_papers.yml`, commit `fbe734e`)
-- "Verified Ownership, Unverified Trust: The Effect of Digital Asset Disclosure on Followership Expansion" — Zhao K, Chen C, Basak E, **Hong Y** — 2026, SSRN `abstract_id=7009718`.
-- Placed among the existing 2026 entries (after DeepAudio, before the Zelle 2025 paper).
+**1. New working paper** (`_data/working_papers.yml`, commit `fbe734e`, pushed earlier)
+- "Verified Ownership, Unverified Trust…" — Zhao K, Chen C, Basak E, **Hong Y** — 2026, SSRN `abstract_id=7009718`.
+- Fixed two issues in the user's raw edit before committing: a **YAML indentation bug** (`- title:` indented 2 spaces → malformed nested item; corrected to col 0; `yaml.safe_load` → 12 entries OK) and **author format** `"Basak Ecem"` → `"Basak E"` (file's `Surname Initial` convention).
 
-**Fixed two issues in the user's edit before committing**
-1. **YAML indentation bug (would have broken the build):** the new entry's `- title:` was indented 2 spaces, making it a malformed nested list item instead of a top-level sequence entry. Corrected to column 0, matching every other entry. Validated with `yaml.safe_load` → 12 entries parse cleanly (was 11 before the addition).
-2. **Author format normalization:** `"Basak Ecem"` → `"Basak E"` to match the file's universal `Surname Initial` convention (the user had already placed the surname first; only the given name needed abbreviating — the researcher is Ecem Basak).
+**2. Scripts docs refactor** (commit `8d3f890`)
+- New **`scripts/README.md`**: per-script index, "I want to… → run…" decision guide, the `*.sh`-wrapper / `*.py`-worker convention, the relocated Scholar + forthcoming pipeline deep-docs, and **first-ever docs for `audit_colors.py`** (was undocumented anywhere).
+- **`.claude/CLAUDE.md` slimmed 464 → 219 lines**: the ~260-line Scholar/forthcoming sections replaced by a short `## Scripts & data pipelines` pointer to the README. Rationale (user-endorsed): CLAUDE.md is loaded into every agent session, so deep pipeline docs were costing context on every turn. Single source of truth — title-case *rules* stay in CLAUDE.md, script *mechanics* live in README. Fixed a stale `refresh_scholar.sh` comment that pointed at the moved CLAUDE.md section.
 
-**Git identity** — repo had no `user.name`/`user.email` configured (prior commits used env vars). Set **local-only** config to `kevinhong-research <kevinhong.research@gmail.com>` to match existing history; global config left untouched.
+**3. Scholar requests→browser auto-fallback** (commit `7318caa`)
+- `fetch_scholar_counts.py`: new `MAX_CONSECUTIVE_BLOCKS = 1` constant; the direct-path block check trips on the **first** confirmed captcha (was 3), exits 2 with partial progress preserved.
+- `refresh_scholar.sh`: on exit 2 it commits any partial progress, then invokes `./scripts/fetch_scholar_browser.sh` for the rest (signed-in Chrome). Forwards `--only`/`--limit`, **strips `--max-age-days`** (browser `.py` doesn't accept it), and **skips the fallback on `--dry-run`** (no Chrome window). Single push at the end.
+- Verified statically: `bash -n` both scripts, `py_compile` the scraper, and a 7-case unit test of the flag-filter loop. **Not** run end-to-end live (would open Chrome + hit Scholar while a background browser refresh was mid-run).
 
 ### Current status
-- **Done & pushed**: the working-paper addition (`fbe734e`) + this handover.
-- No browser verification performed — pure data addition; the live `/working/` page will reflect it after the GitHub Actions deploy (~1–2 min).
+- **Done & pushed** (this push carried 4 commits): `7b4a6d9` (orphaned browser scholar-count refresh that the wrapper committed but never pushed), `7318caa` (fallback), `8d3f890` (docs), plus this handover.
+- The auto-fallback is **statically verified only** — the live path still needs one real run to confirm.
 
 ### Important context
-- Working papers source of truth is `_data/working_papers.yml` (rendered on `/working/`). New entries go at the top; ordering is by `sort_key: YYYY`.
-- The pre-commit title-case hook (`.githooks/pre-commit`) only fires on staged `_data/publications.yml`, not `working_papers.yml`, so it no-opped here.
+- **Going forward, `./scripts/refresh_scholar.sh` is the single command** for both forthcoming-status promotion (Phase 1) and Scholar counts (Phase 2, now with auto-browser-fallback). Exceptions: a brand-new paper in `publications.yml` still needs a one-time `fetch_scholar_pub_ids.py` bootstrap; the first browser run may need a manual sign-in/captcha (persists in `.scholar-browser-profile/`).
+- Browser fetcher = `fetch_scholar_browser.sh` (wrapper, commits+pushes) → `fetch_scholar_counts_browser.py` (pure fetch, flags: `--only`/`--limit`/`--headless`/`--dry-run`).
+- Deep pipeline docs now live in `scripts/README.md`, not `CLAUDE.md`.
 
 ### Decisions already made
-- Fixed the indentation + author-format issues rather than committing the user's edit verbatim — the indentation was a parse-breaking bug, and the author format was an unambiguous deviation from the file's convention. Both flagged to the user in the session response so they can object if `"Basak Ecem"` was intentional.
-- Set git identity locally (not globally) to keep impact minimal and match the existing commit author exactly.
+- Slimmed CLAUDE.md by *moving* (not duplicating) the pipeline docs to the README — avoids a second source of truth that would drift.
+- In `refresh_scholar.sh`, delegated to the `.sh` wrapper (not the `.py`) so its venv/playwright guard and `(browser)` commit message aren't duplicated; single-shift flag parsing avoids a `shift 2` hang on a trailing valueless flag.
+- `MAX_CONSECUTIVE_BLOCKS = 1` (fail fast) is right because Scholar now captcha-blocks the requests path almost always — probing further only deepens the block.
 
 ### Next best step
-- **Primary**: watch the GitHub Actions deploy from this push; glance at the live `/working/` page to confirm the new paper renders with the correct author list.
-- If the user intended a different name form than "Basak E", correct `_data/working_papers.yml` and re-push.
+- **Primary**: run one live smoke test — `./scripts/refresh_scholar.sh --only 10.25300/MISQ/2017/41.4.02 --max-age-days 0` — and confirm it prints "→ requests path blocked … falling back to the browser fetcher (Chrome)…" and lands a count via the browser path.
+- Glance at the live `/working/` page to confirm the new working paper renders with the right author list.
 
 ### Lessons learned
-- None from a user correction this session. Worth noting operationally: always `yaml.safe_load` a hand-edited `_data/*.yml` before committing — the indentation slip here would have produced malformed YAML that Jekyll could silently mis-render.
+- No user correction this session, but a recurring operational note: `yaml.safe_load` a hand-edited `_data/*.yml` before committing; and when slimming an always-loaded context file, *move* docs to a linked file rather than copying, to preserve single-source-of-truth.
 
 ---
 
