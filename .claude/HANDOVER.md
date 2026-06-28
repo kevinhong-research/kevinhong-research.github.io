@@ -4,7 +4,45 @@
 
 ---
 
-## 2026-06-27 — Session 23 (latest)
+## 2026-06-28 — Session 24 (latest)
+
+### Goal
+Fix the light-mode top-nav color inconsistency: clicking **about**/**publications** turned the toggle green (and drew a green dropdown outline) while the active link + hover were warm — dark mode looked correct.
+
+### What was done
+
+**Root-cause investigation** (systematic-debugging + live preview inspection)
+- The nav accent states (active link, hover, open `.show`, glow outline) are **owned by `assets/css/research.css`** — loaded **site-wide**, all `!important`, so it **wins over the compiled `main.css`** copies. `_sass/_dropdown.scss` carries shadowed duplicate `!important` rules for the same states.
+- Bug: the open-toggle color used `--global-theme-color` and the glow used `--accent-cool` — both **green in BOTH themes**. The active link + hover correctly used the per-theme accent, so light mode mixed warm (active/hover) with green (open/glow). Dark mode only looked right because every token is green there.
+
+**The fix** (commit `5fbae84`, 7 token swaps, 2 files)
+- `assets/css/research.css`: open-toggle color, base + `html[data-theme="light"]` → `--global-theme-color` ⟶ `--global-hover-color`.
+- `_sass/_dropdown.scss`: open-toggle (base + light), glow border + box-shadow (`--accent-cool` ⟶ `--global-hover-color`), active dropdown-item marker (`--global-theme-color` ⟶ `--global-hover-color`), and corrected the explanatory comment.
+- **Key token:** `--global-hover-color` is the per-theme nav accent — `--accent-cool` (green `#00a060`) in dark, `--accent-warm` (`#cc7d5e`) in light. In dark all three tokens equal `#00a060`, so the swap is a **no-op in dark** and only shifts light mode to warm.
+
+**Verification** (live Jekyll preview, computed styles + screenshots)
+- Light (open dropdown): open-toggle, active link, glow all `#cc7d5e` / hue 42 warm — consistent. ✓
+- Dark (open dropdown): open-toggle, active link, glow all green / hue 156; default nav links still ink `#f9f9f7` — unchanged. ✓
+- Repo-wide sweep: no remaining green-only nav `.show`/glow rules in source.
+
+### Current status
+- **Done & (pushing)**: fix committed `5fbae84` + this handover. No follow-ups outstanding for this bug.
+
+### Important context
+- **Nav accent lives in `research.css`, not `_base.scss`/`_dropdown.scss`** despite that file's "/research/ page" header — it's loaded site-wide with `!important`. Keep the `_dropdown.scss` duplicates in sync or a load-order change resurrects bugs. (Also saved to project memory: `nav-accent-ownership`.)
+- `--global-theme-color` = green in both themes; use `--global-hover-color` for anything that should track the theme accent.
+
+### Decisions already made
+- Used `--global-hover-color` (existing per-theme token already used by hover) rather than introducing a new `--nav-accent` token — minimal, behavior-preserving in dark, and matches the existing pattern in the same file.
+- Kept the parallel base + `[data-theme="light"]` rule structure (only retargeted tokens) instead of deleting now-redundant overrides — smaller, safer diff; avoids specificity surprises with the `_dropdown.scss` light copy.
+
+### Next best step
+- **Primary action**: none required — bug fixed, verified, pushed. GitHub Actions will rebuild `gh-pages`; spot-check the live nav in light mode after deploy if desired.
+- Untracked `AGENTS.md` was intentionally left unstaged (unrelated to this fix).
+
+---
+
+## 2026-06-27 — Session 23
 
 ### Goal
 Three pieces of work: (1) commit a new working paper the user added; (2) on request, add a `scripts/README.md` index and slim `CLAUDE.md`; (3) make `refresh_scholar.sh` auto-fall-back to the browser fetcher when Scholar captcha-blocks the requests path.
