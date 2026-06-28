@@ -3,6 +3,15 @@
 # Fields: title, url, authors (list), year
 # sort_key: YYYY (used for ordering)
 
+- title: "The Cybersecurity Consequences of AI Strategy: How Automation-Orientation and Augmentation-Orientation Shape Data Breach Risk"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7014258"
+  authors:
+    - "Srinivas S"
+    - "Zhang L"
+    - "**Hong Y**"
+  year: 2026
+  sort_key: 2026
+
 - title: "Not All Bots Are Equal: Chatbot Roles and Human Interaction in Online Chat Groups"
   url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6834839"
   authors:
