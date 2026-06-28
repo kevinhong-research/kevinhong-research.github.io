@@ -13,7 +13,7 @@
   color: var(--global-hover-color) !important;
 }
 .nav-item.dropdown.show > .nav-link {
-  color: var(--global-theme-color) !important;
+  color: var(--global-hover-color) !important;
 }
 
 /* Caret — hide the default Bootstrap one, draw a minimal one */
@@ -102,7 +102,7 @@
    Keeps the panel visually consistent whether or not an item is active. */
 .nav-item.dropdown .dropdown-item.active,
 .nav-item.dropdown .dropdown-item:active {
-  color: var(--global-theme-color) !important;
+  color: var(--global-hover-color) !important;
   background-color: transparent !important;
   font-weight: 500;
 }
@@ -115,8 +115,8 @@
 
 /* ── DROPDOWN GLOW ON OPEN ───────────────────────────────── */
 .nav-item.dropdown.show .dropdown-menu {
-  border-color: color-mix(in oklch, var(--accent-cool) 30%, transparent);
-  box-shadow: 0 8px 32px var(--shadow-medium), 0 0 0 1px color-mix(in oklch, var(--accent-cool) 15%, transparent);
+  border-color: color-mix(in oklch, var(--global-hover-color) 30%, transparent);
+  box-shadow: 0 8px 32px var(--shadow-medium), 0 0 0 1px color-mix(in oklch, var(--global-hover-color) 15%, transparent);
 }
 
 html[data-theme="light"] .nav-item.dropdown > .nav-link:hover,
@@ -125,12 +125,13 @@ html[data-theme="light"] .nav-item.dropdown > .nav-link:focus {
 }
 
 html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
-  color: var(--global-theme-color) !important;
+  color: var(--global-hover-color) !important;
 }
 
 /* Hover and active dropdown-item rules above apply identically to both
    themes — base uses --text-hi for hover text + --surface for hover bg,
-   and --global-theme-color (= accent-cool) for the active marker. */
+   and --global-hover-color (per-theme nav accent: accent-cool in dark,
+   accent-warm in light) for the open + active markers. */
 
 /* ── REMOVE BROWSER'S FOCUS RING ─────────────────────────── */
 .nav-item.dropdown > .nav-link:focus,

@@ -53,8 +53,12 @@
   color: var(--global-hover-color) !important;
 }
 
+/* Open dropdown toggle — match the per-theme nav accent (green in dark,
+   warm in light), same token the hover + active states use. Using
+   --global-theme-color here forced green in BOTH themes, clashing with
+   light mode's warm accent. */
 .nav-item.dropdown.show > .nav-link {
-  color: var(--global-theme-color) !important;
+  color: var(--global-hover-color) !important;
 }
 
 /* ── SECTION ── */
@@ -1124,7 +1128,7 @@ html[data-theme="light"] .nav-item.dropdown > .nav-link:focus {
 }
 
 html[data-theme="light"] .nav-item.dropdown.show > .nav-link {
-  color: var(--global-theme-color) !important;
+  color: var(--global-hover-color) !important;
 }
 
 html[data-theme="light"] .area-tag {
