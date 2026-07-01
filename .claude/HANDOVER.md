@@ -25,8 +25,12 @@ Fix the light-mode top-nav color inconsistency: clicking **about**/**publication
 - Dark (open dropdown): open-toggle, active link, glow all green / hue 156; default nav links still ink `#f9f9f7` — unchanged. ✓
 - Repo-wide sweep: no remaining green-only nav `.show`/glow rules in source.
 
+**New working paper** (`_data/working_papers.yml`, commit `dff6eb0`)
+- "Agentic Coding, Developer Exploration, and Software Security" — Huang A, Huang N, **Hong Y** — 2026, SSRN `abstract_id=7032178`. Added at top of list (now 14 entries).
+- Validated: `yaml.safe_load` OK; fields `{title,url,authors,year,sort_key}`, `Surname Initial` author format (Hong bolded), SSRN url, Chicago title case — all consistent with the file.
+
 ### Current status
-- **Done & (pushing)**: fix committed `5fbae84` + this handover. No follow-ups outstanding for this bug.
+- **Done & (pushing)**: nav fix `5fbae84`, new working paper `dff6eb0`, + this handover. No follow-ups outstanding.
 
 ### Important context
 - **Nav accent lives in `research.css`, not `_base.scss`/`_dropdown.scss`** despite that file's "/research/ page" header — it's loaded site-wide with `!important`. Keep the `_dropdown.scss` duplicates in sync or a load-order change resurrects bugs. (Also saved to project memory: `nav-accent-ownership`.)
