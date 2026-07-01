@@ -3,6 +3,15 @@
 # Fields: title, url, authors (list), year
 # sort_key: YYYY (used for ordering)
 
+- title: "Agentic Coding, Developer Exploration, and Software Security"
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7032178"
+  authors:
+    - "Huang A"
+    - "Huang N"
+    - "**Hong Y**"
+  year: 2026
+  sort_key: 2026
+
 - title: "The Cybersecurity Consequences of AI Strategy: How Automation-Orientation and Augmentation-Orientation Shape Data Breach Risk"
   url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7014258"
   authors:
