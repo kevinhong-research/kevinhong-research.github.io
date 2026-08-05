@@ -4,7 +4,62 @@
 
 ---
 
-## 2026-06-28 — Session 24 (latest)
+## 2026-08-05 — Session 25 (latest)
+
+### Goal
+Update two talks (USF → 10/2026, JUSWIS '26 → no longer upcoming) and replace the hand-maintained `upcoming:` flag with a mechanism that derives the status by comparing the current month to the talk month.
+
+### What was done
+
+**Root cause** — `_data/talks.yml` carried a manual `upcoming: true` boolean that nobody remembers to unset. JUSWIS '26 (7/2026) still rendered "Upcoming" in August. The fix is to stop storing the answer and derive it.
+
+**The rule** (implemented, verified, commit `3135c36`)
+
+```
+upcoming  <=>  month != 0  AND  sort_key >= YYYYMM(site.time)
+```
+
+- No new data: all 51 entries already satisfy `sort_key == year * 100 + month`. That invariant is now **load-bearing for the badge, not just the sort** — documented in the talks.yml header.
+- `upcoming:` deleted outright, **no override key**. An override is by definition a hand-set boolean nobody remembers to unset — i.e. the reported bug, made rarer and therefore harder to notice.
+
+**Files changed** (4 code + 1 doc; no JS, no CSS)
+- `_data/talks.yml` — header rewritten into the spec for the rule + sentinels; USF → `10/2026` / month 10 / sort_key 202610; both `upcoming: true` lines removed.
+- `_includes/talks_render.html` — `{% assign now_key = site.time | date: "%Y%m" | to_integer %}`; badge condition at line 68.
+- `_pages/talks.md` — same `now_key` assign inside the `<script>` block (line 131); pill count via `where_exp` (133); map JSON boolean (141).
+- `.github/workflows/deploy.yml` — added `schedule: - cron: "17 8 1 * *"`.
+- `.claude/CLAUDE.md` — new **Talk "Upcoming" badge** subsection under Conventions.
+
+**Verification** (real builds, not reasoning)
+- Time-travelled `--config` builds: 2026-07 → USF + JUSWIS · **2026-08 → USF only** · 2026-09-30, 10-01, 10-31 → USF · 2026-11-01 → none. Badge count and pill count agree at every date (that agreement is the typo detector — see Important context).
+- Live page: 51 talks / 1 upcoming; JUSWIS badge gone; map 59 circles, 2 warm `#cc7d5e` + pulse ring on Tampa, 56 cool; zero console errors; zero unrendered Liquid.
+
+**Unrelated, user-authored** (commit `e013f9a`) — `_data/scholar_pub_ids.yml`: Scholar cluster id for `10.1287/isre.2024.1003` `yFnVuubrUp4C` → `bKqednn6t2AC`. Committed separately at the user's instruction.
+
+### Current status
+- **Done & pushed**: `3135c36` (talks derivation), `e013f9a` (scholar id), + this handover. No follow-ups outstanding.
+
+### Important context
+
+- **`site.time` is BUILD time**, so the badge only flips when a deploy runs — this is why deploy.yml now has a monthly cron (the 1st is the only day a `YYYYMM` comparison can change). **Do not delete that cron as unused.** Caveat: GitHub disables scheduled workflows in *public* repos after 60 days with no repo activity, notifying the owner by email only.
+- **Liquid fails silently here.** `Integer >= nil` is `false` with exit code 0 — a build stays green while every talk renders as past. Two consequences: (a) `now_key` is computed inside `talks_render.html` rather than passed as an include parameter, so a dropped parameter can't silently blank every badge; (b) the `where_exp` variable name lives inside a quoted string where no linter can see it, and a typo yields count 0, not an error. **Detection, not prevention: if the pill count and the visible badge count ever disagree, that's the bug.**
+- Also verified empirically, in case it comes up again: bare `sort_key >= "202608"` (uncoerced string) **raises** `Liquid::ArgumentError`, so the `| to_integer` is mandatory, not cosmetic. `where_exp` **can** read an outer `{% assign %}`ed variable (tested under real Jekyll — it cannot under bare Liquid, where the filter doesn't exist).
+- Sentinels: `13` = Fall (sorts after December, stays Upcoming through 31 Dec); `0` = undated (**never** Upcoming — that is the entire job of the `month != 0` clause; without it an undated *future* year is wrongly badged, confirmed by test).
+
+### Decisions already made
+
+- **`>=`, not `>`** — a talk in its own month is still upcoming. Dates are month-precision, so `>` would un-badge every talk for the whole month it happens in, up to 30 days *before* the event. Erring toward "still advertised" is the right direction for an invited-talk listing.
+- **Pure Liquid, not client-side JS** — JS would be genuinely live (immune to deploy cadence), but writes the same rule twice in two languages with a divergence invisible in development, and leaves no-JS/crawler output exactly as stale. Rejected.
+- **No Ruby plugin / no validator script / no pre-commit change** — considered and rejected as scope creep for 51 rows of YAML. Note the existing `scripts/*` date pipelines are *not* precedent: `refresh_forthcoming` exists because it needs a Crossref network call, whereas `upcoming` is a pure function of (talks.yml, today) and needs no I/O.
+- The `sort_key == year*100 + month` invariant is **documented, not enforced**. If a fat-fingered sort_key ever bites, the proportionate fix is ~15 lines in `.githooks/pre-commit`, not a validator script.
+- Untracked `AGENTS.md` left unstaged again (unrelated; same call as Session 24).
+
+### Next best step
+- **Primary action**: none required. After the Actions run completes, spot-check `https://kevinhong.ai/talks/` — expect "51 talks · 1 upcoming", the badge on University of South Florida (10/2026), and no badge on JUSWIS '26.
+- **First real test of the cron is 1 Sep 2026**; the first *behavioural* change it produces is **1 Nov 2026**, when USF drops to 0 upcoming and `talkmap.js` hides the upcoming pill and its separator (expected, not a bug).
+
+---
+
+## 2026-06-28 — Session 24
 
 ### Goal
 Fix the light-mode top-nav color inconsistency: clicking **about**/**publications** turned the toggle green (and drew a green dropdown outline) while the active link + hover were warm — dark mode looked correct.
