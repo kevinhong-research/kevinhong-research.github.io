@@ -58,6 +58,14 @@ on:
       - "!INSTALL.md"
       - "!README.md"
   workflow_dispatch:
+  # The /talks/ "Upcoming" badge is derived from site.time at build time, so it
+  # can only change when a build runs. Rebuild on the 1st of each month — the
+  # only day a YYYYMM comparison can flip. Cron is UTC and can be delayed under
+  # load, which is immaterial at month granularity. No redeploy loop: this
+  # workflow triggers on push to main/master, while the deploy step publishes to
+  # gh-pages, which those branch filters cannot match.
+  schedule:
+    - cron: "17 8 1 * *"
 
 permissions:
   contents: write

@@ -5,20 +5,46 @@
 #   date:        (required) — use M/YYYY format for correct sorting, or "Season YYYY"
 #   month:       (required for sorting) — numeric month; use 13 for "Fall", 0 for undated
 #   year:        (required for sorting) — numeric year
-#   upcoming:    true  — shows green Upcoming badge
+#   sort_key:    (required) — MUST equal year * 100 + month (2026 + 10 → 202610)
 #   type:        "keynote" — shows orange Keynote badge
 #   logo:        "/assets/img/talk-logos/example.svg" (optional transparent SVG/PNG)
 #   lat/lng:     (optional) — add for US talks to appear on the talk map
+#
+# There is no `upcoming:` field — do not add one, it is ignored. The green
+# "Upcoming" badge, the warm map dots and the "N upcoming" pill are all DERIVED
+# at build time from the talk's own month:
+#
+#     upcoming  ⇔  month != 0  AND  sort_key >= YYYYMM(build month)
+#
+# A talk in the CURRENT month still counts as upcoming. Dates here are only
+# month-precision, so a strict `>` would drop the badge up to 30 days BEFORE the
+# talk happens — the wrong direction to be wrong in.
+#
+# Because sort_key drives both the sort and the badge, it must stay equal to
+# year * 100 + month. Implemented in exactly two files (this header is the spec):
+#   _includes/talks_render.html — timeline badge
+#   _pages/talks.md             — "N upcoming" pill count + map JSON
+#
+# Sentinel months:
+#   13 = "Fall" / month not yet fixed. Sorts after December, so the talk stays
+#        Upcoming through 31 Dec of its year. Use this for a future talk whose
+#        month is not settled.
+#   0  = undated (archival entry whose real date is lost). Never Upcoming —
+#        that is what the `month != 0` half of the rule is for, since sort_key
+#        arithmetic alone would wrongly badge an undated future year.
+#
+# The badge is recomputed on every build, never in the browser, so it only flips
+# when a deploy runs. `.github/workflows/deploy.yml` carries a monthly cron for
+# exactly this reason — do not remove it as unused.
 
 - institution: "University of South Florida"
   football_name: "South Florida Bulls"
   logo: "/assets/img/talk-logos/fbs-library/South_Florida_Bulls_logo-300x300.png"
   venue: "Muma College of Business"
-  date: "Fall 2026"
+  date: "10/2026"
   year: 2026
-  month: 11
-  sort_key: 202611
-  upcoming: true
+  month: 10
+  sort_key: 202610
   lat: 28.058
   lng: -82.413
 
@@ -29,7 +55,6 @@
   year: 2026
   month: 7
   sort_key: 202607
-  upcoming: true
   lat: 22.08
   lng: 113.49
 

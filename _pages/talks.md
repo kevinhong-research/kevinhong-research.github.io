@@ -123,10 +123,14 @@ nav_order: 3
 
 <!-- ALL talks count (not just US) — separate from TALKMAP_DATA which is US-only.
      Add lat/lng to a talks.yml entry to make it appear on the map.
-     These counts update automatically on every deploy. -->
+     These counts update automatically on every deploy.
+     "Upcoming" is derived from month + sort_key vs the build month; the rule and
+     the sentinel semantics live in the _data/talks.yml header. `where:` can only
+     match a literal value, not a comparison, hence `where_exp`. -->
 <script>
+{% assign now_key = site.time | date: "%Y%m" | to_integer %}
 window.TALKMAP_ALL_TOTAL    = {{ site.data.talks | size }};
-window.TALKMAP_ALL_UPCOMING = {{ site.data.talks | where: "upcoming", true | size }};
+window.TALKMAP_ALL_UPCOMING = {{ site.data.talks | where_exp: "t", "t.month != 0 and t.sort_key >= now_key" | size }};
 window.TALKMAP_DATA = [
   {% assign us_talks = site.data.talks | where_exp: "t", "t.lat" %}
   {% for t in us_talks %}
@@ -134,7 +138,7 @@ window.TALKMAP_DATA = [
     "institution": {{ t.institution | jsonify }},
     "venue":       {{ t.venue      | default: "" | jsonify }},
     "date":        {{ t.date       | jsonify }},
-    "upcoming":    {{ t.upcoming   | default: false | jsonify }},
+    "upcoming":    {% if t.month != 0 and t.sort_key >= now_key %}true{% else %}false{% endif %},
     "lat":         {{ t.lat        | jsonify }},
     "lng":         {{ t.lng        | jsonify }}
   }{% unless forloop.last %},{% endunless %}

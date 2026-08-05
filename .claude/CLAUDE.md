@@ -157,6 +157,17 @@ All titles in `_data/publications.yml` must use **Chicago-style title case**:
 Applied by `scripts/fix_pub_titles.py` and the `.githooks/pre-commit` hook —
 usage in **[`scripts/README.md`](../scripts/README.md)**.
 
+### Talk "Upcoming" badge
+
+Derived at build time — there is **no** `upcoming:` field in `_data/talks.yml`,
+and it must not be re-added (it would be silently ignored). A talk is upcoming
+when `month != 0 and sort_key >= YYYYMM(site.time)`, so `sort_key` must stay
+equal to `year * 100 + month`. Implemented in exactly two places:
+`_includes/talks_render.html` (timeline badge) and `_pages/talks.md` (pill count
++ map JSON). `.github/workflows/deploy.yml` carries a monthly cron so badges flip
+without a push — don't remove it as unused. Full rule and sentinel semantics
+(13 = Fall, 0 = undated/never upcoming) are in the `_data/talks.yml` header.
+
 ### Football page dark mode
 `assets/css/football.css` has three theme sections:
 1. Base (dark palette, no selector) — default and dark mode cards

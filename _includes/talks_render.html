@@ -2,8 +2,14 @@
   _includes/talks_render.html
   Renders _data/talks.yml as a reverse-chronological timeline grouped by year.
   Edit data in _data/talks.yml only.
+
+  "Upcoming" is derived, never stored — see the rule and the month sentinels in
+  the _data/talks.yml header. now_key is computed here rather than passed in as
+  an include parameter because Liquid evaluates `Integer >= nil` as silently
+  false: a dropped parameter would render every talk as past on a green build.
 {% endcomment %}
 
+{% assign now_key = site.time | date: "%Y%m" | to_integer %}
 {% assign sorted = site.data.talks | sort: "sort_key" | reverse %}
 {% assign current_year = "" %}
 
@@ -59,7 +65,7 @@
             </div>
             <div class="talk-meta">
               <span class="talk-date">{{ talk.date }}</span>
-              {% if talk.upcoming %}<span class="talk-badge talk-badge--upcoming">Upcoming</span>{% endif %}
+              {% if talk.month != 0 and talk.sort_key >= now_key %}<span class="talk-badge talk-badge--upcoming">Upcoming</span>{% endif %}
               {% if talk.type == "keynote" %}<span class="talk-badge talk-badge--keynote">Keynote</span>{% endif %}
             </div>
           </div>
