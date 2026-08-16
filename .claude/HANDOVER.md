@@ -36,8 +36,18 @@ Note the failure mode: it returns a *plausible* number, never an exception. Ther
 `_data/scholar_counts.yml` line 165 holds `10.2307/41703461: count: 1050` (fetched 2026-08-15). 1050 is correct; the buggy pattern would have written **105**. The bug is **latent, not active**: this line is only reached when Scholar does *not* captcha-block the requests path, and recent runs have all been blocked, falling back to the browser fetcher (`7318caa`), whose regex was always correct. No back-fill or re-fetch is needed.
 
 ### Current status
-- **Done & pushed**: `bb358e3` (regex fix) + this handover.
-- **Deliberately NOT committed** — two working-tree items, see below.
+- **Done & pushed**: `bb358e3` (regex fix), `043b71a` (school rename), `be1eec3` (gitignore AGENTS.md) + this handover.
+- Working tree clean. No follow-ups outstanding.
+
+### Also done this session (after the initial push)
+
+**School rename** (`043b71a`) — "Miami Herbert Business School" → "Miami Business School", user-confirmed for publishing on a second pass.
+- `_pages/about.md:5` — homepage subtitle. The only literal match in the source tree.
+- `_data/talks.yml:225` — the 11/2021 talk venue read `"Herbert Business School"` with **no "Miami"**, so it was not a literal match but is plainly the same school. Set to `"Miami Business School"` rather than the bare `"Business School"`, which would read oddly alone as a venue (its `institution` is already "University of Miami").
+- `grep -rn "Herbert"` over the source tree now returns nothing. The `people.miami.edu` profile URL in the subtitle is untouched — if that page carries the old name, that is Miami's side, not this repo's.
+- Verified `_data/talks.yml` still parses: 51 talks, edited entry intact.
+
+**`AGENTS.md` gitignored** (`be1eec3`) — resolves the item that had been carried for three sessions. It was **never tracked** (confirmed: `git log --all -- AGENTS.md` is empty), so "untrack" meant "stop it surfacing in every status check". File stays on disk; `.claude/CLAUDE.md` remains canonical. The rationale is written into the `.gitignore` comment so it survives without this handover.
 
 ### Important context
 
@@ -47,13 +57,13 @@ Note the failure mode: it returns a *plausible* number, never an exception. Ther
 
 ### Decisions already made
 
-- **Committed alone, not bundled.** Two other things are dirty in the working tree and were left that way on purpose:
-  1. `_pages/about.md` + `_data/talks.yml` — "Miami Herbert Business School" → "Miami Business School" (this session, at the user's request). `about.md:5` was the literal match; `talks.yml:225` read `"Herbert Business School"` with no "Miami" and was set to `"Miami Business School"` rather than the bare `"Business School"`. **Not pushed — this is public-facing site copy and the user had not confirmed publishing it.** Awaiting a yes.
-  2. `AGENTS.md` — untracked, 198 lines, a near-duplicate of `.claude/CLAUDE.md` that has already drifted (it says rbenv **3.3.7**; CLAUDE.md and `.ruby-version` say **3.3.11**). Left unstaged for the third session running (same call as Sessions 24 and 25). Standing suggestion: make it a pointer to CLAUDE.md or delete it — two copies of the same instructions will keep diverging.
+- **Three separate commits, not one.** The regex fix, the site-copy rename, and the tooling change are unrelated and each is independently revertable. In particular the rename touches public-facing copy while the regex fix does not — bundling them would mean a revert of one silently reverts the other.
+- **The rename was held back on the first push and only landed once confirmed**, because it publishes live site copy. That ordering is the reason `bb358e3` and `043b71a` are separate commits rather than one.
+- **`AGENTS.md` ignored rather than deleted.** Deleting is the other defensible call, but it is the user's file and may be in use by another agent tool; ignoring is reversible and non-destructive. If it is genuinely dead, deleting it is a one-liner. Sessions 24 and 25 both deferred this; it is now resolved.
 
 ### Next best step
-- **Primary action**: decide on the Miami Business School rename — say the word and it commits + pushes as its own commit. Verify after deploy at `https://kevinhong.ai/` (homepage subtitle) and `/talks/` (the 11/2021 Miami entry).
-- Secondary: resolve `AGENTS.md` one way or the other so it stops appearing in every status check.
+- **Primary action**: after the Actions run completes, spot-check `https://kevinhong.ai/` (homepage subtitle should read "University of Miami Business School") and `/talks/` (the 11/2021 Miami entry, venue "Miami Business School").
+- Watch the next **un-blocked** `./scripts/refresh_scholar.sh` run — that is the first execution of the fixed regex on the requests path, and the first time the fix is exercised in anger rather than in a unit-style check.
 
 ---
 
