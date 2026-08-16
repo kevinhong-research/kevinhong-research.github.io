@@ -15,3 +15,9 @@ vendor
 .scholar-browser-profile/
 __pycache__/
 *.pyc
+
+# Local agent instructions. Never tracked — .claude/CLAUDE.md is the canonical
+# copy of this content, and the two had already drifted (AGENTS.md pinned rbenv
+# 3.3.7 against the repo's actual 3.3.11). Ignored so it stops surfacing in
+# every status check; edit .claude/CLAUDE.md instead.
+AGENTS.md
