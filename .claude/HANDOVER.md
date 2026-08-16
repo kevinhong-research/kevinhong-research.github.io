@@ -4,7 +4,60 @@
 
 ---
 
-## 2026-08-05 — Session 25 (latest)
+## 2026-08-16 — Session 26 (latest)
+
+### Goal
+Audit an uncommitted working-tree change to `scripts/fetch_scholar_counts.py` — confirm the fix had never landed in some other form — then commit and push it.
+
+### What was done
+
+**Verified the bug is real and still live at HEAD** (commit `bb358e3`)
+
+The "Total citations" regex in the direct citation-page path (`fetch_count_via_citation_page`) was `\d{1,3}(?:,\d{3})*`. That pattern *requires* a comma before each group of three digits. Scholar renders that particular row **without** a thousands separator (`Cited by 1046`), so it matched only the leading three digits and returned a silently wrong integer.
+
+Confirmed empirically rather than by reading — ran both regexes side by side:
+
+| input | old pattern | new pattern |
+|---|---|---|
+| `Cited by 1046` | **104** | 1046 |
+| `Cited by 1,046` | 1046 | 1046 |
+| `Cited by 104` | 104 | 104 |
+| `Cited by 12345` | **123** | 12345 |
+
+Note the failure mode: it returns a *plausible* number, never an exception. There is no error path that would have surfaced this.
+
+**Confirmed the fix had never been committed, in any form, anywhere**
+- `git log -- scripts/fetch_scholar_counts.py` — 12 commits; the grouped pattern entered in `1a9aee5` (the Option-A direct-URL path) and `git show HEAD:` still had it at line 213.
+- Fixed-string pickaxe `-S'Cited by\s+([\d,]+)' --all` on that file → **zero commits**. Never landed on any branch.
+- The permissive `[\d,]+` *does* appear in history (`f3961ba`) but only inside `scripts/fetch_scholar_counts_browser.py` — a **different file**. That is the origin of the "mirrors the browser fetcher" note in the code comment, and it is why grepping for the pattern repo-wide gives a false "already fixed" impression. Check the file, not the repo.
+- `grep -rn "d{1,3}" scripts/` → no other occurrence. This was the only site.
+
+**Assessed blast radius — no bad data ever reached the repo**
+`_data/scholar_counts.yml` line 165 holds `10.2307/41703461: count: 1050` (fetched 2026-08-15). 1050 is correct; the buggy pattern would have written **105**. The bug is **latent, not active**: this line is only reached when Scholar does *not* captcha-block the requests path, and recent runs have all been blocked, falling back to the browser fetcher (`7318caa`), whose regex was always correct. No back-fill or re-fetch is needed.
+
+### Current status
+- **Done & pushed**: `bb358e3` (regex fix) + this handover.
+- **Deliberately NOT committed** — two working-tree items, see below.
+
+### Important context
+
+- **The requests path is the one to watch.** It is currently masked by Scholar's captcha blocking; the moment a run gets through un-blocked, that line executes. Any DOI at ≥1000 merged citations would have been corrupted. Only `10.2307/41703461` is near that threshold today, but the count only grows.
+- **`_data/scholar_counts.yml` is auto-generated** — never hand-edit it. If truncation is ever suspected, compare against the browser fetcher's output rather than patching the YAML.
+- The two fetchers now have deliberately parallel regexes. **If one is ever changed, change both** — they parse the same DOM row and the browser one is the reference implementation.
+
+### Decisions already made
+
+- **Committed alone, not bundled.** Two other things are dirty in the working tree and were left that way on purpose:
+  1. `_pages/about.md` + `_data/talks.yml` — "Miami Herbert Business School" → "Miami Business School" (this session, at the user's request). `about.md:5` was the literal match; `talks.yml:225` read `"Herbert Business School"` with no "Miami" and was set to `"Miami Business School"` rather than the bare `"Business School"`. **Not pushed — this is public-facing site copy and the user had not confirmed publishing it.** Awaiting a yes.
+  2. `AGENTS.md` — untracked, 198 lines, a near-duplicate of `.claude/CLAUDE.md` that has already drifted (it says rbenv **3.3.7**; CLAUDE.md and `.ruby-version` say **3.3.11**). Left unstaged for the third session running (same call as Sessions 24 and 25). Standing suggestion: make it a pointer to CLAUDE.md or delete it — two copies of the same instructions will keep diverging.
+
+### Next best step
+- **Primary action**: decide on the Miami Business School rename — say the word and it commits + pushes as its own commit. Verify after deploy at `https://kevinhong.ai/` (homepage subtitle) and `/talks/` (the 11/2021 Miami entry).
+- Secondary: resolve `AGENTS.md` one way or the other so it stops appearing in every status check.
+
+---
+
+## 2026-08-05 — Session 25
 
 ### Goal
 Update two talks (USF → 10/2026, JUSWIS '26 → no longer upcoming) and replace the hand-maintained `upcoming:` flag with a mechanism that derives the status by comparing the current month to the talk month.
