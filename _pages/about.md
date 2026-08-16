@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='https://people.miami.edu/profile/f7508a21683d334770fe03a231e454a3'>University of Miami Herbert Business School</a>
+subtitle: <a href='https://people.miami.edu/profile/f7508a21683d334770fe03a231e454a3'>University of Miami Business School</a>
 
 profile:
   align: right
