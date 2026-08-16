@@ -210,7 +210,12 @@ def fetch_count_via_citation_page(user_id: str, pub_id: str) -> tuple[int | None
     # (related-paper) list below it also carry "Cited by N" links.
     #   DOM: <div class="gsc_oci_field">Total citations</div>
     #        <div class="gsc_oci_value">…<a href="…cites=…">Cited by N</a>
-    m = re.search(r'Total citations.*?Cited by\s+(\d{1,3}(?:,\d{3})*)', text, re.DOTALL)
+    # NOTE: match digits permissively ([\d,]+), NOT \d{1,3}(?:,\d{3})*. Scholar
+    # renders this row WITHOUT a thousands separator ("Cited by 1046"), so the
+    # grouped pattern matched only the first three digits and silently truncated
+    # every count >= 1000 (1046 -> 104). Bug found 2026-08-09 on 10.2307/41703461.
+    # This mirrors the browser fetcher's regex in fetch_scholar_counts_browser.py.
+    m = re.search(r'Total citations.*?Cited by\s+([\d,]+)', text, re.DOTALL)
     if m:
         return int(m.group(1).replace(",", "")), "ok (total citations)"
 
