@@ -4,7 +4,37 @@
 
 ---
 
-## 2026-08-16 — Session 26 (latest)
+## 2026-10-26 — Session 27 (latest)
+
+### Goal
+Check whether the repo was up to date; it was, but the live site was not, so fix the broken deploy.
+
+### What was done
+
+**Diagnosed a silent deploy failure** (implemented)
+- `main` == `origin/main` (`215b9bd`), clean tree. But `gh-pages` was last built from `2fcb632` (Oct 4): the Oct 22 Scholar-count push (`215b9bd`) **failed to deploy** (run `39840106624`).
+- Cause: `ubuntu-latest` moved to **ubuntu-26.04**, which only ships the latest patch of each Ruby series. `ruby/setup-ruby` 404'd on the exact pin `3.3.5`.
+
+**Fix** (`7016583`, `.github/workflows/deploy.yml`)
+- `ruby-version: "3.3.5"` → `"3.3"` (tracks newest 3.3.x, currently 3.3.12), with a comment explaining why so it is not re-pinned to a patch.
+- Verified locally: production `jekyll build` on Ruby 3.3.11 passes (~10s).
+
+### Current status
+- **Done**: fix committed and pushed together with this handover; the push redeploys the site.
+- **Pending**: nothing.
+
+### Important context
+- **Don't re-pin an exact Ruby patch in CI.** Note `.ruby-version` (`3.3.11`) is local-only; CI does not read it, and it would 404 on ubuntu-26.04 too.
+- **Local builds need a UTF-8 locale.** In a shell with `LANG` unset (e.g. agent shells), `cssminify2` crashes with `invalid byte sequence in US-ASCII`. Prefix `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8`. Not a repo bug; CI runners are UTF-8.
+- `axe.yml` still pins `3.2.2` and will hit the same 404, but it is `workflow_dispatch`-only, so it was left alone. Bump it to `"3.2"` if you ever run it.
+- Deploy failures are silent: `main` looks synced while the site is stale. Use `gh run list --limit 5` to tell "repo up to date" apart from "site up to date".
+
+### Next best step
+- **Primary action**: none required. The Nov 1 monthly cron rebuild should also succeed now.
+
+---
+
+## 2026-08-16 — Session 26
 
 ### Goal
 Audit an uncommitted working-tree change to `scripts/fetch_scholar_counts.py` — confirm the fix had never landed in some other form — then commit and push it.
