@@ -80,7 +80,9 @@ jobs:
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3.5"
+          # Pin the series, not a patch: newer runner images only ship the
+          # latest patch of each series, so an exact pin 404s when the image moves.
+          ruby-version: "3.3"
           bundler-cache: true
       - name: Build site 🔧
         run: |
