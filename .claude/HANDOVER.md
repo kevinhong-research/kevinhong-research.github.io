@@ -4,7 +4,32 @@
 
 ---
 
-## 2026-10-26 — Session 27 (latest)
+## 2026-10-26 — Session 28 (latest)
+
+### Goal
+Add an invited talk: University of Florida, Warrington College of Business, 3/2027.
+
+### What was done
+
+**New talk entry** (`80a6f53`, `_data/talks.yml`)
+- Added at the top (newest first), mirroring the USF entry: `football_name: "Florida Gators"`, the existing `fbs-library/Florida_Gators_logo-300x300.png`, `sort_key: 202703`, and `lat/lng` 29.650 / -82.343 (UF campus, Warrington area).
+- Validated: 52 talks, every `sort_key == year*100 + month`, still sorted descending.
+- Verified in the dev server: a new **2027** group on `/talks/`, Upcoming badge, pill reads "52 talks · 2 upcoming" (UF + USF 10/2026), logo loads, entry is in the talk-map JSON (`upcoming: true`) and the `/football/` map data (FBS logo + lat), no console errors.
+
+### Current status
+- **Done**: committed and pushed with this handover.
+- **Pending**: nothing.
+
+### Important context
+- Any talk with an `fbs-library/` logo **and** `lat` automatically appears on the football map; no `_data/football.yml` override is needed (USF has none either).
+- The UF Upcoming badge is derived. It drops automatically after 3/2027 via the monthly cron rebuild, so no edit is needed then.
+
+### Next best step
+- **Primary action**: none.
+
+---
+
+## 2026-10-26 — Session 27
 
 ### Goal
 Check whether the repo was up to date; it was, but the live site was not, so fix the broken deploy.
