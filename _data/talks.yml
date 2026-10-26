@@ -37,6 +37,17 @@
 # when a deploy runs. `.github/workflows/deploy.yml` carries a monthly cron for
 # exactly this reason — do not remove it as unused.
 
+- institution: "University of Florida"
+  football_name: "Florida Gators"
+  logo: "/assets/img/talk-logos/fbs-library/Florida_Gators_logo-300x300.png"
+  venue: "Warrington College of Business"
+  date: "3/2027"
+  year: 2027
+  month: 3
+  sort_key: 202703
+  lat: 29.650
+  lng: -82.343
+
 - institution: "University of South Florida"
   football_name: "South Florida Bulls"
   logo: "/assets/img/talk-logos/fbs-library/South_Florida_Bulls_logo-300x300.png"
