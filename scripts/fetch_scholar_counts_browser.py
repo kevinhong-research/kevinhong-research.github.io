@@ -55,7 +55,7 @@ except ImportError:
     sys.exit("PyYAML missing. Run: ./scripts/setup_scholar.sh")
 
 try:
-    from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
+    from playwright.sync_api import sync_playwright, Error as PWError, TimeoutError as PWTimeout
 except ImportError:
     sys.exit("playwright missing. Run: .venv-scholar/bin/pip install playwright")
 
@@ -83,12 +83,39 @@ def is_captcha(page) -> bool:
             or "please show you" in low or "/sorry/" in page.url)
 
 
+def live_page(ctx, page):
+    """Return a usable tab after a manual "press Enter" pause.
+
+    The user may close the tab (or the window) while the script waits, and every
+    later call on the dead handle raises TargetClosedError. Reuse another open
+    tab or open a new one; if Chrome itself was quit, exit with a clear message.
+    """
+    if not page.is_closed():
+        return page
+    open_pages = [pg for pg in ctx.pages if not pg.is_closed()]
+    if open_pages:
+        return open_pages[0]
+    try:
+        return ctx.new_page()
+    except PWError:
+        sys.exit("Chrome was closed while waiting for Enter. Re-run, and leave the "
+                 "Chrome window open (you can switch away from it).")
+
+
 def wait_for_citation_or_captcha(page, timeout_s: float = 15.0) -> str:
     """Poll until the citation table appears. Returns 'ok' | 'captcha' | 'timeout'."""
     deadline = time.time() + timeout_s
     while time.time() < deadline:
-        if page.query_selector(".gsc_oci_field"):
-            return "ok"
+        try:
+            if page.query_selector(".gsc_oci_field"):
+                return "ok"
+        except PWError:
+            # A navigation landed mid-query, destroying the document being
+            # queried. Since 2026-11 the first citation view of a session passes
+            # through www.google.com/sgsync ("Verifying…"), which JS-redirects back
+            # here on its own. Keep polling, unless the tab itself is gone.
+            if page.is_closed():
+                raise
         if is_captcha(page):
             return "captcha"
         time.sleep(0.5)
@@ -182,6 +209,7 @@ def main() -> int:
             print("   3. When you can SEE your publication list, come back here.")
             print("=" * 72)
             input(" Press Enter to start fetching... ")
+            page = live_page(ctx, page)
 
         for i, (doi, pubid) in enumerate(work):
             url = CITATION_URL.format(user=user_id, pubid=pubid)
@@ -198,6 +226,7 @@ def main() -> int:
                 print(f"\n[captcha] {doi}")
                 print("          Solve the captcha in the browser window, then…")
                 input("          press Enter to continue (Ctrl-C to stop): ")
+                page = live_page(ctx, page)
                 page.goto(url, wait_until="domcontentloaded")
                 status = wait_for_citation_or_captcha(page)
 
