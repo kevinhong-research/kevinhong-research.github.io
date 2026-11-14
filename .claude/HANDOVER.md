@@ -32,9 +32,15 @@
 - Verified: headless replay tests (scratchpad; sgsync redirect ×5 → ok, closed tab → recovered, quit browser → clean exit) + live `--dry-run --limit 2` → 2/2 ok.
 - The run's safety net committed `afd5152` (timestamp + 5 retry flags, no counts). Harmless: `SCHOLAR_COUNTS_FETCHED_AT` is defined on the publications page but never read, and flags aren't rendered.
 
+**Follow-up 2: the sgsync bounce sometimes lands on a 404** (`fix(scholar-browser): retry once…`)
+- User saw Chrome on Google's "Error 404 (Not Found)!!1" for a citation URL ending `&ntpr=&sgst=…`. From Chrome's session files: clean URL → `www.google.com/sgsync?url=…&sig=…` → back to `…&ntpr=&sgst=<token>` → Scholar 404. Hit on both of the user's launches (20:59, 21:00); the user stopped each run after paper 1.
+- **Intermittent, Google-side.** Direct loads (no sgsync) at 20:23, 20:25, 21:03, 21:05. A blocked requests probe immediately beforehand does **not** trigger it (tested). Could not re-trigger the 404 on demand.
+- Fix: `wait_for_citation_or_captcha()` returns `sgsync-404` as soon as it sees a `sgst=` URL with a 404 title (was: 15 s timeout). `wait_with_sgsync_retry()` waits 5 s and reloads the clean URL once; a second failure is flagged and the loop continues.
+- Verified: headless replay of the exact chain (0/1/2 failed bounces → ok / retry→ok / flagged), the earlier suites, and a live dry run (2/2). **Unverified live**: whether one retry suffices when Google is actually 404ing. If runs keep flagging `browser fetch: sgsync-404`, try a longer `SGSYNC_RETRY_PAUSE_SEC` or a second retry.
+
 ### Current status
-- **Done**: both fixes + README pushed.
-- **Pending (user)**: re-run `./scripts/refresh_scholar.sh` → `[BLOCKED]` after one paper → Chrome opens → press Enter → counts commit and push.
+- **Done**: all three fixes + README pushed.
+- **Pending (user)**: re-run `./scripts/refresh_scholar.sh` and **let it run to the end**. One flagged paper is retried next run; it's not a reason to stop.
 
 ### Important context
 - `--max-age-days` is requests-only; the browser fallback ignores it (by design, see `refresh_scholar.sh` header).
