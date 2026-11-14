@@ -25,10 +25,16 @@
 - Live: `fetch_scholar_counts.py --dry-run --only 10.1287/isre.2022.0086` → `[BLOCKED] … www.google.com/sgsync`, exit 2.
 - **Not verified here**: the browser leg itself (it drives the user's signed-in Chrome). It polls 15 s for `.gsc_oci_field`, so the sgsync JS check should clear by itself in real Chrome. Deliberately **not** added sgsync to the browser's `is_captcha()`: that would flag the brief "Verifying…" moment as a captcha and prompt for Enter instead of letting it auto-resolve.
 
+**Follow-up: browser fallback crashed after the fallback fired** (`fix(scholar-browser)`, `scripts/fetch_scholar_counts_browser.py`)
+- User re-ran: requests path now `[BLOCKED]` → Chrome opened ✔, then `TargetClosedError` on the first `page.goto` after "Press Enter".
+- **Cause A:** the fetcher held one tab handle across the manual `input()` pause, and that tab had been closed during the pause. Reproduced exactly by closing the tab, then `goto`. Chrome 157 + Playwright 1.60 ruled out: an unattended run fetched fine. Fix: `live_page()` re-acquires a tab after each pause (reuse an open tab or open one); if Chrome was quit, it exits with a clear message.
+- **Cause B (found while probing):** in real Chrome, the first citation view of a session goes via `www.google.com/sgsync`, which JS-redirects back. The redirect lands mid-`query_selector`, raising `Execution context was destroyed` (uncaught → crash). Confirmed in Chrome's session file. Fix: a navigation during the poll means "keep polling" unless the tab is closed.
+- Verified: headless replay tests (scratchpad; sgsync redirect ×5 → ok, closed tab → recovered, quit browser → clean exit) + live `--dry-run --limit 2` → 2/2 ok.
+- The run's safety net committed `afd5152` (timestamp + 5 retry flags, no counts). Harmless: `SCHOLAR_COUNTS_FETCHED_AT` is defined on the publications page but never read, and flags aren't rendered.
+
 ### Current status
-- **Done**: fix + README pushed with this handover.
-- **Pending (user)**: re-run `./scripts/refresh_scholar.sh` → it should print `[BLOCKED]` after one paper and open Chrome.
-- Working tree still has the **uncommitted partial `_data/scholar_counts.yml`** from the interrupted run (timestamp + 4 retry flags, no count changes). Harmless: the next run rewrites it. Or `git restore _data/scholar_counts.yml`.
+- **Done**: both fixes + README pushed.
+- **Pending (user)**: re-run `./scripts/refresh_scholar.sh` → `[BLOCKED]` after one paper → Chrome opens → press Enter → counts commit and push.
 
 ### Important context
 - `--max-age-days` is requests-only; the browser fallback ignores it (by design, see `refresh_scholar.sh` header).
