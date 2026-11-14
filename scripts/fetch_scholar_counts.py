@@ -47,6 +47,7 @@ import tempfile
 import time
 from difflib import SequenceMatcher
 from pathlib import Path
+from urllib.parse import urlparse
 
 try:
     import yaml
@@ -200,6 +201,14 @@ def fetch_count_via_citation_page(user_id: str, pub_id: str) -> tuple[int | None
     if ("/sorry/" in r.url or "unusual traffic" in low or "gs_captcha" in low
             or "not a robot" in low or "please show you" in low):
         return None, "blocked (captcha / robot check)"
+    # A citation page never legitimately leaves Scholar, so a redirect off-host
+    # is an interstitial the requests path cannot pass. Since 2026-11 Scholar
+    # 302s to www.google.com/sgsync, a JS-only "Verifying your request…" page
+    # that carries none of the text markers above; unrecognized, it was treated
+    # as a one-off failure, so the run never returned rc=2 and never fell back.
+    final = urlparse(r.url)
+    if not (final.hostname or "").startswith("scholar.google."):
+        return None, f"blocked (redirected off Scholar to {final.hostname}{final.path})"
 
     text = r.text
     # The "Total citations" row holds Scholar's MERGED total for this entry —

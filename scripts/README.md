@@ -249,6 +249,14 @@ is now the *usual* outcome, which is why `refresh_scholar.sh` **auto-invokes thi
 fallback** as soon as the requests probe is blocked (see Phase 2 above). You can
 also run it standalone any time:
 
+> **"Blocked" is decided in `fetch_count_via_citation_page()`**
+> (`fetch_scholar_counts.py`): a known captcha marker, *or* any redirect off
+> `scholar.google.*` (e.g. the JS-only `www.google.com/sgsync` "Verifying…" page
+> Scholar switched to in 2026-11). If Google changes the wall again and a run logs
+> `[direct-fail] … unrecognized page` on paper after paper instead of
+> `[BLOCKED]` → fallback, the new wall isn't being recognized: capture one
+> response and extend that check.
+
 Fallback: `scripts/fetch_scholar_counts_browser.py` drives your **real,
 signed-in Chrome** (Playwright, `channel="chrome"`), which Scholar trusts:
 
