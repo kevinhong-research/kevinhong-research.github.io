@@ -68,6 +68,11 @@ PROFILE_URL = "https://scholar.google.com/citations?hl=en&user={user}"
 # enough to keep a signed-in session from tripping a captcha on a ~39-paper run.
 JITTER_MIN_SEC, JITTER_MAX_SEC = 15, 25
 
+# Scholar's sgsync "Verifying…" bounce sometimes hands back a URL that Scholar
+# answers with a 404 (…&ntpr=&sgst=<token>). Seen intermittently 2026-11-13; the
+# clean URL loaded fine minutes later. Pause, then retry the clean URL once.
+SGSYNC_RETRY_PAUSE_SEC = 5
+
 
 def load_pubs() -> list:
     with PUBS_FILE.open() as f:
@@ -81,6 +86,22 @@ def is_captcha(page) -> bool:
         return False
     return ("gs_captcha" in low or "not a robot" in low
             or "please show you" in low or "/sorry/" in page.url)
+
+
+def wait_with_sgsync_retry(page, url: str, doi: str) -> str:
+    """wait_for_citation_or_captcha(), plus one retry of the clean URL when the
+    sgsync bounce lands on a 404. Same statuses, plus 'navigation timeout'."""
+    status = wait_for_citation_or_captcha(page)
+    if status != "sgsync-404":
+        return status
+    print(f"[sgsync] {doi:<40} Scholar's verification step landed on a 404; "
+          f"retrying in {SGSYNC_RETRY_PAUSE_SEC}s")
+    time.sleep(SGSYNC_RETRY_PAUSE_SEC)
+    try:
+        page.goto(url, wait_until="domcontentloaded", timeout=30000)
+    except PWTimeout:
+        return "navigation timeout"
+    return wait_for_citation_or_captcha(page)
 
 
 def live_page(ctx, page):
@@ -103,12 +124,17 @@ def live_page(ctx, page):
 
 
 def wait_for_citation_or_captcha(page, timeout_s: float = 15.0) -> str:
-    """Poll until the citation table appears. Returns 'ok' | 'captcha' | 'timeout'."""
+    """Poll until the citation table appears.
+
+    Returns 'ok' | 'captcha' | 'sgsync-404' | 'timeout'.
+    """
     deadline = time.time() + timeout_s
     while time.time() < deadline:
         try:
             if page.query_selector(".gsc_oci_field"):
                 return "ok"
+            if "sgst=" in page.url and "404" in page.title():
+                return "sgsync-404"   # failed verification bounce; caller retries
         except PWError:
             # A navigation landed mid-query, destroying the document being
             # queried. Since 2026-11 the first citation view of a session passes
@@ -221,7 +247,7 @@ def main() -> int:
                 n_fail += 1
                 continue
 
-            status = wait_for_citation_or_captcha(page)
+            status = wait_with_sgsync_retry(page, url, doi)
             if status == "captcha" and not args.headless:
                 print(f"\n[captcha] {doi}")
                 print("          Solve the captcha in the browser window, then…")
