@@ -4,7 +4,42 @@
 
 ---
 
-## 2026-10-26 — Session 28 (latest)
+## 2026-11-13 — Session 29 (latest)
+
+### Goal
+`./scripts/refresh_scholar.sh --max-age-days 0` stopped falling back to the browser fetcher; it kept grinding through papers on the requests path.
+
+### What was done
+
+**Root cause** (confirmed with a live capture)
+- Scholar now **302s the requests path to `www.google.com/sgsync`**, a JS-only "Verifying your request… Please wait while we verify your session" page. It has none of the old markers (`/sorry/`, `gs_captcha`, "not a robot", …) and no citation table.
+- So `fetch_count_via_citation_page()` returned `unrecognized page (no citation table)`, which is **not** counted as a block (the caller checks `"blocked" in reason`). The scraper kept going at 10–20 s per paper, never returned rc=2, and `refresh_scholar.sh` never fell back.
+- Worse if left to finish: rc=0 → the orchestrator would commit and push a run where all 39 papers failed. The user Ctrl-C'd after 4 papers (rc=130 → nothing committed, partial file left on disk).
+
+**Fix** (`86a3da81`, `scripts/fetch_scholar_counts.py`)
+- Any final URL whose host isn't `scholar.google.*` → `blocked (redirected off Scholar to <host><path>)`. A citation page never legitimately leaves Scholar, so this also covers `/sorry/` and any future redirect-based wall. Text markers kept as they were.
+- `scripts/README.md` → "Real-browser fallback" now says where "blocked" is decided and the symptom to watch for (`[direct-fail] … unrecognized page` repeating instead of `[BLOCKED]`).
+
+**Verification**
+- One-off replay test (scratchpad, not committed): the captured sgsync page → blocked; real page (1046), zero-cites page, legacy `/sorry/`, and non-redirect unrecognized page all unchanged; full `scrape()` against the wall → **rc=2 after 1 request** (was rc=0 after 39).
+- Live: `fetch_scholar_counts.py --dry-run --only 10.1287/isre.2022.0086` → `[BLOCKED] … www.google.com/sgsync`, exit 2.
+- **Not verified here**: the browser leg itself (it drives the user's signed-in Chrome). It polls 15 s for `.gsc_oci_field`, so the sgsync JS check should clear by itself in real Chrome. Deliberately **not** added sgsync to the browser's `is_captcha()`: that would flag the brief "Verifying…" moment as a captcha and prompt for Enter instead of letting it auto-resolve.
+
+### Current status
+- **Done**: fix + README pushed with this handover.
+- **Pending (user)**: re-run `./scripts/refresh_scholar.sh` → it should print `[BLOCKED]` after one paper and open Chrome.
+- Working tree still has the **uncommitted partial `_data/scholar_counts.yml`** from the interrupted run (timestamp + 4 retry flags, no count changes). Harmless: the next run rewrites it. Or `git restore _data/scholar_counts.yml`.
+
+### Important context
+- `--max-age-days` is requests-only; the browser fallback ignores it (by design, see `refresh_scholar.sh` header).
+- If the browser fetcher ever times out on every paper, check whether Chrome is sitting on the sgsync page longer than the 15 s poll.
+
+### Next best step
+- **Primary action**: user re-runs the refresh and confirms Chrome opens and counts commit.
+
+---
+
+## 2026-10-26 — Session 28
 
 ### Goal
 Add an invited talk: University of Florida, Warrington College of Business, 3/2027.
